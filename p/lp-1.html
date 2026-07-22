@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asme — Built for the Curious</title>
+
+  <!-- Google Font -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+  </style>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    a {
+      font: inherit;
+    }
+
+    button,
+    a {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: translateY(17%);
+      opacity: 0;
+      will-change: opacity, transform;
+    }
+
+    .video-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at center, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.35) 58%, rgba(0, 0, 0, 0.82) 100%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.16) 38%, rgba(0, 0, 0, 0.72) 100%);
+    }
+
+    .liquid-glass {
+      background: rgba(255, 255, 255, 0.01);
+      background-blend-mode: luminosity;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: none;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .liquid-glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.15) 20%,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 255, 255, 0) 60%,
+        rgba(255, 255, 255, 0.15) 80%,
+        rgba(255, 255, 255, 0.45) 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .navbar {
+      position: relative;
+      z-index: 20;
+      padding: 24px;
+    }
+
+    .nav-inner {
+      max-width: 1024px;
+      margin: 0 auto;
+      border-radius: 999px;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      min-width: 0;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a,
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      white-space: nowrap;
+    }
+
+    .signup-btn {
+      background: transparent;
+      border: 0;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .login-btn {
+      border-radius: 999px;
+      padding: 8px 24px;
+      color: #fff;
+      background-color: transparent;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 180ms ease;
+    }
+
+    .login-btn:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .hero {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      min-height: calc(100vh - 98px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px 24px 110px;
+      transform: translateY(-8%);
+    }
+
+    .hero-pill,
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 14px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 22px;
+    }
+
+    .hero-title {
+      font-family: "Instrument Serif", serif;
+      font-size: clamp(3.2rem, 7vw, 6rem);
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.055em;
+      color: #fff;
+      margin-bottom: 32px;
+      white-space: nowrap;
+      text-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+    }
+
+    .hero-box {
+      width: 100%;
+      max-width: 576px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .email-bar {
+      width: 100%;
+      border-radius: 999px;
+      padding: 8px 8px 8px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .email-bar input {
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .email-bar input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .submit-btn {
+      border: 0;
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      color: #000;
+      transition: transform 180ms ease, background-color 180ms ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateX(2px);
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .subtitle {
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.7;
+      padding: 0 16px;
+      max-width: 560px;
+      text-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
+    }
+
+    .manifesto-btn,
+    .primary-btn,
+    .secondary-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 32px;
+      color: #fff;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 180ms ease, transform 180ms ease;
+    }
+
+    .manifesto-btn:hover,
+    .secondary-btn:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      transform: translateY(-1px);
+    }
+
+    .primary-btn {
+      background: #fff;
+      color: #000;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .social-footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 48px;
+    }
+
+    .social-btn {
+      border: 0;
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.8);
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
+    }
+
+    .social-btn:hover {
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .logo .icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    .site-content {
+      position: relative;
+      z-index: 5;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.09), transparent 28%),
+        radial-gradient(circle at 82% 30%, rgba(133, 180, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, #020202 0%, #050505 40%, #000 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .section {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 110px 24px;
+    }
+
+    .section-header {
+      max-width: 720px;
+      margin-bottom: 44px;
+    }
+
+    .section-header.center {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .section-title {
+      font-family: "Instrument Serif", serif;
+      font-size: clamp(2.6rem, 5vw, 4.7rem);
+      font-weight: 400;
+      line-height: 0.98;
+      letter-spacing: -0.045em;
+      margin-bottom: 18px;
+    }
+
+    .section-text {
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: -38px;
+    }
+
+    .stat-card,
+    .feature-card,
+    .workflow-card,
+    .price-card,
+    .faq-item,
+    .testimonial-card {
+      border-radius: 28px;
+      padding: 26px;
+      background-color: rgba(255, 255, 255, 0.025);
+    }
+
+    .stat-number {
+      font-family: "Instrument Serif", serif;
+      font-size: 46px;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .stat-label,
+    .card-text,
+    .price-note,
+    .faq-answer,
+    .testimonial-role {
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature-card {
+      min-height: 270px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 220ms ease, background-color 220ms ease;
+    }
+
+    .feature-card:hover,
+    .workflow-card:hover,
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      background-color: rgba(255, 255, 255, 0.045);
+    }
+
+    .feature-icon,
+    .workflow-step {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .showcase {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .showcase-panel {
+      border-radius: 34px;
+      padding: 34px;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .showcase-title {
+      font-family: "Instrument Serif", serif;
+      font-size: clamp(2.6rem, 4.8vw, 4.5rem);
+      font-weight: 400;
+      line-height: 0.96;
+      letter-spacing: -0.045em;
+    }
+
+    .showcase-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .showcase-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .orb-board {
+      position: relative;
+      min-height: 520px;
+      border-radius: 34px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.22), transparent 12%),
+        radial-gradient(circle at 60% 55%, rgba(125,167,255,0.18), transparent 18%),
+        radial-gradient(circle at 45% 72%, rgba(255,255,255,0.12), transparent 12%),
+        rgba(255, 255, 255, 0.02);
+    }
+
+    .orb-board::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: radial-gradient(circle at center, black, transparent 72%);
+    }
+
+    .floating-card {
+      position: absolute;
+      z-index: 2;
+      border-radius: 24px;
+      padding: 18px;
+      width: 230px;
+      animation: floatCard 5s ease-in-out infinite;
+    }
+
+    .floating-card:nth-child(1) {
+      top: 54px;
+      left: 42px;
+    }
+
+    .floating-card:nth-child(2) {
+      right: 40px;
+      top: 180px;
+      animation-delay: 0.8s;
+    }
+
+    .floating-card:nth-child(3) {
+      left: 110px;
+      bottom: 58px;
+      animation-delay: 1.4s;
+    }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .floating-label {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .floating-value {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .workflow-card {
+      padding: 30px;
+      transition: transform 220ms ease, background-color 220ms ease;
+    }
+
+    .workflow-step {
+      font-weight: 700;
+      color: #000;
+      background: #fff;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .price-card {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .price-card.featured {
+      background-color: rgba(255, 255, 255, 0.055);
+      transform: translateY(-12px);
+    }
+
+    .price-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .price {
+      font-family: "Instrument Serif", serif;
+      font-size: 54px;
+      line-height: 1;
+    }
+
+    .price span {
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    .price-list {
+      display: grid;
+      gap: 12px;
+      list-style: none;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: auto;
+    }
+
+    .price-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .faq-question {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .quote {
+      font-size: 16px;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 24px;
+    }
+
+    .testimonial-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .cta-panel {
+      border-radius: 38px;
+      min-height: 420px;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255,255,255,0.16), transparent 30%),
+        rgba(255, 255, 255, 0.025);
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 36px 24px 52px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      color: rgba(255, 255, 255, 0.55);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid,
+      .features-grid,
+      .workflow-grid,
+      .pricing-grid,
+      .testimonial-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .showcase,
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .price-card.featured {
+        transform: none;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .navbar {
+        padding: 18px;
+      }
+
+      .nav-inner {
+        padding: 12px 18px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-actions {
+        gap: 10px;
+      }
+
+      .signup-btn {
+        display: none;
+      }
+
+      .login-btn {
+        padding: 8px 18px;
+      }
+
+      .hero {
+        padding: 48px 18px 110px;
+        transform: translateY(-4%);
+      }
+
+      .hero-title {
+        font-size: clamp(3.1rem, 15vw, 4.5rem);
+        white-space: normal;
+      }
+
+      .email-bar {
+        padding-left: 18px;
+      }
+
+      .subtitle {
+        padding: 0 4px;
+      }
+
+      .social-footer {
+        padding-bottom: 34px;
+      }
+
+      .section {
+        padding: 78px 18px;
+      }
+
+      .stats-grid,
+      .features-grid,
+      .workflow-grid,
+      .pricing-grid,
+      .testimonial-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase-panel,
+      .orb-board {
+        min-height: 430px;
+      }
+
+      .floating-card {
+        width: 210px;
+      }
+
+      .floating-card:nth-child(1) {
+        left: 22px;
+      }
+
+      .floating-card:nth-child(2) {
+        right: 18px;
+      }
+
+      .floating-card:nth-child(3) {
+        left: 42px;
+      }
+
+      .cta-panel {
+        padding: 34px 22px;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="video-wrap" aria-hidden="true">
+      <video
+        id="heroVideo"
+        class="bg-video"
+        muted
+        autoplay
+        playsinline
+        preload="auto"
+      >
+        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_115001_bcdaa3b4-03de-47e7-ad63-ae3e392c32d4.mp4" type="video/mp4" />
+      </video>
+      <div class="video-vignette"></div>
+    </div>
+
+    <nav class="navbar">
+      <div class="nav-inner liquid-glass">
+        <div class="nav-left">
+          <a href="#" class="logo" aria-label="Asme home">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20"></path>
+              <path d="M2 12h20"></path>
+            </svg>
+            <span>Asme</span>
+          </a>
+
+          <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#about">About</a>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button class="signup-btn" type="button">Sign Up</button>
+          <button class="login-btn liquid-glass" type="button">Login</button>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-pill liquid-glass">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3l1.8 5.5L19 10l-5.2 1.5L12 17l-1.8-5.5L5 10l5.2-1.5L12 3z"></path>
+          <path d="M19 16l.9 2.7L22 19l-2.1.6L19 22l-.9-2.4L16 19l2.1-.3L19 16z"></path>
+        </svg>
+        A private signal for modern explorers
+      </div>
+
+      <h1 class="hero-title">Built for the curious</h1>
+
+      <div class="hero-box">
+        <form class="email-bar liquid-glass" id="subscribeForm">
+          <input type="email" placeholder="Enter your email" aria-label="Enter your email" required />
+          <button class="submit-btn" type="submit" aria-label="Submit email">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </button>
+        </form>
+
+        <p class="subtitle">
+          Stay updated with the latest news and insights. Subscribe to our newsletter today and never miss out on exciting updates.
+        </p>
+
+        <button class="manifesto-btn liquid-glass" type="button">Read our manifesto</button>
+      </div>
+    </section>
+
+    <footer class="social-footer">
+      <a href="#" class="social-btn liquid-glass" aria-label="Instagram">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          <path d="M17.5 6.5h.01"></path>
+        </svg>
+      </a>
+
+      <a href="#" class="social-btn liquid-glass" aria-label="Twitter">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+        </svg>
+      </a>
+
+      <a href="#" class="social-btn liquid-glass" aria-label="Website">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20"></path>
+          <path d="M2 12h20"></path>
+        </svg>
+      </a>
+    </footer>
+  </main>
+
+  <div class="site-content">
+    <section class="section" id="about">
+      <div class="stats-grid">
+        <div class="stat-card liquid-glass">
+          <div class="stat-number">120K+</div>
+          <p class="stat-label">curious readers, makers, founders, and operators following fresh signals.</p>
+        </div>
+        <div class="stat-card liquid-glass">
+          <div class="stat-number">42</div>
+          <p class="stat-label">weekly briefings across technology, culture, science, design, and strategy.</p>
+        </div>
+        <div class="stat-card liquid-glass">
+          <div class="stat-number">9 min</div>
+          <p class="stat-label">average read time, made for focused people who want clarity without noise.</p>
+        </div>
+        <div class="stat-card liquid-glass">
+          <div class="stat-number">0%</div>
+          <p class="stat-label">fluff. Every issue is edited to feel sharp, simple, and actually useful.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="section-header center">
+        <div class="section-pill liquid-glass">Why Asme exists</div>
+        <h2 class="section-title">A calmer way to keep up with what matters.</h2>
+        <p class="section-text">
+          Asme turns the internet’s loudest updates into clean, thoughtful briefings. No endless tabs, no shallow summaries, just the useful context behind new ideas.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <article class="feature-card liquid-glass">
+          <div>
+            <div class="feature-icon liquid-glass">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+            </div>
+            <h3 class="card-title">Daily signal brief</h3>
+            <p class="card-text">A crisp digest of the ideas, launches, shifts, and research worth paying attention to.</p>
+          </div>
+        </article>
+
+        <article class="feature-card liquid-glass">
+          <div>
+            <div class="feature-icon liquid-glass">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+              </svg>
+            </div>
+            <h3 class="card-title">Human written context</h3>
+            <p class="card-text">Each topic is shaped into simple language so you understand why it matters, not just what happened.</p>
+          </div>
+        </article>
+
+        <article class="feature-card liquid-glass">
+          <div>
+            <div class="feature-icon liquid-glass">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 3v18h18"></path>
+                <path d="m19 9-5 5-4-4-3 3"></path>
+              </svg>
+            </div>
+            <h3 class="card-title">Trend intelligence</h3>
+            <p class="card-text">See patterns before they become obvious, from AI tools to design culture and startup behavior.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="showcase">
+        <div class="showcase-panel liquid-glass">
+          <div>
+            <div class="section-pill liquid-glass">Inside the product</div>
+            <h2 class="showcase-title">Everything feels focused, calm, and intentional.</h2>
+          </div>
+
+          <div class="showcase-list">
+            <div class="showcase-item">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+              Smart summaries with practical context, not robotic bullet dumps.
+            </div>
+            <div class="showcase-item">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+              Topic collections for AI, business, design, systems, and the future of work.
+            </div>
+            <div class="showcase-item">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+              A private reading space made to feel premium, cinematic, and distraction-free.
+            </div>
+          </div>
+        </div>
+
+        <div class="orb-board liquid-glass">
+          <div class="floating-card liquid-glass">
+            <p class="floating-label">Today’s Signal</p>
+            <p class="floating-value">AI agents are moving from demos to daily workflows.</p>
+          </div>
+          <div class="floating-card liquid-glass">
+            <p class="floating-label">Reader Mode</p>
+            <p class="floating-value">8-minute insight, saved for later.</p>
+          </div>
+          <div class="floating-card liquid-glass">
+            <p class="floating-label">Trend Score</p>
+            <p class="floating-value">High impact · early stage</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header center">
+        <div class="section-pill liquid-glass">How it works</div>
+        <h2 class="section-title">From noisy internet to useful clarity.</h2>
+        <p class="section-text">A simple flow that helps you stay informed without losing your attention to endless feeds.</p>
+      </div>
+
+      <div class="workflow-grid">
+        <article class="workflow-card liquid-glass">
+          <div class="workflow-step">1</div>
+          <h3 class="card-title">We scan the signal</h3>
+          <p class="card-text">Important ideas are collected from product launches, research, founder notes, market shifts, and culture.</p>
+        </article>
+        <article class="workflow-card liquid-glass">
+          <div class="workflow-step">2</div>
+          <h3 class="card-title">We cut the noise</h3>
+          <p class="card-text">Every briefing removes filler and keeps the parts that help you think, build, or make better decisions.</p>
+        </article>
+        <article class="workflow-card liquid-glass">
+          <div class="workflow-step">3</div>
+          <h3 class="card-title">You read with focus</h3>
+          <p class="card-text">Open one clean issue, understand the context, save what matters, and move on with your day.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header center">
+        <div class="section-pill liquid-glass">Loved by curious teams</div>
+        <h2 class="section-title">Made for people who like depth, but hate clutter.</h2>
+      </div>
+
+      <div class="testimonial-grid">
+        <article class="testimonial-card liquid-glass">
+          <p class="quote">“Asme feels like a calm editor sitting between me and the internet. I get the signal without drowning in tabs.”</p>
+          <p class="testimonial-name">Maya R.</p>
+          <p class="testimonial-role">Product Designer</p>
+        </article>
+        <article class="testimonial-card liquid-glass">
+          <p class="quote">“The best part is the context. It does not just say what launched, it explains why the timing matters.”</p>
+          <p class="testimonial-name">Arjun K.</p>
+          <p class="testimonial-role">Startup Founder</p>
+        </article>
+        <article class="testimonial-card liquid-glass">
+          <p class="quote">“I replaced five newsletters with this. The writing is cleaner, sharper, and easier to remember.”</p>
+          <p class="testimonial-name">Elena M.</p>
+          <p class="testimonial-role">Research Lead</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="pricing">
+      <div class="section-header center">
+        <div class="section-pill liquid-glass">Pricing</div>
+        <h2 class="section-title">Start free. Upgrade when curiosity becomes a habit.</h2>
+        <p class="section-text">Simple plans for readers, creators, and teams who want better information hygiene.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <article class="price-card liquid-glass">
+          <p class="price-name">Starter</p>
+          <div class="price">$0 <span>/month</span></div>
+          <p class="price-note">For casual readers testing the signal.</p>
+          <ul class="price-list">
+            <li>✓ Weekly public briefing</li>
+            <li>✓ Basic topic collections</li>
+            <li>✓ Limited saved notes</li>
+          </ul>
+          <button class="secondary-btn liquid-glass" type="button">Get started</button>
+        </article>
+
+        <article class="price-card liquid-glass featured">
+          <p class="price-name">Curious</p>
+          <div class="price">$12 <span>/month</span></div>
+          <p class="price-note">For people who want the full private stream.</p>
+          <ul class="price-list">
+            <li>✓ Daily signal briefing</li>
+            <li>✓ Full archive access</li>
+            <li>✓ Trend reports and deep dives</li>
+            <li>✓ Unlimited saved notes</li>
+          </ul>
+          <button class="primary-btn" type="button">Join now</button>
+        </article>
+
+        <article class="price-card liquid-glass">
+          <p class="price-name">Team</p>
+          <div class="price">$49 <span>/month</span></div>
+          <p class="price-note">For teams who discuss trends together.</p>
+          <ul class="price-list">
+            <li>✓ Everything in Curious</li>
+            <li>✓ Shared team library</li>
+            <li>✓ Internal reading rooms</li>
+            <li>✓ Priority research requests</li>
+          </ul>
+          <button class="secondary-btn liquid-glass" type="button">Contact sales</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header center">
+        <div class="section-pill liquid-glass">FAQ</div>
+        <h2 class="section-title">Questions before you join?</h2>
+      </div>
+
+      <div class="faq-grid">
+        <article class="faq-item liquid-glass">
+          <h3 class="faq-question">Is this only for tech readers?</h3>
+          <p class="faq-answer">No. Tech is a major theme, but Asme also covers design, business, science, culture, and future-of-work ideas.</p>
+        </article>
+        <article class="faq-item liquid-glass">
+          <h3 class="faq-question">How often do I receive updates?</h3>
+          <p class="faq-answer">Free readers get a weekly issue. Paid readers get daily briefings, deeper reports, and archive access.</p>
+        </article>
+        <article class="faq-item liquid-glass">
+          <h3 class="faq-question">Can I cancel anytime?</h3>
+          <p class="faq-answer">Yes. You can cancel your subscription whenever you want. Your access continues until the end of your billing period.</p>
+        </article>
+        <article class="faq-item liquid-glass">
+          <h3 class="faq-question">Is this written by humans?</h3>
+          <p class="faq-answer">The final writing and editing is shaped for clarity, context, and taste, so each issue feels readable and useful.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="cta-panel liquid-glass">
+        <div class="section-pill liquid-glass">Start reading smarter</div>
+        <h2 class="section-title">Your next big idea may already be hiding in the noise.</h2>
+        <p class="section-text">Join Asme and get a cleaner, calmer way to understand the ideas shaping tomorrow.</p>
+        <div class="cta-actions">
+          <button class="primary-btn" type="button">Subscribe free</button>
+          <button class="secondary-btn liquid-glass" type="button">Explore archive</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <a href="#" class="logo" aria-label="Asme home">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20"></path>
+          <path d="M2 12h20"></path>
+        </svg>
+        <span>Asme</span>
+      </a>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#about">About</a>
+        <a href="#">Privacy</a>
+      </div>
+      <p>© 2026 Asme. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    const video = document.getElementById("heroVideo");
+    const form = document.getElementById("subscribeForm");
+
+    let fadeFrame = null;
+    let fadingOutRef = false;
+
+    function getCurrentOpacity() {
+      const value = Number.parseFloat(window.getComputedStyle(video).opacity);
+      return Number.isFinite(value) ? value : 0;
+    }
+
+    function cancelFade() {
+      if (fadeFrame !== null) {
+        cancelAnimationFrame(fadeFrame);
+        fadeFrame = null;
+      }
+    }
+
+    function fadeVideo(targetOpacity, duration = 500, onComplete) {
+      cancelFade();
+
+      const startOpacity = getCurrentOpacity();
+      const difference = targetOpacity - startOpacity;
+      const startTime = performance.now();
+
+      function animate(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+
+        video.style.opacity = String(startOpacity + difference * eased);
+
+        if (progress < 1) {
+          fadeFrame = requestAnimationFrame(animate);
+        } else {
+          video.style.opacity = String(targetOpacity);
+          fadeFrame = null;
+          if (typeof onComplete === "function") onComplete();
+        }
+      }
+
+      fadeFrame = requestAnimationFrame(animate);
+    }
+
+    function startVideo() {
+      const playPromise = video.play();
+
+      if (playPromise && typeof playPromise.then === "function") {
+        playPromise
+          .then(() => fadeVideo(1, 500))
+          .catch(() => {
+            video.style.opacity = "1";
+          });
+      } else {
+        fadeVideo(1, 500);
+      }
+    }
+
+    video.addEventListener("loadeddata", () => {
+      fadingOutRef = false;
+      startVideo();
+    });
+
+    video.addEventListener("timeupdate", () => {
+      if (!video.duration || Number.isNaN(video.duration)) return;
+
+      const remaining = video.duration - video.currentTime;
+
+      if (remaining <= 0.55 && !fadingOutRef) {
+        fadingOutRef = true;
+        fadeVideo(0, 500);
+      }
+    });
+
+    video.addEventListener("ended", () => {
+      cancelFade();
+      video.style.opacity = "0";
+
+      window.setTimeout(() => {
+        fadingOutRef = false;
+        video.currentTime = 0;
+        startVideo();
+      }, 100);
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const input = form.querySelector("input");
+
+      if (input.value.trim()) {
+        input.value = "";
+        input.placeholder = "You're subscribed!";
+
+        window.setTimeout(() => {
+          input.placeholder = "Enter your email";
+        }, 1800);
+      }
+    });
+
+    if (video.readyState >= 2) {
+      startVideo();
+    }
+  </script>
+</body>
+</html>
