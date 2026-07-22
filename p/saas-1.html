@@ -558,6 +558,71 @@
             }
         }
 
+
+/* LLM Integration Logo Slider */
+.partner-logo-slider {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  position: relative;
+}
+.partner-logo-slider:before {
+  content: "";
+  background: linear-gradient(to right, #fff 0%, rgba(255, 255, 255, 0) 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120px;
+  height: 100%;
+  z-index: 9;
+}
+.partner-logo-slider:after {
+  content: "";
+  background: linear-gradient(to left, #fff 0%, rgba(255, 255, 255, 0) 100%);
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 100%;
+  z-index: 9;
+}
+.partner-logo-slide {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  animation: partner-logo 30s linear infinite;
+}
+.partner-logo-slide:hover {
+  animation-play-state: paused;
+}
+.partner-logo-slide img {
+  width: 150px;
+  border: 1px solid #b2b2b2;
+  padding: 20px;
+  border-radius: 10px;
+}
+@keyframes partner-logo {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media only screen and (max-width: 1025px) {
+  .partner-logo-slide {
+    gap: 20px;
+  }
+  .partner-logo-slide img {
+    height: 45px;
+  }
+}
+
+
+ 
+
 </style>
 </head>
 <body>
@@ -626,6 +691,35 @@
             </div>
         </div>
     </section>
+
+
+
+<section>
+
+<div class="partner-logo-slider">
+  <div class="partner-logo-slide">
+    <img src="https://storage.googleapis.com/msgsndr/Os3Td5Z0qWJU6XLRU7VI/media/692d7b76fd073a2aba8e3ee7.png" />
+    <img src="https://storage.googleapis.com/msgsndr/Os3Td5Z0qWJU6XLRU7VI/media/692d7b761f60a199d057145b.png" />
+    <img src="https://storage.googleapis.com/msgsndr/Os3Td5Z0qWJU6XLRU7VI/media/692d7b7682f4c543ce52b3c8.png" />
+    <img src="https://storage.googleapis.com/msgsndr/Os3Td5Z0qWJU6XLRU7VI/media/692d7b76aaad9148081119dc.png" />
+    <img src="https://storage.googleapis.com/msgsndr/Os3Td5Z0qWJU6XLRU7VI/media/692d7b76fd073a5c1c8e3ee8.png" />
+  </div>
+</div>
+
+
+</section>
+
+
+
+
+
+
+ 
+
+
+
+
+ 
 
     <!-- Metrics / Social Proof -->
     <section class="social-proof">
@@ -1018,6 +1112,32 @@
             </div>
         </div>
     </footer>
+
+
+
+
+
+
+
+
+
+<script>
+
+$(document).ready(function () {
+  const $slides = $(".partner-logo-slide");
+  const cloneCount = 3;
+
+  for (let i = 0; i < cloneCount; i++) {
+    $slides.children().clone(true).appendTo($slides);
+  }
+});
+
+ 
+</script>
+
+
+
+ 
 
 </body>
 </html>
