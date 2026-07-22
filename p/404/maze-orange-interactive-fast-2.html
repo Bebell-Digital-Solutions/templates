@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Página no encontrada</title>
+    <!-- Google Font for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== YOUR ORANGE COLOR PALETTE ===== */
+        :root {
+            --skin-color: #ff5011;
+            --mirage-color: hsl(210, 10%, 23%);
+            --title-color: hsl(210, 8%, 95%);
+            --text-color: hsl(210, 8%, 85%);
+            --body-color: hsl(210, 19%, 5%);
+            --box-color: hsl(210, 14%, 10%);
+            --scroll-box-color: hsl(210, 12%, 38%);
+            --scroll-thumb-color: #ff5011;
+            --hue-color: 210; /* for hsl fallbacks */
+        }
+
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--body-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== MATRIX CANVAS ===== */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* ===== CENTERED CARD ===== */
+        .card {
+            position: relative;
+            z-index: 1;
+            background: var(--box-color);
+            background: rgba(10, 14, 19, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--scroll-box-color);
+            border-radius: 2rem;
+            padding: 3rem 4rem;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8);
+            
+            /* Smooth transitions for hover */
+            transition: transform 0.3s ease, box-shadow 0.4s ease, border-color 0.3s ease;
+        }
+
+        /* ===== CARD HOVER EFFECT ===== */
+        .card:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 30px rgba(255, 80, 17, 0.25),
+                        0 25px 50px -8px rgba(0, 0, 0, 0.9);
+            border-color: var(--skin-color);
+        }
+
+        /* ===== TITLE WITH ANIMATED GLOW ===== */
+        .card h1 {
+            font-size: 8rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--skin-color);
+            margin-bottom: 0.25rem;
+            letter-spacing: -4px;
+
+            /* Breathing glow animation */
+            animation: glowPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0% {
+                text-shadow: 0 0 20px rgba(255, 80, 17, 0.4),
+                             0 0 40px rgba(255, 80, 17, 0.15);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(255, 80, 17, 0.8),
+                             0 0 80px rgba(255, 80, 17, 0.4),
+                             0 0 120px rgba(255, 80, 17, 0.15);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(255, 80, 17, 0.4),
+                             0 0 40px rgba(255, 80, 17, 0.15);
+            }
+        }
+
+        .card .subtitle {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--title-color);
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .card .subtitle span {
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--skin-color);
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 0.9rem 2.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 80, 17, 0.3);
+            letter-spacing: 0.3px;
+        }
+
+        .btn:hover {
+            background-color: var(--scroll-thumb-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 80, 17, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .card {
+                padding: 2rem 1.5rem;
+            }
+            .card h1 {
+                font-size: 5.5rem;
+            }
+            .card .subtitle {
+                font-size: 1.1rem;
+            }
+            .btn {
+                font-size: 1rem;
+                padding: 0.8rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Matrix Canvas -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Centered Card -->
+    <div class="card">
+        <h1>404</h1>
+        <p class="subtitle">La página que buscas <span>no existe</span></p>
+        <a href="/" class="btn">Volver al Inicio</a>
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+
+            const ORANGE = '#ff5011';
+            let width, height, fontSize;
+            let streams = [];
+
+            // ============================================================
+            // 1. INITIALIZE STREAMS FROM ALL 4 SIDES
+            // ============================================================
+            function initStreams() {
+                streams = [];
+                const numStreams = Math.floor((width + height) / 22);
+                const directions = ['down', 'up', 'right', 'left'];
+
+                for (let i = 0; i < numStreams; i++) {
+                    const dir = directions[Math.floor(Math.random() * directions.length)];
+                    const len = 6 + Math.floor(Math.random() * 12);
+                    const speed = 3.5 + Math.random() * 8;
+
+                    let x, y;
+                    switch (dir) {
+                        case 'down':
+                            x = Math.random() * width;
+                            y = -len * fontSize - Math.random() * 120;
+                            break;
+                        case 'up':
+                            x = Math.random() * width;
+                            y = height + len * fontSize + Math.random() * 120;
+                            break;
+                        case 'right':
+                            x = -len * fontSize - Math.random() * 120;
+                            y = Math.random() * height;
+                            break;
+                        case 'left':
+                            x = width + len * fontSize + Math.random() * 120;
+                            y = Math.random() * height;
+                            break;
+                    }
+
+                    streams.push({ x, y, speed, direction: dir, length: len });
+                }
+            }
+
+            // ============================================================
+            // 2. RESIZE HANDLER
+            // ============================================================
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+
+                fontSize = Math.max(14, Math.min(22, width / 45));
+                initStreams();
+            }
+
+            // ============================================================
+            // 3. DIGIT GENERATOR (favors 4, 0, 4)
+            // ============================================================
+            function getDigit() {
+                const r = Math.random();
+                if (r < 0.15) return '4';
+                if (r < 0.30) return '0';
+                if (r < 0.45) return '4';
+                return Math.floor(Math.random() * 10).toString();
+            }
+
+            // ============================================================
+            // 4. ANIMATION LOOP (multi‑directional trails - NO OPACITY)
+            // ============================================================
+            function draw() {
+                // Fade trail (keeps the motion trail effect)
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+                ctx.fillRect(0, 0, width, height);
+
+                ctx.font = fontSize + 'px "Courier New", monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+
+                // ===== SOLID ORANGE - NO OPACITY =====
+                ctx.globalAlpha = 1.0;
+                ctx.fillStyle = ORANGE;
+
+                for (let s of streams) {
+                    // Move the head
+                    switch (s.direction) {
+                        case 'down':  s.y += s.speed; break;
+                        case 'up':    s.y -= s.speed; break;
+                        case 'right': s.x += s.speed; break;
+                        case 'left':  s.x -= s.speed; break;
+                    }
+
+                    // Reset if fully off screen
+                    if (s.direction === 'down' && s.y - s.length * fontSize > height) {
+                        s.y = -s.length * fontSize - Math.random() * 60;
+                        s.x = Math.random() * width;
+                        s.speed = 3.5 + Math.random() * 8;
+                    } else if (s.direction === 'up' && s.y + s.length * fontSize < 0) {
+                        s.y = height + s.length * fontSize + Math.random() * 60;
+                        s.x = Math.random() * width;
+                        s.speed = 3.5 + Math.random() * 8;
+                    } else if (s.direction === 'right' && s.x - s.length * fontSize > width) {
+                        s.x = -s.length * fontSize - Math.random() * 60;
+                        s.y = Math.random() * height;
+                        s.speed = 3.5 + Math.random() * 8;
+                    } else if (s.direction === 'left' && s.x + s.length * fontSize < 0) {
+                        s.x = width + s.length * fontSize + Math.random() * 60;
+                        s.y = Math.random() * height;
+                        s.speed = 3.5 + Math.random() * 8;
+                    }
+
+                    // ===== DRAW SOLID ORANGE CHARACTERS - NO OPACITY VARIATION =====
+                    for (let i = 0; i < s.length; i++) {
+                        let charX, charY;
+
+                        switch (s.direction) {
+                            case 'down':
+                                charX = s.x;
+                                charY = s.y - i * fontSize;
+                                break;
+                            case 'up':
+                                charX = s.x;
+                                charY = s.y + i * fontSize;
+                                break;
+                            case 'right':
+                                charX = s.x - i * fontSize;
+                                charY = s.y;
+                                break;
+                            case 'left':
+                                charX = s.x + i * fontSize;
+                                charY = s.y;
+                                break;
+                        }
+
+                        // Skip if off canvas
+                        if (charX < -fontSize || charX > width + fontSize ||
+                            charY < -fontSize || charY > height + fontSize) continue;
+
+                        // ===== EVERY CHARACTER IS SOLID ORANGE =====
+                        ctx.fillText(getDigit(), charX, charY);
+                    }
+                }
+
+                // Reset global alpha (though we set it to 1.0 above)
+                ctx.globalAlpha = 1.0;
+                requestAnimationFrame(draw);
+            }
+
+            // ============================================================
+            // 5. START
+            // ============================================================
+            window.addEventListener('resize', resize);
+            resize();
+            draw();
+        })();
+    </script>
+</body>
+</html>
