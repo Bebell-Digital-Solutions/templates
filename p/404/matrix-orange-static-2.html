@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Página no encontrada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== YOUR ORANGE COLOR PALETTE ===== */
+        :root {
+            --skin-color: #ff5011;
+            --mirage-color: hsl(210, 10%, 23%);
+            --title-color: hsl(210, 8%, 95%);
+            --text-color: hsl(210, 8%, 85%);
+            --body-color: hsl(210, 19%, 5%);
+            --box-color: hsl(210, 14%, 10%);
+            --scroll-box-color: hsl(210, 12%, 38%);
+            --scroll-thumb-color: #ff5011;
+            --hue-color: 210;
+        }
+
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--body-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== MATRIX CANVAS ===== */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* ===== CENTERED CARD ===== */
+        .card {
+            position: relative;
+            z-index: 1;
+            background: rgba(10, 14, 19, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--scroll-box-color);
+            border-radius: 2rem;
+            padding: 3rem 4rem;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8);
+        }
+
+        .card h1 {
+            font-size: 8rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--skin-color);
+            text-shadow: 0 0 30px rgba(255, 80, 17, 0.3);
+            margin-bottom: 0.25rem;
+            letter-spacing: -4px;
+        }
+
+        .card .subtitle {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--title-color);
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .card .subtitle span {
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--skin-color);
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 0.9rem 2.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 80, 17, 0.3);
+            letter-spacing: 0.3px;
+        }
+
+        .btn:hover {
+            background-color: var(--scroll-thumb-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 80, 17, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 2rem 1.5rem;
+            }
+            .card h1 {
+                font-size: 5.5rem;
+            }
+            .card .subtitle {
+                font-size: 1.1rem;
+            }
+            .btn {
+                font-size: 1rem;
+                padding: 0.8rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="card">
+        <h1>404</h1>
+        <p class="subtitle">La página que buscas <span>no existe</span></p>
+        <a href="/" class="btn">Volver al Inicio</a>
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+
+            const ORANGE = '#ff5011';
+            let width, height;
+            let columns = [];
+            let fontSize = 20;
+
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+
+                // Slightly smaller font for better readability
+                fontSize = Math.max(14, Math.min(20, width / 45));
+                const colCount = Math.floor(width / fontSize);
+                columns = [];
+                for (let i = 0; i < colCount; i++) {
+                    columns.push({
+                        x: i * fontSize + (fontSize / 2),
+                        y: Math.random() * height * -1,
+                        speed: 1.5 + Math.random() * 4, // slightly slower
+                    });
+                }
+            }
+
+            function getDigit() {
+                const r = Math.random();
+                if (r < 0.15) return '4';
+                if (r < 0.30) return '0';
+                if (r < 0.45) return '4';
+                return Math.floor(Math.random() * 10).toString();
+            }
+
+            function draw() {
+                // --- INTENSITY FIX #1: Faster fade (was 0.08, now 0.25) ---
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+                ctx.fillRect(0, 0, width, height);
+
+                ctx.font = fontSize + 'px "Courier New", monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+
+                for (let col of columns) {
+                    col.y += col.speed;
+
+                    if (col.y > height) {
+                        col.y = -fontSize * 3;
+                        col.speed = 1.5 + Math.random() * 4;
+                        col.x = Math.floor(Math.random() * (width / fontSize)) * fontSize + (fontSize / 2);
+                    }
+
+                    // --- INTENSITY FIX #2: Fewer numbers per column (was 10-25, now 5-14) ---
+                    const numChars = 5 + Math.floor(Math.random() * 10);
+                    for (let i = 0; i < numChars; i++) {
+                        const yPos = col.y - i * fontSize;
+                        if (yPos < -fontSize || yPos > height + fontSize) continue;
+
+                        // Opacity gradient: newer (top) is brighter, older (bottom) fades
+                        const fadeFactor = 1 - (i / numChars) * 0.9;
+                        
+                        // --- INTENSITY FIX #3: Global softness multiplier (0.5x) ---
+                        // Plus a little random variation
+                        const finalOpacity = 0.5 * fadeFactor * (0.6 + 0.4 * Math.random());
+                        
+                        ctx.globalAlpha = Math.min(finalOpacity, 0.9); // cap it just in case
+                        ctx.fillStyle = ORANGE;
+                        
+                        const char = getDigit();
+                        ctx.fillText(char, col.x, yPos);
+                    }
+                }
+
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(draw);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+            draw();
+        })();
+    </script>
+</body>
+</html>
