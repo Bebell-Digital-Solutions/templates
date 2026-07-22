@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Techvora - Smart Startup Solutions</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Icons+Outlined&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f97316", // Vibrant Orange from the logo/accents
+              "background-light": "#ffffff",
+              "background-dark": "#0a0a0a",
+              "surface-dark": "#161616",
+              "card-dark": "#1f1f1f",
+            },
+            fontFamily: {
+              display: ["Plus Jakarta Sans", "sans-serif"],
+              sans: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "12px",
+              "xl": "24px",
+            },
+          },
+        },
+      };
+    </script>
+<style>
+        .hero-glow {
+            background: radial-gradient(circle at 50% -20%, rgba(249, 115, 22, 0.15), transparent 70%);
+        }
+        .card-border {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .accent-gradient {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+<nav class="fixed top-0 w-full z-50 border-b border-slate-200/10 backdrop-blur-md bg-white/70 dark:bg-background-dark/70">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="text-primary material-icons-outlined text-3xl">terminal</span>
+<span class="text-2xl font-extrabold font-display tracking-tight">Techvora</span>
+</div>
+<div class="hidden md:flex items-center gap-8 text-sm font-medium opacity-80">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<a class="hover:text-primary transition-colors" href="#">About Us</a>
+<a class="hover:text-primary transition-colors" href="#">Features</a>
+<a class="hover:text-primary transition-colors" href="#">Pages</a>
+<a class="hover:text-primary transition-colors" href="#">Contact Us</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-black font-semibold text-sm hover:opacity-90 transition-all">
+                    Get Started
+                </button>
+</div>
+</div>
+</nav>
+<section class="relative pt-40 pb-20 overflow-hidden hero-glow">
+<div class="max-w-7xl mx-auto px-6 text-center">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest mb-8">
+<span class="material-icons-outlined text-sm">auto_awesome</span>
+                What We Offer
+            </div>
+<h1 class="text-5xl md:text-7xl font-extrabold font-display leading-[1.1] mb-6 max-w-4xl mx-auto">
+                Everything You Need <br/>
+<span class="text-primary">To Work Smarter</span>
+</h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg max-w-2xl mx-auto mb-10">
+                Streamline your operations, automate workflows, and gain deep insights with our all-in-one startup intelligence platform.
+            </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-24">
+<button class="w-full sm:w-auto px-8 py-4 rounded-full bg-primary text-white font-bold text-lg hover:shadow-lg hover:shadow-primary/20 transition-all">
+                    Start Free Trial
+                </button>
+<button class="w-full sm:w-auto px-8 py-4 rounded-full border border-slate-200 dark:border-slate-800 font-bold text-lg hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+                    Book a Demo
+                </button>
+</div>
+<div class="pt-12 border-t border-slate-200 dark:border-slate-800">
+<p class="text-xs font-bold uppercase tracking-widest opacity-40 mb-10">Trusted By 5,000+ Teams Worldwide</p>
+<div class="flex flex-wrap justify-center items-center gap-12 opacity-50 grayscale hover:grayscale-0 transition-all">
+<img alt="Slack" class="h-8 invert dark:invert-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnW_IqoLGJSMDNmMwG7-Grubx9TuOLGAb9-bYxbOe6Ha62UMi0FVZ3vASSmpb1YUP-TV7dcV29FQan9ruAjXuoh423KoWjeNcmRsspXnHpOyKAM76yxvqqhfksHDz69Hb8VOn6cvuddHxbaAs_n4wvt2F8G6dli4QUvAg3Z-lZBZSVXePyF63fpxpxRUeL4UmRRRw5rXnhHnlfclp7Idl8r4B7miO5TK_l5cVgIufpx0t1oYX28-OVqriLFEnWvnHGucxIqqeliaRg"/>
+<img alt="Google" class="h-8 invert dark:invert-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdC_l7BC9ralWNNGn1J90I9GKZRIRo90yhqydHbAx6VPPMRGI2ud0c8XcjkPwgLuY_yZP6dnZs7UjmGsTurF5ESe6kFcPBDxjeYFRH_JBWCKrYrtr7N29tFDe0m9RTVFM9JR0bhJHb-RAb5oDCfP9oV0Y_DCV4W0_-dxkfREsuljz-fM_Tm1VkyG8KcCS6m0DaUy7r3iw_y97CmY5LHx1Cbpx2FXrTrk8ktg7o5eUDY45kdogNYf3omgDKoKARnkQF8mTTYm_kEQCl"/>
+<img alt="LinkedIn" class="h-8 invert dark:invert-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwuSOXXiz1DAAiv9wxfRkzeSw2cvPioHq_DBuPokTk1kDz9AXGmgj5VvFstCvCUDQXcwm1MfvXj1HjsIPnIXhjpDAhoDDdaI9mNpzlblJJuUargrzZgKAE7YcfOWdXDPqlJ9hs2k5NSm2fxTwqhccriDXhxEmadAknU2Q3whldcmBAXGE6DHm4jg_TznDUF2K5h74HCjVrcYfKhd9FxArDwd_FUhv_lAKFLMPh-ncVC5FZIXYyBqyfvtgJTlnU_0Nv5dVXLuK0q1-X"/>
+<img alt="Loom" class="h-8 invert dark:invert-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy1JxPKRxQIbwVmPzD4_dRbAEVIel_MjRMxOgR1GlObrYWM-29jbN48Y81xMf9bC6Q_kIOhT2joiS_U0PBVNJby7eoYoTicS3qirNfJdKa0wrS_K5MPmmqnc_qlH-22UZQ_Zdfmvl1qXTwddiDc8DB32ZoQt0mCpcQgGXivQA2iMULWSRLtgnZuzoKo4wpJn0TQhiC1I2pa_hBHWaDo-0tRLRKmtszL1BE5dkjh3WdZHXc8HwDHV75tQmIMOGhb0ALOzxYk8V4M_jR"/>
+<img alt="Meta" class="h-8 invert dark:invert-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3eWpo457c1vyvNo0KulEEZ2YcQp-XeppNbdcrZYpAINSTts4bdpO1dw8Kkv7vqtMChQQl22dq7jQ7040way1pTIejP1MVQMvn7hT_mP_k3dnIITUAVnGiGgqWvUiegFbFcSgtVw8b20Fm0Tl0xK_3GbM7X1sEUGACsytODXPriVca8HzpeyKtQ70A9OGisEa-ff5Mcuv0k4qYc2QnX9DT0fHNWCI2l475oOhB1imv51mskJI7WlGpkK5BsiYH2Lw5AhbgsaMk69in"/>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-white dark:bg-[#080808]">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid md:grid-cols-2 gap-12 items-center mb-32">
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest mb-6">
+<span class="material-icons-outlined text-sm">key</span> Key Features
+                    </div>
+<h2 class="text-4xl md:text-5xl font-bold font-display mb-6">
+                        Everything You Need <br/>
+<span class="text-primary">To Scale Your Startup</span>
+</h2>
+</div>
+<div class="text-slate-500 dark:text-slate-400 leading-relaxed">
+<p class="mb-6">Our platform provides a comprehensive suite of tools designed specifically for the modern entrepreneur. Focus on what matters most while we handle the complexity of data and operations.</p>
+<button class="px-6 py-2.5 rounded-full bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white font-semibold text-sm hover:bg-slate-200 dark:hover:bg-white/10 transition-all">
+                        Learn More
+                    </button>
+</div>
+</div>
+<div class="space-y-12">
+<div class="grid lg:grid-cols-2 gap-12 items-center p-8 rounded-3xl bg-slate-50 dark:bg-surface-dark card-border">
+<div class="order-2 lg:order-1">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6">
+<span class="material-icons-outlined">insights</span>
+</div>
+<h3 class="text-3xl font-bold mb-4">Smart Analytics <span class="text-primary">Dashboard</span></h3>
+<p class="text-slate-500 dark:text-slate-400 mb-8 max-w-md">Get real-time insights into your business performance with interactive charts and automated reporting tools.</p>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 text-sm opacity-80"><span class="material-icons-outlined text-primary text-sm">check_circle</span> Real-time data processing</li>
+<li class="flex items-center gap-3 text-sm opacity-80"><span class="material-icons-outlined text-primary text-sm">check_circle</span> Customizable KPI tracking</li>
+</ul>
+</div>
+<div class="order-1 lg:order-2 relative group">
+<div class="absolute -inset-4 bg-primary/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<img alt="Analytics Dashboard" class="rounded-xl relative shadow-2xl border border-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9E7nbKm9jk22htKBi3MR2Efu6GCr3Q13oFix8nyTGqO18wat7W10IA0TtSrwYUD80tKofyDwAyjhwGitmt6fFV3Ic_3gP1Dm_gzFjJc1NWxL1hvc-0ckCM-u1f66siM0i96PPg5K88XHQAO-cFKOQkl9AdOwXin_t2gNYeYPyaKmd1AYlwkAUGJK7UHXBTeAPOAX5bQby0qB19S2r6flUQhN4k0F0U_Hpw8YqBvv2lxEAOdg7JnidzLvkksk_38c2QJizLDwYgwPG"/>
+</div>
+</div>
+<div class="grid lg:grid-cols-2 gap-12 items-center p-8 rounded-3xl bg-slate-50 dark:bg-surface-dark card-border">
+<div class="relative group">
+<div class="absolute -inset-4 bg-primary/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<img alt="Automation Workflow" class="rounded-xl relative shadow-2xl border border-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrgQ7TKxNCv5LbxbJCl6Q42wS9E7Mvp03o7OIt-E-NyblVgnHQ-VR6ig099UdJWcm2LRPOkh5ZtD4L-pFnwZkZMj7SkHfwJRnF1oYfaoDFM3KKnNBzCGQp4F8NZA_9xkmUYvryVow-On8_aiiz_5WvYgTqu8cojYeKcu-xLlTJjbgxkvShRcp_oJywUJmlAVEtjKrEh2z--3Mk0MDU0kC2Tq0FKK_AoAtA7Ci1gbGUEX5hnCIdHPXjqYMKF0mbJ88oQtaz-Cjm4T7M"/>
+</div>
+<div>
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6">
+<span class="material-icons-outlined">account_tree</span>
+</div>
+<h3 class="text-3xl font-bold mb-4">Automation <span class="text-primary">Workflow</span></h3>
+<p class="text-slate-500 dark:text-slate-400 mb-8 max-w-md">Eliminate repetitive tasks by building powerful automated workflows that connect your favorite tools.</p>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 text-sm opacity-80"><span class="material-icons-outlined text-primary text-sm">check_circle</span> Visual drag-and-drop builder</li>
+<li class="flex items-center gap-3 text-sm opacity-80"><span class="material-icons-outlined text-primary text-sm">check_circle</span> 500+ native integrations</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-slate-50 dark:bg-background-dark">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-16">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest mb-6">
+<span class="material-icons-outlined text-sm">bolt</span> Powerful Services
+                </div>
+<h2 class="text-4xl md:text-5xl font-bold font-display mb-6">Everything You Need To <br/> Build <span class="text-primary">Smarter, Faster</span></h2>
+</div>
+<div class="grid md:grid-cols-2 gap-8">
+<div class="group relative p-1 rounded-3xl bg-slate-200 dark:bg-slate-800 overflow-hidden">
+<div class="relative h-full bg-white dark:bg-surface-dark rounded-[22px] p-8 flex flex-col justify-between overflow-hidden">
+<div class="relative z-10">
+<span class="material-icons-outlined text-primary mb-4">schedule</span>
+<h4 class="text-2xl font-bold mb-3">Real Time <span class="text-primary">Dashboard</span></h4>
+<p class="text-slate-500 text-sm mb-6">Live streaming data updates every millisecond.</p>
+</div>
+<img alt="Dashboard Chart" class="rounded-xl shadow-lg border border-white/5 mt-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCapKu0IM0krTGqmspJ0Img1gATLxwIVKB6VFrx2DLFc9L9EOykKySOV3bFSlwPUulQU_P23aWAtKypZETbhg6EJlTnnJ2et6O4L0Psv-T6aYNJLV1U8jQ8ggiz-HuTWS92rZX-MKVbvfoLUHnUu2H2ZNm2xdadituS0hhv2SNZLJp3Z8Bnw4BlrVCLq5QILof1Kua0yQuI31j1cXaBjchYhfeOOq-Y0sOusgCQDVR2uwFBEd01Nm8UdylQeeCzMoOi2wydJOzp26Gb"/>
+<div class="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/10 blur-3xl group-hover:bg-primary/20 transition-all"></div>
+</div>
+</div>
+<div class="group relative p-1 rounded-3xl accent-gradient overflow-hidden">
+<div class="relative h-full bg-white dark:bg-surface-dark rounded-[22px] p-8 flex flex-col justify-between overflow-hidden">
+<div class="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+<div class="relative z-10">
+<span class="material-icons-outlined text-primary mb-4">query_stats</span>
+<h4 class="text-2xl font-bold mb-3">Performance <span class="text-primary">Tracking</span></h4>
+<p class="text-slate-500 text-sm mb-6">Deep dive into unit economics and growth loops.</p>
+</div>
+<div class="relative z-10 mt-auto bg-slate-100 dark:bg-card-dark p-6 rounded-2xl border border-white/5">
+<div class="flex justify-between items-end mb-4">
+<div>
+<p class="text-xs opacity-60 uppercase mb-1">Social Traffic</p>
+<p class="text-3xl font-bold">524.122</p>
+</div>
+<div class="text-emerald-500 flex items-center text-sm font-bold">
+<span class="material-icons-outlined text-sm">trending_up</span> 14%
+                                </div>
+</div>
+<div class="flex gap-1 items-end h-20">
+<div class="bg-primary w-full h-[30%] rounded-t"></div>
+<div class="bg-primary w-full h-[50%] rounded-t"></div>
+<div class="bg-primary w-full h-[40%] rounded-t"></div>
+<div class="bg-primary w-full h-[80%] rounded-t"></div>
+<div class="bg-primary w-full h-[60%] rounded-t"></div>
+<div class="bg-primary w-full h-[90%] rounded-t"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid md:grid-cols-2 gap-8 mt-8">
+<div class="bg-white dark:bg-surface-dark p-8 rounded-3xl card-border flex items-start gap-6">
+<div class="p-3 bg-primary/10 rounded-xl text-primary">
+<span class="material-icons-outlined">psychology</span>
+</div>
+<div>
+<h4 class="text-xl font-bold mb-2">Predictive <span class="text-primary">Analytics</span></h4>
+<p class="text-slate-500 text-sm">AI-driven forecasts to anticipate market trends and user behavior.</p>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark p-8 rounded-3xl card-border flex items-start gap-6">
+<div class="p-3 bg-primary/10 rounded-xl text-primary">
+<span class="material-icons-outlined">description</span>
+</div>
+<div>
+<h4 class="text-xl font-bold mb-2">Reporting &amp; <span class="text-primary">Insights</span></h4>
+<p class="text-slate-500 text-sm">Generate beautiful stakeholder reports with just one click.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-16">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest mb-6">
+<span class="material-icons-outlined text-sm">payments</span> Pricing
+                </div>
+<h2 class="text-4xl md:text-5xl font-bold font-display mb-6">Simple Pricing For <span class="text-primary">Every Stage</span></h2>
+<p class="text-slate-500 dark:text-slate-400 max-w-xl mx-auto">Choose the plan that fits your current needs and scale as you grow.</p>
+</div>
+<div class="grid lg:grid-cols-3 gap-8 items-stretch">
+<div class="p-8 rounded-3xl bg-slate-50 dark:bg-surface-dark card-border flex flex-col">
+<div class="w-10 h-10 rounded-lg bg-slate-200 dark:bg-white/5 flex items-center justify-center mb-6">
+<span class="material-icons-outlined text-sm">star_outline</span>
+</div>
+<h3 class="text-xl font-bold mb-2">Starter Plan</h3>
+<div class="flex items-baseline gap-1 mb-6">
+<span class="text-4xl font-extrabold">$29.5</span>
+<span class="text-slate-500 text-sm">/ Month</span>
+</div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-center gap-3 text-sm opacity-70"><span class="material-icons-outlined text-primary text-sm">check</span> 5 Team Members</li>
+<li class="flex items-center gap-3 text-sm opacity-70"><span class="material-icons-outlined text-primary text-sm">check</span> Basic Analytics</li>
+<li class="flex items-center gap-3 text-sm opacity-70"><span class="material-icons-outlined text-primary text-sm">check</span> 10 Automation Flows</li>
+<li class="flex items-center gap-3 text-sm opacity-70"><span class="material-icons-outlined text-primary text-sm">check</span> Support via Email</li>
+</ul>
+<button class="w-full py-4 rounded-full border border-slate-300 dark:border-white/10 font-bold hover:bg-slate-100 dark:hover:bg-white/5 transition-all">Get Started</button>
+</div>
+<div class="p-8 rounded-3xl accent-gradient text-white flex flex-col relative transform scale-105 shadow-2xl z-10">
+<div class="absolute top-0 right-0 p-4">
+<span class="bg-white/20 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Most Popular</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center mb-6">
+<span class="material-icons-outlined text-sm">rocket_launch</span>
+</div>
+<h3 class="text-xl font-bold mb-2">Pro Plan</h3>
+<div class="flex items-baseline gap-1 mb-6">
+<span class="text-4xl font-extrabold">$99.5</span>
+<span class="text-white/70 text-sm">/ Month</span>
+</div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-center gap-3 text-sm"><span class="material-icons-outlined text-sm">check</span> Unlimited Members</li>
+<li class="flex items-center gap-3 text-sm"><span class="material-icons-outlined text-sm">check</span> Advanced Smart Analytics</li>
+<li class="flex items-center gap-3 text-sm"><span class="material-icons-outlined text-sm">check</span> Unlimited Automations</li>
+<li class="flex items-center gap-3 text-sm"><span class="material-icons-outlined text-sm">check</span> Priority 24/7 Support</li>
+</ul>
+<button class="w-full py-4 rounded-full bg-white text-primary font-bold hover:shadow-xl transition-all">Get Started</button>
+</div>
+<div class="p-8 rounded-3xl bg-slate-50 dark:bg-surface-dark card-border flex flex-col">
+<div class="w-10 h-10 rounded-lg bg-slate-200 dark:bg-white/5 flex items-center justify-center mb-6">
+<span class="material-icons-outlined text-sm">groups</span>
+</div>
+<h3 class="text-xl font-bold mb-2">Team Plan</h3>
+<div class="flex items-baseline gap-1 mb-6">
+<span class="text-4xl font-extrabold">$299</span>
+<span class="text-slate-500 text-sm">/ Month</span>
+</div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-center gap-3 text-sm opacity-70"><span class="material-icons-outlined text-primary text-sm">check</span> Custom Integrations</li>
+<li class="flex items-center gap-3 text-sm opacity-70"><span class="material-icons-outlined text-primary text-sm">check</span> White-label Reports</li>
+<li class="flex items-center gap-3 text-sm opacity-70"><span class="material-icons-outlined text-primary text-sm">check</span> Dedicated Account Manager</li>
+<li class="flex items-center gap-3 text-sm opacity-70"><span class="material-icons-outlined text-primary text-sm">check</span> Enterprise SLA</li>
+</ul>
+<button class="w-full py-4 rounded-full border border-slate-300 dark:border-white/10 font-bold hover:bg-slate-100 dark:hover:bg-white/5 transition-all">Get Started</button>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 px-6">
+<div class="max-w-5xl mx-auto p-12 md:p-20 rounded-[40px] accent-gradient text-white text-center relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full opacity-30 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+<div class="relative z-10">
+<div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-10 text-3xl font-bold">T</div>
+<h2 class="text-4xl md:text-5xl font-extrabold mb-6">Ready To Scale <br/> Your Startup Faster?</h2>
+<p class="text-white/80 max-w-lg mx-auto mb-10">Join thousands of successful startups using Techvora to power their growth.</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="w-full sm:w-auto px-10 py-4 rounded-full bg-white text-primary font-bold hover:shadow-xl transition-all">Start Free Trial</button>
+<button class="w-full sm:w-auto px-10 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 font-bold hover:bg-white/20 transition-all">Talk To Sales</button>
+</div>
+</div>
+</div>
+</section>
+<footer class="pt-24 pb-12 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-20">
+<div class="col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<span class="text-primary material-icons-outlined text-3xl">terminal</span>
+<span class="text-2xl font-extrabold font-display tracking-tight">Techvora</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm max-w-xs mb-8">
+                        The ultimate operating system for modern startups. Build, scale, and thrive with data-driven confidence.
+                    </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#">
+<i class="material-icons-outlined text-lg">facebook</i>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#">
+<i class="material-icons-outlined text-lg">alternate_email</i>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#">
+<i class="material-icons-outlined text-lg">camera_alt</i>
+</a>
+</div>
+</div>
+<div>
+<h5 class="font-bold mb-6">Navigation</h5>
+<ul class="space-y-4 text-sm text-slate-500 dark:text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">Home</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Features</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Use Cases</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Reviews</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact Us</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6">Company</h5>
+<ul class="space-y-4 text-sm text-slate-500 dark:text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6">Resources</h5>
+<ul class="space-y-4 text-sm text-slate-500 dark:text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">Documentation</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Reference</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Help Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Blog</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Case Studies</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:row items-center justify-between gap-4 text-xs font-medium text-slate-500">
+<p>© 2024 Techvora. Powered by Innovation.</p>
+<div class="flex gap-8">
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Check for system theme preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        } else {
+            // Default to dark for this specific design if preference not found or system is light
+            // because the reference image is dark-themed
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
+</body></html>
