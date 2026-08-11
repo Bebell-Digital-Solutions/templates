@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Reviews</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #111827;
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex items-center justify-center">
+
+    <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-8 lg:gap-12 relative h-[800px] overflow-hidden">
+        
+        <!-- Left Column: Header and Summary -->
+        <div class="flex flex-col justify-center p-8 lg:p-12 z-10 bg-white">
+            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
+                Real reviews for our products
+            </h1>
+            <p class="text-gray-500 text-lg mb-8 leading-relaxed">
+                Explore our curated collections and see why thousands of shoppers choose us for quality and reliability. Authenticated reviews from our global community.
+            </p>
+
+            <!-- Rating Summary Card -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 flex flex-col items-center justify-center text-center shadow-sm border border-gray-100">
+                <div class="flex items-center gap-3 mb-2">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    <span class="text-3xl font-bold">5.0</span>
+                    <div class="flex gap-0.5 text-gray-800">
+                        <!-- 5 Stars -->
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 font-medium">Based on 8 reviews</p>
+            </div>
+
+            <button class="w-full bg-[#111827] text-white font-semibold py-3.5 px-6 rounded-xl hover:bg-gray-800 transition-colors duration-200" onclick="openReviewModal()">
+                Write a review
+            </button>
+        </div>
+
+        <!-- Right Column: Auto-scrolling Reviews -->
+        <div class="relative h-full overflow-hidden bg-white" id="reviewsContainer">
+            <!-- Fade overlays for smooth scrolling effect -->
+            <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 md:px-8 h-full" id="scrollTracks">
+                <!-- Track 1 (Left) -->
+                <div class="flex flex-col gap-6" id="track1">
+                    <!-- Cards will be injected here -->
+                </div>
+                <!-- Track 2 (Right) -->
+                <div class="flex flex-col gap-6" id="track2">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Review Modal Overlay -->
+    <div id="reviewModalOverlay" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <!-- Modal Content -->
+        <div id="reviewModal" class="bg-white rounded-2xl shadow-xl w-full max-w-2xl mx-4 overflow-hidden transform scale-95 transition-transform duration-300 relative">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between p-4 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900">Write a Review</h3>
+                <button onclick="closeReviewModal()" class="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Iframe Container -->
+            <div class="w-full h-[500px] bg-gray-50">
+                <!-- Using a placeholder URL for demonstration -->
+                <iframe id="reviewIframe" src="" class="w-full h-full border-none" title="Google Review Form"></iframe>
+            </div>
+            
+            <!-- Footer/Loading state (Optional, but good for UX) -->
+            <div id="modalLoading" class="absolute inset-0 bg-white/80 flex items-center justify-center z-10 hidden">
+                 <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data for reviews based on the provided screenshots
+        const reviewsData = [
+            {
+                rating: 5,
+                date: "3 years ago",
+                title: "",
+                content: "Just got my new tops and have to say I'm impressed with the quality. The delivery was really fast, it only took 2...",
+                author: {
+                    name: "Jessica Smith",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                }
+            },
+            {
+                rating: 5,
+                date: "3 years ago",
+                title: "",
+                content: "These pastel blue pants combine a vibrant, eye-catching color with utmost comfort and an unbeatable fit. The...",
+                author: {
+                    name: "Filip Koteski",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=filip"
+                }
+            },
+             {
+                rating: 5,
+                date: "3 years ago",
+                title: "",
+                content: "I recently purchased a fabulous handbag from this amazing store, and let me tell you, it has been a total game-changer!...",
+                author: {
+                    name: "Teodora Delovska",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=teodora"
+                }
+            },
+             {
+                rating: 5,
+                date: "3 years ago",
+                title: "",
+                content: "The customer service at this store is excellent. The staff is always friendly and helpful. They make sure that every...",
+                author: {
+                    name: "Laze Trajkov",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                }
+            },
+            {
+                rating: 5,
+                date: "3 years ago",
+                title: "",
+                content: "This store is my favorite place to shop. The quality of the products is excellent and the prices are reasonable. I always...",
+                author: {
+                    name: "Bratislav Petrovski",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=bratislav"
+                }
+            },
+            {
+                rating: 5,
+                date: "3 years ago",
+                title: "",
+                content: "I recently made my first purchase from ES Commerce clothing store and I am beyond impressed! The selection of...",
+                author: {
+                    name: "Toni Toshic",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026703d"
+                }
+            },
+            {
+                rating: 5,
+                date: "3 years ago",
+                title: "",
+                content: "The quality of the clothes at this store never fails to impress me. They are not only durable and well-fitting, but they...",
+                 author: {
+                    name: "Zeo Zdravkovski",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d"
+                }
+            },
+            {
+                rating: 5,
+                date: "3 years ago",
+                title: "",
+                content: "Exceptional products, marked by several distinctive aspects. The staff members...",
+                 author: {
+                    name: "Aleksandar Angelov",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=aleksandar"
+                }
+            },
+            {
+                rating: 5,
+                date: "2 years ago",
+                title: "",
+                content: "Absolutely love the fit and fabric! Will definitely be buying more in different colors. The quality is just unmatched.",
+                author: {
+                    name: "Sarah Jenkins",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=sarah"
+                }
+            },
+            {
+                rating: 5,
+                date: "2 years ago",
+                title: "",
+                content: "Customer support was amazing when I needed an exchange. The new size fits perfectly and the process was so seamless.",
+                author: {
+                    name: "Michael Chang",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=michael"
+                }
+            },
+            {
+                rating: 4,
+                date: "1 year ago",
+                title: "",
+                content: "This jacket is exactly what I was looking for. Lightweight but very warm. Took off one star because shipping took a bit longer.",
+                author: {
+                    name: "Emma Watson",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=emma"
+                }
+            },
+            {
+                rating: 5,
+                date: "1 year ago",
+                title: "",
+                content: "I've been wearing these shoes for a week now and they are incredibly comfortable for long walks around the city.",
+                author: {
+                    name: "David Rodriguez",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=david"
+                }
+            },
+            {
+                rating: 5,
+                date: "11 months ago",
+                title: "",
+                content: "The stitching and attention to detail on this dress is remarkable for the price. I wore it to a wedding and got so many compliments.",
+                author: {
+                    name: "Sophia Lee",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=sophia"
+                }
+            },
+            {
+                rating: 5,
+                date: "8 months ago",
+                title: "",
+                content: "Shipping was incredibly fast and the packaging was beautiful. Makes for a great unboxing experience. Highly recommend!",
+                author: {
+                    name: "James Wilson",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=james"
+                }
+            },
+            {
+                rating: 5,
+                date: "5 months ago",
+                title: "",
+                content: "These jeans have the perfect amount of stretch. They look like rigid denim but feel like sweatpants. Will buy again.",
+                author: {
+                    name: "Olivia Martinez",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=olivia"
+                }
+            },
+            {
+                rating: 5,
+                date: "2 months ago",
+                title: "",
+                content: "I bought this as a gift for my sister and she hasn't taken it off since. The material is so soft and holds up well in the wash.",
+                author: {
+                    name: "Daniel Kim",
+                    verified: true,
+                    avatar: "https://i.pravatar.cc/150?u=daniel"
+                }
+            }
+        ];
+
+        function createReviewCard(review) {
+            let starsHtml = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < review.rating) {
+                    starsHtml += `<svg class="w-4 h-4 fill-gray-800" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`;
+                } else {
+                    starsHtml += `<svg class="w-4 h-4 text-gray-300 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`;
+                }
+            }
+
+            let avatarHtml = '';
+            if (review.author.avatar) {
+                avatarHtml = `<img src="${review.author.avatar}" alt="${review.author.name}" class="w-10 h-10 rounded-full object-cover">`;
+            } else {
+                avatarHtml = `<div class="w-10 h-10 rounded-full ${review.author.color} flex items-center justify-center text-white font-semibold">${review.author.initials}</div>`;
+            }
+
+            return `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-4 transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-md">
+                    <div class="flex justify-between items-center">
+                        <div class="flex gap-0.5">
+                            ${starsHtml}
+                        </div>
+                        <span class="text-sm text-gray-500">${review.date}</span>
+                    </div>
+                    
+                    <p class="text-gray-700 leading-relaxed text-[15px]">
+                        ${review.content}
+                    </p>
+
+                    <div class="flex items-center gap-3 mt-auto pt-2">
+                        ${avatarHtml}
+                        <div>
+                            <p class="text-sm font-bold text-gray-900">${review.author.name}</p>
+                            ${review.author.verified ? `
+                                <div class="flex items-center gap-1 text-gray-500">
+                                    <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                    <span class="text-xs">Verified Buyer</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const track1 = document.getElementById('track1');
+            const track2 = document.getElementById('track2');
+            
+            // Split data into two columns for the tracks
+            const col1Data = reviewsData.filter((_, i) => i % 2 === 0);
+            const col2Data = reviewsData.filter((_, i) => i % 2 !== 0);
+
+            // Function to populate a track multiple times to create enough content for seamless scrolling
+            function populateTrack(track, data) {
+                let html = '';
+                // Duplicate data to ensure track is taller than container
+                for(let i=0; i<3; i++) {
+                    data.forEach(review => {
+                        html += createReviewCard(review);
+                    });
+                }
+                track.innerHTML = html;
+            }
+
+            populateTrack(track1, col1Data);
+            populateTrack(track2, col2Data);
+
+            // Setup scrolling animation variables
+            let scrollPos1 = 0;
+            // Start track 2 halfway to offset the cards visually
+            let scrollPos2 = -150; 
+            const speed = 0.5; // Pixels per frame
+
+            function animateScroll() {
+                scrollPos1 -= speed;
+                // Reverse direction for track 2
+                scrollPos2 += speed;
+
+                const resetPoint = -(track1.scrollHeight / 3);
+                // For track 2 going up, reset when it goes above 0
+                const resetPointUp = 0; 
+                // We need to know max scroll for upward scrolling reset
+                const maxScrollUp = -(track2.scrollHeight / 3);
+
+                if (scrollPos1 <= resetPoint) {
+                    scrollPos1 = 0;
+                }
+                
+                if (scrollPos2 >= resetPointUp) {
+                    // Reset to the negative position representing the bottom of the first block
+                    scrollPos2 = maxScrollUp;
+                }
+
+                track1.style.transform = `translateY(${scrollPos1}px)`;
+                track2.style.transform = `translateY(${scrollPos2}px)`;
+
+                requestAnimationFrame(animateScroll);
+            }
+
+            // Start animation
+            requestAnimationFrame(animateScroll);
+        });
+
+        // Modal Logic
+        const modalOverlay = document.getElementById('reviewModalOverlay');
+        const modal = document.getElementById('reviewModal');
+        const iframe = document.getElementById('reviewIframe');
+        
+        // Placeholder URL - Replace with actual Google Review URL
+        const reviewUrl = "https://example.com/demo-review-form";
+
+        function openReviewModal() {
+            // Set iframe src just before opening to avoid loading it on initial page load
+            if (!iframe.src || iframe.src === window.location.href) {
+                iframe.src = reviewUrl;
+            }
+
+            // Show overlay
+            modalOverlay.classList.remove('hidden');
+            
+            // Small delay to allow display:block to apply before animating opacity
+            setTimeout(() => {
+                modalOverlay.classList.remove('opacity-0');
+                modalOverlay.classList.add('opacity-100');
+                
+                modal.classList.remove('scale-95');
+                modal.classList.add('scale-100');
+            }, 10);
+            
+            // Prevent body scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeReviewModal() {
+            // Animate out
+            modalOverlay.classList.remove('opacity-100');
+            modalOverlay.classList.add('opacity-0');
+            
+            modal.classList.remove('scale-100');
+            modal.classList.add('scale-95');
+
+            // Hide after animation completes
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+                // Optional: clear iframe to stop any background processes if needed
+                // iframe.src = ''; 
+            }, 300); // Matches duration-300 class
+
+            // Restore body scrolling
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close on click outside modal content
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeReviewModal();
+            }
+        });
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) {
+                closeReviewModal();
+            }
+        });
+
+    </script>
+</body>
+</html>
