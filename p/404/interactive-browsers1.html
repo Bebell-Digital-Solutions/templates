@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Página No Encontrada</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Brand Color Scheme */
+            --primary-brand: rgb(0, 32, 99); 
+            --accent-color: rgb(150, 109, 28);
+            --title-color: rgb(150, 109, 28);
+            
+            --text-main: #0f172a; /* Slate 900 */
+            --text-muted: #475569; /* Slate 600 */
+            
+            /* Backgrounds */
+            --bg-slate-50: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            background-color: var(--bg-slate-50); 
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        h1, h3 {
+            font-family: 'Libre Baskerville', serif;
+            color: var(--title-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        p { 
+            font-size: 1.15rem; 
+            color: var(--text-muted); 
+            margin-bottom: 1.5rem; 
+        }
+
+        /* --- 404 SPECIFIC STYLES --- */
+        .error-wrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            /* min-height changed to 100vh to fill the screen since header/footer are gone */
+            min-height: 100vh; 
+            transition: transform .5s;
+            overflow: hidden;
+        }
+        
+        .error {
+            width: 400px;
+            padding: 40px;
+            text-align: center;
+            z-index: 10;
+        }
+        .error h1 {
+            font-size: 125px;
+            padding: 0;
+            margin: 0;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+        }
+        .error h3 {
+            margin: -30px 0 0 0;
+            padding: 0px;
+            font-size: 20px;
+        }
+
+        .stack-container {
+            position: relative;
+            width: 420px;
+            height: 210px;
+            transition: width 1s, height 1s;
+        }
+
+        .card-container {
+            position: absolute; 
+        }
+        .pokeup {
+            transition: all .3s ease;
+        }
+        .pokeup:hover {
+            transform: translateY(-10px);
+            transition: .3s ease;
+            cursor: pointer; /* Added pointer to show interactivity */
+        }
+
+        .perspec {
+            perspective: 1000px;
+        }
+        
+        .card {
+            animation: tiltcard .5s ease-in-out 1s forwards;
+            position: absolute;
+        }
+
+        .writing {
+            width: 320px;
+            height: 200px;
+            background-color: #3f3f3f;
+            border: 1px solid #bbbbbb;
+            border-radius: 6px 6px 4px 4px;
+            position: relative;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .writing .topbar {
+            position: absolute;
+            width: 100%;
+            height: 12px;
+            background-color: #f1f1f1;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+        .writing .topbar div {
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            margin: 3px;
+            float: left;
+        }
+        .writing .topbar div.green { background-color: #60d060; }
+        .writing .topbar div.red { background-color: red; }
+        .writing .topbar div.yellow { background-color: #e6c015; }
+
+        .writing .code {
+            padding: 15px;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .writing .code .centered {
+            width: 50%;
+            margin-top: 6%;
+            margin-left: 24%;
+        }
+        .writing .code .centered img {
+            width: 140px;
+            filter: invert(66%);
+        }
+
+        /* 404 Animations */
+        @keyframes tiltcard {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(-30deg); }
+        }
+        @keyframes explode {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(var(--spreaddist), var(--vertdist)) scale(var(--scaledist)); }
+        }
+        
+        .explode { animation: explode .5s ease-in-out forwards; }
+
+        /* Error Responsiveness */
+        @media screen and (max-width: 1000px) {
+            .error-wrapper { transform: scale(.85); }
+        }
+        @media screen and (max-width: 850px) {
+            .error-wrapper { transform: scale(.75); }
+        }
+        @media screen and (max-width: 775px) {
+            .error-wrapper {
+                flex-wrap: wrap-reverse;
+                align-items: inherit;
+            }
+            .stack-container { margin: 0 auto 50px auto; }
+        }
+        @media screen and (max-width: 370px) {
+            .error-wrapper { transform: scale(.6); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 404 Main Content Wrapper -->
+    <main class="error-wrapper">
+        <div class="error">
+            <h1>404</h1>
+            <h3>PÁGINA NO ENCONTRADA</h3>
+            <p style="margin-top:10px;">No hemos podido encontrar lo que estás buscando. Revisa la URL e intentalo nuevamente.</p>
+        </div>
+        
+        <div class="stack-container">
+            <!-- Animated code visual cards -->
+            <div class="card-container">
+                <div class="perspec" style="--spreaddist: 125px; --scaledist: .75; --vertdist: -25px;">
+                    <div class="card">
+                        <div class="writing">
+                            <div class="topbar">
+                                <div class="red"></div>
+                                <div class="yellow"></div>
+                                <div class="green"></div>
+                            </div>
+                            <div class="code">
+                                <div class="centered">
+                                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6bd225a966619de1c0ea48137d7ba46ea63ab6e3.png" alt="Code Symbol">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-container">
+                <div class="perspec" style="--spreaddist: 100px; --scaledist: .8; --vertdist: -20px;">
+                    <div class="card">
+                        <div class="writing">
+                            <div class="topbar">
+                                <div class="red"></div>
+                                <div class="yellow"></div>
+                                <div class="green"></div>
+                            </div>
+                            <div class="code">
+                                <div class="centered">
+                                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6bd225a966619de1c0ea48137d7ba46ea63ab6e3.png" alt="Code Symbol">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-container">
+                <div class="perspec" style="--spreaddist:75px; --scaledist: .85; --vertdist: -15px;">
+                    <div class="card">
+                        <div class="writing">
+                            <div class="topbar">
+                                <div class="red"></div>
+                                <div class="yellow"></div>
+                                <div class="green"></div>
+                            </div>
+                            <div class="code">
+                                <div class="centered">
+                                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6bd225a966619de1c0ea48137d7ba46ea63ab6e3.png" alt="Code Symbol">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-container">
+                <div class="perspec" style="--spreaddist: 50px; --scaledist: .9; --vertdist: -10px;">
+                    <div class="card">
+                        <div class="writing">
+                            <div class="topbar">
+                                <div class="red"></div>
+                                <div class="yellow"></div>
+                                <div class="green"></div>
+                            </div>
+                            <div class="code">
+                                <div class="centered">
+                                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6bd225a966619de1c0ea48137d7ba46ea63ab6e3.png" alt="Code Symbol">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-container">
+                <div class="perspec" style="--spreaddist: 25px; --scaledist: .95; --vertdist: -5px;">
+                    <div class="card">
+                        <div class="writing">
+                            <div class="topbar">
+                                <div class="red"></div>
+                                <div class="yellow"></div>
+                                <div class="green"></div>
+                            </div>
+                            <div class="code">
+                                <div class="centered">
+                                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6bd225a966619de1c0ea48137d7ba46ea63ab6e3.png" alt="Code Symbol">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-container">
+                <div class="perspec" style="--spreaddist: 0px; --scaledist: 1; --vertdist: 0px;">
+                    <div class="card">
+                        <div class="writing">
+                            <div class="topbar">
+                                <div class="red"></div>
+                                <div class="yellow"></div>
+                                <div class="green"></div>
+                            </div>
+                            <div class="code">
+                                <div class="centered">
+                                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6bd225a966619de1c0ea48137d7ba46ea63ab6e3.png" alt="Code Symbol">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- 404 Cards Animation Logic ---
+        const stackContainer = document.querySelector('.stack-container');
+        const cardNodes = document.querySelectorAll('.card-container');
+        const perspecNodes = document.querySelectorAll('.perspec');
+        const card = document.querySelector('.card');
+
+        let counter = stackContainer ? stackContainer.children.length : 0;
+
+        // After tilt animation, fire the explode animation
+        if(card) {
+            card.addEventListener('animationend', function () {
+                perspecNodes.forEach(function (elem, index) {
+                    elem.classList.add('explode');
+                });
+            });
+        }
+
+        // After explode animation, add interactivity
+        if(perspecNodes.length > 0) {
+            perspecNodes[0].addEventListener('animationend', function (e) {
+                if (e.animationName === 'explode') {
+                    cardNodes.forEach(function (elem, index) {
+                        // Add hover animation class
+                        elem.classList.add('pokeup');
+
+                        // Add event listener to throw card on click
+                        elem.addEventListener('click', function () {
+                            let updown = [800, -800]
+                            let randomY = updown[Math.floor(Math.random() * updown.length)];
+                            let randomX = Math.floor(Math.random() * 1000) - 1000;
+                            
+                            elem.style.transform = `translate(${randomX}px, ${randomY}px) rotate(-540deg)`;
+                            elem.style.transition = "transform 1s ease, opacity 2s";
+                            elem.style.opacity = "0";
+                            elem.style.pointerEvents = "none"; // prevent double clicking
+                            
+                            counter--;
+                            if (counter === 0) {
+                                stackContainer.style.width = "0";
+                                stackContainer.style.height = "0";
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
