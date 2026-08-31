@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Reviews</title>
+    
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    
+    
+    <style>
+   
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            color: #111827;
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+    
+    
+    
+    
+</head>
+<body class="antialiased min-h-screen flex items-center justify-center">
+
+    <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-8 lg:gap-12 relative h-[800px] overflow-hidden">
+        
+        <!-- Left Column: Header and Summary -->
+        <div class="flex flex-col justify-center p-8 lg:p-12 z-10 bg-white">
+            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
+                Testimonios Recibidos
+            </h1>
+            <p class="text-gray-500 text-lg mb-8 leading-relaxed">
+         Descubre lo que nuestros clientes dicen sobre su experiencia. Opiniones verificadas de personas reales que confían en nosotros para ofrecer calidad, confianza y un servicio excepcional.
+            </p>
+
+            <!-- Rating Summary Card -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 flex flex-col items-center justify-center text-center shadow-sm border border-gray-100">
+                <div class="flex items-center gap-3 mb-2">
+    <img src="https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/Symbol.webp" alt="Icon" class="w-6 h-6">
+    
+                    <span class="text-3xl font-bold">5.0</span>
+                    <div class="flex gap-0.5 text-gray-800">
+                        <!-- 5 Stars -->
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 font-medium">Basado en 50 testimonios</p>
+            </div>
+
+            <button class="w-full bg-[#967e2d] text-white font-semibold py-3.5 px-6 rounded-full hover:bg-gray-800 transition-colors duration-200" onclick="openReviewModal()">
+                Leer todos los Testimonios
+            </button>
+        </div>
+
+        <!-- Right Column: Auto-scrolling Reviews -->
+        <div class="relative h-full overflow-hidden bg-white" id="reviewsContainer">
+            <!-- Fade overlays for smooth scrolling effect -->
+            <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 md:px-8 h-full" id="scrollTracks">
+                <!-- Track 1 (Left) -->
+                <div class="flex flex-col gap-6" id="track1">
+                    <!-- Cards will be injected here -->
+                </div>
+                <!-- Track 2 (Right) -->
+                <div class="flex flex-col gap-6" id="track2">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    
+    
+    
+    
+    
+
+    <!-- Review Modal Overlay -->
+    <div id="reviewModalOverlay" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <!-- Modal Content -->
+        <div id="reviewModal" class="bg-white rounded-2xl shadow-xl w-full max-w-2xl mx-4 overflow-hidden transform scale-95 transition-transform duration-300 relative">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between p-4 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900">Leer todos los Testimonios</h3>
+                <button onclick="closeReviewModal()" class="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            
+            
+            
+            
+
+            <!-- Iframe Container -->
+            <div class="w-full h-[500px] bg-gray-50">
+                <!-- Using a placeholder URL for demonstration -->
+                <iframe id="reviewIframe" src="https://testimonio.tarjeta-digital.site/wall" class="w-full h-full border-none" title="Google Review Form"></iframe>
+            </div>
+            
+            
+            
+            
+            <!-- Footer/Loading state (Optional, but good for UX) -->
+            <div id="modalLoading" class="absolute inset-0 bg-white/80 flex items-center justify-center z-10 hidden">
+                 <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <script>
+        // Mock data for reviews based on the provided screenshots
+        const reviewsData = [
+            {
+                rating: 5,
+                date: "",
+                title: "Socio Co-Fundador Más Que Seguros Podcast",
+                content: "Excelente servicio, atención inmediata y cumplen con lo prometido en tiempo récord.",
+                author: {
+                    name: "Vladimir Guzmán",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/vladimir-guzman.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "Directora de Ventas POSTA",
+                content: "Excelente servicio, muy rápido, Aaron estuvo muy pendiente de los detalles, los recomiendo 100%...",
+                author: {
+                    name: "Evelin Rengifo",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/evelin-rengifo.jpeg"
+                }
+            },
+             {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Excelente servicio con una atención esmerada hasta lograr la entrega del llavero. Los recomiendo para aquellos que deseen estar a la vanguardia de la tecnología en las tarjetas de presentación. Muchas gracias y abundantes bendiciones a ustedes por su entrega.",
+                author: {
+                    name: "Kelvin Molina",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/kelvin-molina.png"
+                }
+            },
+             {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "¡Super excelente producto! Y el servicio al cliente totalmente personalizado y eficiente. ¡Quedé super complacida con todo!",
+                author: {
+                    name: "Eva Luna Agra Tiburcio",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/eva-luna.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Muy eficientes, atentos, y serviciales. Recomendado al 100% muy contento con el producto 🙏",
+                author: {
+                    name: "Raymond Castillo",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/Raymond-Castillo%20.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Excelente servicio, diligentes y sobre todo pendientes a cada paso. Volvería a contactarlos. Servicio 10/10 y muyy amables! 🫶🏻✨",
+                author: {
+                    name: "HANNA COHEN",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/hanna-cohen.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Complacido es un servicio personalizado, vanguardista y económico. La rapidez en entrega y calidad del producto es excelente.",
+                 author: {
+                    name: "Alexander Cano Livingston",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/4417-e4ig8hxygd.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Excelente servicio , muy contentos con mi nueva Busisnes Card.",
+                 author: {
+                    name: "Victor Roa Samboy",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/4417-zmt2dfxcp0d.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Un servicio extraordinario! El acompañamiento en cada paso del proceso y la tarjeta, su diseño y cuidado. INSUPERABLE",
+                author: {
+                    name: "Elisa Elena González",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/4417-9614wmb0zfd.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Un placer trabajar con ustedes, excelente servicio desde el primer día. Innovadores productos y atenciones de primera en el servicio al cliente.",
+                author: {
+                    name: "Giancarlo Lendof",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/4417-n7071feqp2.jpeg"
+                }
+            },
+            {
+                rating: 4,
+                date: "",
+                title: "",
+                content: "Me encanto mi tarjeta digital, la envoltura, el trato personalizado y la facilidad que esto trae con mis pacientes. Lo recomiendo 100%",
+                author: {
+                    name: "Dra. Glorinil Mercedes",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/4417-x75q20v3dod.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Trabajar con esta gente es darse cuenta de inmediato que dominan el tema digital como los mejores, sigan así....",
+                author: {
+                    name: "Reinaldo Ortega",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/4417-n37vo4moxm.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Muy complacida con el trato recibido. Nos sentimos a gusto en cada etapa del proceso. Excelente servicio!",
+                author: {
+                    name: "Licda. Aleidi Valerio",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/4417-fdymnhymb6.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Excelente trato y hermoso trabajo. Experiencia en él área y acompañamiento durante el proceso de realización.",
+                author: {
+                    name: "Dra Felicia Mercedes",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/4417-jrc7yzf5np.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Estoy totalmente satisfecho tanto con la tarjeta como con el trato profesional que recibí durante el diseño, la programación y la entrega, la tarjeta ha sido algo espectacular, sobrepasaron mis expectativas. Los recomiendo 100%.",
+                author: {
+                    name: "H. Otto Isidor",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/4417-y9a6lyye04f.jpeg"
+                }
+            },
+            {
+                rating: 5,
+                date: "",
+                title: "",
+                content: "Una experiencia maravillosa comprar en NFC el trato , te buscan la vuelta , todo llega bien empacado representable otro nivel me encantó le diera 10,000 estrellas , gracias NFC",
+                author: {
+                    name: "Rachel Chevalier",
+                    verified: true,
+                    avatar: "https://ik.imagekit.io/bebell/NFC%20Technology/Clientes/4417-rahr1dartak.jpeg"
+                }
+            }
+        ];
+
+        function createReviewCard(review) {
+            let starsHtml = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < review.rating) {
+                    starsHtml += `<svg class="w-4 h-4 fill-gray-800" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`;
+                } else {
+                    starsHtml += `<svg class="w-4 h-4 text-gray-300 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`;
+                }
+            }
+
+            let avatarHtml = '';
+            if (review.author.avatar) {
+                avatarHtml = `<img src="${review.author.avatar}" alt="${review.author.name}" class="w-10 h-10 rounded-full object-cover">`;
+            } else {
+                avatarHtml = `<div class="w-10 h-10 rounded-full ${review.author.color} flex items-center justify-center text-white font-semibold">${review.author.initials}</div>`;
+            }
+
+            return `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-4 transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-md">
+                    <div class="flex justify-between items-center">
+                        <div class="flex gap-0.5">
+                            ${starsHtml}
+                        </div>
+                        <span class="text-sm text-gray-500">${review.date}</span>
+                    </div>
+                    
+                    <p class="text-gray-700 leading-relaxed text-[15px]">
+                        ${review.content}
+                    </p>
+
+                    <div class="flex items-center gap-3 mt-auto pt-2">
+                        ${avatarHtml}
+                        <div>
+                            <p class="text-sm font-bold text-gray-900">${review.author.name}</p>
+                            ${review.author.verified ? `
+                                <div class="flex items-center gap-1 text-gray-500">
+                                    <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                    <span class="text-xs">Cliente Verificado</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const track1 = document.getElementById('track1');
+            const track2 = document.getElementById('track2');
+            
+            // Split data into two columns for the tracks
+            const col1Data = reviewsData.filter((_, i) => i % 2 === 0);
+            const col2Data = reviewsData.filter((_, i) => i % 2 !== 0);
+
+            // Function to populate a track multiple times to create enough content for seamless scrolling
+            function populateTrack(track, data) {
+                let html = '';
+                // Duplicate data to ensure track is taller than container
+                for(let i=0; i<3; i++) {
+                    data.forEach(review => {
+                        html += createReviewCard(review);
+                    });
+                }
+                track.innerHTML = html;
+            }
+
+            populateTrack(track1, col1Data);
+            populateTrack(track2, col2Data);
+
+            // Setup scrolling animation variables
+            let scrollPos1 = 0;
+            // Start track 2 halfway to offset the cards visually
+            let scrollPos2 = -150; 
+            const speed = 0.5; // Pixels per frame
+
+            function animateScroll() {
+                scrollPos1 -= speed;
+                // Reverse direction for track 2
+                scrollPos2 += speed;
+
+                const resetPoint = -(track1.scrollHeight / 3);
+                // For track 2 going up, reset when it goes above 0
+                const resetPointUp = 0; 
+                // We need to know max scroll for upward scrolling reset
+                const maxScrollUp = -(track2.scrollHeight / 3);
+
+                if (scrollPos1 <= resetPoint) {
+                    scrollPos1 = 0;
+                }
+                
+                if (scrollPos2 >= resetPointUp) {
+                    // Reset to the negative position representing the bottom of the first block
+                    scrollPos2 = maxScrollUp;
+                }
+
+                track1.style.transform = `translateY(${scrollPos1}px)`;
+                track2.style.transform = `translateY(${scrollPos2}px)`;
+
+                requestAnimationFrame(animateScroll);
+            }
+
+            // Start animation
+            requestAnimationFrame(animateScroll);
+        });
+
+        // Modal Logic
+        const modalOverlay = document.getElementById('reviewModalOverlay');
+        const modal = document.getElementById('reviewModal');
+        const iframe = document.getElementById('reviewIframe');
+        
+        // Placeholder URL - Replace with actual Google Review URL
+        const reviewUrl = "https://example.com/demo-review-form";
+
+        function openReviewModal() {
+            // Set iframe src just before opening to avoid loading it on initial page load
+            if (!iframe.src || iframe.src === window.location.href) {
+                iframe.src = reviewUrl;
+            }
+
+            // Show overlay
+            modalOverlay.classList.remove('hidden');
+            
+            // Small delay to allow display:block to apply before animating opacity
+            setTimeout(() => {
+                modalOverlay.classList.remove('opacity-0');
+                modalOverlay.classList.add('opacity-100');
+                
+                modal.classList.remove('scale-95');
+                modal.classList.add('scale-100');
+            }, 10);
+            
+            // Prevent body scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeReviewModal() {
+            // Animate out
+            modalOverlay.classList.remove('opacity-100');
+            modalOverlay.classList.add('opacity-0');
+            
+            modal.classList.remove('scale-100');
+            modal.classList.add('scale-95');
+
+            // Hide after animation completes
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+                // Optional: clear iframe to stop any background processes if needed
+                // iframe.src = ''; 
+            }, 300); // Matches duration-300 class
+
+            // Restore body scrolling
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close on click outside modal content
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeReviewModal();
+            }
+        });
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) {
+                closeReviewModal();
+            }
+        });
+
+    </script>
+</body>
+</html>
