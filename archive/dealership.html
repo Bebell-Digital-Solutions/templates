@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cars Zero - HTML Template</title>
+  
+  <!-- Required External Libraries -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <!-- Lucide Icons Library -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Extracted Variables */
+    :root {
+      --main-color: #0534ff;
+      --main-text: #242d3d;
+      --main-body-font: 400 15px Poppins, sans-serif;
+      --main-body-bg: #ffffff;
+      --head-color: #111013;
+      --head-text: #ffffff;
+      --head-font: 500 15px Poppins, sans-serif;
+      --logo-width: 68px;
+      --logo-height: 34px;
+      --head-hover: #c2e744;
+      --head-height: 80px;
+      --main-title-post: 500 16px Poppins, sans-serif;
+      --main-price: 700 24px Poppins, sans-serif;
+      --main-meta: #7d7d7d;
+      --main-meta-color: #555555;
+      --main-post-bg: #ffffff;
+      --main-border: #e5e5e5;
+      --main-width: 2200px;
+      --main-button: #bbe913;
+      --main-button-font: #101014;
+      --main-page-bg: #f7f7f7;
+      --main-footer-bg: #161519;
+      --main-footer-font: bold 16px Poppins, sans-serif;
+      --main-footer-hover: #c2e744;
+      --main-footer-color: #ffffff;
+    }
+    
+    
+    
+    
+    
+    body[data-theme="dark"] {
+      --main-body-bg: #121212;
+      --main-page-bg: #1d1d1d;
+      --main-post-bg: #1d1d1d;
+      --main-text: #ffffff;
+      --main-meta: #cccccc;
+      --head-color: #000000;
+      --main-border: #313131;
+      --main-footer-bg: #0a0a0a;
+    }
+    
+    
+    
+    
+    
+    /* Base Styling */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    *, ::before, ::after { 
+      box-sizing: border-box; 
+    }
+    
+    
+    
+    
+    
+    html { 
+      font-family: sans-serif; 
+      margin: 0 !important; 
+      scroll-behavior: smooth; 
+    }
+    
+    
+    
+    
+    
+    body { 
+      color: var(--main-text); 
+      background-color: var(--main-body-bg); 
+      font: var(--main-body-font); 
+      line-height: 1.5; 
+      margin: 0; 
+      padding: 0; /* Full width support for footer */
+      -webkit-font-smoothing: antialiased; 
+      transition: background-color 0.3s, color 0.3s; 
+    }
+    
+    
+    
+    
+    
+    a, a:hover { color: var(--main-color); cursor: pointer; text-decoration: none; outline: 0; }
+    
+    
+    
+    img { 
+      max-width: 100%; 
+      height: auto; 
+    }
+    
+    
+    
+    
+    button { 
+      font-family: inherit; 
+      background: transparent; 
+      border: 0; 
+      padding: 0; 
+      outline: 0; 
+      cursor: pointer; 
+    }
+    
+    
+    
+    
+    /* Content Constraints */
+    .c-width { 
+      margin: 0 auto; 
+      width: 100%; 
+      max-width: var(--main-width); 
+      padding: 0 20px; 
+    }
+    
+    .flex { 
+      display: flex; 
+      align-items: center; 
+    }
+    
+    .flex-col { 
+      display: flex; 
+      flex-direction: column; 
+    }
+    
+    /* Header & Top Menu */
+    .temabanua-header { 
+      background-color: var(--head-color); 
+      border-radius: 16px; /* Floating rounded corners on all 4 sides */
+      padding: 0 30px; 
+      display: flex; 
+      align-items: center; 
+      color: var(--head-text); 
+      width: calc(100% - 40px); 
+      max-width: var(--main-width);
+      height: var(--head-height); 
+      z-index: 999; 
+      margin: 20px auto; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    
+    .temabanua-nav { 
+      width: 100%; 
+      padding: 0; 
+    }
+    
+    .temabanua-menu { 
+      display: flex; 
+      width: 100%; 
+      align-items: center; 
+      justify-content: space-between; 
+    }
+    
+    .header-widget { 
+      display: flex; 
+      align-items: center; 
+      gap: 15px; 
+    }
+    
+    .header-widget h1 { font-size: 24px; font-weight: 700; margin: 0; color: var(--head-hover); letter-spacing: -0.5px;}
+    
+    
+    
+    
+    .header-logo { width: 40px; height: 40px; object-fit: contain; border-radius: 8px; }
+    
+    
+    
+    .header-image-wrapper { display: flex; align-items: center; gap: 10px; }
+    
+    .icon-menu { 
+      display: none; 
+      color: var(--head-text); 
+    }
+    
+    .header-item { 
+      display: flex; 
+      align-items: center; 
+    }
+    
+    #temabanua-menu-drop { 
+      display: flex; 
+      gap: 8px; 
+      list-style: none; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    #temabanua-menu-drop li a { 
+      color: var(--head-text); 
+      padding: 10px 18px; 
+      font: var(--head-font); 
+      border-radius: 8px;
+      transition: background-color 0.2s, color 0.2s; 
+    }
+    
+    #temabanua-menu-drop li a:hover { 
+      background-color: var(--head-hover); 
+      color: var(--head-color); 
+    }
+    
+    #button-web { 
+      display: flex; 
+      align-items: center; 
+      gap: 15px; 
+    }
+    
+    .widget-content-tel { 
+      display: flex; 
+      align-items: center; 
+      color: var(--head-text); 
+      padding-right: 15px; 
+      border-right: 1px solid rgba(255,255,255,0.2); 
+    }
+    
+    .icon-tel { 
+      color: var(--head-hover); 
+      margin-right: 10px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .name-tel { 
+      font-size: 11px; 
+      opacity: 0.8; 
+      line-height: 1;
+    }
+    
+    .item-tel { 
+      font-size: 14px; 
+      font-weight: 700; 
+    }
+    
+    .widget-content-dark { 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      color: var(--head-text); 
+      padding: 8px; 
+      border-radius: 50%; 
+      transition: background-color 0.2s;
+    }
+    
+    .widget-content-dark:hover { 
+      background-color: rgba(255,255,255,0.1); 
+    }
+    
+    /* Dark Mode Icon Toggles */
+    .icon-moon { display: none; }
+    body[data-theme="dark"] .icon-moon { display: block; }
+    
+    
+    
+    body[data-theme="dark"] .icon-sun { display: none; }
+    
+    
+    
+    
+    /* Banner & Carousel */
+    .temabanua-banner { 
+      position: relative; 
+      display: flex; 
+      justify-content: center; 
+    }
+    
+    .d-img { width: 100%; }
+    
+    
+    .d-img .item { width: 100%; height: 500px; border-radius: 20px; overflow: hidden; position: relative; }
+    
+    
+    
+    .d-img .item img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .d-img .item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    /* Fixed Floating Search Widget */
+    form.desktop {
+      position: absolute;
+      bottom: 70px; 
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      z-index: 10;
+    }
+    
+    .search-field { 
+      background-color: var(--main-post-bg); 
+      display: grid; 
+      grid-template-columns: 1.5fr 1.5fr 1.5fr auto; 
+      padding: 10px 16px 10px 32px; 
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25); 
+      align-items: center; 
+      gap: 20px; 
+      border-radius: 50px; 
+      width: max-content; 
+      max-width: 90%; 
+    }
+    
+    .search-field .widget-content { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 4px; 
+      border-right: 1px solid var(--main-border); 
+      padding-right: 20px;
+    }
+    
+    .search-field .widget-content:nth-last-child(2) { border-right: none; }
+    
+    .search-field label { 
+      font-size: 13px; 
+      font-weight: 600; 
+      color: var(--main-text); 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px;
+    }
+    
+    .search-field input, .search-field select { 
+      font-family: inherit; 
+      font-size: 15px; 
+      font-weight: 500; 
+      border: 0; 
+      outline: 0; 
+      width: 100%; 
+      background: transparent; 
+      color: var(--main-meta-color); 
+      cursor: pointer; 
+      padding: 0;
+    }
+    
+    
+
+    
+    
+    
+    /* Search button */
+    .search-field button { 
+      width: auto; 
+      height: 56px; 
+      padding: 0 18px;
+      border-radius: 50px; 
+      background-color: #000; 
+      color: #fff; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 8px; 
+      font-weight: 600;
+      font-size: 15px;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    
+    .search-field button:hover { 
+    transform: scale(1.05); 
+    color: var(--head-color);
+    background-color: var(--head-hover); }
+
+
+
+    /* Search text hidden on desktop, shown on mobile */
+    .search-text { display: none; }
+
+
+
+    /* Featured Grids */
+    .m-feat { 
+    display: grid; 
+    grid-template-columns: 2fr 1fr 1fr; 
+    gap: 24px; 
+    margin-top: 40px; 
+    margin-bottom: 60px; }
+    
+
+    
+    .m-feat article { 
+      position: relative; 
+      border-radius: 20px; 
+      overflow: hidden; 
+      aspect-ratio: 8/7; 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .m-feat article:first-child { aspect-ratio: 16/7; }
+    
+    .m-feat .widget-image { position: absolute; inset: 0; }
+    
+    .m-feat .widget-image img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      transition: transform 0.4s ease; 
+    }
+    
+    .m-feat article:hover .widget-image img { transform: scale(1.08); }
+    
+    .m-feat .widget-info { 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      right: 0; 
+      padding: 30px 24px; 
+      background: linear-gradient(180deg, transparent 0, rgba(0,0,0,0.85) 100%); 
+      color: #fff; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-end; 
+    }
+    
+    .m-feat h2.title { font-size: 26px; font-weight: 700; margin: 0 0 6px; line-height: 1.1; }
+    
+    .m-feat .caption { font-size: 14px; opacity: 0.9; }
+    
+    .d-right { 
+      width: 40px; 
+      height: 40px; 
+      border-radius: 50%; 
+      background: rgba(255,255,255,0.2); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      backdrop-filter: blur(4px); 
+      transition: background 0.2s; 
+    }
+    
+    .m-feat article:hover .d-right { background: var(--main-color); }
+    
+    
+ 
+ 
+ 
+ 
+ 
+ 
+.m-feat-2 { display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 24px; margin-top: 40px; margin-bottom: 80px; }
+
+
+    
+    .m-feat-2 article { 
+      position: relative; 
+      border-radius: 20px; 
+      overflow: hidden; 
+      aspect-ratio: 8/7; 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .m-feat-2 article:first-child { aspect-ratio: 16/7; }
+    
+    .m-feat-2 .widget-image { position: absolute; inset: 0; }
+    
+    .m-feat-2 .widget-image img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      transition: transform 0.4s ease; 
+    }
+    
+    .m-feat-2 article:hover .widget-image img { transform: scale(1.08); }
+    
+    .m-feat-2 .widget-info { 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      right: 0; 
+      padding: 30px 24px; 
+      background: linear-gradient(180deg, transparent 0, rgba(0,0,0,0.85) 100%); 
+      color: #fff; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-end; 
+    }
+    
+    .m-feat-2 h2.title { font-size: 26px; font-weight: 700; margin: 0 0 6px; line-height: 1.1; }
+    
+    .m-feat-2 .caption { font-size: 14px; opacity: 0.9; }
+    
+    .d-right { 
+      width: 40px; 
+      height: 40px; 
+      border-radius: 50%; 
+      background: rgba(255,255,255,0.2); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      backdrop-filter: blur(4px); 
+      transition: background 0.2s; 
+    }
+    
+    .m-feat-2 article:hover .d-right { background: var(--main-color); }
+     
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+    
+    
+    /* Footer */
+    .temabanua-footer { 
+      background: var(--main-footer-bg); 
+      color: var(--main-footer-color); 
+      padding: 60px 0 40px; 
+      border-radius: 0; 
+      margin-top: 40px; 
+      width: 100%;
+    }
+    
+    
+    
+    
+    .footer-image-wrapper { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; }    
+    
+    
+    
+    
+    .m-footer { 
+    display: grid; 
+    grid-template-columns: 1.5fr 1fr 1fr 1.5fr; 
+    gap: 40px; }
+    
+    
+    
+    .m-footer h3 { 
+      font: var(--main-footer-font); 
+      color: rgba(255,255,255,0.5); 
+      margin-bottom: 20px; 
+      text-transform: uppercase; 
+      font-size: 13px; 
+      letter-spacing: 1px;
+    }
+    
+    .m-footer ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+    
+    .m-footer ul li a { color: var(--main-footer-color); font-size: 15px; transition: color 0.2s; opacity: 0.9; }
+    
+    .m-footer ul li a:hover { color: var(--main-footer-hover); opacity: 1; }
+    
+    .m-footer p { opacity: 0.8; font-size: 14px; line-height: 1.7; margin: 0; }
+
+    /* Sub Footer */
+    .sub-footer {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 20px 0;
+      font-size: 14px;
+    }
+    
+    
+    
+    .sub-footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    
+    
+    .sub-footer-social {
+      display: flex;
+      gap: 18px;
+    }
+    
+    
+    
+    .sub-footer-social a {
+      color: var(--head-hover); /* Fluorescent green matching top menu */
+      transition: opacity 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    
+    
+    .sub-footer-social a:hover {
+      opacity: 0.8;
+      transform: scale(1.1);
+    }
+    
+    
+    
+    .sub-footer-social svg {
+      display: block;
+    }
+    
+    
+    
+    
+
+    /* Responsive Breakpoints */
+    @media (max-width: 960px) {
+      .c-width { padding: 0 15px; }
+      
+      .temabanua-header {
+        width: calc(100% - 30px);
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+      
+      .icon-menu { display: block; }
+      
+      
+      
+      /* Mobile Menu Styles */
+      .header-item { 
+        display: none; 
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        background-color: var(--head-color);
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        z-index: 1000;
+      }
+      
+      
+      
+      .header-item.active { display: flex !important; }
+      
+      
+      
+      .header-item.active #temabanua-menu-drop { 
+        display: flex; 
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+      }
+      
+      
+      
+      .header-item.active #temabanua-menu-drop li { width: 100%; text-align: center; }
+      
+      
+      
+      .header-item.active #temabanua-menu-drop li a { display: block; }
+      
+      /* Mobile Hero Fix: Move form beneath the carousel */
+      .temabanua-banner {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      form.desktop {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        margin-top: 20px; 
+      }
+      
+      .search-field { 
+        grid-template-columns: 1fr; 
+        padding: 20px; 
+        border-radius: 20px; 
+        gap: 15px; 
+        width: 100%; 
+      }
+      
+      .search-field .widget-content { 
+        border-right: none; 
+        border-bottom: 1px solid var(--main-border); 
+        padding-bottom: 15px; 
+      }
+      
+      .search-field button { 
+        width: 100%; 
+        border-radius: 12px; 
+        margin-top: 5px; 
+      }
+      
+      .search-text { display: inline; }
+      
+      .m-feat { grid-template-columns: 1fr; }
+      .m-feat article:first-child { aspect-ratio: 16/10; }
+      
+      .m-footer { grid-template-columns: 1fr 1fr; }
+    }
+    
+    @media (max-width: 600px) {
+      .m-footer { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+
+  <!-- Header -->
+  <header class="temabanua-header" id="header">
+    <nav class="c-width temabanua-nav">
+      <div class="temabanua-menu">
+        
+        <!-- Logo -->
+        <div class="header-widget">
+          <button aria-label="Menu" class="icon-menu">
+            <i data-lucide="menu" width="28" height="28"></i>
+          </button>
+          <a href="/" class="header-image-wrapper">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/b26017fe658778a7c7b33f753c8044bee1b856f8.png" alt="Car Zero Logo" class="header-logo">
+            <h1>Car Zero</h1>
+          </a>
+        </div>
+        
+        <!-- Center Nav Items -->
+        <div class="header-item">
+          <ul id="temabanua-menu-drop">
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Featured</a></li>
+            <li><a href="#">Shop</a></li>
+            <li><a href="#">Article</a></li>
+            <li><a href="#">Video</a></li>
+          </ul>
+        </div>
+
+        <!-- Right Side: Contact & Dark Mode -->
+        <div id="button-web">
+          <a class="widget-content-tel" href="tel:6285-5671-4532">
+            <div class="icon-tel">
+              <i data-lucide="phone" width="22" height="22"></i>
+            </div>
+            <div class="flex-col">
+              <span class="name-tel">Get Support</span>
+              <div class="item-tel">6285-5671-4532</div>
+            </div>
+          </a>
+          
+          <button class="widget-content-dark" id="darkModeToggle" aria-label="Toggle Dark Mode">
+             <i data-lucide="sun" class="icon-sun" width="22" height="22"></i>
+             <i data-lucide="moon" class="icon-moon" width="22" height="22"></i>
+          </button>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+  
+  
+  
+  
+
+  <!-- Main Content -->
+  <main class="temabanua-main c-width" id="main">
+    <div class="temabanua-banner">
+      
+      <!-- Image Slider -->
+      <section class="owl-carousel owl-theme d-img" id="slider-web">
+        <div class="item">
+          <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjYMBVQqlQmhSVfSyR9GnHLIjZv8M62lhQTRSjcstDr5mULmSiPdbDjMBBxrRxW8h8xhcO0jqIStepf_uh9ba8ZvvFKlTJ9jsohxIJESv8BzBOewgDBM5LIDPiXLkYpNUeli7ZlaNnFpuk5OuZ7JQVAk78VOnD7WnDc9ipQqd1HiImLn6T030FFupK3BRTR=s1600" alt="Slider 1">
+        </div>
+        <div class="item">
+          <img src="https://blogger.googleusercontent.com/img/a/AVvXsEh_7neroqQnpg1QKvPGSRLrImVuq0pSt5HlhBmIXuXhyYw4P-5oWci7bfCVnAlERFkbMMROux_7Ng6_mQhXcq2x9Yp1LulTls23xyOUrBkK0pabhiPHLcuqx1faR22f_ZWxTKPIba-Augzf0PVV3JCYIEH4WWXyDDUfYd5ICQ7vxsZ-WUvMp2TwepVRM1gb=s1600" alt="Slider 2">
+        </div>
+        <div class="item">
+          <img src="https://blogger.googleusercontent.com/img/a/AVvXsEg88h3davlsaNU0W_MLEEDnQxEZmSGeXUzp2TliRiHggGQLMzfT1u4FW_028x_EShkEbTcvgh4tfPA-h825vsx4H1jWCDiaBtJYitK1-CtNX0m-9SDyg9AZHT9KA6-Bnbzu4pBJP1lMdMCNwmOjnTSgoZKmAaP-APEXKOx4BYRCxH4eH0O5UKHtlo0NidEh=s1600" alt="Slider 3">
+        </div>
+      </section>
+      
+      
+      
+      
+      
+      
+      
+
+      <!-- Search Field overlaying on Desktop, flowing beneath on Mobile -->
+      <form action="/search" class="desktop" method="get">
+        <section class="search-field">
+          <div class="flex-col widget-content">
+            <label>Location</label>
+            <input placeholder="Search City..." name="location" required type="text">
+          </div>
+          <div class="flex-col widget-content">
+            <label>Make</label>
+            <select name="make" required>
+              <option disabled selected value="">Select Make</option>
+              <option value="Toyota">Toyota</option>
+              <option value="Honda">Honda</option>
+              <option value="BMW">BMW</option>
+              <option value="Audi">Audi</option>
+            </select>
+          </div>
+          <div class="flex-col widget-content">
+            <label>Body Type</label>
+            <select name="model" required>
+              <option disabled selected value="">Select Type</option>
+              <option value="SUV">SUV</option>
+              <option value="Sedan">Sedan</option>
+              <option value="Truck">Truck</option>
+            </select>
+          </div>
+          <button aria-label="Search" type="submit">
+            <i data-lucide="search" width="20" height="20"></i>
+            <span class="search-text">Search ....</span>
+          </button>
+        </section>
+      </form>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Featured Grid -->
+    <div class="temabanua-featured">
+      <section class="m-feat" id="featured-web">
+        
+        <article class="widget-content">
+          <a href="#" class="flex-col">
+            <div class="widget-image">
+              <img src="https://blogger.googleusercontent.com/img/a/AVvXsEgYls2INYQBH2STiair8NjMzUR7duDM1OJumuxUAOGauw4UQ4a04Ooo6cPaE5kxAqEYtX9AvPy0KhEAPp1fjdRqDjxF5zHa2F8Rrtg0Hg2WPJplMrMPBJuVr98Cabkm8kwq4Nn0Rx0hshwq3OXC958n1sbBkKjYmVLWW1FBZRR5DGB2kDTGw2f3HczsKYgW=s1600" alt="Sport Cars">
+            </div>
+            <div class="widget-info">
+              <div class="flex-col d-left">
+                <h2 class="title">Sport Cars</h2>
+                <span class="caption">Discover All Models</span>
+              </div>
+              <div class="d-right">
+                <i data-lucide="arrow-right" width="20" height="20"></i>
+              </div>
+            </div>
+          </a>
+        </article>
+        
+        
+        
+        
+        
+
+        <article class="widget-content">
+          <a href="#" class="flex-col">
+            <div class="widget-image">
+              <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhgLC4kzy902Ab6OVa71lFFGaFEecDGe2wfxx3u1L8e8F4CPiZJQPzmcZmd5S0VUZ5pgBXUZUQ5gCvwTsRya3ltjQmvJ7LybgH5L7kWOxhcFgFKlvO-FgyVWce0zu2xQCerQFBXBG7GhPiXdESv4W6-hlEw32-bfQPSRkKftqEHdLKp8i46rVaKu-07Wpzk=s1600" alt="Honda">
+            </div>
+            <div class="widget-info">
+              <div class="flex-col d-left">
+                <h2 class="title">Honda</h2>
+                <span class="caption">Explore Inventory</span>
+              </div>
+              <div class="d-right">
+                <i data-lucide="arrow-right" width="20" height="20"></i>
+              </div>
+            </div>
+          </a>
+        </article>
+        
+        
+        
+        
+        
+
+        <article class="widget-content">
+          <a href="#" class="flex-col">
+            <div class="widget-image">
+              <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjNPMub4QCq1nUG_y6i64Xgq0Xwz3okA90Adp1vMIGdM_1PM-K-bcUhbq1L_chOiU9IvXtNNZBtJ50-xTUnkuiQEVZOEthwa_jiYm2EVfSrTdxTlnBt3Y4A0L2diPhIYwHmDftr2CYOeO7NXK3lpvO6BmyZNt892y9uQ_Z5mq2zzjCK9RjwZMIACZkzGOwF=s1600" alt="Mazda">
+            </div>
+            <div class="widget-info">
+              <div class="flex-col d-left">
+                <h2 class="title">Mazda</h2>
+                <span class="caption">View Offers</span>
+              </div>
+              <div class="d-right">
+                <i data-lucide="arrow-right" width="20" height="20"></i>
+              </div>
+            </div>
+          </a>
+        </article>
+        
+ 
+      </section>
+  </div>      
+  
+  </main>
+  
+  
+  
+  
+  
+  
+
+  <!-- Footer -->
+  <footer class="temabanua-footer" id="footer">
+    <div class="c-width">
+      <div class="m-footer">
+        
+        <div class="section">
+        
+        
+          <div class="footer-image-wrapper" style="margin-bottom: 5px;">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/b26017fe658778a7c7b33f753c8044bee1b856f8.png" alt="Car Zero Logo" class="header-logo">
+            
+            <h2 style="margin-bottom: 15px; font-size: 30px; color: var(--head-hover); text-transform: none;">Car Zero</h2>
+          </div>
+          
+          
+          
+          <p>
+            Leading the way in digital car commerce. Find your next dream car with Car Zero. We make it simple to launch your next journey.
+          </p>
+        </div>
+
+        <div class="section">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="#">About Company</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Condition</a></li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Tool & Service</h3>
+          <ul>
+            <li><a href="#">Platform Log-in</a></li>
+            <li><a href="#">Explore Cars Commerce</a></li>
+            <li><a href="#">Dealer Inspire</a></li>
+            <li><a href="#">Investor Relations</a></li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>About</h3>
+          <p>Temabanua makes it easy to bring personality and performance to your websites and products. Our robust catalog of open-source themes makes it simple to launch your next project.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  
+  
+  
+  
+
+  <!-- Sub Footer / Bottom Page Bar -->
+  <div class="sub-footer">
+    <div class="c-width sub-footer-content">
+      <div class="sub-footer-text">
+        Developed with 💚 by Bebell Digital Solutions.
+      </div>
+      <div class="sub-footer-social">
+
+
+        <!-- Instagram Icon (Inline SVG matching Lucide stroke style) -->
+        <a href="#" aria-label="Instagram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+          </svg>
+        </a>
+        
+        
+        
+
+        <!-- Facebook Icon (Inline SVG matching Lucide stroke style) -->
+        <a href="#" aria-label="Facebook">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+        </a>
+        
+        
+        
+
+        <!-- WhatsApp Icon -->
+        <a href="#" aria-label="WhatsApp">
+          <i data-lucide="message-circle" width="20" height="20"></i>
+        </a>
+        
+        
+        
+          <!-- Email Icon -->
+        <a href="mailto:info@example.com" aria-label="Email">
+          <i data-lucide="mail" width="20" height="20"></i>
+        </a>      
+        
+       
+        
+
+        <!-- Location Icon -->
+        <a href="#" aria-label="Location">
+          <i data-lucide="map-pin" width="20" height="20"></i>
+        </a>
+        
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    $(document).ready(function(){
+      
+      // Initialize Slider
+      $('.owl-carousel.d-img').owlCarousel({
+        items: 1,
+        loop: true,
+        margin: 0,
+        nav: false,
+        dots: true,
+        autoplay: true,
+        autoplayTimeout: 6000,
+        smartSpeed: 800
+      });
+
+      // Dark Mode Logic
+      $('#darkModeToggle').on('click', function() {
+        var body = $('body');
+        if (body.attr('data-theme') === 'dark') {
+          body.removeAttr('data-theme');
+        } else {
+          body.attr('data-theme', 'dark');
+        }
+      });
+
+      // Mobile Menu Toggle Logic
+      $('.icon-menu').on('click', function(e) {
+        e.stopPropagation();
+        $('.header-item').toggleClass('active');
+      });
+
+      // Close mobile menu when clicking outside
+      $(document).on('click', function(e) {
+        if (!$(e.target).closest('.header-item, .icon-menu').length) {
+          $('.header-item').removeClass('active');
+        }
+      });
+      
+    });
+
+    // Initialize Lucide Icons
+    lucide.createIcons();
+  </script>
+
+</body>
+</html>
