@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dashboard Tabs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f3; /* Matching the background color from the image */
+            color: #333;
+        }
+
+        /* Custom progress bar animation for active tab */
+        @keyframes progress {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        .tab-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background-color: #10b981; /* Tailwind emerald-500 */
+            width: 0;
+        }
+
+        .tab-active .tab-progress-bar {
+            animation: progress 10s linear forwards;
+        }
+
+        /* Hide scrollbar for the horizontal scrolling container on mobile */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen py-16 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-6xl mx-auto">
+        
+        <!-- Header Text -->
+        <div class="text-center mb-12">
+            <div class="flex items-center justify-center gap-4 mb-4 text-sm font-medium text-emerald-600 tracking-widest uppercase">
+                <span class="w-8 h-px bg-emerald-200"></span>
+                <span>05 · O QUE VEM DENTRO</span>
+                <span class="w-8 h-px bg-emerald-200"></span>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 leading-tight">
+                Quatro áreas. <span class="text-emerald-500">Uma operação<br/> completa.</span>
+            </h2>
+            <p class="text-lg text-gray-500 max-w-2xl mx-auto">
+                Tudo compartilha os mesmos contatos e os mesmos dados. Configurou uma vez, funciona junto.
+            </p>
+        </div>
+
+        <!-- Main Dashboard Container -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+            
+            <!-- Tabs Navigation -->
+            <div class="flex border-b border-gray-200 bg-[#fbfbf9] overflow-x-auto no-scrollbar" role="tablist">
+                
+                <!-- Tab 1 -->
+                <button 
+                    class="tab-btn relative flex-1 min-w-[200px] py-5 px-6 text-center text-sm font-semibold text-gray-500 transition-colors hover:bg-gray-50/50 outline-none" 
+                    data-target="tab1" 
+                    role="tab" 
+                    aria-selected="false">
+                    Atendimento
+                    <div class="tab-progress-bar hidden"></div>
+                </button>
+                
+                <!-- Tab 2 -->
+                <button 
+                    class="tab-btn relative flex-1 min-w-[200px] py-5 px-6 text-center text-sm font-semibold text-gray-500 transition-colors hover:bg-gray-50/50 outline-none" 
+                    data-target="tab2" 
+                    role="tab" 
+                    aria-selected="false">
+                    Clientes & Funis
+                    <div class="tab-progress-bar hidden"></div>
+                </button>
+                
+                <!-- Tab 3 -->
+                <button 
+                    class="tab-btn relative flex-1 min-w-[200px] py-5 px-6 text-center text-sm font-semibold text-gray-500 transition-colors hover:bg-gray-50/50 outline-none" 
+                    data-target="tab3" 
+                    role="tab" 
+                    aria-selected="false">
+                    Campanhas & Jornadas
+                    <div class="tab-progress-bar hidden"></div>
+                </button>
+                
+                <!-- Tab 4 (Initially Active based on image) -->
+                <button 
+                    class="tab-btn relative flex-1 min-w-[200px] py-5 px-6 text-center text-sm font-bold text-emerald-600 bg-white active-tab tab-active outline-none" 
+                    data-target="tab4" 
+                    role="tab" 
+                    aria-selected="true">
+                    Sua equipe de IA
+                    <div class="tab-progress-bar block"></div>
+                </button>
+            </div>
+
+            <!-- Tab Content Area -->
+            <div class="p-8 md:p-12">
+                
+                <!-- Tab 1 Content -->
+                <div id="tab1" class="tab-content hidden fade-in">
+                    <h3 class="text-2xl md:text-3xl font-bold text-center mb-10 text-gray-900">
+                        Atendimento humanizado e eficiente em todos os canais.
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                        <div class="bg-[#f2f7f4] rounded-2xl p-4 flex items-center gap-4 border border-[#e5f0ea]">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-700 leading-tight">Centralização de mensagens de WhatsApp, IG e mais</p>
+                        </div>
+                        <div class="bg-[#f2f7f4] rounded-2xl p-4 flex items-center gap-4 border border-[#e5f0ea]">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-700 leading-tight">Múltiplos atendentes no mesmo número</p>
+                        </div>
+                        <div class="bg-[#f2f7f4] rounded-2xl p-4 flex items-center gap-4 border border-[#e5f0ea]">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-700 leading-tight">Histórico unificado do cliente</p>
+                        </div>
+                    </div>
+                    
+                    <div class="rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-gray-50 aspect-video relative flex items-center justify-center">
+                        <span class="text-gray-400 font-medium">Imagem Atendimento Placeholder</span>
+                    </div>
+                </div>
+
+                <!-- Tab 2 Content -->
+                <div id="tab2" class="tab-content hidden fade-in">
+                    <h3 class="text-2xl md:text-3xl font-bold text-center mb-10 text-gray-900">
+                        Gestão de clientes e funis de venda integrados.
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                        <div class="bg-[#f2f7f4] rounded-2xl p-4 flex items-center gap-4 border border-[#e5f0ea]">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-700 leading-tight">CRM completo para acompanhar negociações</p>
+                        </div>
+                        <div class="bg-[#f2f7f4] rounded-2xl p-4 flex items-center gap-4 border border-[#e5f0ea]">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-700 leading-tight">Funis de venda personalizáveis</p>
+                        </div>
+                        <div class="bg-[#f2f7f4] rounded-2xl p-4 flex items-center gap-4 border border-[#e5f0ea]">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-700 leading-tight">Automações baseadas em estágios do funil</p>
+                        </div>
+                    </div>
+                    
+                    <div class="rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-gray-50 aspect-video relative flex items-center justify-center">
+                        <span class="text-gray-400 font-medium">Imagem Clientes & Funis Placeholder</span>
+                    </div>
+                </div>
+
+                <!-- Tab 3 Content -->
+                <div id="tab3" class="tab-content hidden fade-in">
+                    <h3 class="text-2xl md:text-3xl font-bold text-center mb-10 text-gray-900">
+                        Campanhas e jornadas automatizadas de alto impacto.
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                        <div class="bg-[#f2f7f4] rounded-2xl p-4 flex items-center gap-4 border border-[#e5f0ea]">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-700 leading-tight">Disparos em massa no WhatsApp</p>
+                        </div>
+                        <div class="bg-[#f2f7f4] rounded-2xl p-4 flex items-center gap-4 border border-[#e5f0ea]">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-700 leading-tight">Construtor visual de fluxos de automação</p>
+                        </div>
+                        <div class="bg-[#f2f7f4] rounded-2xl p-4 flex items-center gap-4 border border-[#e5f0ea]">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-700 leading-tight">Métricas e relatórios de conversão</p>
+                        </div>
+                    </div>
+                    
+                    <div class="rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-gray-50 aspect-video relative flex items-center justify-center">
+                        <span class="text-gray-400 font-medium">Imagem Campanhas Placeholder</span>
+                    </div>
+                </div>
+
+                <!-- Tab 4 Content (Active based on image) -->
+                <div id="tab4" class="tab-content block fade-in">
+                    <h3 class="text-2xl md:text-[28px] font-bold text-center mb-8 text-gray-900 tracking-tight">
+                        Inteligência artificial trabalhando pelo seu negócio 24/7.
+                    </h3>
+                    
+                    <!-- Feature Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                        <div class="bg-[#eef4f0] rounded-2xl p-4 flex items-center gap-4">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-800 leading-tight">Agentes para venda, suporte e triagem</p>
+                        </div>
+                        
+                        <div class="bg-[#eef4f0] rounded-2xl p-4 flex items-center gap-4">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-800 leading-tight">Treinados com os dados da sua empresa</p>
+                        </div>
+                        
+                        <div class="bg-[#eef4f0] rounded-2xl p-4 flex items-center gap-4">
+                            <div class="bg-[#dcfce7] rounded-full p-1.5 flex-shrink-0">
+                                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-800 leading-tight">Atendimento em escala direto nos seus canais</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Image Container -->
+                    <div class="rounded-xl overflow-hidden shadow-sm border border-gray-200 bg-white">
+                        <!-- Using the specific requested image -->
+                        <img src="e18ddb4c-d549-47c1-bd54-3c542e718360.jpg" alt="Interface de agentes de Inteligência Artificial" class="w-full h-auto object-cover object-top" style="max-height: 500px;" onerror="this.src='https://placehold.co/1200x675/f3f4f6/a1a1aa?text=Interface+Dashboard'">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            let currentIndex = 3; // Start with the 4th tab (index 3) as per the image
+            const rotationInterval = 10000; // 10 seconds
+            let timer;
+
+            // Function to switch tabs
+            function switchTab(index) {
+                // Reset all tabs
+                tabs.forEach(tab => {
+                    tab.classList.remove('bg-white', 'text-emerald-600', 'font-bold', 'active-tab', 'tab-active');
+                    tab.classList.add('text-gray-500', 'font-semibold');
+                    tab.setAttribute('aria-selected', 'false');
+                    
+                    // Reset progress bar
+                    const progressBar = tab.querySelector('.tab-progress-bar');
+                    if (progressBar) {
+                        progressBar.classList.add('hidden');
+                        progressBar.classList.remove('block');
+                        // Force reflow to restart animation next time
+                        void progressBar.offsetWidth;
+                    }
+                });
+
+                // Reset all contents
+                contents.forEach(content => {
+                    content.classList.add('hidden');
+                    content.classList.remove('block');
+                });
+
+                // Set active tab
+                const activeTab = tabs[index];
+                activeTab.classList.remove('text-gray-500', 'font-semibold');
+                activeTab.classList.add('bg-white', 'text-emerald-600', 'font-bold', 'active-tab', 'tab-active');
+                activeTab.setAttribute('aria-selected', 'true');
+                
+                // Show progress bar on active tab
+                const activeProgressBar = activeTab.querySelector('.tab-progress-bar');
+                if (activeProgressBar) {
+                    activeProgressBar.classList.remove('hidden');
+                    activeProgressBar.classList.add('block');
+                }
+
+                // Show active content
+                const targetId = activeTab.getAttribute('data-target');
+                document.getElementById(targetId).classList.remove('hidden');
+                document.getElementById(targetId).classList.add('block');
+
+                // Update current index
+                currentIndex = index;
+            }
+
+            // Function to go to next tab automatically
+            function nextTab() {
+                const nextIndex = (currentIndex + 1) % tabs.length;
+                switchTab(nextIndex);
+            }
+
+            // Start auto rotation
+            function startTimer() {
+                clearInterval(timer);
+                timer = setInterval(nextTab, rotationInterval);
+            }
+
+            // Add click event listeners to tabs
+            tabs.forEach((tab, index) => {
+                tab.addEventListener('click', () => {
+                    switchTab(index);
+                    // Restart timer on manual click so user has full 10s to read
+                    startTimer(); 
+                });
+            });
+
+            // Initialize
+            // Start the timer
+            startTimer();
+            // Force animation restart on initial load for the pre-selected tab
+            const initialProgressBar = tabs[currentIndex].querySelector('.tab-progress-bar');
+            if (initialProgressBar) {
+                initialProgressBar.classList.remove('hidden');
+                initialProgressBar.classList.add('block');
+            }
+        });
+    </script>
+</body>
+</html>
