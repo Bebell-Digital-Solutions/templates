@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stacking Blocks Component - Light Theme</title>
+<style>
+  /* Light Theme Variables */
+  :root {
+    --bg-main: #ffffff;
+    --card-bg: #ffffff;
+    --text-primary: #121212;
+    --text-secondary: #5a5a5a;
+    --accent-color: #6a4cff; /* Deep purple for high contrast */
+    --border-color: #e5e7eb;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  /* Container for the scroll area */
+  .page-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 20px 20vh;
+  }
+
+  /* Centered Main Title Area */
+  .intro-text {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+
+  .main-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    letter-spacing: -1px;
+    color: #000000;
+  }
+  
+  .subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin: 0;
+  }
+
+  /* Stacking Cards Container */
+  .stack-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* Individual Card */
+  .stack-card {
+    position: sticky;
+    top: calc(40px + (var(--card-index) * 20px)); 
+    display: flex;
+    align-items: center;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 60px;
+    gap: 60px;
+    /* Softer, more diffuse shadow for light mode */
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.06);
+    
+    transform-origin: top center;
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  /* Left Side: Content */
+  .card-content {
+    flex: 1;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    background-color: rgba(106, 76, 255, 0.05); /* Slight tint */
+  }
+
+  .card-title {
+    font-size: 2.5rem;
+    margin: 0 0 20px 0;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+
+  .card-text {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    max-width: 90%;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    background-color: var(--text-primary);
+    color: var(--bg-main);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+
+  .cta-btn:hover {
+    background-color: #333333;
+  }
+
+  /* Right Side: Image Block */
+  .card-media {
+    flex: 1;
+    width: 100%;
+  }
+  
+  
+  .image-wrapper {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-sizing: border-box;
+    background-size: cover;
+    background-position: center;
+    /* I REMOVED THE BACKGROUND-IMAGE LINE FROM HERE */
+  }
+  
+  
+
+
+  /* Mobile Responsiveness */
+  @media (max-width: 992px) {
+    .main-title {
+      font-size: 2.5rem;
+    }
+    
+    .stack-card {
+      flex-direction: column;
+      padding: 40px 24px;
+      gap: 40px;
+      top: calc(20px + (var(--card-index) * 10px));
+    }
+    
+    .card-title {
+      font-size: 2rem;
+    }
+    
+    .card-text {
+      max-width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+  
+
+<div class="page-wrapper">
+  
+  <!-- Centered Main Title Area -->
+  <div class="intro-text">
+    <h1 class="main-title">Automate Everything</h1>
+    <h2 class="subtitle">Scroll down to see the features pile up</h2>
+  </div>
+
+  <div class="stack-container" id="stack-container">
+  
+  
+  
+  
+  
+    
+    <!-- Block 1 -->
+    <div class="stack-card" style="--card-index: 0;">
+      <div class="card-content">
+        <div class="badge">Feature</div>
+        <h2 class="card-title">Scrape Data</h2>
+        <p class="card-text">Easily pull data from any webpage using our advanced syntax. Handle dynamic elements, javascript rendering, and pagination effortlessly.</p>
+        <a href="#" class="cta-btn">Learn More</a>
+      </div>
+      <div class="card-media">
+<div class="image-wrapper" style="background-image: url('https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/6_yellow.png?updatedAt=1787948546654');"></div>
+      </div>
+      
+    </div>
+    
+    
+  
+
+    <!-- Block 2 -->
+    <div class="stack-card" style="--card-index: 1;">
+      <div class="card-content">
+        <div class="badge">Extract</div>
+        <h2 class="card-title">Extract Entities</h2>
+        <p class="card-text">Automatically identify and structure unstructured data. Extract names, prices, addresses, and dates without complex regex configurations.</p>
+        <a href="#" class="cta-btn">View Documentation</a>
+      </div>
+      <div class="card-media">
+<div class="image-wrapper" style="background-image: url('https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/7_green.png?updatedAt=1787948546614');">
+
+</div>      
+
+</div>
+    </div>
+    
+    
+
+
+    <!-- Block 3 -->
+    <div class="stack-card" style="--card-index: 2;">
+      <div class="card-content">
+        <div class="badge">Monitor</div>
+        <h2 class="card-title">Monitor Changes</h2>
+        <p class="card-text">Watch webpages for changes and get notified via webhook. Perfect for price tracking, content updates, and competitor intelligence.</p>
+        <a href="#" class="cta-btn">Start Monitoring</a>
+      </div>
+      <div class="card-media">
+<div class="image-wrapper" style="background-image: url('https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/2_purple.png?updatedAt=1787948546627');"></div>
+
+
+</div>
+    </div>
+    
+    
+
+    <!-- Block 4 -->
+    <div class="stack-card" style="--card-index: 3;">
+      <div class="card-content">
+        <div class="badge">Deploy</div>
+        <h2 class="card-title">Scale Instantly</h2>
+        <p class="card-text">Run thousands of concurrent tasks with zero infrastructure management. Our globally distributed network bypasses blocks automatically.</p>
+        <a href="#" class="cta-btn">Get Started</a>
+      </div>
+      <div class="card-media">
+<div class="image-wrapper" style="background-image: url('https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/4_red.png?updatedAt=1787948546599');">
+
+</div>
+
+</div>
+    </div>
+    
+    
+
+  </div>
+</div>
+
+
+
+
+
+
+<script>
+  document.addEventListener('scroll', () => {
+    const cards = document.querySelectorAll('.stack-card');
+    
+    cards.forEach((card, index) => {
+      const rect = card.getBoundingClientRect();
+      const cardTop = rect.top;
+      const stickyOffset = parseInt(getComputedStyle(card).top); 
+
+      if (cardTop <= stickyOffset + 5) {
+        const distancePast = (stickyOffset - cardTop);
+        const scale = Math.max(0.95, 1 - (distancePast * 0.0005));
+        
+        // In Light Mode, we drop the brightness significantly less than in dark mode
+        // so it looks like a subtle shadow rather than turning black.
+        const brightness = Math.max(0.92, 1 - (distancePast * 0.0003));
+        
+        card.style.transform = `scale(${scale})`;
+        card.style.filter = `brightness(${brightness})`;
+      } else {
+        card.style.transform = 'scale(1)';
+        card.style.filter = 'brightness(1)';
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+</body>
+</html>
