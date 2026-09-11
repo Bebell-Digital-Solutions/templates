@@ -1,0 +1,2165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Interactivo - HelpDesk</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Brand Colors */
+            --brand: #df1783;
+            --brand-hover: #a02b8f;
+            --brand-light: rgba(223, 23, 131, 0.1);
+            --brand-lighter: rgba(223, 23, 131, 0.05);
+            
+            /* Structural Colors */
+            --dark: #1e293b;
+            --body-bg: #f7f7f3;
+            --white: #ffffff;
+            
+            /* Text Colors */
+            --text-main: #1f2937; /* gray-800 */
+            --text-heading: #0f172a; /* slate-900 */
+            --text-muted: #6b7280; /* gray-500 */
+            --text-light: #94a3b8; /* slate-400 */
+            
+            /* Borders */
+            --border-light: #e2e8f0;
+            --border-lighter: #f1f5f9;
+            
+            /* Spacing & Layout */
+            --container-max: 1280px;
+            --container-md: 1152px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-md {
+            max-width: var(--container-md);
+        }
+
+        /* Utility Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        @media (min-width: 992px) {
+            .grid-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Typography */
+        .text-brand { color: var(--brand); }
+        .text-heading { color: var(--text-heading); }
+        .text-muted { color: var(--text-muted); }
+        .font-extrabold { font-weight: 800; }
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border: none;
+            outline: none;
+        }
+
+        .btn-outline {
+            border: 1px solid #d1d5db;
+            color: var(--text-heading);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            color: var(--brand);
+            border-color: var(--brand);
+        }
+
+        .btn-primary {
+            background-color: var(--brand);
+            color: var(--white);
+            box-shadow: 0 4px 6px -1px var(--brand-light);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--brand-hover);
+            transform: translateY(-2px);
+        }
+
+        /* --- Header --- */
+        .site-header {
+            background-color: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-lighter);
+            padding: 16px 0;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+        }
+
+        .header-inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .header-inner {
+                flex-direction: row;
+                gap: 0;
+            }
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-heading);
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.1) rotate(-3deg);
+        }
+
+        .logo-title {
+            font-weight: 800;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .logo-subtitle {
+            font-size: 9px;
+            color: var(--text-muted);
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+
+        /* Nav */
+        .main-nav {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .main-nav {
+                width: auto;
+                padding-bottom: 0;
+                overflow-x: visible;
+            }
+        }
+
+        .nav-list {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-muted);
+            min-width: max-content;
+        }
+
+        @media (min-width: 768px) {
+            .nav-list {
+                gap: 32px;
+            }
+        }
+
+        .nav-list a:hover {
+            color: var(--brand);
+        }
+
+        /* --- Dropdown --- */
+        .dropdown {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .dropdown-link {
+            display: flex;
+            align-items: center;
+        }
+        
+        .dropdown-link i {
+            font-size: 10px;
+            margin-left: 4px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 220px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            z-index: 1000;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 0;
+            border: 1px solid var(--border-light);
+            margin-top: 15px; 
+        }
+
+        .dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8fafc;
+            color: var(--brand);
+            padding-left: 24px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .header-actions {
+                width: auto;
+            }
+        }
+
+        /* --- Hero --- */
+        .hero {
+            padding: 100px 0 80px;
+        }
+         
+        .hero-text {
+            max-width: 540px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Hero Bullets */
+        .bullets {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+            margin-bottom: 35px;
+        }
+
+        .bullets li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .bullets li::before {
+            content: "\f00c"; 
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--brand);
+        }
+
+        /* CSS Mockups (UI Style: Tech Dashboard) */
+        .hero-container, .mockup-container {
+            position:relative;
+            overflow:hidden;
+            border-radius:10px;
+            border:1px solid #e2e8f0;
+            background:#fff;
+            box-shadow:
+                0 20px 40px rgba(15,23,42,.08),
+                0 8px 18px rgba(15,23,42,.05);
+            transition:
+                transform .45s cubic-bezier(.22,1,.36,1),
+                box-shadow .45s ease;
+            animation:float 2s ease-in-out infinite;
+        }
+
+        .hero-container:hover, .mockup-container:hover {
+            animation-play-state:paused;
+            transform: translateY(-12px);
+            box-shadow:
+                0 35px 80px rgba(15,23,42,.18),
+                0 15px 30px rgba(15,23,42,.08);
+        }
+
+        @keyframes float {
+            0%,100% { transform:translateY(0); }
+            50% { transform:translateY(-8px); }
+        }
+
+        .hero-dashboard {
+            display:block;
+            width:100%;
+            aspect-ratio:2070 / 1500;
+            object-fit:cover;
+            transition: opacity .45s ease, transform .6s ease;
+        }
+
+        .hero-dashboard.hover {
+            position:absolute;
+            inset:0;
+            opacity:0;
+            transform:scale(1.05);
+        }
+
+        .hero-container:hover .hero-dashboard.default, .mockup-container:hover .hero-dashboard.default {
+            opacity:0;
+            transform:scale(1.05);
+        }
+
+        .hero-container:hover .hero-dashboard.hover, .mockup-container:hover .hero-dashboard.hover {
+            opacity:1;
+            transform:scale(1);
+        }
+
+        .hero-container::after, .mockup-container::after {
+            content:"";
+            position:absolute;
+            inset:0;
+            background:linear-gradient(110deg, transparent 25%, rgba(255,255,255,.35) 50%, transparent 75%);
+            transform:translateX(-120%);
+            transition:transform .5s ease;
+            pointer-events:none;
+        }
+
+        .hero-container:hover::after, .mockup-container:hover::after {
+            transform:translateX(120%);
+        }
+
+        /* Tech Colors for Skeletons */
+        .sk-primary { background: #c7d2fe; }
+        .sk-accent { background: #fde68a; }
+        .sk-success { background: #bbf7d0; }
+        .sk-neutral { background: #f1f5f9; }
+
+        .skeleton-line {
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        /* LLM Integration Logo Slider */
+        .llms-section {
+            background-color: var(--white);
+            padding: 60px 0;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .partner-logo-slider {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .partner-logo-slider:before, .partner-logo-slider:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 120px;
+            height: 100%;
+            z-index: 9;
+        }
+        .partner-logo-slider:before { left: 0; background: linear-gradient(to right, #fff 0%, rgba(255, 255, 255, 0) 100%); }
+        .partner-logo-slider:after { right: 0; background: linear-gradient(to left, #fff 0%, rgba(255, 255, 255, 0) 100%); }
+
+        .partner-logo-slide {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            animation: partner-logo 30s linear infinite;
+        }
+        .partner-logo-slide:hover { animation-play-state: paused; }
+        .partner-logo-slide img {
+            width: 200px;
+            border: 1px solid #b2b2b2;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        @keyframes partner-logo {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* --- Channels Grid --- */
+        .channels-section {
+            padding: 100px 0;
+        }
+
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 50px;
+            text-align: left;
+        }
+        
+        .channel-card {
+            background: var(--white);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .channel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(15,23,42,0.08);
+            border-color: #cbd5e1;
+        }
+        
+        .channel-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .channel-icon-wrapper {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .channel-card:hover .channel-icon-wrapper {
+            transform: scale(1.15) rotate(-3deg);
+        }     
+          
+        .channel-title {
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+        
+        .channel-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* --- Sections --- */
+        .section {
+            padding: 64px 0;
+        }
+
+        @media (min-width: 768px) {
+            .section {
+                padding: 96px 0;
+            }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--brand);
+            letter-spacing: 0.1em;
+        }
+
+        .badge-line {
+            width: 32px;
+            height: 1px;
+            background-color: var(--brand);
+            opacity: 0.3;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-heading);
+            margin-bottom: 16px;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: 48px;
+            }
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 42rem;
+            margin: 0 auto;
+        }
+
+        /* --- Tabs Component --- */
+        .dashboard-panel {
+            background-color: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+
+        .tab-list {
+            display: flex;
+            background-color: #fbfbf9;
+            border-bottom: 1px solid var(--border-light);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .tab-list::-webkit-scrollbar {
+            height: 6px; 
+        }
+        .tab-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .tab-list::-webkit-scrollbar-thumb {
+            background-color: var(--brand);
+            border-radius: 4px;
+        }
+
+        .tab-btn {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+            padding: 20px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            outline: none;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        .tab-btn.active {
+            font-weight: 700;
+            color: var(--brand);
+            background-color: var(--white);
+        }
+
+        .tab-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background-color: var(--brand);
+            width: 0;
+            opacity: 0;
+        }
+
+        .tab-btn.active .tab-progress-bar {
+            opacity: 1;
+            animation: tabProgress 10s linear forwards;
+        }
+
+        @keyframes tabProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .tab-content-area {
+            padding: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .tab-content-area {
+                padding: 48px;
+            }
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-inner-title {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-heading);
+            margin-bottom: 40px;
+            letter-spacing: -0.01em;
+        }
+
+        @media (min-width: 768px) {
+            .tab-inner-title {
+                font-size: 30px;
+            }
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            background-color: var(--brand-lighter);
+            border: 1px solid var(--brand-light);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .feature-icon {
+            background-color: var(--brand-light);
+            color: var(--brand);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .preview-img-wrapper {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+            background-color: var(--white);
+        }
+
+        .preview-img-wrapper img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        /* --- Stacking Section --- */
+        .stack-section {
+            padding-top: 80px;
+            padding-bottom: 20vh;
+        }
+
+        .stack-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .stack-card {
+            position: sticky;
+            top: calc(100px + (var(--card-index) * 20px)); 
+            transform-origin: top center;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            
+            display: flex;
+            flex-direction: column;
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            padding: 32px;
+            gap: 40px;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.04);
+        }
+
+        @media (min-width: 992px) {
+            .stack-card {
+                flex-direction: row;
+                align-items: center;
+                padding: 56px;
+                gap: 64px;
+                top: calc(80px + (var(--card-index) * 10px));
+            }
+        }
+
+        .stack-card-content {
+            flex: 1;
+            width: 100%;
+        }
+
+        .stack-card-tag {
+            display: inline-block;
+            padding: 6px 16px;
+            border: 1px solid var(--brand);
+            color: var(--brand);
+            background-color: var(--brand-lighter);
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .stack-card-title {
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+
+        @media (min-width: 1024px) {
+            .stack-card-title {
+                font-size: 36px;
+            }
+        }
+
+        .stack-card-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            max-width: 32rem;
+        }
+
+        .stack-card-btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background-color: var(--brand);
+            color: var(--white);
+            border-radius: 8px;
+            font-weight: 700;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .stack-card-btn:hover {
+            background-color: var(--text-heading);
+        }
+
+        .stack-card-image {
+            flex: 1;
+            width: 100%;
+        }
+
+        .stack-image-inner {
+            width: 100%;
+            aspect-ratio: 3/2;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+        }
+
+        /* --- Target Audience Section --- */
+        .audience-section {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+        
+        .audience-section h2 {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-heading);
+            margin-bottom: 16px;
+        }
+        
+        .audience-section > p {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 64px auto;
+        }
+        
+        .audience-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+        
+        @media (min-width: 768px) {
+            .audience-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .audience-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .audience-item {
+            background: var(--body-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .audience-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(15,23,42,0.08);
+            border-color: #cbd5e1;
+        }
+        
+        .audience-icon-box {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px auto;
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-light);
+        }
+        
+        .audience-item h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 16px;
+        }
+        
+        .audience-item p {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* --- FAQ Section --- */
+        .faq-section {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--white);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .faq-item:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 6px rgba(15,23,42,0.02);
+        }
+
+        .faq-item summary {
+            padding: 24px;
+            font-weight: 700;
+            font-size: 1.15rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            color: var(--text-main);
+            user-select: none;
+        }
+
+        .faq-item summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .faq-item summary::after {
+            content: '\f078'; /* fa-chevron-down */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--brand);
+            transition: transform 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .faq-item[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .faq-content {
+            padding: 0 24px 24px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        /* --- Testimonials --- */
+        .testimonials {
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .testimonial-card {
+            text-align: left;
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #cbd5e1;
+            object-fit: cover;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--dark);
+            color: var(--white);
+            padding-top: 96px;
+            padding-bottom: 40px;
+            border-top-left-radius: 40px;
+            border-top-right-radius: 40px;
+        }
+
+        .footer-cta {
+            text-align: center;
+            max-width: 48rem;
+            margin: 0 auto 80px auto;
+        }
+
+        .footer-cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        @media (min-width: 768px) {
+            .footer-cta-title {
+                font-size: 48px;
+            }
+        }
+
+        .footer-cta-desc {
+            color: var(--text-light);
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+
+        .footer-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .footer-btn {
+            padding: 16px 32px;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-btn-primary {
+            background-color: var(--brand);
+            color: var(--white);
+        }
+
+        .footer-btn-primary:hover {
+            background-color: var(--brand-hover);
+        }
+
+        .footer-btn-outline {
+            background-color: transparent;
+            border: 1px solid #475569; /* slate-600 */
+            color: var(--white);
+        }
+
+        .footer-btn-outline:hover {
+            background-color: var(--brand-light);
+            border-color: var(--brand);
+            color: var(--brand);
+        }
+
+        .footer-note {
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Footer Grid */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            border-top: 1px solid #334155;
+            padding-top: 64px;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        @media (min-width: 1024px) {
+            .footer-brand {
+                align-items: flex-start;
+                text-align: left;
+            }
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .footer-logo img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s;
+        }
+
+        .footer-logo:hover img {
+            transform: scale(1.1) rotate(-3deg);
+        }
+
+        .footer-logo-title {
+            font-weight: 800;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .footer-logo-subtitle {
+            font-size: 9px;
+            color: var(--text-light);
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+
+        .footer-desc {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 320px;
+        }
+
+        .footer-col-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: #cbd5e1; /* slate-300 */
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        /* Footer Bottom */
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            margin-top: 64px;
+            padding-top: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        @media (min-width: 768px) {
+            .footer-bottom {
+                flex-direction: row;
+            }
+        }
+
+        .footer-copyright {
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        @media (min-width: 768px) {
+            .footer-copyright {
+                text-align: left;
+            }
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 24px;
+            font-size: 18px;
+        }
+
+        .footer-socials a {
+            color: var(--text-muted);
+        }
+
+        .footer-socials a:hover {
+            color: var(--white);
+        }
+
+        /* --- Back to Top --- */
+        .back-to-top {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: all 0.3s ease;
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            background-color: var(--brand);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            z-index: 999;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .back-to-top:hover {
+            background-color: var(--brand-hover);
+            transform: translateY(-4px) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <img src="https://bucket.mlcdn.com/a/3336/3336910/images/1ea6c41da3544c958ba611015aae9ea3e7a7499a.png" alt="HelpDesk Logo" />
+                <div>
+                    <div class="logo-title">HelpDesk®</div>
+                    <div class="logo-subtitle">by Bebell Digital Solutions</div>
+                </div>
+            </a>
+            
+            <!-- Nav Links -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="#" class="text-brand">Inicio</a></li>
+                    <li><a href="#">Integraciones</a></li>
+                    <li><a href="#">Canales</a></li>
+                    <li><a href="#">Planes</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-link">
+                            Recursos <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="#" class="dropdown-item">Centro de Ayuda</a>
+                            <a href="#" class="dropdown-item">Guía GRATUITA</a>
+                            <a href="#" class="dropdown-item font-bold">Enlaces WhatsApp</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Actions -->
+            <div class="header-actions">
+                <a href="#" class="btn btn-outline">Iniciar Sesión</a>
+                <a href="#" class="btn btn-primary">Agendar Demo</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="grid-2">
+                <div class="hero-text">
+                    <h1>Nunca pierdas otro cliente por responder tarde.</h1>
+                    <p style="margin-top: 15px;">Centraliza WhatsApp, Instagram, Facebook, Telegram y más en una sola bandeja para responder más rápido, vender más y brindar una mejor experiencia.</p>
+                    
+                    <ul class="bullets">
+                        <li>Responde desde una sola bandeja</li>
+                        <li>Atiende con tu equipo</li>
+                        <li>Automatiza respuestas con IA</li>
+                        <li>Sin cambiar tu número de WhatsApp</li>
+                    </ul>
+                    
+                    <div class="hero-buttons">
+                        <a href="/p/planes" class="btn btn-primary"><strong>Pruébalo sin Costo</strong></a>
+                        <a href="/p/reserva" class="btn btn-outline" style="background: white;">Solicita una Demostración</a>
+                    </div>
+                    <p style="margin-top: 15px; font-size: 0.85rem; color: #94a3b8; font-weight: 500;">
+                        14 días de prueba sin costo. Configúralo en menos de 10 minutos.
+                    </p>
+                </div>
+                
+                <div class="hero-container">
+                    <img
+                        class="hero-dashboard default"
+                        src="https://ik.imagekit.io/bebell/HelpDesk%20App/Image%20Files%20&%20Assets/helpdesk-dashboard.webp?updatedAt=1785270631284"
+                        alt="HelpDesk Dashboard">
+                    <img
+                        class="hero-dashboard hover"
+                        src="https://ik.imagekit.io/bebell/HelpDesk%20App/Image%20Files%20&%20Assets/helpdesk-chat.webp?updatedAt=1785270631262"
+                        alt="HelpDesk Dashboard - Conversations">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. LLMs / Integraciones Section -->
+    <section class="llms-section">
+        <div class="container">
+            <div style="text-align: center; max-width: 600px; margin: 0 auto 30px;">
+                <h2 style="font-size: 1.8rem; color: var(--text-muted);">Asistentes Inteligentes</h2>
+                <p class="subtitle" style="font-size: 1rem;">Añade agentes de soporte impulsados por Inteligencia Artificial.</p>
+            </div>
+        </div>
+        
+        <div class="partner-logo-slider">
+            <div class="partner-logo-slide">
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/DeepSeek.svg" alt="DeepSeek" />
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/openai.svg" alt="OpenAI" />
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/claude.svg" alt="Claude" />
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/gemini.svg" alt="Gemini" />
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/idtcsMbudc_logos.svg" alt="Logo" />
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/openrouter.svg" alt="OpenRouter" />
+                <!-- Duplicates for smooth scrolling -->
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/DeepSeek.svg" alt="DeepSeek" />
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/openai.svg" alt="OpenAI" />
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/claude.svg" alt="Claude" />
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/gemini.svg" alt="Gemini" />
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/idtcsMbudc_logos.svg" alt="Logo" />
+                <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/LLMs/openrouter.svg" alt="OpenRouter" />
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Main Dashboard Features -->
+    <main class="section">
+        <div class="container container-md">
+            
+            <!-- Dashboard Header -->
+            <div class="section-header">
+                <div class="badge">
+                    <span class="badge-line"></span>
+                    <span>05 · QUÉ INCLUYE</span>
+                    <span class="badge-line"></span>
+                </div>
+                <h2 class="section-title">
+                    Cuatro áreas. <br/><span class="text-brand">Una operación completa.</span>
+                </h2>
+                <p class="section-subtitle">
+                    Todo comparte los mismos contactos y los mismos datos. Lo configuras una vez y funciona en conjunto.
+                </p>
+            </div>
+
+            <!-- Dashboard Component -->
+            <div class="dashboard-panel">
+                <!-- Tabs -->
+                <div class="tab-list" role="tablist">
+                    <button class="tab-btn" data-target="tab1" role="tab" aria-selected="false">
+                        Atención
+                        <div class="tab-progress-bar"></div>
+                    </button>
+                    <button class="tab-btn" data-target="tab2" role="tab" aria-selected="false">
+                        Clientes y Embudos
+                        <div class="tab-progress-bar"></div>
+                    </button>
+                    <button class="tab-btn" data-target="tab3" role="tab" aria-selected="false">
+                        Campañas y Jornadas
+                        <div class="tab-progress-bar"></div>
+                    </button>
+                    <!-- Default Active Tab -->
+                    <button class="tab-btn active" data-target="tab4" role="tab" aria-selected="true">
+                        Tu equipo de IA
+                        <div class="tab-progress-bar"></div>
+                    </button>
+                </div>
+
+                <!-- Tab Content Area -->
+                <div class="tab-content-area">
+                    <!-- Tab 1: Atención -->
+                    <div id="tab1" class="tab-content">
+                        <h3 class="tab-inner-title">Atención humanizada y eficiente en todos los canales.</h3>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Centralización de mensajes de WhatsApp, IG y más</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Múltiples agentes en el mismo número</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Historial unificado del cliente</p>
+                            </div>
+                        </div>
+                        <div class="preview-img-wrapper">
+                            <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/f0781370-21d2-49da-922b-f60079b00b23.webp" alt="Interfaz de agentes">
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Clientes y Embudos -->
+                    <div id="tab2" class="tab-content">
+                        <h3 class="tab-inner-title">Gestión de clientes y embudos de venta integrados.</h3>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">CRM completo para seguir negociaciones</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Embudos de venta personalizables</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Automatizaciones basadas en las etapas</p>
+                            </div>
+                        </div>
+                        <div class="preview-img-wrapper">
+                            <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/dd8927ff-6887-43f7-93ff-17a1e19ce19c.webp" alt="Interfaz CRM">
+                        </div>
+                    </div>
+
+                    <!-- Tab 3: Campañas -->
+                    <div id="tab3" class="tab-content">
+                        <h3 class="tab-inner-title">Campañas y jornadas automatizadas de alto impacto.</h3>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Envíos masivos por WhatsApp</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Constructor visual de flujos</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Métricas y reportes de conversión</p>
+                            </div>
+                        </div>
+                        <div class="preview-img-wrapper">
+                            <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/chatflow-preview.webp" alt="Flujos de automatización">
+                        </div>
+                    </div>
+
+                    <!-- Tab 4: IA (Active) -->
+                    <div id="tab4" class="tab-content active">
+                        <h3 class="tab-inner-title">Inteligencia artificial trabajando para tu negocio 24/7.</h3>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Agentes para ventas, soporte y triaje</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Entrenados con datos de tu empresa</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="feature-text">Atención a escala en tus canales</p>
+                            </div>
+                        </div>
+                        <div class="preview-img-wrapper">
+                            <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/base-de-conocimientos.webp" alt="Base de conocimientos">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 4. Stacking Scroll Section -->
+    <section class="stack-section">
+        <div class="container container-md">
+            
+            <!-- Section Header -->
+            <div class="section-header">
+                <div class="badge">
+                    <span class="badge-line"></span>
+                    <span>06 · QUÉ INCLUYE</span>
+                    <span class="badge-line"></span>
+                </div>
+                <h2 class="section-title">
+                    Automate <span class="text-brand">Everything</span>
+                </h2>
+                <p class="section-subtitle">
+                    Scroll down to see the features pile up
+                </p>
+            </div>
+
+            <!-- Stacking Cards Container -->
+            <div class="stack-container" id="stack-container">
+                
+                <!-- Card 1 -->
+                <div class="stack-card" style="--card-index: 0;">
+                    <div class="stack-card-content">
+                        <div class="stack-card-tag">Feature</div>
+                        <h2 class="stack-card-title">View Documentation</h2>
+                        <p class="stack-card-desc">Easily pull data from any webpage using our advanced syntax. Handle dynamic elements, javascript rendering, and pagination effortlessly.</p>
+                        <a href="#" class="stack-card-btn">View Documentation</a>
+                    </div>
+                    <div class="stack-card-image">
+                        <div class="stack-image-inner" style="background-image: url('https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/6_yellow.png?updatedAt=1787948546654');"></div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="stack-card" style="--card-index: 1;">
+                    <div class="stack-card-content">
+                        <div class="stack-card-tag">Extract</div>
+                        <h2 class="stack-card-title">Extract Entities</h2>
+                        <p class="stack-card-desc">Automatically identify and structure unstructured data. Extract names, prices, addresses, and dates without complex regex configurations.</p>
+                        <a href="#" class="stack-card-btn">View Documentation</a>
+                    </div>
+                    <div class="stack-card-image">
+                        <div class="stack-image-inner" style="background-image: url('https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/7_green.png?updatedAt=1787948546614');"></div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="stack-card" style="--card-index: 2;">
+                    <div class="stack-card-content">
+                        <div class="stack-card-tag">Monitor</div>
+                        <h2 class="stack-card-title">Monitor Changes</h2>
+                        <p class="stack-card-desc">Watch webpages for changes and get notified via webhook. Perfect for price tracking, content updates, and competitor intelligence.</p>
+                        <a href="#" class="stack-card-btn">View Documentation</a>
+                    </div>
+                    <div class="stack-card-image">
+                        <div class="stack-image-inner" style="background-image: url('https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/2_purple.png?updatedAt=1787948546627');"></div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="stack-card" style="--card-index: 3;">
+                    <div class="stack-card-content">
+                        <div class="stack-card-tag">Deploy</div>
+                        <h2 class="stack-card-title">Scale Instantly</h2>
+                        <p class="stack-card-desc">Run thousands of concurrent tasks with zero infrastructure management. Our globally distributed network bypasses blocks automatically.</p>
+                        <a href="#" class="stack-card-btn">View Documentation</a>
+                    </div>
+                    <div class="stack-card-image">
+                        <div class="stack-image-inner" style="background-image: url('https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/4_red.png?updatedAt=1787948546599');"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- 5. Canales de Comunicación Section -->
+    <section class="channels-section">
+        <div class="container">
+        
+        
+            <!-- Section Header -->
+            <div class="section-header">
+                <div class="badge">
+                    <span class="badge-line"></span>
+                    <span>06 · QUÉ INCLUYE</span>
+                    <span class="badge-line"></span>
+                </div>
+                <h2 class="section-title">
+                    Conecta tus Canales de <span class="text-brand">Chat</span>
+                </h2>
+                <p class="section-subtitle">
+                    <strong>HelpDesk</strong> reúne todos tus canales en un solo lugar para que nunca vuelvas a perder una oportunidad.
+                </p>
+            </div>
+
+            <!-- Channels Integration Grid -->
+            <div class="channels-grid">
+                <!-- Live Chat -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #f8fafc; border: 1px solid #e2e8f0; overflow: hidden;">
+                            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/1ea6c41da3544c958ba611015aae9ea3e7a7499a.png" alt="HelpDesk Logo" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="channel-title">Live Chat (Web)</div>
+                    </div>
+                    <p class="channel-desc">Permite a tus clientes contactarte al instante desde tu sitio web utilizando nuestro completo widget de chat en vivo. Mejora el engagement y acelera las respuestas.</p>
+                </div>
+                
+                <!-- WhatsApp -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #25D366;">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div class="channel-title">WhatsApp Business</div>
+                    </div>
+                    <p class="channel-desc">La app en la que confían más de 3 mil millones de usuarios. Ideal para soporte rápido y actualizaciones, con una increíble tasa de apertura del 98%.</p>
+                </div>
+
+                <!-- Facebook Messenger -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #0084FF;">
+                            <i class="fa-brands fa-facebook-messenger"></i>
+                        </div>
+                        <div class="channel-title">Facebook Messenger</div>
+                    </div>
+                    <p class="channel-desc">Conecta con más de mil millones de usuarios activos. Una herramienta clave para soporte y marketing, logrando altas tasas de engagement mundialmente.</p>
+                </div>
+
+                <!-- Instagram DM -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
+                            <i class="fa-brands fa-instagram"></i>
+                        </div>
+                        <div class="channel-title">Instagram DM</div>
+                    </div>
+                    <p class="channel-desc">Interactúa en la red social visual más grande del mundo. Ofrece una experiencia conversacional ideal para descubrir productos y construir relaciones con tu audiencia.</p>
+                </div>
+
+                <!-- SMS Twilio -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #F22F46;">
+                            <i class="fa-solid fa-message"></i>
+                        </div>
+                        <div class="channel-title">SMS (Twilio)</div>
+                    </div>
+                    <p class="channel-desc">Canal universal con acceso a más de 5 mil millones de personas. Entrega notificaciones inmediatas con un 98% de apertura, incluso sin acceso a internet.</p>
+                </div>
+
+                <!-- Telegram -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #229ED9;">
+                            <i class="fa-brands fa-telegram"></i>
+                        </div>
+                        <div class="channel-title">Telegram</div>
+                    </div>
+                    <p class="channel-desc">Plataforma global enfocada en privacidad y velocidad con más de mil millones de usuarios. Procesa millones de mensajes diarios en comunidades que crecen rápidamente.</p>
+                </div>
+
+                <!-- Viber -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #7360F2;">
+                            <i class="fa-brands fa-viber"></i>
+                        </div>
+                        <div class="channel-title">Viber</div>
+                    </div>
+                    <p class="channel-desc">App de mensajería con fuerte adopción en Europa y Asia. Envía actualizaciones directas aprovechando sus herramientas ricas en contenido multimedia.</p>
+                </div>
+
+                <!-- Line -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #00C300;">
+                            <i class="fa-brands fa-line"></i>
+                        </div>
+                        <div class="channel-title">LINE</div>
+                    </div>
+                    <p class="channel-desc">Dominante en Japón y el sudeste asiático. Una herramienta versátil que va más allá de los mensajes, integrando múltiples servicios empresariales.</p>
+                </div>
+
+                <!-- WeChat -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #09B83E;">
+                            <i class="fa-brands fa-weixin"></i>
+                        </div>
+                        <div class="channel-title">WeChat</div>
+                    </div>
+                    <p class="channel-desc">La súper-aplicación masiva con 1.4 mil millones de usuarios. Dominante en China, es un ecosistema completo para mensajería, pagos y soporte.</p>
+                </div>
+
+                <!-- Zalo -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #0068FF;">
+                            <i class="fa-solid fa-comment-dots"></i>
+                        </div>
+                        <div class="channel-title">Zalo</div>
+                    </div>
+                    <p class="channel-desc">Plataforma líder en Vietnam con 79 millones de usuarios activos. Indispensable para conectar profundamente con clientes y audiencias en esta región.</p>
+                </div>
+
+                <!-- Correo Electrónico -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #EA4335;">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div class="channel-title">Correo Electrónico</div>
+                    </div>
+                    <p class="channel-desc">El canal clásico e indispensable. Gestiona todos los correos de soporte directamente desde tu bandeja de HelpDesk, sin necesidad de saltar entre pestañas.</p>
+                </div>
+
+                <!-- API Channel -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-icon-wrapper" style="background: #475569;">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </div>
+                        <div class="channel-title">API Channel</div>
+                    </div>
+                    <p class="channel-desc">Conecta cualquier plataforma de terceros directamente a tu sistema. Integra apps personalizadas manteniendo todas tus conversaciones en un panel unificado.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- 6. Target Audience Section -->
+    <section class="audience-section">
+        <div class="container">
+            <h2>¿Para quién es HelpDesk?</h2>
+            <p>Diseñado para equipos y negocios que necesitan agilidad y orden en su comunicación diaria.</p>
+
+            <div class="audience-grid">
+                <div class="audience-item">
+                    <div class="audience-icon-box">
+                        <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/HelpDesk%20Icons/clinics.webp" 
+                             alt="Clínicas" 
+                             style="width:100%; height:100%; object-fit:contain;">
+                    </div>
+                    <h3>Clínicas</h3>
+                    <p>Agenda citas médicas al instante y responde a pacientes desde cualquier canal de mensajería sin perder el historial.</p>
+                </div>
+
+                <div class="audience-item">
+                    <div class="audience-icon-box">
+                        <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/HelpDesk%20Icons/restaurantes.webp" 
+                             alt="Restaurantes" 
+                             style="width:100%; height:100%; object-fit:contain;">
+                    </div>
+                    <h3>Restaurantes</h3>
+                    <p>Recibe y gestiona múltiples pedidos a domicilio de forma centralizada. Nunca dejes a un comensal esperando.</p>
+                </div>
+
+                <div class="audience-item">
+                    <div class="audience-icon-box">
+                        <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/HelpDesk%20Icons/tiendas.webp" 
+                             alt="Tiendas y eCommerce" 
+                             style="width:100%; height:100%; object-fit:contain;">
+                    </div>
+                    <h3>Tiendas y eCommerce</h3>
+                    <p>Responde consultas de stock, envía fotos de productos y cierra ventas directamente por chat en tiempo récord.</p>
+                </div>
+
+                <div class="audience-item">
+                    <div class="audience-icon-box">
+                        <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/HelpDesk%20Icons/oficinas.webp" 
+                             alt="Oficinas" 
+                             style="width:100%; height:100%; object-fit:contain;">
+                    </div>
+                    <h3>Oficinas</h3>
+                    <p>Ofrece soporte técnico organizado, crea tickets y brinda una atención personalizada que tus clientes amarán.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 style="font-size: 36px; font-weight: 800; color: var(--text-heading); margin-bottom: 50px;">Negocios que ya no pierden ventas</h2>
+
+            <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 0;">
+                <div class="testimonial-card">
+                    <i class="fa-solid fa-quote-left" style="color:#e2e8f0; font-size:2rem;"></i>
+                    <p style="font-size: 1.05rem; font-weight: 500; margin: 20px 0; color: var(--text-main);">"Pasamos de tener un desastre en WhatsApp a responder en segundos. Ahora todo el equipo colabora desde el mismo lugar y las ventas se han disparado."</p>
+                    <div class="user-profile">
+                        <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/Image%20Files%20&%20Assets/business-woman.png" alt="María Fernández" class="avatar">
+                        <div style="text-align:left;">
+                            <div style="font-weight:700; font-size:0.9rem;">María Fernández</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Dueña de Tienda Online</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <i class="fa-solid fa-quote-left" style="color:#e2e8f0; font-size:2rem;"></i>
+                    <p style="font-size: 1.05rem; font-weight: 500; margin: 20px 0; color: var(--text-main);">"Las respuestas guardadas y la IA nos ahorran horas de trabajo al día. HelpDesk literalmente pagó su suscripción en la primera semana."</p>
+                    <div class="user-profile">
+                        <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/Image%20Files%20&%20Assets/business-man.png" alt="Alejandro Gómez" class="avatar">
+                        <div style="text-align:left;">
+                            <div style="font-weight:700; font-size:0.9rem;">Alejandro Gómez</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Director Comercial</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <i class="fa-solid fa-quote-left" style="color:#e2e8f0; font-size:2rem;"></i>
+                    <p style="font-size: 1.05rem; font-weight: 500; margin: 20px 0; color: var(--text-main);">"Nuestros pacientes ya no se quejan por respuestas lentas. Centralizar Instagram y WhatsApp nos dio la claridad que necesitábamos."</p>
+                    <div class="user-profile">
+                        <img src="https://ik.imagekit.io/bebell/HelpDesk%20App/Image%20Files%20&%20Assets/health-professional.png" alt="Dr. Claudio Jiménez" class="avatar">
+                        <div style="text-align:left;">
+                            <div style="font-weight:700; font-size:0.9rem;">Dr. Claudio Jiménez</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Director de Clínica Médica</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. FAQ Section -->
+    <section class="faq-section">
+        <div class="container faq-container">
+            <h2 style="text-align: center; margin-bottom: 50px; font-size: 2.5rem; color: var(--text-heading); font-weight: 800;">Preguntas Frecuentes</h2>
+            
+            <details class="faq-item">
+                <summary>¿Qué canales de comunicación puedo unificar en HelpDesk?</summary>
+                <div class="faq-content">
+                    Puedes conectar múltiples canales, incluyendo WhatsApp Business, Instagram Direct, Facebook Messenger, Telegram, Correo electrónico, y nuestro propio widget de Chat en Vivo para tu sitio web. Todo centralizado en una única bandeja.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>¿Puedo seguir usando mi número de WhatsApp actual?</summary>
+                <div class="faq-content">
+                    ¡Sí! Puedes mantener tu número de WhatsApp actual. Lo conectamos de forma oficial mediante la API de WhatsApp Business para que todo tu equipo pueda responder simultáneamente sin perder el historial.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>¿Necesito conocimientos de programación para crear automatizaciones?</summary>
+                <div class="faq-content">
+                    En lo absoluto. Nuestra interfaz es visual y de tipo "arrastrar y soltar". Podrás construir flujos de chat y configurar respuestas automáticas o bots de Inteligencia Artificial en cuestión de minutos.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary>¿Ofrecen algún periodo de prueba gratuito?</summary>
+                <div class="faq-content">
+                    Sí, ofrecemos un periodo de prueba de 14 días completamente gratis. Podrás explorar todas las funciones premium, conectar tus canales y probar el poder de la automatización sin necesidad de registrar una tarjeta de crédito.
+                </div>
+            </details>
+            
+            <details class="faq-item">
+                <summary>¿Qué tan seguros están los datos de mis clientes?</summary>
+                <div class="faq-content">
+                    La seguridad es nuestra prioridad. Cumplimos con los más altos estándares de protección de datos (incluyendo GDPR). Toda la información viaja cifrada y se almacena en servidores seguros con copias de respaldo continuas.
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            
+            <!-- Footer CTA -->
+            <div class="footer-cta">
+                <h2 class="footer-cta-title">¿Listo para dejar de perder ventas por responder tarde?</h2>
+                <p class="footer-cta-desc">Únete a cientos de negocios que ya optimizaron su comunicación.</p>
+                <div class="footer-btn-group">
+                    <a href="#" class="footer-btn footer-btn-primary">Pruébalo sin Costo</a>
+                    <a href="#" class="footer-btn footer-btn-outline">Agenda una Demostración</a>
+                </div>
+                <p class="footer-note">No requiere tarjeta de crédito. Configúralo en menos de 10 minutos.</p>
+            </div>
+
+            <!-- Footer Links Grid -->
+            <div class="footer-grid">
+                <!-- Brand Column -->
+                <div class="footer-brand" style="grid-column: span 2;">
+                    <a href="/" class="footer-logo">
+                        <img src="https://bucket.mlcdn.com/a/3336/3336910/images/1ea6c41da3544c958ba611015aae9ea3e7a7499a.png" alt="HelpDesk Logo" />
+                        <div>
+                            <div class="footer-logo-title">HelpDesk®</div>
+                            <div class="footer-logo-subtitle">by Bebell Digital Solutions</div>
+                        </div>
+                    </a>                
+                    <p class="footer-desc">La plataforma que ayuda a negocios a ofrecer soporte excepcional y vender más en cada canal.</p>
+                </div>
+
+                <!-- Links Columns -->
+                <div>
+                    <h4 class="footer-col-title">Plataforma</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Características</a></li>
+                        <li><a href="#">Integraciones</a></li>
+                        <li><a href="#">Precios</a></li>
+                        <li><a href="#">Seguridad</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-col-title">Empresa</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Sobre nosotros</a></li>
+                        <li><a href="#">Blog & Noticias</a></li>
+                        <li><a href="#">Partners</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-col-title">Recursos</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Centro de Ayuda</a></li>
+                        <li><a href="#">Comunidad</a></li>
+                        <li><a href="#">Guía GRATUITA</a></li>
+                        <li><a href="#">Tickets de Soporte</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    Desarrollado con 💖 por Bebell Digital Solutions.<br>Copyright © 2026 • Todos los derechos reservados.
+                </div>
+                <div class="footer-socials">
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Volver arriba">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Interactive Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Back To Top Logic
+            const backToTopBtn = document.getElementById("backToTop");
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.add("show");
+                } else {
+                    backToTopBtn.classList.remove("show");
+                }
+            });
+            
+            backToTopBtn.addEventListener("click", () => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+
+            // 2. Tabs Auto-Rotation Logic
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            let currentIndex = 3; // Starts with the 4th tab (index 3)
+            const rotationInterval = 10000; // 10 seconds
+            let timer;
+
+            function switchTab(index) {
+                // Reset all tabs & contents
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                    tab.setAttribute('aria-selected', 'false');
+                });
+
+                contents.forEach(content => {
+                    content.classList.remove('active');
+                });
+
+                // Set Active tab & content
+                const activeTab = tabs[index];
+                activeTab.classList.add('active'); 
+                activeTab.setAttribute('aria-selected', 'true');
+                
+                const targetId = activeTab.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+
+                // Horizontal scroll centering
+                const tabList = activeTab.parentElement;
+                const scrollPos = activeTab.offsetLeft - (tabList.clientWidth / 2) + (activeTab.clientWidth / 2);
+                tabList.scrollTo({ left: scrollPos, behavior: 'smooth' });
+                
+                // Restart progress bar animation
+                const oldBar = activeTab.querySelector('.tab-progress-bar');
+                if (oldBar) {
+                    const newBar = oldBar.cloneNode(true);
+                    activeTab.replaceChild(newBar, oldBar);
+                }
+
+                currentIndex = index;
+            }
+
+            function nextTab() {
+                const nextIndex = (currentIndex + 1) % tabs.length;
+                switchTab(nextIndex);
+            }
+
+            function startTimer() {
+                clearInterval(timer);
+                timer = setInterval(nextTab, rotationInterval);
+            }
+
+            // Click Events for Tabs
+            tabs.forEach((tab, index) => {
+                tab.addEventListener('click', () => {
+                    switchTab(index);
+                    startTimer(); // Restart timer on manual interaction
+                });
+            });
+
+            // Initialize Tabs Animation
+            startTimer();
+
+            // 3. Stacking Cards Scroll Animation
+            document.addEventListener('scroll', () => {
+                const cards = document.querySelectorAll('.stack-card');
+                
+                cards.forEach((card, index) => {
+                    const rect = card.getBoundingClientRect();
+                    const cardTop = rect.top;
+                    const stickyOffset = parseInt(getComputedStyle(card).top); 
+
+                    if (cardTop <= stickyOffset + 5) {
+                        const distancePast = (stickyOffset - cardTop);
+                        const scale = Math.max(0.95, 1 - (distancePast * 0.0005));
+                        
+                        // Subtle brightness drop for visual stacking
+                        const brightness = Math.max(0.92, 1 - (distancePast * 0.0003));
+                        
+                        card.style.transform = `scale(${scale})`;
+                        card.style.filter = `brightness(${brightness})`;
+                    } else {
+                        card.style.transform = 'scale(1)';
+                        card.style.filter = 'brightness(1)';
+                    }
+                });
+            });
+            
+        });
+    </script>
+</body>
+</html>
