@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baseline — Tennis Club & Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&display=swap" rel="stylesheet">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm"
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --background: #ffffff;
+      --foreground: #0a0a0a;
+      --brand: #2563c9;
+      --brand-deep: #0f2f63;
+      --brand-light: #5790e6;
+      --accent-teal: #0b6e97;
+      --surface: #f4f4f4;
+      --surface-card: #ffffff;
+      --ink: #0a0a0a;
+      --ink-soft: #717784;
+      --ghost: #d7dae1;
+      --hairline: #e6e8ec;
+      --on-brand: #ffffff;
+
+      --radius-card: 1.5rem;
+      --radius-card-lg: 2rem;
+      --radius-pill: 62.5rem;
+
+      --page-inset: 0.5rem;
+    }
+
+    @media (min-width: 640px) {
+      :root { --page-inset: 0.75rem; }
+    }
+
+    /* Adaptive Grid System */
+    html { font-size: 16px; }
+    @media (max-width: 1920px) { html { font-size: 0.833333vw; } }
+    @media (max-width: 1440px) { html { font-size: 1.111111vw; } }
+    @media (max-width: 1024px) { html { font-size: 1.5625vw;  } }
+    @media (max-width: 640px)  { html { font-size: 4.444444vw; } }
+
+    /* Reset & Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    
+    html, body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    
+    
+    body {
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--foreground);
+      font-family: "Onest", system-ui, sans-serif;
+      font-weight: 400;
+      overflow-x: hidden;
+    }
+    
+    
+
+    /* Utility & Reset Classes */
+    img, picture, svg, video { display: block; max-width: 100%; }
+    
+    
+    button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+    
+    
+    
+    a { text-decoration: none; color: inherit; }
+    
+    
+    
+    ul, ol { list-style: none; }
+    
+    
+    
+    :focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
+    
+    
+
+    /* Lenis required class for scroll locking */
+    html.lenis-locked { position: relative; overflow: hidden; height: 100%; }
+    
+    
+    
+
+    /* Layout Primitives */
+    main { width: 100%; overflow-x: clip; padding: var(--page-inset); display: flex; flex-direction: column; }
+    
+    
+    
+    .flex { display: flex; }
+    
+    
+    .col { flex-direction: column; }
+    
+    
+    .items-center { align-items: center; }
+    
+    
+    .items-end { align-items: flex-end; }
+    
+    
+    .justify-center { justify-content: center; }
+    
+    
+    
+    .justify-between { justify-content: space-between; }
+    
+    
+    
+    .justify-end { justify-content: flex-end; }
+    
+    
+    .w-full { width: 100%; }
+    
+    
+    .h-full { height: 100%; }
+    
+    
+    .absolute { position: absolute; }
+    
+    
+    .relative { position: relative; }
+    
+    
+    .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+    
+    
+    .hidden { display: none !important; }
+
+    /* Typography Utilities */
+    .font-medium { font-weight: 500; }
+    
+    
+    .uppercase { text-transform: uppercase; }
+    
+    
+    .tracking-wide { letter-spacing: 0.05em; }
+    
+    
+    .tracking-wider { letter-spacing: 0.18em; }
+    
+    
+    .tracking-widest { letter-spacing: 0.22em; }
+    
+    
+    .tight { letter-spacing: -0.02em; line-height: 0.95; }
+    .line-none { line-height: 1; }
+    .text-xs { font-size: 0.75rem; }
+    .text-sm { font-size: 0.875rem; }
+    .text-base { font-size: 1rem; }
+    .text-lg { font-size: 1.125rem; }
+    .text-xl { font-size: 1.25rem; }
+    .text-2xl { font-size: 1.5rem; }
+    .text-3xl { font-size: 1.875rem; }
+    .text-4xl { font-size: 2.25rem; }
+    .text-5xl { font-size: 3rem; }
+    .text-6xl { font-size: 3.75rem; }
+    .text-7xl { font-size: 4.5rem; }
+    .text-ink { color: var(--ink); }
+    .text-ink-soft { color: var(--ink-soft); }
+
+    /* Components */
+    .eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.22em; }
+    
+    
+    
+    .eyebrow-dot { width: 0.375rem; height: 0.375rem; border-radius: var(--radius-pill); }
+    
+    
+    .eyebrow.dark { color: var(--ink-soft); }
+    
+    
+    .eyebrow.dark .eyebrow-dot { background-color: var(--brand); }
+    
+    
+    
+    .eyebrow.light { color: rgba(255,255,255,0.7); }
+    
+    
+    
+    .eyebrow.light .eyebrow-dot { background-color: var(--brand-light); }
+
+    .pill-btn { display: inline-flex; align-items: center; gap: 0.5rem; border-radius: var(--radius-pill); padding: 0.875rem 1.75rem; font-size: 0.875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; transition: background 0.3s, color 0.3s; }
+    
+    
+    
+    .pill-btn.light { background: #fff; color: var(--brand-deep); }
+    
+    
+    .pill-btn.light:hover { background: var(--brand-light); color: #fff; }
+    
+    
+    .pill-btn.solid { background: var(--ink); color: #fff; }
+    
+    
+    .pill-btn.solid:hover { background: var(--brand-deep); }
+    
+    
+    .pill-btn.outline { border: 1px solid currentColor; color: var(--ink); }
+    
+    
+    .pill-btn.outline:hover { background: var(--ink); color: #fff; }
+
+    .arrow-btn { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: var(--radius-pill); transition: background 0.3s, border-color 0.3s; }
+    
+    
+    
+    @media (min-width: 640px) { .arrow-btn { width: 3.5rem; height: 3.5rem; } }
+    
+    
+    .arrow-btn.outline { border: 1px solid var(--hairline); color: var(--ink); }
+    
+    
+    .arrow-btn.outline:hover { border-color: var(--ink); }
+    
+    
+    .arrow-btn.solid { background: var(--ink); border: 1px solid var(--ink); color: #fff; }
+    
+    
+    .arrow-btn.solid:hover { background: var(--brand-deep); }
+
+    .clip-wrap { overflow: hidden; display: inline-block; padding-bottom: 0.14em; vertical-align: bottom; }
+    
+    
+    .clip-inner { display: inline-block; transform: translateY(115%); opacity: 0; }
+  </style>
+
+  <style>
+    /* Loader */
+    #loader { position: fixed; inset: 0; z-index: 200; background: var(--brand-deep); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; transform-origin: top; }
+    
+    
+    
+    #loader-mark { display: flex; align-items: center; gap: 0.5rem; opacity: 0; transform: translateY(16px); }
+    
+    
+    #loader-track { width: 10rem; height: 1px; border-radius: var(--radius-pill); background: rgba(255,255,255,0.2); overflow: hidden; }
+    
+    
+    #loader-fill { width: 100%; height: 100%; background: #fff; transform-origin: left; transform: scaleX(0); }
+    
+    
+
+    /* Hero */
+    #hero { background: va(--ink); color: #fff; position: relative; isolate: isolation; overflow: hidden; border-radius: var(--radius-card-lg); height: calc(100svh - 1rem); min-height: 36rem; display: flex; flex-direction: column; }
+    
+    
+    
+    @media (min-width: 640px) { #hero { height: calc(100svh - 1.5rem); } }
+    
+    
+    .hero-parallax-wrap { position: absolute; left: 0; right: 0; top: -16%; height: 132%; width: 100%; z-index: -10; will-change: transform; }
+    
+    
+    
+    .hero-parallax-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    /* Updated hero gradient for clear image visibility instead of solid blue tint */
+    .hero-gradient { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.1), rgba(0,0,0,0.7)); pointer-events: none; z-index: -5; }
+    
+
+    header { padding: 1.5rem 1.5rem 0; font-size: 0.75rem; display: flex; align-items: center; z-index: 10; }
+    
+    
+    @media (min-width: 640px) { header { padding: 2rem 2.5rem 0; } }
+    
+    
+    .header-nav { display: none; gap: 2rem; flex: 1; }
+    
+    
+    @media (min-width: 1024px) { .header-nav { display: flex; } }
+    
+    
+    
+    .header-nav a { color: rgba(255,255,255,0.9); transition: color 0.3s; }
+    
+    
+    .header-nav a:hover { color: #fff; }
+    
+    
+    
+    .header-brand { flex: 1; display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.2em; }
+    
+    
+    
+    @media (min-width: 1024px) { .header-brand { justify-content: center; } }
+    
+    
+    
+    .header-right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 1rem; }
+    
+    
+    
+    @media (min-width: 640px) { .header-right { gap: 1.25rem; } }
+    
+    
+    
+    .burger { width: 2.5rem; height: 2.5rem; border-radius: var(--radius-pill); background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; transition: background 0.3s; }
+    
+    
+    
+    .burger:hover { background: rgba(255,255,255,0.25); }
+    
+    
+    .burger span { width: 1rem; height: 1px; background: #fff; }
+
+    .hero-title-block { padding: 1rem 1.5rem 0; z-index: 10; margin-top: 4em; }
+    
+    
+    @media (min-width: 640px) { .hero-title-block { padding: 0 2.5rem; } }
+    
+    
+    
+    /* Updated title CSS to allow text wrapping instead of cutting on the right edge */
+    #hero-title { font-size: 14.5vw; font-weight: 500; text-transform: uppercase; line-height: 0.9; letter-spacing: -0.02em; white-space: normal; overflow-wrap: break-word; max-width: 100%; }
+    
+    
+    
+    @media (min-width: 768px) { #hero-title { font-size: 11vw; line-height: 0.85; } }
+    
+    
+    
+    @media (min-width: 1024px) { #hero-title { font-size: 11vw; } }
+
+    .hero-bottom { margin-top: auto; padding: 0 1.5rem 2rem; display: flex; flex-direction: column; gap: 1.5rem; z-index: 10; }
+    
+    
+    
+    @media (min-width: 640px) { .hero-bottom { padding: 0 2.5rem 2.5rem; flex-direction: row; justify-content: space-between; align-items: flex-end; } }
+    
+    
+    .hero-tagline { font-size: 2.4rem; font-weight: 500; text-transform: uppercase; line-height: 0.95; letter-spacing: -0.02em; color: rgba(255,255,255,0.85); }
+    
+
+    .hero-right-cluster { display: flex; align-items: flex-end; gap: 1rem; }
+    
+    
+    
+    
+    .glass-card { border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.1); border-radius: var(--radius-card); padding: 0.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.2); backdrop-filter: blur(12px); }
+
+    .collection-slider { display: none; width: 16rem; flex-direction: column; gap: 0.75rem; opacity: 0; transform: translateY(28px); }
+    
+    
+    
+    @media (min-width: 768px) { .collection-slider { display: flex; } }
+    
+    
+    
+    .collection-card { display: flex; gap: 0.75rem; }
+    
+    
+    
+    .collection-card img { width: 3.5rem; height: 3.5rem; border-radius: 0.75rem; object-fit: cover; }
+    
+    
+    
+    .slider-dots { display: flex; gap: 0.5rem; }
+    
+    
+    
+    .dot { padding: 0.375rem; }
+    
+    
+    
+    .dot-inner { width: 0.375rem; height: 0.375rem; border-radius: var(--radius-pill); transition: width 0.3s, background 0.3s; }
+    
+    
+    
+    .dot.light .dot-inner { background: rgba(255,255,255,0.4); }
+    
+    
+    
+    .dot.light[aria-current="true"] .dot-inner { width: 1.25rem; background: #fff; }
+    
+    
+    .dot.dark .dot-inner { background: var(--ghost); }
+    
+    
+    
+    .dot.dark[aria-current="true"] .dot-inner { width: 1.25rem; background: var(--ink); }
+    
+    
+    
+
+    .membership-card { width: 100%; max-width: 20rem; display: flex; gap: 0.75rem; opacity: 0; transform: translateY(28px); }
+    
+    
+    @media (min-width: 640px) { .membership-card { max-width: 15rem; } }
+    
+    
+    .mem-avatars { display: flex; margin-left: 0.5rem; }
+    
+    
+    .mem-avatar { width: 1.25rem; height: 1.25rem; border-radius: var(--radius-pill); border: 1px solid rgba(15,47,99,0.4); margin-left: -0.5rem; }
+  </style>
+  
+  
+  
+  
+  
+
+  <style>
+    /* Trust */
+    #trust { background: var(--background); position: relative; isolate: isolation; overflow: hidden; padding: 4rem 1.5rem; border-radius: var(--radius-card-lg); }
+    
+    
+    
+    @media (min-width: 640px) { #trust { padding: 5rem 2.5rem; } }
+    .trust-badges { display: flex; flex-direction: column; gap: 1.5rem; z-index: 20; position: relative; }
+    
+    
+    
+    @media (min-width: 640px) { .trust-badges { flex-direction: row; justify-content: space-between; } }
+    
+    
+    
+    .percent-badge { width: 7rem; height: 7rem; border-radius: var(--radius-pill); background: var(--surface); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transform: scale(0.9); }
+    
+    
+    
+    @media (min-width: 640px) { .percent-badge { width: 8rem; height: 8rem; } }
+    .badge-card { max-width: 28rem; background: var(--surface); border-radius: var(--radius-card); padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; opacity: 0; transform: translateY(24px); }
+    
+    
+    
+    @media (min-width: 640px) { .badge-card { padding: 1.5rem; gap: 1.25rem; } }
+
+    .ghost-heading { pointer-events: none; z-index: 0; user-select: none; max-width: 88rem; margin: 3rem auto 0; font-size: 8.2vw; font-weight: 500; text-transform: uppercase; line-height: 1.02; letter-spacing: -0.02em; }
+    
+    
+    .ghost-row { display: flex; justify-content: space-between; }
+    
+    
+    .ghost-word { color: var(--ghost); will-change: transform; }
+    
+    
+    .ghost-word.ink { color: var(--ink); }
+
+    .coach-card { z-index: 10; margin: 2rem auto; width: 13rem; aspect-ratio: 3/4; border-radius: var(--radius-card); background: var(--brand); overflow: hidden; position: relative; transform: rotate(6deg) translateY(60px) scale(0.92); opacity: 0; }
+    
+    
+    
+    @media (min-width: 640px) { .coach-card { margin: 0; position: absolute; left: 50%; top: 50%; width: 16rem; margin-top: -12rem; margin-left: -8rem; } }
+    .coach-card img { width: 100%; height: 100%; object-fit: cover; }
+    
+    
+    .coach-caption { position: absolute; left: 0.75rem; right: 0.75rem; bottom: 0.75rem; border-radius: 0.75rem; background: rgba(15,47,99,0.4); color: #fff; backdrop-filter: blur(12px); padding: 0.5rem 0.75rem; }
+    
+    
+
+    .carousel-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; z-index: 20; position: relative; }
+    
+    
+    
+    @media (min-width: 640px) { .carousel-controls { margin-top: 6rem; } 
+    }
+
+    /* Programs */
+    #programs { background: var(--surface); padding: 6rem 1.5rem; border-radius: var(--radius-card-lg); }
+    
+    
+    @media (min-width: 640px) { #programs { padding: 6rem 2.5rem; } }
+    
+    
+    
+    .program-row { display: flex; align-items: center; gap: 1.5rem; padding: 1.75rem 0; border-top: 1px solid var(--hairline); opacity: 0; transform: translateY(26px); transition: background 0.3s; }
+    
+    
+    
+    .program-row:last-child { border-bottom: 1px solid var(--hairline); }
+    
+    
+    
+    .program-row:focus-visible { background: var(--background); }
+    
+    
+    
+    .prog-num { width: 2.5rem; font-size: 0.875rem; font-weight: 500; color: var(--ink-soft); }
+    
+    
+    .prog-content { flex: 1; }
+    
+    
+    .prog-arrow { width: 2.75rem; height: 2.75rem; border-radius: var(--radius-pill); border: 1px solid var(--hairline); display: grid; place-items: center; flex-shrink: 0; }
+    
+    
+    
+    
+
+    /* Facilities */
+    #facilities { background: var(--background); border-radius: var(--radius-card-lg); margin-top: -2.5rem; padding: 4rem 1.5rem 5rem; z-index: 10; position: relative; }
+    
+    
+    
+    @media (min-width: 640px) { #facilities { padding: 4rem 2.5rem 5rem; } }
+    .fac-grid { display: grid; gap: 2.5rem; align-items: flex-end; }
+    
+    
+    @media (min-width: 768px) { .fac-grid { grid-template-columns: 1fr 1fr; } }
+    
+    
+    .fac-intro { max-width: 24rem; }
+    
+    
+    .fac-icon { width: 4rem; height: 4rem; border-radius: var(--radius-card); object-fit: cover; opacity: 0; transform: scale(0.85); }
+    
+    
+    .fac-cards { display: flex; align-items: flex-end; gap: 1.25rem; }
+    
+    
+    .fac-tile { flex: 1; aspect-ratio: 3/4; border-radius: var(--radius-card); overflow: hidden; background: var(--surface); position: relative; opacity: 0; transform: translateY(48px); }
+    .fac-tile:nth-child(2) { margin-bottom: 2rem; }
+    
+    
+    .fac-tile img { width: 100%; height: 100%; object-fit: cover; }
+    
+    
+    .fac-cap { position: absolute; left: 0.75rem; right: 0.75rem; bottom: 0.75rem; border-radius: 0.75rem; color: #fff; backdrop-filter: blur(12px); padding: 0.75rem 1rem; }
+    
+    
+    
+
+    /* Stats */
+    #stats { background: var(--brand-deep); color: #fff; border-radius: var(--radius-card-lg); margin-top: 0.75rem; padding: 5rem 1.5rem; }
+    
+    
+    @media (min-width: 640px) { #stats { padding: 5rem 2.5rem; } }
+    
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3rem 2rem; margin-top: 4rem; }
+    
+    
+    @media (min-width: 1024px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+    
+    
+    
+    .stat-cell { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1.25rem; opacity: 0; transform: translateY(30px); }
+    
+    
+    
+
+    /* Testimonials */
+    #testimonials { background: var(--background); padding: 5rem 1.5rem; border-radius: var(--radius-card-lg); }
+    
+    
+    @media (min-width: 640px) { #testimonials { padding: 6rem 2.5rem; } }
+    .test-grid { display: grid; gap: 1.25rem; margin-top: 3.5rem; }
+    
+    
+    @media (min-width: 768px) { .test-grid { grid-template-columns: repeat(3, 1fr); } }
+    .test-card { display: flex; flex-direction: column; justify-content: space-between; height: 100%; border-radius: var(--radius-card); background: var(--surface); padding: 1.75rem; opacity: 0; transform: translateY(40px); }
+    
+    
+    
+    .test-card figcaption { border-top: 1px solid var(--hairline); padding-top: 1rem; margin-top: 1.5rem; }
+    
+    
+    
+    
+
+    /* Footer */
+    #contact { background: var(--brand-deep); color: #fff; border-radius: var(--radius-card-lg); margin-top: 0.75rem; padding: 3.5rem 1.5rem; }
+    
+    
+    @media (min-width: 640px) { #contact { padding: 4rem 2.5rem; } }
+    
+    
+    .foot-cta { border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 3.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    
+    
+    @media (min-width: 640px) { .foot-cta { flex-direction: row; justify-content: space-between; align-items: flex-end; } }
+    
+    
+    .foot-grid { display: grid; gap: 2.5rem; padding: 3.5rem 0; }
+    
+    
+    @media (min-width: 768px) { .foot-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
+    
+    
+    .foot-nav ul { margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.875rem; color: rgba(255,255,255,0.8); }
+    
+    
+    .foot-nav a:hover { color: #fff; }
+    
+    
+    .foot-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 2rem; font-size: 0.875rem; color: rgba(255,255,255,0.6); display: flex; flex-direction: column; gap: 1.25rem; }
+    
+    
+    
+    @media (min-width: 640px) { .foot-bottom { flex-direction: row; justify-content: space-between; align-items: center; } 
+    }
+    
+    
+    .foot-links { display: flex; gap: 1.25rem; }
+    
+    
+    .foot-links a:hover { color: #fff; }
+
+
+
+
+
+    /* Modals */
+    .overlay { position: fixed; inset: 0; z-index: 90; display: none; }
+    
+    
+    
+    .overlay.active { display: flex; }
+    
+    
+    .overlay-backdrop { position: absolute; inset: 0; cursor: pointer; }
+
+    #contact-modal { align-items: flex-end; justify-content: center; padding: 0.75rem; }
+    
+    
+    
+    @media (min-width: 640px) { #contact-modal { align-items: center; padding: 1.5rem; } }
+    
+    
+    #contact-modal .overlay-backdrop { background: rgba(15,47,99,0.4); backdrop-filter: blur(8px); opacity: 0; }
+    
+    
+    .modal-panel { position: relative; z-index: 1; max-height: 92svh; overflow-y: auto; border-radius: var(--radius-card-lg); background: var(--surface-card); padding: 1.5rem; width: 100%; color: var(--ink); box-shadow: 0 20px 40px rgba(15,47,99,0.3); opacity: 0; transform: translateY(28px) scale(0.96); }
+    
+    
+    
+    @media (min-width: 640px) { 
+    .modal-panel { 
+    padding: 2rem; 
+    max-width: 32rem; 
+    } 
+    }
+    
+    
+    .close-btn { width: 2.5rem; height: 2.5rem; border-radius: var(--radius-pill); background: var(--surface); display: grid; place-items: center; transition: background 0.3s; }
+    
+    
+    .close-btn:hover { background: var(--hairline); }
+    
+    
+    .close-icon { width: 1.5rem; height: 1.5rem; }
+    
+
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+    
+    
+    .form-label { font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.18em; color: var(--ink-soft); }
+    
+    
+    .form-input { width: 100%; border-radius: 0.75rem; border: 1px solid var(--hairline); background: var(--background); padding: 0.75rem 1rem; font-size: 0.875rem; font-family: inherit; }
+    
+    
+    .form-input:focus { outline: 2px solid var(--brand-light); outline-offset: -1px; }
+
+    #menu-overlay { z-index: 70; flex-direction: column; }
+    
+    
+    #menu-overlay .overlay-backdrop { background: var(--brand-deep); opacity: 0; }
+    .menu-panel { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; padding: var(--page-inset); opacity: 0; transform: translateY(-24px); pointer-events: none; }
+    
+    
+    .menu-panel-inner { flex: 1; display: flex; flex-direction: column; padding: 1.5rem; }
+    
+    
+    @media (min-width: 640px) { .menu-panel-inner { padding: 2.5rem; } }
+    .menu-nav a { display: block; font-size: 3rem; font-weight: 500; line-height: 0.95; letter-spacing: -0.02em; color: #fff; transition: color 0.3s; opacity: 0; transform: translateY(28px); }
+    
+    
+    @media (min-width: 640px) { .menu-nav a { font-size: 4.5rem; } }
+    .menu-nav a:hover { color: var(--brand-light); }
+  </style>
+</head>
+<body>
+
+  <div id="loader">
+    <div id="loader-mark">
+      <svg class="size-7" style="width:1.75rem;height:1.75rem" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none">
+        <circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/>
+      </svg>
+      <span class="text-2xl font-medium uppercase tracking-widest">Baseline</span>
+    </div>
+    <div id="loader-track">
+      <div id="loader-fill"></div>
+    </div>
+  </div>
+
+  <main>
+    <section id="hero">
+      <div class="hero-parallax-wrap" id="hero-parallax">
+        <img src="https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/Banners.webp" alt="Tennis court banner" fetchpriority="high">
+      </div>
+      
+      <div class="hero-gradient"></div>
+
+      <header>
+        <nav class="header-nav">
+          <a href="#programs" class="nav-link">Programs & Coaches</a>
+          <a href="#facilities" class="nav-link">Club & Events</a>
+        </nav>
+        <div class="header-brand">
+          <svg style="width:1.25rem;height:1.25rem" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none">
+            <circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/>
+          </svg>
+          Baseline
+        </div>
+        <div class="header-right">
+          <button class="hidden sm:block text-xs uppercase tracking-wide" style="display:none; text-decoration:none;" id="btn-book-header" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Book a Visit</button>
+          <button class="burger" id="btn-burger" aria-label="Open menu">
+            <span></span><span></span>
+          </button>
+        </div>
+      </header>
+
+      <div class="hero-title-block">
+        <h1 id="hero-title" class="clip-text" data-stagger="140" data-ease="easeOutExpo" data-dur="1100">Own The Court</h1>
+      </div>
+
+      <div class="hero-bottom">
+        <div class="hero-tagline clip-text-lines" data-stagger="110" data-delay="350" data-dur="900" data-ease="easeOutExpo">
+          Show Up,<br>Level Up
+        </div>
+        <div class="hero-right-cluster">
+          <div class="glass-card collection-slider" id="hero-slider">
+            <div class="collection-card" id="hero-slide-content">
+              <!-- JS injected -->
+            </div>
+            <div class="slider-dots" id="hero-slider-dots">
+              <!-- JS injected -->
+            </div>
+          </div>
+          <article class="glass-card membership-card inview-el" data-delay="780">
+            <div class="flex col justify-between">
+              <div class="text-3xl font-medium line-none">9K+</div>
+              <div>
+                <div class="mem-avatars">
+                  <div class="mem-avatar" style="background:#5790e6; z-index:4"></div>
+                  <div class="mem-avatar" style="background:#c2e029; z-index:3"></div>
+                  <div class="mem-avatar" style="background:#0b6e97; z-index:2"></div>
+                  <div class="mem-avatar" style="background:#ffffff; z-index:1"></div>
+                </div>
+                <div style="font-size:0.65rem; opacity:0.8; margin-top:0.25rem;">Members on court</div>
+              </div>
+            </div>
+            <img src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/1.webp" alt="Player waiting to return on a clay court" style="width:4rem; height:100%; object-fit:cover; border-radius:0.75rem;">
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="trust">
+      <div class="trust-badges">
+        <div class="percent-badge inview-scale" data-tension="220" data-friction="22">
+          <div class="text-2xl font-medium line-none">100%</div>
+          <div style="font-size:0.6rem; color:var(--ink-soft); max-width:7em; text-align:center; margin-top:0.25rem;">Coaching built around your game</div>
+        </div>
+        <article class="badge-card inview-el" data-delay="120" data-tension="200" data-friction="26">
+          <div class="flex items-center gap-2">
+            <div style="background:var(--background); padding:0.5rem 1rem; border-radius:0.75rem;" class="text-xl font-medium">#01</div>
+            <h3 class="text-lg font-medium">Trusted by serious players</h3>
+          </div>
+          <p class="text-xs text-ink-soft" style="line-height:1.6;">From first-timers to nationally ranked juniors, players train here because the progress shows up on the scoreboard.</p>
+        </article>
+      </div>
+
+      <h2 id="trust-title" class="ghost-heading">
+        <div class="ghost-row">
+          <span class="ghost-word clip-text word" data-dur="700" id="gw-0">Expert</span>
+          <span class="ghost-word clip-text word" data-dur="700" id="gw-1">Result-</span>
+        </div>
+        <div class="ghost-row">
+          <span class="ghost-word clip-text word ink" data-dur="700" id="gw-2">Driven</span>
+          <span class="ghost-word clip-text word" data-dur="700" id="gw-3">Coaching</span>
+        </div>
+      </h2>
+
+      <figure class="coach-card inview-el" id="coach-card" data-dy="60" data-scale="0.92" data-tension="170" data-friction="26">
+        <img id="coach-img" src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/5.webp" alt="Head coach set in a ready stance on clay">
+        <figcaption class="coach-caption">
+          <div class="text-sm font-medium" id="coach-name">Marco Vidal</div>
+          <div style="font-size:0.65rem; opacity:0.8;" id="coach-role">Head Coach</div>
+        </figcaption>
+      </figure>
+
+      <div class="carousel-controls">
+        <button class="arrow-btn outline" id="trust-prev" aria-label="Previous">
+          <svg class="arrow-icon" style="width:1.25rem;height:1.25rem; transform:scaleX(-1)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <div class="slider-dots dark" id="trust-dots"></div>
+        <button class="arrow-btn solid" id="trust-next" aria-label="Next">
+          <svg class="arrow-icon" style="width:1.25rem;height:1.25rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <section id="programs">
+      <div class="eyebrow dark"><div class="eyebrow-dot"></div>Training programs</div>
+      <h2 class="clip-text-lines text-5xl font-medium tight" style="margin-top:1rem;">Built for<br>every level</h2>
+
+      <ul style="margin-top:3.5rem;">
+        <li><a href="#junior" class="program-row inview-el" data-delay="0" data-tension="190">
+          <div class="prog-num">01</div>
+          <div class="prog-content">
+            <div class="text-2xl sm-text-3xl font-medium tight">Junior Development</div>
+            <div class="text-sm text-ink-soft">Fundamentals, footwork, and match play for ages 6–14.</div>
+          </div>
+          <div class="prog-arrow"><svg style="width:1.25rem; height:1.25rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a></li>
+        <li><a href="#performance" class="program-row inview-el" data-delay="90" data-tension="190">
+          <div class="prog-num">02</div>
+          <div class="prog-content">
+            <div class="text-2xl sm-text-3xl font-medium tight">Performance Squad</div>
+            <div class="text-sm text-ink-soft">High-volume training for competitive and ranked players.</div>
+          </div>
+          <div class="prog-arrow"><svg style="width:1.25rem; height:1.25rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a></li>
+        <li><a href="#adult" class="program-row inview-el" data-delay="180" data-tension="190">
+          <div class="prog-num">03</div>
+          <div class="prog-content">
+            <div class="text-2xl sm-text-3xl font-medium tight">Adult Clinics</div>
+            <div class="text-sm text-ink-soft">Small-group sessions to sharpen technique and fitness.</div>
+          </div>
+          <div class="prog-arrow"><svg style="width:1.25rem; height:1.25rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a></li>
+        <li><a href="#private" class="program-row inview-el" data-delay="270" data-tension="190">
+          <div class="prog-num">04</div>
+          <div class="prog-content">
+            <div class="text-2xl sm-text-3xl font-medium tight">Private Coaching</div>
+            <div class="text-sm text-ink-soft">One-to-one sessions tailored to your goals and schedule.</div>
+          </div>
+          <div class="prog-arrow"><svg style="width:1.25rem; height:1.25rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a></li>
+      </ul>
+    </section>
+
+    <section id="facilities">
+      <div class="fac-grid">
+        <div class="fac-intro">
+          <img src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/3.webp" alt="Player stretching for a forehand on clay" class="fac-icon inview-scale" data-tension="240">
+          <h2 class="clip-text-lines text-5xl font-medium tight" style="margin-top:1.5rem;" data-stagger="120">Tour Our<br>World-Class<br>Courts</h2>
+          <p class="text-sm text-ink-soft fac-body-fade" style="margin-top:1.5rem; max-width:20rem;">Reserve a court for focused practice, squad drills, or private sessions — and train in the same conditions you'll compete in.</p>
+        </div>
+        <div class="fac-cards">
+          <figure class="fac-tile inview-el hover-scale" data-delay="0" data-tension="180">
+            <img src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/1.webp" alt="Player on the baseline of an outdoor clay court" loading="lazy">
+            <figcaption class="fac-cap" style="background:rgba(15,47,99,0.4)">
+              <div class="text-sm font-medium">Redline Clay</div>
+              <div style="font-size:0.65rem; opacity:0.85;">A fast outdoor clay court tuned for long, physical rallies.</div>
+            </figcaption>
+          </figure>
+          <figure class="fac-tile inview-el hover-scale" data-delay="140" data-tension="180">
+            <img src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/4.webp" alt="Player following through on a blue hard court" loading="lazy">
+            <figcaption class="fac-cap" style="background:rgba(11,110,151,0.55)">
+              <div class="text-sm font-medium">Harbor Court</div>
+              <div style="font-size:0.65rem; opacity:0.85;">A sheltered hard court built for precision and night play.</div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="stats">
+      <div class="eyebrow light"><div class="eyebrow-dot"></div>By the numbers</div>
+      <h2 class="clip-text-lines text-5xl font-medium tight" style="margin-top:1rem;">A club that<br>keeps score</h2>
+      <dl class="stats-grid">
+        <div class="stat-cell inview-el" data-delay="0">
+          <dd class="text-6xl sm-text-7xl font-medium tight">24</dd>
+          <dt class="text-sm" style="color:rgba(255,255,255,0.65); margin-top:0.75rem;">Certified coaches</dt>
+        </div>
+        <div class="stat-cell inview-el" data-delay="110">
+          <dd class="text-6xl sm-text-7xl font-medium tight">12</dd>
+          <dt class="text-sm" style="color:rgba(255,255,255,0.65); margin-top:0.75rem;">Championship courts</dt>
+        </div>
+        <div class="stat-cell inview-el" data-delay="220">
+          <dd class="text-6xl sm-text-7xl font-medium tight">9K+</dd>
+          <dt class="text-sm" style="color:rgba(255,255,255,0.65); margin-top:0.75rem;">Members training</dt>
+        </div>
+        <div class="stat-cell inview-el" data-delay="330">
+          <dd class="text-6xl sm-text-7xl font-medium tight">15</dd>
+          <dt class="text-sm" style="color:rgba(255,255,255,0.65); margin-top:0.75rem;">Years on the baseline</dt>
+        </div>
+      </dl>
+    </section>
+
+    <section id="testimonials">
+      <div class="eyebrow dark"><div class="eyebrow-dot"></div>What players say</div>
+      <h2 class="clip-text-lines text-5xl font-medium tight" style="margin-top:1rem;">Loved by<br>the locker room</h2>
+      <ul class="test-grid">
+        <li class="test-card inview-el hover-lift" data-delay="0" data-dy="40">
+          <div>
+            <div class="text-4xl line-none" style="color:var(--brand)">"</div>
+            <blockquote class="text-lg text-ink" style="line-height:1.6; margin-top:1rem;">I added a level to my serve in one season. The coaching is detailed and it actually sticks.</blockquote>
+          </div>
+          <figcaption>
+            <div class="font-medium">Priya Anand</div>
+            <div class="text-sm text-ink-soft">Performance Squad</div>
+          </figcaption>
+        </li>
+        <li class="test-card inview-el hover-lift" data-delay="120" data-dy="40">
+          <div>
+            <div class="text-4xl line-none" style="color:var(--brand)">"</div>
+            <blockquote class="text-lg text-ink" style="line-height:1.6; margin-top:1rem;">Best courts in the city and a team that treats every member like a competitor.</blockquote>
+          </div>
+          <figcaption>
+            <div class="font-medium">Lukas Brenner</div>
+            <div class="text-sm text-ink-soft">Adult Clinics</div>
+          </figcaption>
+        </li>
+        <li class="test-card inview-el hover-lift" data-delay="240" data-dy="40">
+          <div>
+            <div class="text-4xl line-none" style="color:var(--brand)">"</div>
+            <blockquote class="text-lg text-ink" style="line-height:1.6; margin-top:1rem;">My daughter went from shy beginner to club champion. Worth every minute.</blockquote>
+          </div>
+          <figcaption>
+            <div class="font-medium">Dana Okafor</div>
+            <div class="text-sm text-ink-soft">Parent, Junior Development</div>
+          </figcaption>
+        </li>
+      </ul>
+    </section>
+
+    <footer id="contact">
+      <div class="foot-cta">
+        <div>
+          <div class="eyebrow light"><div class="eyebrow-dot"></div>Get started</div>
+          <p class="clip-text-lines text-6xl font-medium tight" style="margin-top:1rem;">Ready to<br>play?</p>
+        </div>
+        <button class="pill-btn light inview-el btn-open-modal" data-delay="150" data-dy="20">
+          Book a Visit <svg style="width:1rem;height:1rem" class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+
+      <div class="foot-grid">
+        <div style="max-width:20rem;">
+          <div class="flex items-center gap-2 text-lg font-medium uppercase tracking-widest">
+            <svg style="width:1.25rem;height:1.25rem" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none">
+              <circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/>
+            </svg> Baseline
+          </div>
+          <p class="text-sm" style="color:rgba(255,255,255,0.65); margin-top:1rem;">A members' tennis club and academy where focused coaching meets championship courts.</p>
+          <address class="text-sm" style="font-style:normal; margin-top:1.5rem; color:rgba(255,255,255,0.8); display:flex; flex-direction:column; gap:0.25rem;">
+            <a href="mailto:play@baseline.club">play@baseline.club</a>
+            <a href="tel:+12125550148">+1 (212) 555-0148</a>
+            <span style="color:rgba(255,255,255,0.55)">120 Court Lane, New York</span>
+          </address>
+        </div>
+
+        <nav class="foot-nav">
+          <h3 class="text-xs font-medium uppercase tracking-widest" style="color:rgba(255,255,255,0.5)">Programs</h3>
+          <ul>
+            <li><a href="#junior">Junior Development</a></li>
+            <li><a href="#performance">Performance Squad</a></li>
+            <li><a href="#adult">Adult Clinics</a></li>
+            <li><a href="#private">Private Coaching</a></li>
+          </ul>
+        </nav>
+        <nav class="foot-nav">
+          <h3 class="text-xs font-medium uppercase tracking-widest" style="color:rgba(255,255,255,0.5)">Club</h3>
+          <ul>
+            <li><a href="#membership">Membership</a></li>
+            <li><a href="#facilities">Facilities</a></li>
+            <li><a href="#club">Events</a></li>
+            <li><a href="#shop">Pro Shop</a></li>
+          </ul>
+        </nav>
+        <nav class="foot-nav">
+          <h3 class="text-xs font-medium uppercase tracking-widest" style="color:rgba(255,255,255,0.5)">Company</h3>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#programs">Coaches</a></li>
+            <li><a href="#careers">Careers</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="foot-bottom">
+        <div>© 2026 Baseline Tennis Club. All rights reserved.</div>
+        <div class="foot-links">
+          <a href="#instagram">Instagram</a>
+          <a href="#x">X</a>
+          <a href="#youtube">YouTube</a>
+          <a href="#linkedin">LinkedIn</a>
+        </div>
+        <div class="foot-links">
+          <a href="#privacy">Privacy</a>
+          <a href="#terms">Terms</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <div class="overlay" id="contact-modal" role="dialog" aria-modal="true">
+    <div class="overlay-backdrop"></div>
+    <div class="modal-panel">
+      <div class="flex justify-between items-start">
+        <div>
+          <div class="eyebrow dark"><div class="eyebrow-dot"></div>Book a visit</div>
+          <h2 class="clip-text-lines text-4xl sm-text-5xl font-medium tight" style="margin-top:0.75rem;" data-dur="800" data-stagger="90">Come see<br>the courts</h2>
+        </div>
+        <button class="close-btn" aria-label="Close modal">
+          <svg class="close-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <form id="contact-form" style="margin-top:1.75rem;" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="fname">Full name</label>
+          <input type="text" id="fname" class="form-input" placeholder="Alex Rivera" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input type="email" id="email" class="form-input" placeholder="you@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="msg">What would you like to play?</label>
+          <textarea id="msg" class="form-input" rows="3" placeholder="I'd love to try a private lesson on the clay courts…"></textarea>
+        </div>
+        <button type="submit" class="pill-btn solid w-full justify-center" style="margin-top:1rem;">Request a visit</button>
+      </form>
+
+      <div id="contact-success" class="hidden col items-center text-center" style="margin-top:2rem; background:var(--surface); border-radius:var(--radius-card); padding:1.5rem;">
+        <div style="width:3rem;height:3rem;background:var(--brand-light);border-radius:var(--radius-pill);display:grid;place-items:center;color:#fff;margin-bottom:1rem;">
+          <svg style="width:1.5rem;height:1.5rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h3 class="text-lg font-medium">Request received</h3>
+        <p class="text-sm text-ink-soft" style="margin-top:0.5rem;margin-bottom:1.5rem;">Thanks, <span id="s-name">there</span> — our team will be in touch to lock in your visit.</p>
+        <button class="pill-btn solid w-full justify-center close-btn-alt">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="menu-overlay">
+    <div class="overlay-backdrop"></div>
+    <div class="menu-panel">
+      <div class="flex justify-between items-center" style="padding:1.5rem 1.5rem 0;">
+        <div class="header-brand" style="color:#fff;">
+          <svg style="width:1.25rem;height:1.25rem" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none">
+            <circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/>
+          </svg> Baseline
+        </div>
+        <button class="close-btn" style="background:rgba(255,255,255,0.15); color:#fff;" aria-label="Close menu">
+          <svg class="close-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="menu-panel-inner">
+        <nav class="menu-nav flex col justify-center gap-2 h-full">
+          <a href="#programs" class="menu-link">Programs</a>
+          <a href="#facilities" class="menu-link">Facilities</a>
+          <a href="#testimonials" class="menu-link">Reviews</a>
+          <a href="#contact" class="menu-link">Contact</a>
+        </nav>
+        <div class="flex col sm:row justify-between items-center gap-4" style="border-top:1px solid rgba(255,255,255,0.15); padding-top:2rem;">
+          <button class="pill-btn light btn-open-modal">Book a Visit <svg style="width:1rem;height:1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <div class="foot-links" style="color:rgba(255,255,255,0.7); font-size:0.875rem;">
+            <a href="#instagram">Instagram</a>
+            <a href="#x">X</a>
+            <a href="#youtube">YouTube</a>
+            <a href="#linkedin">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <script type="module">
+    import Lenis from 'lenis';
+
+    // Adaptive Scaling
+    const handleResize = () => {
+      const BASE_W = 1920, FONT_BASE = 16, COEF = 0.6666;
+      if (window.innerWidth > BASE_W) {
+        const reduction = ((BASE_W - window.innerWidth) / BASE_W) * 100 * COEF;
+        const size = FONT_BASE - (FONT_BASE * reduction) / 100;
+        document.documentElement.style.fontSize = size + "px";
+      } else {
+        document.documentElement.style.removeProperty("font-size");
+      }
+
+      const isSm = window.innerWidth >= 640;
+      document.querySelectorAll('.sm-text-3xl').forEach(el => el.classList.toggle('text-3xl', isSm));
+      document.querySelectorAll('.sm-text-5xl').forEach(el => el.classList.toggle('text-5xl', isSm));
+      document.querySelectorAll('.sm-text-7xl').forEach(el => el.classList.toggle('text-7xl', isSm));
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    // Core Spring Logic
+    class Spring {
+      constructor(val, config = {}) {
+        this.val = val; 
+        this.target = val; 
+        this.vel = 0;
+        this.tension = config.tension || 170; 
+        this.friction = config.friction || 26;
+      }
+      update(dt) {
+        let a = -this.tension * (this.val - this.target) - this.friction * this.vel;
+        this.vel += a * dt;
+        this.val += this.vel * dt;
+        return Math.abs(this.vel) < 0.001 && Math.abs(this.target - this.val) < 0.001;
+      }
+    }
+
+    const easings = {
+      easeOutExpo: t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t),
+      easeOutQuart: t => 1 - Math.pow(1 - t, 4),
+      easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+    };
+
+    const lenis = new Lenis({ smoothWheel: true });
+    window.scrollTo(0,0);
+
+    const activeTweens = new Set();
+    const activeSprings = new Map();
+    let globalState = { loaderReady: false };
+
+    // Helper: Safely updates or creates a spring property without losing the object reference
+    function setSpringTarget(el, prop, target, tension = 180, friction = 26, fallback = 0) {
+      let state = activeSprings.get(el);
+      if (!state) {
+        state = { props: {} };
+        activeSprings.set(el, state);
+      }
+      if (!state.props[prop]) {
+        state.props[prop] = new Spring(fallback, { tension, friction });
+      } else {
+        state.props[prop].tension = tension;
+        state.props[prop].friction = friction;
+      }
+      state.props[prop].target = target;
+    }
+
+    function tween(duration, easingFn, onUpdate, onComplete) {
+      const start = performance.now();
+      const tick = (now) => {
+        let t = Math.min(1, (now - start) / duration);
+        onUpdate(easingFn(t));
+        if (t < 1) { activeTweens.add(tick); } 
+        else { activeTweens.delete(tick); if(onComplete) onComplete(); }
+      };
+      activeTweens.add(tick);
+    }
+
+    // Main Render Loop
+    let lastTime = performance.now();
+    function raf(t) {
+      lenis.raf(t);
+      let dt = (t - lastTime) / 1000;
+      if (dt > 0.05) dt = 0.05; // clamp
+      lastTime = t;
+
+      activeTweens.forEach(fn => fn(t));
+
+      activeSprings.forEach((springData, el) => {
+        let isAnimating = false;
+        
+        Object.keys(springData.props).forEach(prop => {
+          let s = springData.props[prop];
+          if (!s.update(dt)) isAnimating = true;
+        });
+
+        // Continue applying styles even if settled to ensure final transforms group correctly
+        let sY = springData.props.y;
+        let sX = springData.props.x;
+        let sScale = springData.props.scale;
+        let sRotate = springData.props.rotate;
+        let sOp = springData.props.opacity;
+
+        let transform = '';
+        if (sX) transform += `translateX(${sX.val}px) `;
+        if (sY) transform += `translateY(${sY.val}px) `;
+        if (sScale) transform += `scale(${sScale.val}) `;
+        if (sRotate) transform += `rotate(${sRotate.val}deg)`;
+        
+        if (transform) el.style.transform = transform.trim();
+        if (sOp) el.style.opacity = sOp.val;
+      });
+
+      updateParallax();
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    const toggleScroll = (lock) => {
+      if (lock) { lenis.stop(); document.documentElement.classList.add('lenis-locked'); } 
+      else { lenis.start(); document.documentElement.classList.remove('lenis-locked'); }
+    };
+
+    function prepareTextReveals() {
+      document.querySelectorAll('.clip-text').forEach(el => {
+        let words = el.innerText.split(' ');
+        el.innerHTML = words.map(w => `<span class="clip-wrap"><span class="clip-inner">${w}</span></span>`).join(el.classList.contains('word') ? '' : ' ');
+      });
+      document.querySelectorAll('.clip-text-lines').forEach(el => {
+        let lines = el.innerHTML.split('<br>');
+        el.innerHTML = lines.map(l => `<span class="clip-wrap" style="display:block"><span class="clip-inner">${l}</span></span>`).join('');
+      });
+      document.querySelectorAll('.fac-body-fade').forEach(el => {
+        let words = el.innerText.split(' ');
+        el.innerHTML = words.map(w => `<span style="display:inline-block; opacity:0; transform:translateY(18px)">${w}</span>`).join(' ');
+      });
+    }
+
+    function playTextReveal(el, delayOffset = 0) {
+      if (!el) return;
+      let isLines = el.classList.contains('clip-text-lines');
+      let isFade = el.classList.contains('fac-body-fade');
+      let inners = isFade ? el.querySelectorAll('span') : el.querySelectorAll('.clip-inner');
+      let baseDelay = parseInt(el.dataset.delay || 0) + delayOffset;
+      let stagger = parseInt(el.dataset.stagger || (isFade ? 28 : 120));
+      let dur = parseInt(el.dataset.dur || (isFade ? 700 : 950));
+      let ease = easings[el.dataset.ease || (isFade ? 'easeOutQuart' : 'easeOutExpo')];
+
+      inners.forEach((span, i) => {
+        let startY = isFade ? 18 : 115;
+        setTimeout(() => {
+          tween(dur, ease, (t) => {
+            span.style.transform = `translateY(${startY - startY*t}${isFade?'px':'%'})`;
+            span.style.opacity = isFade ? t : (t > 0.1 ? 1 : t*10);
+          });
+        }, baseDelay + (i * stagger));
+      });
+    }
+
+    // Intersection Observer
+    const inviewObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          let el = entry.target;
+
+          if (el.classList.contains('clip-text') || el.classList.contains('clip-text-lines') || el.classList.contains('fac-body-fade')) {
+            if(!el.dataset.gated || globalState.loaderReady) playTextReveal(el);
+          } else {
+            let delay = parseInt(el.dataset.delay || 0);
+            let tension = parseInt(el.dataset.tension || 180);
+            let friction = parseInt(el.dataset.friction || 26);
+
+            setTimeout(() => {
+              if (el.dataset.dy) {
+                 setSpringTarget(el, 'y', 0, tension, friction, parseInt(el.dataset.dy));
+              } else if (el.classList.contains('inview-scale')) {
+                 setSpringTarget(el, 'scale', 1, tension, friction, 0.85);
+              } else {
+                 setSpringTarget(el, 'y', 0, tension, friction, 28);
+              }
+
+              setSpringTarget(el, 'opacity', 1, tension, friction, 0);
+
+              if(el.id === 'coach-card') {
+                 setSpringTarget(el, 'rotate', 6, tension, friction, 6);
+                 setSpringTarget(el, 'scale', 1, tension, friction, parseFloat(el.dataset.scale || 0.92));
+              }
+            }, delay);
+          }
+          inviewObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const parallaxEls = [];
+    function setupParallax() {
+      let heroWrap = document.getElementById('hero-parallax');
+      if(heroWrap) parallaxEls.push({el: heroWrap, map: (p) => `translateY(${p * 12}%)`});
+
+      const w0 = document.getElementById('gw-0'), w1 = document.getElementById('gw-1'), w2 = document.getElementById('gw-2'), w3 = document.getElementById('gw-3');
+      const section = document.getElementById('trust');
+      if(section && w0) {
+        parallaxEls.push({ 
+          el: section, isSection: true,
+          update: (p) => {
+            if(w0) w0.style.transform = `translateX(${-3 + p*6}%)`;
+            if(w1) w1.style.transform = `translateX(${3 - p*6}%)`;
+            if(w2) w2.style.transform = `translateX(${-2 + p*6}%)`;
+            if(w3) w3.style.transform = `translateX(${4 - p*7}%)`;
+          }
+        });
+      }
+    }
+
+    function updateParallax() {
+      let wh = window.innerHeight;
+      parallaxEls.forEach(item => {
+        let rect = item.isSection ? item.el.getBoundingClientRect() : (item.el.parentElement || item.el).getBoundingClientRect();
+        let totalDist = wh + rect.height;
+        let scrolled = wh - rect.top;
+        let p = Math.max(0, Math.min(1, scrolled / totalDist));
+
+        if (item.update) item.update(p);
+        else item.el.style.transform = item.map(p);
+      });
+    }
+
+    const initLoader = () => {
+      toggleScroll(true);
+      const minVisible = 1400;
+      const maxVisible = 2600;
+      const exitMs = 850;
+      let startTime = performance.now();
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      const curtain = document.getElementById('loader');
+      const mark = document.getElementById('loader-mark');
+      const fill = document.getElementById('loader-fill');
+
+      setTimeout(() => {
+        setSpringTarget(mark, 'y', 0, 200, 22, 16);
+        setSpringTarget(mark, 'opacity', 1, 200, 22, 0);
+      }, 10);
+
+      setTimeout(() => {
+        tween(reduceMotion ? 0 : 1280, easings.easeInOutCubic, (t) => fill.style.transform = `scaleX(${t})`);
+      }, 120);
+
+      const unlock = () => {
+        globalState.loaderReady = true;
+        toggleScroll(false);
+
+        playTextReveal(document.getElementById('hero-title'));
+        setTimeout(() => playTextReveal(document.querySelector('.hero-tagline')), 0);
+
+        document.querySelectorAll('.inview-el, .clip-text-lines, .fac-body-fade').forEach(el => inviewObserver.observe(el));
+
+        initHeroSlider();
+        initTrustSlider();
+
+        tween(reduceMotion ? 0 : exitMs, easings.easeInOutCubic, (t) => {
+          curtain.style.transform = `translateY(${-105 * t}%)`;
+        }, () => curtain.remove());
+      };
+
+      const checkLoad = () => {
+        let elapsed = performance.now() - startTime;
+        let wait = Math.max(0, (reduceMotion ? 200 : minVisible) - elapsed);
+        setTimeout(unlock, wait);
+      };
+
+      if (document.readyState === 'complete') checkLoad();
+      else {
+        window.addEventListener('load', checkLoad);
+        setTimeout(() => { if(!globalState.loaderReady) checkLoad(); }, maxVisible);
+      }
+    };
+
+    // Sliders
+    const heroSlides = [
+      { img: '2.webp', brand: 'Baseline Pro', title: 'Featured Gear', cta: 'Shop the kit', url: 'https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/2.webp' },
+      { img: '3.webp', brand: 'Court Series', title: 'Summer Drop', cta: 'View the line', url: 'https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/3.webp' },
+      { img: '5.webp', brand: 'Academy Kit', title: 'Junior Range', cta: 'Browse juniors', url: 'https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/5.webp' }
+    ];
+    let heroIdx = 0;
+
+    function renderHeroSlide(idx) {
+      let data = heroSlides[idx];
+      return `
+        <img src="${data.url}" alt="">
+        <div class="flex col justify-center">
+          <div class="text-xs font-medium uppercase tracking-wide">${data.brand}</div>
+          <div style="font-size:0.7rem; text-transform:uppercase; opacity:0.8">${data.title}</div>
+          <div style="font-size:0.65rem; text-decoration:underline; margin-top:0.25rem;">${data.cta} →</div>
+        </div>
+      `;
+    }
+
+    function initHeroSlider() {
+      const content = document.getElementById('hero-slide-content');
+      const dots = document.getElementById('hero-slider-dots');
+      const slider = document.getElementById('hero-slider');
+
+      if(window.innerWidth < 768) return;
+
+      content.innerHTML = renderHeroSlide(0);
+      dots.innerHTML = heroSlides.map((_, i) => `<button class="dot light" aria-current="${i===0}"><div class="dot-inner"></div></button>`).join('');
+
+      setSpringTarget(slider, 'y', 0, 200, 26, 28);
+      setSpringTarget(slider, 'opacity', 1, 200, 26, 0);
+
+      setInterval(() => {
+        heroIdx = (heroIdx + 1) % heroSlides.length;
+
+        setSpringTarget(content, 'y', 16, 210, 24, 0);
+        setSpringTarget(content, 'opacity', 0, 210, 24, 1);
+        setSpringTarget(content, 'scale', 0.96, 210, 24, 1);
+
+        setTimeout(() => {
+          content.innerHTML = renderHeroSlide(heroIdx);
+          Array.from(dots.children).forEach((d, i) => d.setAttribute('aria-current', i === heroIdx));
+          
+          let props = activeSprings.get(content).props;
+          props.y.val = -16; props.opacity.val = 0; props.scale.val = 0.96;
+          
+          setSpringTarget(content, 'y', 0, 210, 24, -16);
+          setSpringTarget(content, 'opacity', 1, 210, 24, 0);
+          setSpringTarget(content, 'scale', 1, 210, 24, 0.96);
+        }, 150);
+      }, 3800);
+    }
+
+    const trustSlides = [
+      { img: '5.webp', name: 'Marco Vidal', role: 'Head Coach', words: ['Expert', 'Result-', 'Driven', 'Coaching'], url: 'https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/5.webp' },
+      { img: '4.webp', name: 'Elena Sokolova', role: 'Performance Coach', words: ['Sharper', 'Faster', 'Stronger', 'Player'], url: 'https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/4.webp' },
+      { img: '1.webp', name: 'James Okoro', role: 'Juniors Lead', words: ['Future', 'Champions', 'Start', 'Here'], url: 'https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/1.webp' }
+    ];
+    let trustIdx = 0;
+
+    function initTrustSlider() {
+      const img = document.getElementById('coach-img');
+      const name = document.getElementById('coach-name');
+      const role = document.getElementById('coach-role');
+      const dots = document.getElementById('trust-dots');
+      const w0 = document.getElementById('gw-0'), w1 = document.getElementById('gw-1'), w2 = document.getElementById('gw-2'), w3 = document.getElementById('gw-3');
+
+      dots.innerHTML = trustSlides.map((_, i) => `<button class="dot dark" aria-current="${i===0}"><div class="dot-inner"></div></button>`).join('');
+
+      const update = (newIdx) => {
+        trustIdx = newIdx;
+        let data = trustSlides[trustIdx];
+
+        setSpringTarget(img, 'opacity', 0, 260, 26, 1);
+
+        setTimeout(() => {
+          img.src = data.url;
+          name.innerText = data.name;
+          role.innerText = data.role;
+          setSpringTarget(img, 'opacity', 1, 260, 26, 0);
+        }, 100);
+
+        [w0,w1,w2,w3].forEach((w, i) => {
+          w.innerHTML = `<span class="clip-wrap"><span class="clip-inner">${data.words[i]}</span></span>`;
+          playTextReveal(w);
+        });
+
+        Array.from(dots.children).forEach((d, i) => d.setAttribute('aria-current', i === trustIdx));
+      };
+
+      document.getElementById('trust-prev').addEventListener('click', () => { update((trustIdx - 1 + trustSlides.length) % trustSlides.length); });
+      document.getElementById('trust-next').addEventListener('click', () => { update((trustIdx + 1) % trustSlides.length); });
+      Array.from(dots.children).forEach((btn, i) => btn.addEventListener('click', () => update(i)));
+    }
+
+    function setupHovers() {
+      const isMobile = window.innerWidth <= 768;
+
+      document.querySelectorAll('.program-row').forEach(row => {
+        let svg = row.querySelector('.prog-arrow svg');
+        row.addEventListener('mouseenter', () => {
+          if(!isMobile) {
+             setSpringTarget(svg, 'x', 8, 300, 20, 0);
+             setSpringTarget(svg, 'opacity', 1, 300, 20, 0.55);
+          }
+        });
+        row.addEventListener('mouseleave', () => {
+          if(!isMobile) {
+             setSpringTarget(svg, 'x', 0, 300, 20, 8);
+             setSpringTarget(svg, 'opacity', 0.55, 300, 20, 1);
+          }
+        });
+      });
+
+      document.querySelectorAll('.arrow-btn').forEach(btn => {
+        let icon = btn.querySelector('.arrow-icon');
+        if(!icon) return;
+        let baseScale = icon.style.transform.includes('-1') ? -1 : 1;
+        btn.addEventListener('mouseenter', () => {
+          if(!isMobile) setSpringTarget(icon, 'scale', baseScale * 1.15, 320, 18, baseScale);
+        });
+        btn.addEventListener('mouseleave', () => {
+          if(!isMobile) setSpringTarget(icon, 'scale', baseScale, 320, 18, baseScale * 1.15);
+        });
+      });
+
+      document.querySelectorAll('.pill-btn:not(.w-full)').forEach(btn => {
+        let arrow = btn.querySelector('.btn-arrow');
+        if(!arrow) return;
+        btn.addEventListener('mouseenter', () => {
+          if(!isMobile) setSpringTarget(arrow, 'x', 5, 320, 20, 0);
+        });
+        btn.addEventListener('mouseleave', () => {
+          if(!isMobile) setSpringTarget(arrow, 'x', 0, 320, 20, 5);
+        });
+      });
+
+      document.querySelectorAll('.hover-scale').forEach(card => {
+        let img = card.querySelector('img');
+        card.addEventListener('mouseenter', () => {
+          if(!isMobile) setSpringTarget(img, 'scale', 1.03, 300, 22, 1);
+        });
+        card.addEventListener('mouseleave', () => {
+          if(!isMobile) setSpringTarget(img, 'scale', 1, 300, 22, 1.03);
+        });
+      });
+
+      document.querySelectorAll('.hover-lift').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          if(!isMobile) setSpringTarget(card, 'y', -8, 300, 22, 0);
+        });
+        card.addEventListener('mouseleave', () => {
+          if(!isMobile) setSpringTarget(card, 'y', 0, 300, 22, -8);
+        });
+      });
+
+      document.querySelectorAll('.close-btn').forEach(btn => {
+        let icon = btn.querySelector('.close-icon');
+        btn.addEventListener('mouseenter', () => {
+          if(!isMobile) setSpringTarget(icon, 'rotate', 90, 300, 18, 0);
+        });
+        btn.addEventListener('mouseleave', () => {
+          if(!isMobile) setSpringTarget(icon, 'rotate', 0, 300, 18, 90);
+        });
+      });
+    }
+
+    function setupModals() {
+      const contactModal = document.getElementById('contact-modal');
+      const menuOverlay = document.getElementById('menu-overlay');
+
+      const openContact = () => {
+        contactModal.classList.add('active');
+        toggleScroll(true);
+        let bd = contactModal.querySelector('.overlay-backdrop');
+        let panel = contactModal.querySelector('.modal-panel');
+        let title = contactModal.querySelector('h2');
+
+        setSpringTarget(bd, 'opacity', 1, 240, 30, 0);
+        setSpringTarget(panel, 'y', 0, 240, 26, 28);
+        setSpringTarget(panel, 'scale', 1, 240, 26, 0.96);
+        setSpringTarget(panel, 'opacity', 1, 240, 26, 0);
+
+        playTextReveal(title, 100);
+        setTimeout(() => document.getElementById('fname').focus(), 120);
+      };
+
+      const closeContact = () => {
+        let bd = contactModal.querySelector('.overlay-backdrop');
+        let panel = contactModal.querySelector('.modal-panel');
+
+        setSpringTarget(bd, 'opacity', 0, 240, 30, 1);
+        setSpringTarget(panel, 'y', 28, 240, 26, 0);
+        setSpringTarget(panel, 'scale', 0.96, 240, 26, 1);
+        setSpringTarget(panel, 'opacity', 0, 240, 26, 1);
+
+        setTimeout(() => {
+          contactModal.classList.remove('active');
+          toggleScroll(false);
+          document.getElementById('contact-form').reset();
+          document.getElementById('contact-form').classList.remove('hidden');
+          document.getElementById('contact-success').classList.add('hidden');
+          document.querySelector('#contact-form button').innerText = 'Request a visit';
+          document.querySelector('#contact-form button').disabled = false;
+          document.querySelector('#contact-form button').style.opacity = 1;
+        }, 350);
+      };
+
+      document.querySelectorAll('.btn-open-modal').forEach(btn => btn.addEventListener('click', openContact));
+      contactModal.querySelector('.overlay-backdrop').addEventListener('click', closeContact);
+      contactModal.querySelector('.close-btn').addEventListener('click', closeContact);
+      contactModal.querySelector('.close-btn-alt').addEventListener('click', closeContact);
+
+      document.getElementById('contact-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        let btn = e.target.querySelector('button');
+        let name = document.getElementById('fname').value || 'there';
+        btn.innerText = 'Sending...';
+        btn.disabled = true;
+        btn.style.opacity = 0.7;
+
+        setTimeout(() => {
+          document.getElementById('contact-form').classList.add('hidden');
+          document.getElementById('s-name').innerText = name.split(' ')[0];
+          document.getElementById('contact-success').classList.remove('hidden');
+        }, 600);
+      });
+
+      const openMenu = () => {
+        menuOverlay.classList.add('active');
+        toggleScroll(true);
+        let bd = menuOverlay.querySelector('.overlay-backdrop');
+        let panel = menuOverlay.querySelector('.menu-panel');
+        let links = menuOverlay.querySelectorAll('.menu-link');
+
+        setSpringTarget(bd, 'opacity', 1, 260, 30, 0);
+        setSpringTarget(panel, 'y', 0, 220, 28, -24);
+        setSpringTarget(panel, 'opacity', 1, 220, 28, 0);
+        panel.style.pointerEvents = 'auto';
+
+        links.forEach((l, i) => {
+          setTimeout(() => {
+            setSpringTarget(l, 'y', 0, 200, 26, 28);
+            setSpringTarget(l, 'opacity', 1, 200, 26, 0);
+          }, 120 + i*70);
+        });
+      };
+
+      const closeMenu = () => {
+        let bd = menuOverlay.querySelector('.overlay-backdrop');
+        let panel = menuOverlay.querySelector('.menu-panel');
+        let links = menuOverlay.querySelectorAll('.menu-link');
+
+        setSpringTarget(bd, 'opacity', 0, 260, 30, 1);
+        setSpringTarget(panel, 'y', -24, 220, 28, 0);
+        setSpringTarget(panel, 'opacity', 0, 220, 28, 1);
+        panel.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+          menuOverlay.classList.remove('active');
+          toggleScroll(false);
+        }, 350);
+      };
+
+      document.getElementById('btn-burger').addEventListener('click', openMenu);
+      menuOverlay.querySelector('.overlay-backdrop').addEventListener('click', closeMenu);
+      menuOverlay.querySelector('.close-btn').addEventListener('click', closeMenu);
+      menuOverlay.querySelector('.btn-open-modal').addEventListener('click', () => { closeMenu(); setTimeout(openContact, 300); });
+
+      window.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape') {
+          if(contactModal.classList.contains('active')) closeContact();
+          if(menuOverlay.classList.contains('active')) closeMenu();
+        }
+      });
+    }
+
+    // Scroll Anchor Logic + Close Menu Hooks
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        
+        if(this.classList.contains('menu-link')) {
+           document.querySelector('.close-btn[aria-label="Close menu"]').click();
+           if (target) setTimeout(() => lenis.scrollTo(target), 400); // trigger smoothly after close
+           return;
+        }
+        
+        if (target) lenis.scrollTo(target);
+      });
+    });
+
+    prepareTextReveals();
+    setupParallax();
+    setupHovers();
+    setupModals();
+
+    document.getElementById('hero-title').dataset.gated = "true";
+    document.querySelector('.hero-tagline').dataset.gated = "true";
+
+    initLoader();
+  </script>
+</body>
+</html>
