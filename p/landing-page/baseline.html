@@ -254,7 +254,7 @@
     
 
     /* Hero */
-    #hero { background: va(--ink); color: #fff; position: relative; isolate: isolation; overflow: hidden; border-radius: var(--radius-card-lg); height: calc(100svh - 1rem); min-height: 36rem; display: flex; flex-direction: column; }
+    #hero { background: var(--ink); color: #fff; position: relative; isolation: isolate; overflow: hidden; border-radius: var(--radius-card-lg); height: calc(100svh - 1rem); min-height: 36rem; display: flex; flex-direction: column; }
     
     
     
@@ -413,7 +413,7 @@
 
   <style>
     /* Trust */
-    #trust { background: var(--background); position: relative; isolate: isolation; overflow: hidden; padding: 4rem 1.5rem; border-radius: var(--radius-card-lg); }
+    #trust { background: var(--background); position: relative; isolation: isolate; overflow: hidden; padding: 4rem 1.5rem; border-radius: var(--radius-card-lg); }
     
     
     
@@ -1074,7 +1074,7 @@
     </div>
   </div>
 
- <script type="module">
+<script type="module">
     import Lenis from 'lenis';
 
     // Adaptive Scaling
@@ -1330,7 +1330,9 @@
         playTextReveal(document.getElementById('hero-title'));
         setTimeout(() => playTextReveal(document.querySelector('.hero-tagline')), 0);
 
-        document.querySelectorAll('.inview-el, .clip-text-lines, .fac-body-fade').forEach(el => inviewObserver.observe(el));
+        // FIX: include .ghost-word.clip-text so the trust heading words
+        // reveal on scroll (previously only revealed after prev/next click).
+        document.querySelectorAll('.inview-el, .clip-text-lines, .fac-body-fade, .ghost-word.clip-text').forEach(el => inviewObserver.observe(el));
 
         initHeroSlider();
         initTrustSlider();
