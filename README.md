@@ -84,16 +84,16 @@
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg" width="48" height="48" alt="Scikit-learn" /><br>Scikit-learn
       </td>
       <td align="center" width="96">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeb5-bLp1rMvj27Zz6nOeyW2Fp0qU8J9p7lQ&s" width="48" height="48" alt="HuggingFace" /><br>HuggingFace
+        <img src="https://cdn.simpleicons.org/huggingface" width="48" height="48" alt="HuggingFace" /><br>HuggingFace
       </td>
       <td align="center" width="96">
-        <img src="https://python.langchain.com/img/favicon.png" width="48" height="48" alt="LangChain" /><br>LangChain
+        <img src="https://cdn.simpleicons.org/langchain" width="48" height="48" alt="LangChain" /><br>LangChain
       </td>
       <td align="center" width="96">
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg" width="48" height="48" alt="FastAPI" /><br>FastAPI
       </td>
       <td align="center" width="96">
-        <img src="https://mlflow.org/docs/latest/_static/MLflow-logo-final-black.png" width="48" height="48" alt="MLflow" /><br>MLflow
+        <img src="https://cdn.simpleicons.org/mlflow" width="48" height="48" alt="MLflow" /><br>MLflow
       </td>
     </tr>
     <!-- Row 5: Databases & Cloud -->
@@ -126,7 +126,7 @@
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" width="48" height="48" alt="React Native" /><br>React Native
       </td>
       <td align="center" width="96">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azuresqldatabase/azuresqldatabase-original.svg" width="48" height="48" alt="Expo" /><br>Expo
+        <img src="https://cdn.simpleicons.org/expo" width="48" height="48" alt="Expo" /><br>Expo
       </td>
       <td align="center" width="96">
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" width="48" height="48" alt="Flutter" /><br>Flutter
