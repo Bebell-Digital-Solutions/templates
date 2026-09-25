@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Rotating Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            background-color: #fafafa;
+        }
+
+        .layout-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Nav styling */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: transparent;
+            border-bottom: none;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-wrapper {
+            width: 100%;
+            overflow: hidden;
+            margin-top: 2rem;
+            order: 1; /* Carousel is above the text on mobile */
+            /* Fades out the edges for a smoother entrance/exit effect */
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            padding: 20px 0;
+        }
+
+        .rotating-container {
+            display: flex;
+            width: max-content;
+            animation: marqueeMobile 25s linear infinite;
+        }
+
+        /* Pause animation on mobile hover/touch */
+        .rotating-container:hover {
+            animation-play-state: paused;
+        }
+
+        .media-card {
+            width: 160px;
+            height: 240px;
+            margin: 0 12px;
+            border-radius: 16px;
+            position: relative;
+            flex-shrink: 0;
+            overflow: hidden;
+            background-color: #e5e7eb;
+            box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.4);
+            /* NO !important here so JS can override on desktop */
+        }
+
+        /* Mobile specific hover scale */
+        @media (max-width: 767px) {
+            .media-card:hover {
+                transform: translateY(-8px) scale(1.05);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+                z-index: 50;
+            }
+        }
+
+        .media-card img, .media-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        /* Seamless Marquee Keyframe */
+        @keyframes marqueeMobile {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
+
+        /* 3D Flip Card Container */
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        /* Mobile Flip on Hover */
+        @media (max-width: 767px) {
+            .media-card:hover .card-inner {
+                transform: rotateY(180deg);
+            }
+            .media-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+                z-index: 50;
+            }
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .card-front {
+            background-color: #e5e7eb;
+        }
+
+        .card-back {
+            background-color: white;
+            color: black;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+        }
+
+        /* Card Back Content Styling */
+        .card-back-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .card-back-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .card-back-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .card-back-text {
+            font-size: 0.75rem;
+            color: #4b5563;
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+
+        .card-front img, .card-front video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.15);
+            pointer-events: none;
+            transition: background 0.3s;
+        }
+
+        .media-card:hover .play-overlay {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .play-button {
+            width: 44px;
+            height: 44px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .media-card:hover .play-button {
+            transform: scale(1.15);
+        }
+
+        .play-button svg {
+            width: 18px;
+            height: 18px;
+            fill: #1f2937;
+            margin-left: 3px; 
+        }
+
+        .text-content {
+            order: 2; /* Sits beneath carousel on mobile */
+            text-align: center;
+            padding: 1rem 2rem 3rem 2rem;
+            z-index: 10;
+        }
+
+        .explore-link {
+            display: inline-block;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            color: #4b5563;
+            text-transform: uppercase;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s;
+            margin-top: 1.5rem;
+        }
+
+        .explore-link:hover {
+            color: #111827;
+        }
+        
+        @media (min-width: 768px) {
+            .main-content {
+                display: block; /* Let absolute children fill the space */
+            }
+
+            .gallery-wrapper {
+                position: absolute;
+                inset: 0; 
+                margin-top: 0;
+                padding: 0;
+                mask-image: none;
+                -webkit-mask-image: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                pointer-events: none; 
+            }
+
+            .rotating-container {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                /* Fixed width/height to ensure the center point is stable */
+                width: 2px; 
+                height: 2px; 
+                display: block; 
+                animation: rotateContinuous 50s linear infinite;
+                pointer-events: auto; 
+            }
+
+            /* Desktop Flip Hover (Managed partially by JS for scale, CSS for flip) */
+            /* We want to rotate the inner card when the main card is hovered */
+            .media-card:hover .card-inner {
+                transform: rotateY(180deg);
+            }
+
+            .media-card {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin: 0;
+                /* Slightly smaller cards to match the reference image's tight clustering */
+                width: max(130px, 14vw);
+                height: max(180px, 20vw);
+                max-width: 200px;
+                max-height: 280px;
+                backface-visibility: visible; /* Let inner handle it */
+                /* Remove transform transition here, handled by JS */
+                transition: box-shadow 0.4s ease;
+                /* Border to match reference style closely */
+                border: 2px solid white;
+            }
+
+            .text-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                margin-top: 0;
+                padding: 50px;
+                background: none;
+                border-radius: 50%;
+                animation: breathe 5s ease-in-out infinite alternate;
+                pointer-events: auto;
+                max-width: 600px;
+                width: 90%;
+            }
+
+            @keyframes rotateContinuous {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+
+            @keyframes breathe {
+                0% { transform: translate(-50%, -50%) scale(1); }
+                100% { transform: translate(-50%, -50%) scale(1.03); }
+            }
+        }
+
+        /* Modal Styles */
+        #mediaModal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #mediaModal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10001;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        .modal-content-wrapper {
+            position: relative;
+            z-index: 10000;
+            width: 90vw;
+            height: 85vh;
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #mediaModal.active .modal-content-wrapper {
+            transform: scale(1);
+        }
+
+    </style>
+</head>
+<body class="text-gray-900">
+
+    <div class="layout-wrapper">
+        <!-- Top Navigation -->
+        <nav class="flex items-center justify-between px-6 py-5 md:px-12 md:py-6">
+            <div class="text-2xl font-black tracking-tighter cursor-pointer">
+                Commune.
+            </div>
+            <div class="hidden md:flex space-x-10 text-sm font-semibold text-gray-500">
+                <a href="#" class="hover:text-gray-900 transition-colors">Creators</a>
+                <a href="#" class="hover:text-gray-900 transition-colors">Collections</a>
+                <a href="#" class="hover:text-gray-900 transition-colors">About</a>
+            </div>
+            <div>
+                <button class="px-6 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-full hover:bg-gray-800 transition-colors shadow-lg shadow-gray-900/20">
+                    Join Now
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            
+            <div class="gallery-wrapper">
+                <div class="rotating-container" id="ringContainer">
+                    <!-- Cards will be dynamically injected -->
+                </div>
+            </div>
+
+            <div class="text-content">
+                <h1 class="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight leading-tight">
+                    Explore our <br/> community
+                </h1>
+                <p class="mt-4 text-gray-500 font-medium max-w-sm mx-auto md:hidden">
+                    Discover thousands of creators sharing their world.
+                </p>
+                <a href="#" class="explore-link font-bold">
+                    Start Exploring &rarr;
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Media Modal -->
+    <div id="mediaModal">
+        <div class="modal-backdrop" id="modalBackdrop"></div>
+        <button class="close-modal" id="closeModal">&times;</button>
+        <div class="modal-content-wrapper" id="modalContentContainer">
+            <!-- Image or Video injected dynamically here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('ringContainer');
+            
+            const baseImages = [
+                'https://picsum.photos/id/1011/400/600', 
+                'https://picsum.photos/id/1025/400/600', 
+                'https://picsum.photos/id/1027/400/600', 
+                'https://picsum.photos/id/1043/400/600', 
+                'https://picsum.photos/id/1066/400/600', 
+                'https://picsum.photos/id/177/400/600',  
+                'https://picsum.photos/id/338/400/600',  
+                'https://picsum.photos/id/342/400/600',
+                'https://picsum.photos/id/349/400/600',
+                'https://picsum.photos/id/447/400/600'
+            ];
+
+            const videoIndicesBase = [1, 4, 7];
+            const totalCards = 10; // Match the reference image count closely (approx 10)
+            const cards = [];
+
+            // Modal elements & state
+            const modal = document.getElementById('mediaModal');
+            const modalBackdrop = document.getElementById('modalBackdrop');
+            const closeModalBtn = document.getElementById('closeModal');
+            const modalContentContainer = document.getElementById('modalContentContainer');
+            
+            // Standard dummy video for demo purposes
+            const dummyVideoUrl = "https://www.w3schools.com/html/mov_bbb.mp4";
+
+            function openModal(mediaUrl, isVideo) {
+                modalContentContainer.innerHTML = ''; // Clear previous
+                
+                if (isVideo) {
+                    const videoElem = document.createElement('video');
+                    videoElem.src = dummyVideoUrl;
+                    videoElem.controls = true;
+                    videoElem.autoplay = true;
+                    videoElem.style.maxWidth = '100%';
+                    videoElem.style.maxHeight = '100%';
+                    videoElem.style.borderRadius = '16px';
+                    videoElem.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.5)';
+                    videoElem.style.outline = 'none';
+                    modalContentContainer.appendChild(videoElem);
+                } else {
+                    const imgElem = document.createElement('img');
+                    imgElem.src = mediaUrl;
+                    imgElem.alt = "Community Full Media";
+                    imgElem.style.maxWidth = '100%';
+                    imgElem.style.maxHeight = '100%';
+                    imgElem.style.objectFit = 'contain';
+                    imgElem.style.borderRadius = '16px';
+                    imgElem.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.5)';
+                    modalContentContainer.appendChild(imgElem);
+                }
+                
+                modal.classList.add('active');
+                // Prevent scrolling on the body while modal is open
+                document.body.style.overflow = 'hidden'; 
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+                
+                // Clear content after fade out transition to stop video playback
+                setTimeout(() => {
+                    modalContentContainer.innerHTML = '';
+                }, 300);
+            }
+
+            modalBackdrop.addEventListener('click', closeModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            // Some dummy text for the back of cards
+            const dummyTexts = [
+                "Embrace timeless style with our classic comfort essentials.",
+                "Finding peace in the everyday moments around us.",
+                "Adventures await those who seek the unknown paths.",
+                "Capturing the vibrant energy of city life after dark.",
+                "Discovering new perspectives in familiar places."
+            ];
+
+            for (let i = 0; i < totalCards; i++) {
+                const baseIndex = i % baseImages.length;
+                
+                const card = document.createElement('div');
+                card.className = 'media-card';
+                
+                // Create the 3D inner container
+                const cardInner = document.createElement('div');
+                cardInner.className = 'card-inner';
+
+                // --- FRONT OF CARD ---
+                const cardFront = document.createElement('div');
+                cardFront.className = 'card-front';
+
+                const img = document.createElement('img');
+                img.src = baseImages[baseIndex];
+                img.alt = "Community Media";
+                img.loading = "lazy";
+                cardFront.appendChild(img);
+
+                if (videoIndicesBase.includes(baseIndex)) {
+                    const overlay = document.createElement('div');
+                    overlay.className = 'play-overlay';
+                    overlay.innerHTML = `
+                        <div class="play-button">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                        </div>
+                    `;
+                    cardFront.appendChild(overlay);
+                }
+
+                // --- BACK OF CARD ---
+                const cardBack = document.createElement('div');
+                cardBack.className = 'card-back';
+                
+                // Add some content to the back
+                const textIndex = i % dummyTexts.length;
+                cardBack.innerHTML = `
+                    <div class="card-back-header">
+                        <div class="card-back-avatar">es.</div>
+                        <div class="card-back-name">escommerce</div>
+                    </div>
+                    <div class="card-back-text">
+                        ${dummyTexts[textIndex]}
+                    </div>
+                    <div style="text-align:center; margin-top: auto; opacity: 0.5;">
+                        <svg style="width:16px; height:16px; display:inline-block;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </div>
+                `;
+
+                // Assemble card
+                cardInner.appendChild(cardFront);
+                cardInner.appendChild(cardBack);
+                card.appendChild(cardInner);
+
+                // Desktop Hover Logic - Apply scale to main card, flip is handled by CSS on inner
+                card.addEventListener('mouseenter', () => {
+                    if (window.innerWidth >= 768 && card.dataset.baseTransform) {
+                        // Apply scale and slightly lift it z-index wise
+                        card.style.transform = `${card.dataset.baseTransform} scale(1.15)`;
+                        card.style.zIndex = "50";
+                        // add transition back in for the hover scale effect
+                        card.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    }
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    if (window.innerWidth >= 768 && card.dataset.baseTransform) {
+                        card.style.transform = card.dataset.baseTransform;
+                        card.style.zIndex = "1";
+                    }
+                });
+
+                const isVideoCard = videoIndicesBase.includes(baseIndex);
+                card.addEventListener('click', () => {
+                    // Grab a higher resolution version of the image for the modal
+                    const hdImageUrl = baseImages[baseIndex].replace('400/600', '800/1200');
+                    openModal(hdImageUrl, isVideoCard);
+                });
+
+                container.appendChild(card);
+                cards.push(card);
+            }
+
+            function applyLayout() {
+                if (window.innerWidth < 768) {
+                    // Mobile Mode: Clear inline styles to let CSS Marquee handle layout
+                    cards.forEach(card => {
+                        card.style.transform = '';
+                        card.style.transition = '';
+                        card.dataset.baseTransform = '';
+                    });
+                    
+                    // We need enough cards to loop nicely on mobile, clone if needed
+                    // For simplicity, we just use the 10 we have, which should be wide enough.
+                } else {
+                    // Desktop Mode: Mathematical circular layout
+                    // We want a tighter layout matching the screenshot.
+                    // The cards should overlap the center text area slightly.
+                    
+                    const minDimension = Math.min(window.innerWidth, window.innerHeight);
+                    
+                    // Base radius on viewport size, but keep it tight.
+                    // Instead of trying to keep them entirely away from the center,
+                    // we allow them to orbit closely.
+                    let radius = minDimension * 0.32; 
+                    
+                    // Cap the radius so it doesn't get ridiculously large on huge screens
+                    // but also ensure it doesn't get too small.
+                    radius = Math.max(160, Math.min(radius, 300));
+                    
+                    cards.forEach((card, i) => {
+                        // Offset by -90deg (-Math.PI/2) so the first item is at the top
+                        const angle = (i / totalCards) * (2 * Math.PI) - (Math.PI / 2); 
+                        
+                        const x = radius * Math.cos(angle);
+                        const y = radius * Math.sin(angle);
+                        
+                        // Rotates card so inner edge points toward the center
+                        // In the reference image, the cards are rotated outwards.
+                        // If center is (0,0), a card at top (0, -r) is rotated roughly 0 or 180.
+                        // It looks like they are roughly perpendicular to the radius line, 
+                        // pointing slightly outwards.
+                        const rotation = angle + (Math.PI / 2);
+                        const rotationDeg = rotation * (180 / Math.PI);
+
+                        // Remove transition temporarily while setting layout to avoid flying cards on resize
+                        card.style.transition = 'none';
+
+                        // Apply transform relative to the center of the container (which is 2x2px)
+                        const transformString = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotationDeg}deg)`;
+                        
+                        card.style.transform = transformString;
+                        card.dataset.baseTransform = transformString; 
+                        
+                        // Force reflow
+                        void card.offsetWidth;
+                    });
+                }
+            }
+
+            // Small timeout allows DOM to fully render dimensions before initial calculation
+            setTimeout(applyLayout, 50);
+
+            // Re-calculate safely upon browser resize 
+            window.addEventListener('resize', () => {
+                requestAnimationFrame(applyLayout);
+            });
+        });
+    </script>
+</body>
+</html>
