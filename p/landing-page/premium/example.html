@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plerouse - Smart Banking</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        offwhite: '#f9f9f9',
+                        darkgreen: '#0d130f',
+                        softpink: '#f9bed3',
+                        vibrantred: '#e94b28',
+                        neonyellow: '#dcf600',
+                        darkcard: '#1a201c',
+                        darkmaroon: '#3a0c16',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Marquee and Specific Layouts -->
+    <style>
+        body {
+            background-color: #f9f9f9;
+            overflow-x: hidden;
+        }
+
+        /* Marquee Animation */
+        .marquee-container {
+            display: flex;
+            width: 200%;
+            animation: marquee 20s linear infinite;
+        }
+        
+        .marquee-container:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f9f9f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+        
+        /* Smooth transitions for hover */
+        .hover-scale {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="text-darkgreen antialiased selection:bg-neonyellow selection:text-darkgreen">
+
+    <nav class="fixed top-0 w-full z-50 bg-offwhite/80 backdrop-blur-md border-b border-gray-200/50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 py-5 flex items-center justify-between">
+            <a href="#" class="text-2xl font-extrabold tracking-tight">Plerouse</a>
+            
+            <div class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+                <a href="#" class="hover:text-vibrantred transition-colors">Products</a>
+                <a href="#" class="hover:text-vibrantred transition-colors">Features</a>
+                <a href="#" class="hover:text-vibrantred transition-colors">Cards</a>
+                <a href="#" class="hover:text-vibrantred transition-colors">Wealth</a>
+            </div>
+            
+            <a href="#" class="bg-darkgreen text-white px-6 py-3 rounded-full text-sm font-semibold hover-scale">
+                Book account
+            </a>
+        </div>
+    </nav>
+
+    <section class="pt-40 pb-20 px-6 lg:px-12 max-w-7xl mx-auto relative min-h-screen flex flex-col items-center">
+        <!-- Floating Badges -->
+        <div class="absolute top-32 left-10 md:left-20 bg-white shadow-sm border border-gray-100 px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 transform -rotate-3 gsap-fade-up hidden md:flex">
+            <span>Smart Banking</span>
+        </div>
+        <div class="absolute top-48 right-10 md:right-32 bg-softpink text-darkmaroon px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 transform rotate-6 gsap-fade-up hidden md:flex">
+            <span>Instant Transfer</span>
+        </div>
+
+        <div class="text-center max-w-5xl mx-auto mb-16 relative z-10 gsap-fade-up">
+            <h1 class="text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[1.1] tracking-tight">
+                Can one smarter bank 
+                <span class="inline-flex align-middle bg-neonyellow rounded-full px-4 py-2 mx-2 gap-2 shadow-sm">
+                    <span class="w-3 h-3 bg-darkgreen rounded-full"></span>
+                    <span class="w-3 h-3 bg-darkgreen rounded-full"></span>
+                </span> 
+                change how you 
+                <span class="inline-flex align-middle mx-2 -space-x-3">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100" class="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-offwhite object-cover" alt="User">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&h=100" class="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-offwhite object-cover" alt="User">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100" class="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-offwhite object-cover z-10" alt="User">
+                </span> 
+                manage money?
+            </h1>
+            <p class="mt-8 text-gray-500 max-w-lg mx-auto text-sm md:text-base">
+                Spend, save, invest, and manage your money efficiently with smart, automated digital banking.
+            </p>
+        </div>
+
+        <!-- Hero Card -->
+        <div class="relative w-full max-w-2xl mx-auto aspect-[4/3] md:aspect-[16/10] rounded-[2rem] overflow-hidden hover-scale gsap-fade-up shadow-2xl">
+            <!-- Background Image -->
+            <img src="https://images.unsplash.com/photo-1618077360395-f3068be8e001?auto=format&fit=crop&w=1200&q=80" alt="Card Background" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-vibrantred/40 mix-blend-multiply"></div>
+            
+            <!-- Top Left Logo -->
+            <div class="absolute top-6 left-6 w-10 h-10 border border-white/50 rounded-full flex items-center justify-center text-white backdrop-blur-sm">
+                <i data-lucide="copyright" class="w-5 h-5"></i>
+            </div>
+            
+            <!-- Bottom Content -->
+            <div class="absolute bottom-4 left-4 right-4 bg-darkgreen/95 backdrop-blur-md rounded-2xl p-5 flex items-center justify-between">
+                <div>
+                    <h3 class="text-white font-semibold text-sm">Smart accounts</h3>
+                    <p class="text-gray-400 text-xs mt-1">Starting from $0/month</p>
+                </div>
+                <button class="bg-softpink text-darkmaroon px-5 py-2.5 rounded-full text-sm font-bold hover:bg-white transition-colors">
+                    Open Account
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div class="bg-darkgreen text-white py-4 overflow-hidden border-y border-white/10">
+        <div class="marquee-container text-sm font-semibold tracking-wide flex items-center">
+            <!-- Content repeated for infinite scroll -->
+            <div class="flex items-center justify-around w-1/2 flex-shrink-0 px-4">
+                <span>Secure Banking</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Instant Transfers</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Smart Savings</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Virtual Cards</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>AI Money Insights</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+            </div>
+            <div class="flex items-center justify-around w-1/2 flex-shrink-0 px-4">
+                <span>Secure Banking</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Instant Transfers</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Smart Savings</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Virtual Cards</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>AI Money Insights</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="bg-darkgreen text-white py-24 px-6 lg:px-12 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+            <!-- Left: Stacked Typography -->
+            <div class="space-y-2 gsap-fade-up relative">
+                <!-- Decorative Index -->
+                <div class="absolute -left-8 top-1/2 transform -translate-y-1/2 text-neonyellow text-2xl font-mono">02</div>
+                
+                <h2 class="text-5xl md:text-7xl font-bold text-gray-600 flex items-start gap-4">
+                    Banking <span class="text-sm font-mono text-gray-500 mt-2">01</span>
+                </h2>
+                <h2 class="text-5xl md:text-7xl font-bold text-white flex items-start gap-4">
+                    Payments <span class="text-sm font-mono text-neonyellow mt-2">02</span>
+                </h2>
+                <h2 class="text-5xl md:text-7xl font-bold text-gray-600 flex items-start gap-4">
+                    Savings <span class="text-sm font-mono text-gray-500 mt-2">03</span>
+                </h2>
+                <h2 class="text-5xl md:text-7xl font-bold text-gray-600 flex items-start gap-4">
+                    Investing <span class="text-sm font-mono text-gray-500 mt-2">04</span>
+                </h2>
+            </div>
+
+            <!-- Right: Interactive Cards -->
+            <div class="relative min-h-[500px]">
+                
+                <!-- Teal Card (Top Right) -->
+                <div class="absolute right-0 top-0 w-64 aspect-square bg-[#7ca39f] rounded-3xl overflow-hidden hover-scale z-10 gsap-fade-up" style="animation-delay: 0.1s;">
+                    <img src="https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?auto=format&fit=crop&w=500&q=80" alt="Guy" class="w-full h-full object-cover">
+                    <div class="absolute top-4 left-4 bg-softpink text-xs font-bold text-darkmaroon px-3 py-1 rounded-full">
+                        Gen-Z Customers
+                    </div>
+                </div>
+
+                <!-- Orange Card (Bottom Left) -->
+                <div class="absolute left-0 bottom-20 w-72 aspect-[4/3] bg-vibrantred rounded-3xl overflow-hidden hover-scale z-20 shadow-2xl gsap-fade-up">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80" alt="Girl" class="w-full h-full object-cover mix-blend-luminosity opacity-80">
+                    <div class="absolute inset-0 bg-vibrantred/30"></div>
+                    <div class="absolute top-4 left-4 w-8 h-8 border border-white/50 rounded-full flex items-center justify-center text-white backdrop-blur-sm">
+                        <i data-lucide="copyright" class="w-4 h-4"></i>
+                    </div>
+                    <div class="absolute bottom-4 left-4 text-[10px] font-mono text-white/80 uppercase tracking-wider">
+                        Insights for secure layers
+                    </div>
+                </div>
+
+                <!-- Descriptive Text Block -->
+                <div class="absolute right-10 bottom-0 max-w-[250px] gsap-fade-up">
+                    <i data-lucide="user" class="text-softpink w-8 h-8 mb-4"></i>
+                    <p class="text-xl font-semibold leading-tight text-white">
+                        Can one smart account change the way you see your money?
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-softpink py-24 px-6 lg:px-12">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+            
+            <!-- Left Side -->
+            <div class="flex flex-col justify-between">
+                <div class="gsap-fade-up">
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-darkmaroon leading-[1.1] max-w-md">
+                        Can a single building change an entire neighborhood?
+                    </h2>
+                </div>
+
+                <div class="mt-20 flex items-end justify-between gsap-fade-up">
+                    <div class="relative w-40 h-40">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100" class="absolute top-0 left-10 w-12 h-12 rounded-full border-2 border-softpink object-cover">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&h=100" class="absolute top-10 left-0 w-16 h-16 rounded-full border-2 border-softpink object-cover">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100" class="absolute bottom-0 left-12 w-20 h-20 rounded-full border-2 border-softpink object-cover z-10">
+                        <div class="absolute bottom-2 -right-4 bg-darkgreen text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-20">
+                            Money Clarity
+                        </div>
+                    </div>
+                    
+                    <div class="text-darkmaroon">
+                        <div class="text-5xl font-black">18+</div>
+                        <div class="text-[10px] uppercase tracking-wider font-bold mt-1 opacity-70">Over a million young adults</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side (Cards) -->
+            <div class="space-y-6">
+                <!-- Arrow Button -->
+                <div class="flex justify-end mb-8 gsap-fade-up">
+                    <button class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover-scale shadow-sm text-darkgreen">
+                        <i data-lucide="arrow-down-right" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <!-- Banking App Card -->
+                <div class="bg-darkgreen rounded-[2rem] p-8 text-white relative overflow-hidden hover-scale gsap-fade-up shadow-xl">
+                    <div class="flex justify-between items-start mb-12">
+                        <span class="text-xl font-extrabold tracking-tight">Plerouse</span>
+                        <div class="flex items-center gap-3">
+                            <span class="bg-neonyellow text-darkgreen text-xs font-bold px-3 py-1.5 rounded-full">Smart Banking</span>
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=80&h=80" alt="User Profile" class="w-10 h-10 rounded-full border border-white/20">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-400 text-sm font-medium mb-1">Available Balance</p>
+                        <h3 class="text-5xl md:text-6xl font-bold tracking-tighter">2,409.00</h3>
+                    </div>
+                </div>
+
+                <!-- Savings Goal Card -->
+                <div class="bg-white rounded-[2rem] p-2 flex items-center justify-between hover-scale gsap-fade-up shadow-md">
+                    <div class="bg-darkmaroon text-neonyellow px-8 py-6 rounded-3xl font-bold text-lg w-1/2 text-center h-full flex items-center justify-center">
+                        Savings Goal
+                    </div>
+                    <div class="w-1/2 text-center text-4xl font-extrabold text-darkmaroon">
+                        60K
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-24 px-6 lg:px-12 bg-offwhite">
+        <div class="max-w-4xl mx-auto text-center mb-20 gsap-fade-up">
+            <div class="w-16 h-16 mx-auto border-2 border-gray-200 rounded-2xl flex items-center justify-center mb-8">
+                <i data-lucide="lock" class="w-8 h-8 text-darkgreen"></i>
+            </div>
+            <p class="text-2xl md:text-4xl font-medium leading-snug tracking-tight">
+                Designed for clarity, security, and everyday control — engineered to help you understand your money, protect your data, and make financial decisions with confidence. A new standard in digital banking, built for real life.
+            </p>
+        </div>
+
+        <!-- 4 Column Grid -->
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 list-stagger">
+            
+            <!-- Card 1: Pattern -->
+            <div class="bg-darkmaroon rounded-[2rem] p-6 aspect-square relative overflow-hidden hover-scale flex flex-col justify-between gsap-item">
+                <div class="grid grid-cols-4 gap-3 w-32">
+                    <div class="w-6 h-6 rounded-full bg-softpink"></div>
+                    <div class="w-6 h-6 rounded-full bg-softpink"></div>
+                    <div class="w-6 h-6 rounded-full bg-softpink/50"></div>
+                    <div class="w-6 h-6 rounded-full bg-softpink/20"></div>
+                    <div class="w-6 h-6 rounded-full bg-softpink/30"></div>
+                    <div class="w-6 h-6 rounded-full bg-softpink/10"></div>
+                </div>
+                <div class="flex justify-between items-end mt-auto">
+                    <span class="text-white text-3xl font-black">18+</span>
+                    <span class="text-white/50 text-[10px] uppercase text-right leading-tight max-w-[80px]">New standard banking</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Image Cap -->
+            <div class="bg-gray-200 rounded-[2rem] aspect-square overflow-hidden hover-scale gsap-item">
+                <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=600&q=80" alt="Fashion" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Card 3: Dark Stats -->
+            <div class="bg-darkcard rounded-[2rem] p-6 aspect-square relative hover-scale flex flex-col justify-between gsap-item">
+                <p class="text-white/80 text-sm font-semibold leading-relaxed">
+                    Designed for clarity, security and everyday financial control
+                </p>
+                <div class="mt-auto">
+                    <p class="text-white/40 text-[10px] mb-3">Operating Level</p>
+                    <div class="flex items-end gap-1.5 h-8">
+                        <div class="w-1.5 bg-white/20 h-full rounded-full"></div>
+                        <div class="w-1.5 bg-white/20 h-4/5 rounded-full"></div>
+                        <div class="w-1.5 bg-white/20 h-3/5 rounded-full"></div>
+                        <div class="w-1.5 bg-neonyellow h-full rounded-full shadow-[0_0_8px_#dcf600]"></div>
+                        <div class="w-1.5 bg-white/20 h-2/5 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Image Portrait -->
+            <div class="bg-gray-200 rounded-[2rem] aspect-square overflow-hidden hover-scale gsap-item">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80" alt="Portrait" class="w-full h-full object-cover">
+            </div>
+            
+        </div>
+    </section>
+
+    <footer class="bg-darkgreen text-white pt-10 rounded-t-[3rem] relative z-20 mt-[-2rem]">
+        
+        <!-- Marquee Ticker repeated -->
+        <div class="py-4 overflow-hidden border-b border-white/10 mb-16">
+            <div class="marquee-container text-sm font-semibold tracking-wide flex items-center">
+                <div class="flex items-center justify-around w-1/2 flex-shrink-0 px-4">
+                    <span>Secure Banking</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Instant Transfers</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Smart Savings</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Virtual Cards</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>AI Money Insights</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                </div>
+                <div class="flex items-center justify-around w-1/2 flex-shrink-0 px-4">
+                    <span>Secure Banking</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Instant Transfers</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Smart Savings</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Virtual Cards</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>AI Money Insights</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-12 gap-12 pb-16">
+            
+            <!-- Left Info -->
+            <div class="md:col-span-5 space-y-12">
+                <h3 class="text-2xl font-extrabold tracking-tight">Plerouse</h3>
+                
+                <button class="w-16 h-16 bg-softpink rounded-full flex items-center justify-center hover-scale shadow-sm text-darkgreen">
+                    <i data-lucide="arrow-up-right" class="w-8 h-8 font-bold"></i>
+                </button>
+                
+                <p class="text-sm text-gray-400 max-w-[200px] leading-relaxed">
+                    Personalized accounts, filled to real life saving and smart universal features.
+                </p>
+            </div>
+
+            <!-- Center Info -->
+            <div class="md:col-span-5 flex flex-col justify-between">
+                <h4 class="text-xl font-medium max-w-[280px] leading-snug">
+                    We would love to help you build a clearer financial life.
+                </h4>
+                
+                <div class="flex items-center justify-between border-b border-white/20 pb-4 mt-12 md:mt-0">
+                    <a href="mailto:hello@plerouse.com" class="text-gray-300 hover:text-white transition-colors">hello@plerouse.com</a>
+                    <div class="flex -space-x-3">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=60&h=60" class="w-8 h-8 rounded-full border-2 border-darkgreen object-cover">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=60&h=60" class="w-8 h-8 rounded-full border-2 border-darkgreen object-cover">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=60&h=60" class="w-8 h-8 rounded-full border-2 border-darkgreen object-cover z-10">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Links Grid -->
+            <div class="md:col-span-2 grid grid-cols-2 gap-8 text-xs text-gray-400">
+                <div class="space-y-3 flex flex-col">
+                    <span class="text-white font-semibold mb-2">Products</span>
+                    <a href="#" class="hover:text-white transition-colors">Personal Banking</a>
+                    <a href="#" class="hover:text-white transition-colors">Joint Accounts</a>
+                    <a href="#" class="hover:text-white transition-colors">Virtual Cards</a>
+                    <a href="#" class="hover:text-white transition-colors">Money Insights</a>
+                </div>
+                <div class="space-y-3 flex flex-col">
+                    <span class="text-white font-semibold mb-2">Company</span>
+                    <a href="#" class="hover:text-white transition-colors">About Us</a>
+                    <a href="#" class="hover:text-white transition-colors">Careers</a>
+                    <a href="#" class="hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gigantic Bottom Text -->
+        <div class="relative w-full overflow-hidden flex justify-center items-end leading-[0.75] pt-10 pb-4">
+            
+            <div class="absolute top-0 flex justify-center w-full z-10">
+                 <span class="bg-white text-darkgreen text-xs font-bold px-4 py-1.5 rounded-full shadow-lg border border-gray-100">Smart Decisions</span>
+            </div>
+
+            <h1 class="text-[20vw] font-black tracking-tighter text-white relative z-0 uppercase text-center w-full select-none">
+                Plerouse
+            </h1>
+
+            <div class="absolute bottom-10 left-[15%] z-10 hidden md:block">
+                <span class="bg-neonyellow text-darkgreen text-xs font-bold px-4 py-2 rounded-full transform -rotate-6 inline-block shadow-lg">Money Clarity</span>
+            </div>
+            
+            <div class="absolute bottom-12 right-[15%] z-10 hidden md:block">
+                <span class="bg-softpink text-darkmaroon text-xs font-bold px-4 py-2 rounded-full transform rotate-3 inline-block shadow-lg">Instant Transfer</span>
+            </div>
+        </div>
+        
+        <div class="text-center text-[10px] text-gray-500 py-4 border-t border-white/5">
+            &copy; 2024 Plerouse Financial Inc. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Initialize GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // General Fade Up Animation for various elements
+        const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
+        fadeUpElements.forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%", // Animation starts when top of element hits 85% of viewport
+                    toggleActions: "play none none reverse"
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        });
+
+        // Staggered Animation for Grid items
+        gsap.from(".gsap-item", {
+            scrollTrigger: {
+                trigger: ".list-stagger",
+                start: "top 80%",
+            },
+            y: 50,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.15,
+            ease: "power2.out"
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href'))?.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
