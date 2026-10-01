@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News and Insights Carousel</title>
+    <style>
+        *,
+        ::before,
+        ::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            /* Metadata variables */
+            --title: "Carousel Content Block";
+            --author: "Bebell Digital Solutions";
+            --contact: "info@bebelldigitalsolutions.com";
+            --description: "A responsive, scrollable carousel for news and insights with hover effects.";
+            --last-modified: "2025-06-01";
+            
+            /* Color Palette */
+            --primary: #df1783;
+            --primary-dark: #b81269;
+            --primary-light: rgba(223, 23, 131, 0.1);
+            --secondary: #ffd700;
+            --secondary-dark: #e6c200;
+            --white: #ffffff;
+            --black: #1a1a1a;
+            --gray-light: #f8f8f8;
+            --gray-border: #e0e0e0;
+            --gray-text: #666666;
+
+            /* Typography */
+            --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --font-headline: 800 40px/1.2 var(--font-main);
+            --font-title: 700 24px/1.3 var(--font-main);
+            --font-title-small: 700 20px/1.3 var(--font-main);
+            --font-label: 600 15px/1.4 var(--font-main);
+            --font-category: 800 11px/1.2 var(--font-main);
+
+            /* Effects */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 12px 32px rgba(223, 23, 131, 0.15);
+            --transition-fast: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--black);
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .section {
+            background-color: var(--white);
+            padding: 40px 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-wrapper {
+            background-color: var(--primary);
+            border-top-right-radius: 80px;
+            padding: 60px 0 100px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (min-width: 1024px) {
+            .section-wrapper {
+                border-top-right-radius: 120px;
+                border-bottom-left-radius: 40px;
+            }
+        }
+
+        .header {
+            padding: 0 24px 48px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .headline {
+            font: var(--font-headline);
+            color: var(--white);
+            letter-spacing: -0.5px;
+        }
+
+        @media (min-width: 768px) {
+            .headline {
+                font-size: 56px;
+            }
+        }
+
+        .cards {
+            display: flex;
+            gap: 24px;
+            padding: 20px 48px 40px; /* Extra bottom padding for shadows */
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            list-style: none;
+            /* Hide default scrollbar */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .cards::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card {
+            scroll-snap-align: center;
+            flex: 0 0 auto;
+            width: 280px;
+            background-color: var(--gray-light);
+            border-radius: 24px;
+            border: 1px solid var(--gray-border);
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @media (min-width: 640px) {
+            .card {
+                width: 320px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .card {
+                width: 360px;
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(223, 23, 131, 0.3);
+            background-color: var(--white);
+        }
+
+        .card-even {
+            background-color: var(--white);
+        }
+
+        .article {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 32px 24px;
+        }
+
+        .card-header {
+            margin-bottom: auto;
+            min-height: 140px;
+        }
+
+        .hgroup {
+            margin-bottom: 24px;
+        }
+
+        .category {
+            font: var(--font-category);
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            display: inline-block;
+            padding: 4px 10px;
+            background-color: var(--primary-light);
+            border-radius: 12px;
+        }
+
+        .card-even .category {
+            color: var(--secondary-dark);
+            background-color: rgba(255, 215, 0, 0.15);
+        }
+
+        .title {
+            font: var(--font-title-small);
+            color: var(--black);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (min-width: 768px) {
+            .title {
+                font: var(--font-title);
+            }
+        }
+
+        .link {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--secondary);
+            color: var(--black);
+            padding: 0 16px 0 20px;
+            height: 44px;
+            border-radius: 22px;
+            text-decoration: none;
+            font: var(--font-label);
+            transition: var(--transition-fast);
+            box-shadow: var(--shadow-sm);
+            font-weight: 700;
+        }
+
+        .link:hover {
+            background-color: var(--secondary-dark);
+            transform: translateX(4px);
+        }
+
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--white);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-left: 12px;
+            transition: var(--transition-fast);
+            color: var(--black);
+        }
+
+        .link:hover .icon {
+            background-color: var(--black);
+            color: var(--secondary);
+        }
+
+        .visual {
+            position: relative;
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 32px;
+            perspective: 1000px; /* Add perspective for 3D effects if needed */
+        }
+
+        .visual::before {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            z-index: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .card-even .visual::before {
+            background-color: rgba(255, 215, 0, 0.15);
+        }
+        
+        .card:hover .visual::before {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        /* Image styling and transition setup */
+        .img-container {
+            position: relative;
+            width: 140px;
+            height: 198px;
+            z-index: 1;
+            transform-style: preserve-3d;
+        }
+
+        .img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-smooth);
+            backface-visibility: hidden;
+        }
+
+        /* Front image starts visible */
+        .img-front {
+            z-index: 2;
+            opacity: 1;
+            transform: rotateY(0deg);
+        }
+
+        /* Back image starts hidden (rotated and transparent) */
+        .img-back {
+            z-index: 1;
+            opacity: 0;
+            /* Start it slightly behind and rotated */
+            transform: rotateY(180deg) scale(0.95);
+        }
+
+        /* The Hover Effect: Flip or fade */
+        .card:hover .img-front {
+            opacity: 0;
+            transform: rotateY(-180deg);
+        }
+
+        .card:hover .img-back {
+            opacity: 1;
+            transform: rotateY(0deg) scale(1);
+            z-index: 3;
+        }
+
+        /* Subtle floating animation for the container */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .card:hover .img-container {
+            animation: float 3s ease-in-out infinite;
+        }
+
+
+        .scrollbar-container {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .marker-bar {
+            position: absolute;
+            top: 0;
+            left: 0; /* Managed by JS */
+            height: 100%;
+            width: 40px; /* dynamic width could be better, but fixed is fine */
+            background-color: var(--secondary);
+            border-radius: 3px;
+            /* Remove CSS transition to avoid jitter during scroll */
+            /* transition: left 0.1s linear; */
+        }
+        
+        /* Mobile adjustments */
+        @media (max-width: 767px) {
+            .cards {
+                padding: 20px 24px 40px;
+            }
+            .scrollbar-container {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+      <div class="section-wrapper">
+        <header class="header">
+          <h2 class="headline">Get the latest news and insights</h2>
+        </header>
+        
+        <ul class="cards" id="carouselCards">
+          <!-- Card 1 -->
+          <li class="card">
+            <article class="article">
+              <header class="card-header">
+                <hgroup class="hgroup">
+                  <p class="category">INNOVATION</p>
+                  <h3 class="title">Accelerating growth through technology adoption</h3>
+                </hgroup>
+                <a href="#" class="link" aria-label="Read Accelerating growth through technology adoption">
+                  Read Now
+                  <span class="icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+                    </svg>
+                  </span>
+                </a>
+              </header>
+              <div class="visual">
+                <div class="img-container">
+                    <img
+                      src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=400&h=560"
+                      alt="Coding on a laptop"
+                      width="140"
+                      height="198"
+                      class="img img-front"
+                      loading="lazy"
+                    />
+                    <img
+                      src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=400&h=560"
+                      alt="Team collaborating"
+                      width="140"
+                      height="198"
+                      class="img img-back"
+                      loading="lazy"
+                    />
+                </div>
+              </div>
+            </article>
+          </li>
+          
+          <!-- Card 2 -->
+          <li class="card card-even">
+            <article class="article">
+              <header class="card-header">
+                <hgroup class="hgroup">
+                  <p class="category">EMPLOYEE EXPERIENCE</p>
+                  <h3 class="title">Designing inclusive workplace environments</h3>
+                </hgroup>
+                <a href="#" class="link" aria-label="Read Designing inclusive workplace environments">
+                  Read Now
+                  <span class="icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+                    </svg>
+                  </span>
+                </a>
+              </header>
+              <div class="visual">
+                <div class="img-container">
+                    <img
+                      src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=400&h=560"
+                      alt="People discussing in an office"
+                      width="140"
+                      height="198"
+                      class="img img-front"
+                      loading="lazy"
+                    />
+                    <img
+                      src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=400&h=560"
+                      alt="Woman smiling in office"
+                      width="140"
+                      height="198"
+                      class="img img-back"
+                      loading="lazy"
+                    />
+                </div>
+              </div>
+            </article>
+          </li>
+          
+          <!-- Card 3 -->
+          <li class="card">
+            <article class="article">
+              <header class="card-header">
+                <hgroup class="hgroup">
+                  <p class="category">CUSTOMER EXPERIENCE</p>
+                  <h3 class="title">Turning feedback into meaningful action</h3>
+                </hgroup>
+                <a href="#" class="link" aria-label="Read Turning feedback into meaningful action">
+                  Read Now
+                  <span class="icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+                    </svg>
+                  </span>
+                </a>
+              </header>
+              <div class="visual">
+                <div class="img-container">
+                    <img
+                      src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=400&h=560"
+                      alt="Analyzing charts"
+                      width="140"
+                      height="198"
+                      class="img img-front"
+                      loading="lazy"
+                    />
+                    <img
+                      src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=400&h=560"
+                      alt="Business meeting"
+                      width="140"
+                      height="198"
+                      class="img img-back"
+                      loading="lazy"
+                    />
+                </div>
+              </div>
+            </article>
+          </li>
+          
+          <!-- Card 4 -->
+          <li class="card card-even">
+            <article class="article">
+              <header class="card-header">
+                <hgroup class="hgroup">
+                  <p class="category">LEADERSHIP</p>
+                  <h3 class="title">Five habits of highly effective team leaders</h3>
+                </hgroup>
+                <a href="#" class="link" aria-label="Read Five habits of highly effective team leaders">
+                  Read Now
+                  <span class="icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+                    </svg>
+                  </span>
+                </a>
+              </header>
+              <div class="visual">
+                <div class="img-container">
+                    <img
+                      src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400&h=560"
+                      alt="Leader pointing at screen"
+                      width="140"
+                      height="198"
+                      class="img img-front"
+                      loading="lazy"
+                    />
+                    <img
+                      src="https://images.unsplash.com/photo-1556761175-5973dc0f32d7?auto=format&fit=crop&q=80&w=400&h=560"
+                      alt="Handshake"
+                      width="140"
+                      height="198"
+                      class="img img-back"
+                      loading="lazy"
+                    />
+                </div>
+              </div>
+            </article>
+          </li>
+          
+          <!-- Card 5 -->
+          <li class="card">
+            <article class="article">
+              <header class="card-header">
+                <hgroup class="hgroup">
+                  <p class="category">PRODUCTIVITY</p>
+                  <h3 class="title">Streamline collaboration across global teams</h3>
+                </hgroup>
+                <a href="#" class="link" aria-label="Read Streamline collaboration across global teams">
+                  Read Now
+                  <span class="icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/>
+                    </svg>
+                  </span>
+                </a>
+              </header>
+              <div class="visual">
+                <div class="img-container">
+                    <img
+                      src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=400&h=560"
+                      alt="Typing on keyboard"
+                      width="140"
+                      height="198"
+                      class="img img-front"
+                      loading="lazy"
+                    />
+                    <img
+                      src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=400&h=560"
+                      alt="Digital workflow"
+                      width="140"
+                      height="198"
+                      class="img img-back"
+                      loading="lazy"
+                    />
+                </div>
+              </div>
+            </article>
+          </li>
+        </ul>
+        
+        <div class="scrollbar-container">
+            <div class="marker-bar" id="markerBar"></div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cardsContainer = document.getElementById('carouselCards');
+            const markerBar = document.getElementById('markerBar');
+            
+            if (!cardsContainer || !markerBar) return;
+
+            // Use requestAnimationFrame for smoother updates compared to just listening to scroll event
+            let isScrolling = false;
+
+            function updateMarkerPosition() {
+                // Calculate scroll metrics
+                const scrollLeft = cardsContainer.scrollLeft;
+                const scrollWidth = cardsContainer.scrollWidth;
+                const clientWidth = cardsContainer.clientWidth;
+                
+                // Maximum possible scroll distance
+                const maxScroll = scrollWidth - clientWidth;
+                
+                if (maxScroll > 0) {
+                    // Percentage scrolled (0 to 1)
+                    const scrollPercentage = scrollLeft / maxScroll;
+                    
+                    // Container for the marker
+                    const markerContainer = markerBar.parentElement;
+                    const containerWidth = markerContainer.clientWidth;
+                    const markerWidth = markerBar.clientWidth;
+                    
+                    // Maximum movement for the marker
+                    const maxMarkerMovement = containerWidth - markerWidth;
+                    
+                    // Calculate new left position
+                    const newLeft = scrollPercentage * maxMarkerMovement;
+                    
+                    // Apply transform instead of left for better performance
+                    markerBar.style.transform = `translateX(${newLeft}px)`;
+                }
+                
+                isScrolling = false;
+            }
+
+            // Initial calculation
+            updateMarkerPosition();
+            
+            // Add initial transform to override left styling
+            markerBar.style.left = '0';
+            markerBar.style.willChange = 'transform'; // Hint browser for performance
+
+            // Listen to scroll events
+            cardsContainer.addEventListener('scroll', function() {
+                if (!isScrolling) {
+                    window.requestAnimationFrame(updateMarkerPosition);
+                    isScrolling = true;
+                }
+            }, { passive: true }); // passive: true improves scrolling performance
+
+            // Handle window resize as it changes the scrollable area
+            window.addEventListener('resize', function() {
+                updateMarkerPosition();
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>
