@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Finance Section</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        offwhite: '#f9f9f9',
+                        darkgreen: '#0d130f',
+                        softpink: '#f9bed3',
+                        vibrantred: '#e94b28',
+                        neonyellow: '#dcf600',
+                        darkcard: '#1a201c',
+                        darkmaroon: '#3a0c16',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        body {
+            background-color: #0d130f; /* Matched to the darkgreen bg for seamless look */
+            overflow-x: hidden;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d130f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        
+        /* Smooth transitions for hover */
+        .hover-scale {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+        }
+        .hover-scale:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.3), 0 15px 15px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hover Tilt for Badges and Buttons */
+        .hover-tilt {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+        .hover-tilt:hover {
+            transform: rotate(8deg) scale(1.1) !important;
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <section class="bg-darkgreen text-white py-24 px-6 lg:px-12 relative overflow-hidden w-full">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+            <!-- Left: Stacked Typography -->
+            <div class="space-y-2 gsap-fade-up relative">
+                <!-- Make sure your indicator has the ID 'main-indicator' and NO hardcoded top/translate positioning -->
+                <div id="main-indicator" class="absolute -left-8 text-neonyellow text-2xl font-mono z-10">02</div>
+                
+                <!-- Category Links -->
+                <h2 class="category-btn text-5xl md:text-7xl font-bold text-gray-600 flex items-start gap-4 hover:pl-4 transition-all duration-300 cursor-pointer" data-target="banking" data-index="01">
+                    Banking <span class="text-sm font-mono text-gray-500 mt-2 transition-colors duration-300">01</span>
+                </h2>
+                <h2 class="category-btn text-5xl md:text-7xl font-bold text-white flex items-start gap-4 hover:pl-4 transition-all duration-300 cursor-pointer" data-target="payments" data-index="02">
+                    Payments <span class="text-sm font-mono text-neonyellow mt-2 transition-colors duration-300">02</span>
+                </h2>
+                <h2 class="category-btn text-5xl md:text-7xl font-bold text-gray-600 flex items-start gap-4 hover:pl-4 transition-all duration-300 cursor-pointer" data-target="savings" data-index="03">
+                    Savings <span class="text-sm font-mono text-gray-500 mt-2 transition-colors duration-300">03</span>
+                </h2>
+                <h2 class="category-btn text-5xl md:text-7xl font-bold text-gray-600 flex items-start gap-4 hover:pl-4 transition-all duration-300 cursor-pointer" data-target="investing" data-index="04">
+                    Investing <span class="text-sm font-mono text-gray-500 mt-2 transition-colors duration-300">04</span>
+                </h2>
+            </div>
+
+            <!-- Right: Interactive Cards -->
+            <div class="relative min-h-[500px]">
+                
+                <!-- Card 1 (Top Right) -->
+                <div id="card1-bg" class="absolute right-0 top-0 w-64 aspect-square bg-[#7ca39f] rounded-3xl overflow-hidden hover-scale z-10 gsap-fade-up image-card group transition-colors duration-500" style="animation-delay: 0.1s;">
+                    <div class="parallax-wrapper absolute inset-0 w-full h-full scale-110">
+                        <!-- ID added to target image -->
+                        <img id="card1-img" src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=500&q=80" alt="Card 1 Visual" class="w-full h-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.15]">
+                    </div>
+                    <!-- ID added to target text -->
+                    <div id="card1-text" class="overlay-btn absolute top-4 left-4 bg-softpink text-xs font-bold text-darkmaroon px-3 py-1 rounded-full pointer-events-none">
+                        Instant Transfers
+                    </div>
+                </div>
+
+                <!-- Card 2 (Bottom Left) -->
+                <div id="card2-bg" class="absolute left-0 bottom-20 w-72 aspect-[4/3] bg-blue-500 rounded-3xl overflow-hidden hover-scale z-20 shadow-2xl gsap-fade-up image-card group transition-colors duration-500">
+                    <div class="parallax-wrapper absolute inset-0 w-full h-full scale-110">
+                        <!-- ID added to target image -->
+                        <img id="card2-img" src="https://images.unsplash.com/photo-1601597111158-2fceff292cdc?auto=format&fit=crop&w=600&q=80" alt="Card 2 Visual" class="w-full h-full object-cover mix-blend-luminosity opacity-80 transition-transform duration-[800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.15]">
+                    </div>
+                    <!-- Dynamic overlay color -->
+                    <div id="card2-overlay" class="absolute inset-0 bg-blue-500/30 pointer-events-none transition-colors duration-500"></div>
+                    
+                    <div class="overlay-btn absolute top-4 left-4 w-8 h-8 border border-white/50 rounded-full flex items-center justify-center text-white backdrop-blur-sm hover-tilt">
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </div>
+                    <!-- ID added to target text -->
+                    <div id="card2-text" class="overlay-btn absolute bottom-4 left-4 text-[10px] font-mono text-white/90 uppercase tracking-wider pointer-events-none font-bold shadow-sm">
+                        Global Reach
+                    </div>
+                </div>
+
+                <!-- Descriptive Text Block -->
+                <div class="absolute right-10 bottom-0 max-w-[250px] gsap-fade-up">
+                    <i id="desc-icon" data-lucide="zap" class="text-neonyellow w-8 h-8 mb-4"></i>
+                    <!-- ID added to target descriptive text -->
+                    <p id="desc-text" class="text-xl font-semibold leading-tight text-white">
+                        Move your money across borders in seconds, not days.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Initialize GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // General Fade Up Animation for entrance
+        const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
+        fadeUpElements.forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        });
+
+        // Parallax Image Animation for the cards
+        gsap.utils.toArray('.image-card').forEach(card => {
+            const wrapper = card.querySelector('.parallax-wrapper');
+            if(wrapper) {
+                gsap.fromTo(wrapper, 
+                    { yPercent: -5 },
+                    {
+                        yPercent: 5,
+                        scrollTrigger: {
+                            trigger: card,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: true
+                        }
+                    }
+                );
+            }
+        });
+
+        // Overlay Elements Pop-in Animation
+        gsap.utils.toArray('.overlay-btn').forEach(btn => {
+            gsap.from(btn, {
+                scrollTrigger: {
+                    trigger: btn.closest('.image-card'),
+                    start: "top 75%",
+                },
+                scale: 0.5,
+                opacity: 0,
+                y: 20,
+                duration: 0.6,
+                ease: "back.out(2)"
+            });
+        });
+
+        const categoryData = {
+            banking: {
+                card1Img: 'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?auto=format&fit=crop&w=500&q=80',
+                card1Text: 'Gen-Z Customers',
+                card1Bg: '#7ca39f',
+                card2Img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80',
+                card2Text: 'Insights for secure layers',
+                card2Bg: '#e94b28', // vibrant red
+                card2Overlay: 'rgba(233, 75, 40, 0.3)',
+                descIcon: 'user',
+                descIconColor: 'text-softpink',
+                descText: 'Can one smart account change the way you see your money?'
+            },
+            payments: {
+                card1Img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=500&q=80',
+                card1Text: 'Instant Transfers',
+                card1Bg: '#8b5cf6', // purple
+                card2Img: 'https://images.unsplash.com/photo-1601597111158-2fceff292cdc?auto=format&fit=crop&w=600&q=80',
+                card2Text: 'Global Reach',
+                card2Bg: '#3b82f6', // blue
+                card2Overlay: 'rgba(59, 130, 246, 0.3)',
+                descIcon: 'zap',
+                descIconColor: 'text-neonyellow',
+                descText: 'Move your money across borders in seconds, not days.'
+            },
+            savings: {
+                card1Img: 'https://images.unsplash.com/photo-1579621970588-a35d0e7ab9b6?auto=format&fit=crop&w=500&q=80',
+                card1Text: 'High Yield',
+                card1Bg: '#10b981', // green
+                card2Img: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?auto=format&fit=crop&w=600&q=80',
+                card2Text: 'Automated Goals',
+                card2Bg: '#f59e0b', // amber
+                card2Overlay: 'rgba(245, 158, 11, 0.3)',
+                descIcon: 'piggy-bank',
+                descIconColor: 'text-green-400',
+                descText: 'Watch your wealth grow with automated, high-yield savings.'
+            },
+            investing: {
+                card1Img: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=500&q=80',
+                card1Text: 'Zero Fees',
+                card1Bg: '#1e3a8a', // dark blue
+                card2Img: 'https://images.unsplash.com/photo-1590650046522-79e1eb8495a1?auto=format&fit=crop&w=600&q=80',
+                card2Text: 'AI Portfolios',
+                card2Bg: '#f97316', // orange
+                card2Overlay: 'rgba(249, 115, 22, 0.3)',
+                descIcon: 'trending-up',
+                descIconColor: 'text-orange-400',
+                descText: 'Smart, AI-driven portfolios designed for long-term growth.'
+            }
+        };
+
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const mainIndicator = document.getElementById('main-indicator');
+        let isAnimating = false;
+
+        // 1. Initialize indicator position to match the default active element on load
+        const defaultActiveBtn = document.querySelector('[data-target="payments"]');
+        if (defaultActiveBtn) {
+            gsap.set(mainIndicator, { 
+                top: defaultActiveBtn.offsetTop + (defaultActiveBtn.offsetHeight / 2),
+                yPercent: -50
+            });
+        }
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if(isAnimating) return; // Prevent spam clicks
+                
+                const targetKey = btn.getAttribute('data-target');
+                const targetIndex = btn.getAttribute('data-index');
+                const data = categoryData[targetKey];
+
+                // 1. Update UI Classes for headings
+                categoryBtns.forEach(b => {
+                    // Reset to inactive state
+                    b.classList.remove('text-white');
+                    b.classList.add('text-gray-600');
+                    const span = b.querySelector('span');
+                    span.classList.remove('text-neonyellow');
+                    span.classList.add('text-gray-500');
+                });
+
+                // Set active state on clicked
+                btn.classList.remove('text-gray-600');
+                btn.classList.add('text-white');
+                btn.querySelector('span').classList.remove('text-gray-500');
+                btn.querySelector('span').classList.add('text-neonyellow');
+
+                // ==========================================
+                // 2. THE MOVEMENT LOGIC
+                // Calculate the vertical center of the clicked button
+                const targetTop = btn.offsetTop + (btn.offsetHeight / 2);
+                
+                // Slide to the correct line smoothly using GSAP
+                gsap.to(mainIndicator, {
+                    top: targetTop,
+                    duration: 0.5,
+                    ease: "power3.inOut"
+                });
+
+                // Swap the text with a quick fade/slide left
+                gsap.to(mainIndicator, {
+                    x: -15, opacity: 0, duration: 0.2, 
+                    onComplete: () => {
+                        mainIndicator.textContent = targetIndex;
+                        gsap.to(mainIndicator, { x: 0, opacity: 1, duration: 0.3, ease: "back.out(2)" });
+                    }
+                });
+                // ==========================================
+
+                isAnimating = true;
+
+                // 2. Animate out old card content
+                const elementsToAnimate = ['#card1-img', '#card2-img', '#card1-text', '#card2-text', '#desc-text', '#desc-icon'];
+                
+                gsap.to(elementsToAnimate, {
+                    opacity: 0,
+                    y: 15,
+                    duration: 0.3,
+                    stagger: 0.05,
+                    onComplete: () => {
+                        
+                        // 3. Swap out content and styles
+                        document.getElementById('card1-img').src = data.card1Img;
+                        document.getElementById('card1-text').textContent = data.card1Text;
+                        document.getElementById('card1-bg').style.backgroundColor = data.card1Bg;
+
+                        document.getElementById('card2-img').src = data.card2Img;
+                        document.getElementById('card2-text').textContent = data.card2Text;
+                        document.getElementById('card2-bg').style.backgroundColor = data.card2Bg;
+                        document.getElementById('card2-overlay').style.backgroundColor = data.card2Overlay;
+
+                        document.getElementById('desc-text').textContent = data.descText;
+                        
+                        // Update Icon and its color
+                        const iconContainer = document.getElementById('desc-icon');
+                        iconContainer.setAttribute('data-lucide', data.descIcon);
+                        iconContainer.className = `${data.descIconColor} w-8 h-8 mb-4`;
+                        lucide.createIcons(); // Re-render new lucide icon
+
+                        // 4. Animate new card content in
+                        gsap.to(elementsToAnimate, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.5,
+                            stagger: 0.05,
+                            ease: "back.out(1.5)",
+                            onComplete: () => { isAnimating = false; }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
