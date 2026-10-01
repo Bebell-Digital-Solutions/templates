@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plerouse - Smart Banking</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        offwhite: '#f9f9f9',
+                        darkgreen: '#0d130f',
+                        softpink: '#f9bed3',
+                        vibrantred: '#e94b28',
+                        neonyellow: '#dcf600',
+                        darkcard: '#1a201c',
+                        darkmaroon: '#3a0c16',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+       
+    
+        body {
+            background-color: #f9f9f9;
+            overflow-x: hidden;
+        }
+
+        /* Marquee Animation */
+        .marquee-container {
+            display: flex;
+            width: 200%;
+            animation: marquee 20s linear infinite;
+        }
+        
+        .marquee-container:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f9f9f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+        
+        /* Smooth transitions for hover */
+        .hover-scale {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+        }
+        .hover-scale:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Hover Tilt for Badges and Buttons */
+        .hover-tilt {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+        .hover-tilt:hover {
+            transform: rotate(8deg) scale(1.1) !important;
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1);
+        }
+        .hover-tilt-reverse {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+        .hover-tilt-reverse:hover {
+            transform: rotate(-8deg) scale(1.1) !important;
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Avatar Lift */
+        .avatar-lift {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+        .avatar-lift:hover {
+            transform: translateY(-12px) !important;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="text-darkgreen antialiased selection:bg-neonyellow selection:text-darkgreen">
+
+    <nav class="fixed top-0 w-full z-50 bg-offwhite/80 backdrop-blur-md border-b border-gray-200/50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 py-5 flex items-center justify-between">
+            <a href="#" class="text-2xl font-extrabold tracking-tight">Plerouse</a>
+            
+            <div class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+                <a href="#" class="hover:text-vibrantred transition-colors">Products</a>
+                <a href="#" class="hover:text-vibrantred transition-colors">Features</a>
+                <a href="#" class="hover:text-vibrantred transition-colors">Cards</a>
+                <a href="#" class="hover:text-vibrantred transition-colors">Wealth</a>
+            </div>
+            
+            <a href="#" class="bg-darkgreen text-white px-6 py-3 rounded-full text-sm font-semibold hover-scale">
+                Book account
+            </a>
+        </div>
+    </nav>
+
+    <section class="pt-40 pb-20 px-6 lg:px-12 max-w-7xl mx-auto relative min-h-screen flex flex-col items-center">
+        <!-- Floating Badges -->
+        <div class="absolute top-32 left-10 md:left-24 lg:left-40 hidden md:flex floating-badge z-20 pointer-events-none" data-rotate="-3">
+            <div class="bg-white shadow-sm border border-gray-100 px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 hover-tilt pointer-events-auto cursor-pointer">
+                <span>Smart Banking</span>
+            </div>
+        </div>
+        <div class="absolute top-40 right-10 md:right-24 lg:right-40 hidden md:flex floating-badge z-20 pointer-events-none" data-rotate="6">
+            <div class="bg-softpink text-darkmaroon px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 hover-tilt-reverse pointer-events-auto cursor-pointer">
+                <span>Instant Transfer</span>
+            </div>
+        </div>
+
+        <div class="text-center max-w-5xl mx-auto mb-16 relative z-10 gsap-fade-up">
+            <h1 class="text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[1.1] tracking-tight">
+                Can one smarter bank 
+                <span class="inline-flex align-middle bg-neonyellow rounded-full px-4 py-2 mx-2 gap-2 shadow-sm">
+                    <span class="w-3 h-3 bg-darkgreen rounded-full"></span>
+                    <span class="w-3 h-3 bg-darkgreen rounded-full"></span>
+                </span> 
+                change how you 
+                <!-- Staggered Avatars -->
+                <span class="inline-flex align-middle mx-2 -space-x-3">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100" class="avatar-hero avatar-lift w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-offwhite object-cover opacity-0" alt="User">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&h=100" class="avatar-hero avatar-lift w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-offwhite object-cover opacity-0" alt="User">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100" class="avatar-hero avatar-lift w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-offwhite object-cover z-10 opacity-0" alt="User">
+                </span> 
+                manage money?
+            </h1>
+            <p class="mt-8 text-gray-500 max-w-lg mx-auto text-sm md:text-base">
+                Spend, save, invest, and manage your money efficiently with smart, automated digital banking.
+            </p>
+        </div>
+
+        <!-- Hero Card with Parallax Image and Overlay Buttons -->
+        <div class="relative w-full max-w-6xl mx-auto aspect-[4/3] md:aspect-[16/10] rounded-[2rem] overflow-hidden hover-scale gsap-fade-up shadow-2xl image-card group">
+            <!-- Background Image -->
+            <div class="parallax-wrapper absolute inset-0 w-full h-full scale-110 origin-center">
+                <img src="https://images.unsplash.com/photo-1618077360395-f3068be8e001?auto=format&fit=crop&w=1200&q=80" alt="Card Background" class="w-full h-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.15]">
+            </div>
+            <div class="absolute inset-0 bg-vibrantred/40 mix-blend-multiply pointer-events-none"></div>
+            
+            <!-- Top Left Logo (Animated Overlay) -->
+            <div class="overlay-btn absolute top-6 left-6 w-10 h-10 border border-white/50 rounded-full flex items-center justify-center text-white backdrop-blur-sm hover-tilt">
+                <i data-lucide="copyright" class="w-5 h-5"></i>
+            </div>
+            
+            <!-- Bottom Content (Animated Overlay) -->
+            <div class="overlay-btn absolute bottom-4 left-4 right-4 bg-darkgreen/95 backdrop-blur-md rounded-2xl p-5 flex items-center justify-between">
+                <div>
+                    <h3 class="text-white font-semibold text-sm">Smart accounts</h3>
+                    <p class="text-gray-400 text-xs mt-1">Starting from $0/month</p>
+                </div>
+                <button class="bg-softpink text-darkmaroon px-5 py-2.5 rounded-full text-sm font-bold hover:bg-white transition-colors">
+                    Open Account
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="w-full flex leading-[0]">
+        <img src="https://ik.imagekit.io/bebell/html-lab/Banners%20&%20Backgrounds/horizontal-top-banner.webp" class="w-full h-auto block" alt="Top Banner">
+    </div>
+    
+    
+    
+    
+
+    <div class="bg-darkgreen text-white py-4 overflow-hidden border-y border-white/10">
+        <div class="marquee-container text-sm font-semibold tracking-wide flex items-center">
+            <div class="flex items-center justify-around w-1/2 flex-shrink-0 px-4">
+                <span>Secure Banking</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Instant Transfers</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Smart Savings</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Virtual Cards</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>AI Money Insights</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+            </div>
+            <div class="flex items-center justify-around w-1/2 flex-shrink-0 px-4">
+                <span>Secure Banking</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Instant Transfers</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Smart Savings</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>Virtual Cards</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                <span>AI Money Insights</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+<section class="bg-darkgreen text-white py-24 px-6 lg:px-12 relative overflow-hidden w-full">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+            <!-- Left: Stacked Typography -->
+            <div class="space-y-2 gsap-fade-up relative">
+                <!-- Dynamic Floating Index Indicator -->
+                <div id="main-indicator" class="absolute -left-8 text-neonyellow text-2xl font-mono z-10">02</div>
+                
+                <!-- Category Links -->
+                <h2 class="category-btn text-5xl md:text-7xl font-bold text-gray-600 flex items-start gap-4 hover:pl-4 transition-all duration-300 cursor-pointer" data-target="banking" data-index="01">
+                    Banking <span class="text-sm font-mono text-gray-500 mt-2 transition-colors duration-300">01</span>
+                </h2>
+                <h2 class="category-btn text-5xl md:text-7xl font-bold text-white flex items-start gap-4 hover:pl-4 transition-all duration-300 cursor-pointer" data-target="payments" data-index="02">
+                    Payments <span class="text-sm font-mono text-neonyellow mt-2 transition-colors duration-300">02</span>
+                </h2>
+                <h2 class="category-btn text-5xl md:text-7xl font-bold text-gray-600 flex items-start gap-4 hover:pl-4 transition-all duration-300 cursor-pointer" data-target="savings" data-index="03">
+                    Savings <span class="text-sm font-mono text-gray-500 mt-2 transition-colors duration-300">03</span>
+                </h2>
+                <h2 class="category-btn text-5xl md:text-7xl font-bold text-gray-600 flex items-start gap-4 hover:pl-4 transition-all duration-300 cursor-pointer" data-target="investing" data-index="04">
+                    Investing <span class="text-sm font-mono text-gray-500 mt-2 transition-colors duration-300">04</span>
+                </h2>
+            </div>
+
+            <!-- Right: Interactive Cards -->
+            <div class="relative min-h-[500px]">
+                
+                <!-- Card 1 (Top Right) -->
+                <div id="card1-bg" class="absolute right-0 top-0 w-64 aspect-square bg-[#7ca39f] rounded-3xl overflow-hidden hover-scale z-10 gsap-fade-up image-card group transition-colors duration-500" style="animation-delay: 0.1s;">
+                    <div class="parallax-wrapper absolute inset-0 w-full h-full scale-110">
+                        <!-- ID added to target image -->
+                        <img id="card1-img" src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=500&q=80" alt="Card 1 Visual" class="w-full h-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.15]">
+                    </div>
+                    <!-- ID added to target text -->
+                    <div id="card1-text" class="overlay-btn absolute top-4 left-4 bg-softpink text-xs font-bold text-darkmaroon px-3 py-1 rounded-full pointer-events-none">
+                        Instant Transfers
+                    </div>
+                </div>
+
+                <!-- Card 2 (Bottom Left) -->
+                <div id="card2-bg" class="absolute left-0 bottom-20 w-72 aspect-[4/3] bg-blue-500 rounded-3xl overflow-hidden hover-scale z-20 shadow-2xl gsap-fade-up image-card group transition-colors duration-500">
+                    <div class="parallax-wrapper absolute inset-0 w-full h-full scale-110">
+                        <!-- ID added to target image -->
+                        <img id="card2-img" src="https://images.unsplash.com/photo-1601597111158-2fceff292cdc?auto=format&fit=crop&w=600&q=80" alt="Card 2 Visual" class="w-full h-full object-cover mix-blend-luminosity opacity-80 transition-transform duration-[800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.15]">
+                    </div>
+                    <!-- Dynamic overlay color -->
+                    <div id="card2-overlay" class="absolute inset-0 bg-blue-500/30 pointer-events-none transition-colors duration-500"></div>
+                    
+                    <div class="overlay-btn absolute top-4 left-4 w-8 h-8 border border-white/50 rounded-full flex items-center justify-center text-white backdrop-blur-sm hover-tilt">
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </div>
+                    <!-- ID added to target text -->
+                    <div id="card2-text" class="overlay-btn absolute bottom-4 left-4 text-[10px] font-mono text-white/90 uppercase tracking-wider pointer-events-none font-bold shadow-sm">
+                        Global Reach
+                    </div>
+                </div>
+
+                <!-- Descriptive Text Block -->
+                <div class="absolute right-10 bottom-0 max-w-[250px] gsap-fade-up">
+                    <i id="desc-icon" data-lucide="zap" class="text-neonyellow w-8 h-8 mb-4"></i>
+                    <!-- ID added to target descriptive text -->
+                    <p id="desc-text" class="text-xl font-semibold leading-tight text-white">
+                        Move your money across borders in seconds, not days.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <section class="bg-softpink py-24 px-6 lg:px-12 overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+            
+            <!-- Left Side -->
+            <div class="flex flex-col justify-between">
+                <div class="gsap-fade-up">
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-darkmaroon leading-[1.1] max-w-md">
+                        Can a single building change an entire neighborhood?
+                    </h2>
+                </div>
+
+                <div class="mt-20 flex items-end justify-between gsap-fade-up">
+                    <!-- Pop-in Avatar Container -->
+                    <div class="relative w-40 h-40 avatar-sec3-container">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100" class="avatar-sec3 avatar-lift absolute top-0 left-10 w-12 h-12 rounded-full border-2 border-softpink object-cover opacity-0">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&h=100" class="avatar-sec3 avatar-lift absolute top-10 left-0 w-16 h-16 rounded-full border-2 border-softpink object-cover opacity-0">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100" class="avatar-sec3 avatar-lift absolute bottom-0 left-12 w-20 h-20 rounded-full border-2 border-softpink object-cover z-10 opacity-0">
+                        <div class="avatar-sec3 absolute bottom-2 -right-4 bg-darkgreen text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-20 opacity-0 hover-tilt pointer-events-auto cursor-pointer">
+                            Money Clarity
+                        </div>
+                    </div>
+                    
+                    <div class="text-darkmaroon">
+                        <div class="text-5xl font-black">18+</div>
+                        <div class="text-[10px] uppercase tracking-wider font-bold mt-1 opacity-70">Over a million young adults</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side (Cards) -->
+            <div class="space-y-6">
+                <!-- Arrow Button -->
+                <div class="flex justify-end mb-8 gsap-fade-up">
+                    <button class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover-tilt shadow-sm text-darkgreen">
+                        <i data-lucide="arrow-down-right" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <!-- Banking App Card -->
+                <div class="bg-darkgreen rounded-[2rem] p-8 text-white relative overflow-hidden hover-scale gsap-fade-up shadow-xl">
+                    <div class="flex justify-between items-start mb-12">
+                        <span class="text-xl font-extrabold tracking-tight">Plerouse</span>
+                        <div class="flex items-center gap-3">
+                            <span class="bg-neonyellow text-darkgreen text-xs font-bold px-3 py-1.5 rounded-full">Smart Banking</span>
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=80&h=80" alt="User Profile" class="w-10 h-10 rounded-full border border-white/20">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-400 text-sm font-medium mb-1">Available Balance</p>
+                        <h3 class="text-5xl md:text-6xl font-bold tracking-tighter">2,409.00</h3>
+                    </div>
+                </div>
+
+                <!-- Savings Goal Card -->
+                <div class="bg-white rounded-[2rem] p-2 flex items-center justify-between hover-scale gsap-fade-up shadow-md">
+                    <div class="bg-darkmaroon text-neonyellow px-8 py-6 rounded-3xl font-bold text-lg w-1/2 text-center h-full flex items-center justify-center">
+                        Savings Goal
+                    </div>
+                    <div class="w-1/2 text-center text-4xl font-extrabold text-darkmaroon">
+                        60K
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-24 px-6 mb-20 lg:px-12 bg-offwhite">
+        <div class="max-w-4xl mx-auto text-center mb-20 gsap-fade-up">
+            <div class="w-16 h-16 mx-auto border-2 border-gray-200 rounded-2xl flex items-center justify-center mb-8">
+                <i data-lucide="lock" class="w-8 h-8 text-darkgreen"></i>
+            </div>
+            <p class="text-2xl md:text-4xl font-medium leading-snug tracking-tight">
+                Designed for clarity, security, and everyday control — engineered to help you understand your money, protect your data, and make financial decisions with confidence. A new standard in digital banking, built for real life.
+            </p>
+        </div>
+
+        <!-- 4 Column Grid -->
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 list-stagger">
+            
+            <!-- Card 1: Pattern -->
+            <div class="bg-darkmaroon rounded-[2rem] p-6 aspect-square relative overflow-hidden hover-scale flex flex-col justify-between gsap-item">
+                <div class="grid grid-cols-4 gap-3 w-32">
+                    <div class="w-6 h-6 rounded-full bg-softpink"></div>
+                    <div class="w-6 h-6 rounded-full bg-softpink"></div>
+                    <div class="w-6 h-6 rounded-full bg-softpink/50"></div>
+                    <div class="w-6 h-6 rounded-full bg-softpink/20"></div>
+                    <div class="w-6 h-6 rounded-full bg-softpink/30"></div>
+                    <div class="w-6 h-6 rounded-full bg-softpink/10"></div>
+                </div>
+                <div class="flex justify-between items-end mt-auto">
+                    <span class="text-white text-3xl font-black">18+</span>
+                    <span class="text-white/50 text-[10px] uppercase text-right leading-tight max-w-[80px]">New standard banking</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Image Cap -->
+            <div class="bg-gray-200 rounded-[2rem] aspect-square overflow-hidden hover-scale gsap-item image-card group relative">
+                <div class="parallax-wrapper absolute inset-0 w-full h-full scale-110">
+                    <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=600&q=80" alt="Fashion" class="w-full h-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.15]">
+                </div>
+            </div>
+
+            <!-- Card 3: Dark Stats -->
+            <div class="bg-darkcard rounded-[2rem] p-6 aspect-square relative hover-scale flex flex-col justify-between gsap-item">
+                <p class="text-white/80 text-sm font-semibold leading-relaxed">
+                    Designed for clarity, security and everyday financial control
+                </p>
+                <div class="mt-auto">
+                    <p class="text-white/40 text-[10px] mb-3">Operating Level</p>
+                    <div class="flex items-end gap-1.5 h-8">
+                        <div class="w-1.5 bg-white/20 h-full rounded-full"></div>
+                        <div class="w-1.5 bg-white/20 h-4/5 rounded-full"></div>
+                        <div class="w-1.5 bg-white/20 h-3/5 rounded-full"></div>
+                        <div class="w-1.5 bg-neonyellow h-full rounded-full shadow-[0_0_8px_#dcf600]"></div>
+                        <div class="w-1.5 bg-white/20 h-2/5 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Image Portrait -->
+            <div class="bg-gray-200 rounded-[2rem] aspect-square overflow-hidden hover-scale gsap-item image-card group relative">
+                <div class="parallax-wrapper absolute inset-0 w-full h-full scale-110">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80" alt="Portrait" class="w-full h-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.15]">
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <footer class="bg-darkgreen text-white pt-10 rounded-t-[3rem] relative z-20 mt-[-2rem]">
+        
+        <!-- Marquee Ticker repeated -->
+        <div class="py-4 overflow-hidden border-b border-white/10 mb-16">
+            <div class="marquee-container text-sm font-semibold tracking-wide flex items-center">
+                <div class="flex items-center justify-around w-1/2 flex-shrink-0 px-4">
+                    <span>Secure Banking</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Instant Transfers</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Smart Savings</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Virtual Cards</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>AI Money Insights</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                </div>
+                <div class="flex items-center justify-around w-1/2 flex-shrink-0 px-4">
+                    <span>Secure Banking</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Instant Transfers</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Smart Savings</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>Virtual Cards</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                    <span>AI Money Insights</span><span class="text-vibrantred text-lg leading-none">&bull;</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-12 gap-12 pb-16">
+            <!-- Left Info -->
+            <div class="md:col-span-5 space-y-12">
+                <h3 class="text-2xl font-extrabold tracking-tight">Plerouse</h3>
+                
+                <button class="w-16 h-16 bg-softpink rounded-full flex items-center justify-center hover-tilt shadow-sm text-darkgreen">
+                    <i data-lucide="arrow-up-right" class="w-8 h-8 font-bold"></i>
+                </button>
+                
+                <p class="text-sm text-gray-400 max-w-[200px] leading-relaxed">
+                    Personalized accounts, filled to real life saving and smart universal features.
+                </p>
+            </div>
+
+            <!-- Center Info -->
+            <div class="md:col-span-5 flex flex-col justify-between">
+                <h4 class="text-xl font-medium max-w-[280px] leading-snug">
+                    We would love to help you build a clearer financial life.
+                </h4>
+                
+                <div class="flex items-center justify-between border-b border-white/20 pb-4 mt-12 md:mt-0">
+                    <a href="mailto:hello@plerouse.com" class="text-gray-300 hover:text-white transition-colors">hello@plerouse.com</a>
+                    <div class="flex -space-x-3">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=60&h=60" class="w-8 h-8 rounded-full border-2 border-darkgreen object-cover">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=60&h=60" class="w-8 h-8 rounded-full border-2 border-darkgreen object-cover">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=60&h=60" class="w-8 h-8 rounded-full border-2 border-darkgreen object-cover z-10">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Links Grid -->
+            <div class="md:col-span-2 grid grid-cols-2 gap-8 text-xs text-gray-400">
+                <div class="space-y-3 flex flex-col">
+                    <span class="text-white font-semibold mb-2">Products</span>
+                    <a href="#" class="hover:text-white transition-colors">Personal Banking</a>
+                    <a href="#" class="hover:text-white transition-colors">Joint Accounts</a>
+                    <a href="#" class="hover:text-white transition-colors">Virtual Cards</a>
+                    <a href="#" class="hover:text-white transition-colors">Money Insights</a>
+                </div>
+                <div class="space-y-3 flex flex-col">
+                    <span class="text-white font-semibold mb-2">Company</span>
+                    <a href="#" class="hover:text-white transition-colors">About Us</a>
+                    <a href="#" class="hover:text-white transition-colors">Careers</a>
+                    <a href="#" class="hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gigantic Bottom Text -->
+        <div class="relative w-full overflow-hidden flex justify-center items-end leading-[0.75] pt-10 pb-4">
+            
+            <div class="absolute top-6 flex justify-center w-full z-10 floating-badge pointer-events-none" data-rotate="0">
+                 <span class="bg-white text-darkgreen text-xs font-bold px-4 py-1.5 rounded-full shadow-lg border border-gray-100 hover-tilt pointer-events-auto cursor-pointer inline-block">Smart Decisions</span>
+            </div>
+
+            <h1 class="text-[20vw] font-black tracking-tighter text-white relative z-0 uppercase text-center w-full select-none">
+                Plerouse
+            </h1>
+
+            <div class="absolute bottom-10 left-[15%] z-10 hidden md:block floating-badge pointer-events-none" data-rotate="-6">
+                <span class="bg-neonyellow text-darkgreen text-xs font-bold px-4 py-2 rounded-full transform inline-block shadow-lg hover-tilt pointer-events-auto cursor-pointer">Money Clarity</span>
+            </div>
+            
+            <div class="absolute bottom-12 right-[15%] z-10 hidden md:block floating-badge pointer-events-none" data-rotate="3">
+                <span class="bg-softpink text-darkmaroon text-xs font-bold px-4 py-2 rounded-full transform inline-block shadow-lg hover-tilt-reverse pointer-events-auto cursor-pointer">Instant Transfer</span>
+            </div>
+        </div>
+        
+        <div class="text-center text-[10px] text-gray-500 py-4 border-t border-white/5">
+            &copy; 2024 Plerouse Financial Inc. All rights reserved.
+        </div>
+    </footer>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Initialize GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. General Fade Up Animation for text/general elements
+        const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
+        fadeUpElements.forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        });
+
+        // 2. Staggered Animation for Grid items
+        gsap.from(".gsap-item", {
+            scrollTrigger: {
+                trigger: ".list-stagger",
+                start: "top 80%",
+            },
+            y: 50,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.15,
+            ease: "power2.out"
+        });
+
+        // 3. Floating Badges Animation (Bobbing up and down)
+        gsap.utils.toArray('.floating-badge').forEach((badge, i) => {
+            // First animate them in
+            gsap.from(badge, {
+                opacity: 0,
+                y: 40,
+                duration: 1,
+                delay: i * 0.2 + 0.5,
+                ease: "back.out(1.5)",
+                onComplete: () => {
+                    // Then trigger the continuous float
+                    let rot = badge.getAttribute('data-rotate') ? parseInt(badge.getAttribute('data-rotate')) : 0;
+                    gsap.to(badge, {
+                        y: "-=12",
+                        rotation: rot + (Math.random() > 0.5 ? 2 : -2), 
+                        duration: 2 + Math.random(),
+                        yoyo: true,
+                        repeat: -1,
+                        ease: "sine.inOut"
+                    });
+                }
+            });
+        });
+
+        // 4. Parallax Image Animation (Vertical movement to allow CSS hover scaling)
+        gsap.utils.toArray('.image-card').forEach(card => {
+            const wrapper = card.querySelector('.parallax-wrapper');
+            if(wrapper) {
+                gsap.fromTo(wrapper, 
+                    { yPercent: -5 },
+                    {
+                        yPercent: 5,
+                        scrollTrigger: {
+                            trigger: card,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: true
+                        }
+                    }
+                );
+            }
+        });
+
+        // 5. Avatar Stagger Pop-ins
+        // Hero Section Avatars
+        gsap.to(".avatar-hero", {
+            opacity: 1,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "back.out(1.7)",
+            delay: 0.5
+        });
+
+        // Section 3 Avatars
+        gsap.to(".avatar-sec3", {
+            scrollTrigger: {
+                trigger: ".avatar-sec3-container",
+                start: "top 85%"
+            },
+            opacity: 1,
+            scale: 1,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: "back.out(1.7)"
+        });
+
+        // 6. Overlay Buttons/Tags Pop-in
+        gsap.utils.toArray('.overlay-btn').forEach(btn => {
+            gsap.from(btn, {
+                scrollTrigger: {
+                    trigger: btn.closest('.image-card'),
+                    start: "top 75%",
+                },
+                scale: 0.5,
+                opacity: 0,
+                y: 20,
+                duration: 0.6,
+                ease: "back.out(2)"
+            });
+        });
+        
+        
+         const categoryData = {
+            banking: {
+                card1Img: 'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?auto=format&fit=crop&w=500&q=80',
+                card1Text: 'Gen-Z Customers',
+                card1Bg: '#7ca39f',
+                card2Img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80',
+                card2Text: 'Insights for secure layers',
+                card2Bg: '#e94b28', // vibrant red
+                card2Overlay: 'rgba(233, 75, 40, 0.3)',
+                descIcon: 'user',
+                descIconColor: 'text-softpink',
+                descText: 'Can one smart account change the way you see your money?'
+            },
+            payments: {
+                card1Img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=500&q=80',
+                card1Text: 'Instant Transfers',
+                card1Bg: '#8b5cf6', // purple
+                card2Img: 'https://images.unsplash.com/photo-1601597111158-2fceff292cdc?auto=format&fit=crop&w=600&q=80',
+                card2Text: 'Global Reach',
+                card2Bg: '#3b82f6', // blue
+                card2Overlay: 'rgba(59, 130, 246, 0.3)',
+                descIcon: 'zap',
+                descIconColor: 'text-neonyellow',
+                descText: 'Move your money across borders in seconds, not days.'
+            },
+            savings: {
+                card1Img: 'https://images.unsplash.com/photo-1579621970588-a35d0e7ab9b6?auto=format&fit=crop&w=500&q=80',
+                card1Text: 'High Yield',
+                card1Bg: '#10b981', // green
+                card2Img: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?auto=format&fit=crop&w=600&q=80',
+                card2Text: 'Automated Goals',
+                card2Bg: '#f59e0b', // amber
+                card2Overlay: 'rgba(245, 158, 11, 0.3)',
+                descIcon: 'piggy-bank',
+                descIconColor: 'text-green-400',
+                descText: 'Watch your wealth grow with automated, high-yield savings.'
+            },
+            investing: {
+                card1Img: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=500&q=80',
+                card1Text: 'Zero Fees',
+                card1Bg: '#1e3a8a', // dark blue
+                card2Img: 'https://images.unsplash.com/photo-1590650046522-79e1eb8495a1?auto=format&fit=crop&w=600&q=80',
+                card2Text: 'AI Portfolios',
+                card2Bg: '#f97316', // orange
+                card2Overlay: 'rgba(249, 115, 22, 0.3)',
+                descIcon: 'trending-up',
+                descIconColor: 'text-orange-400',
+                descText: 'Smart, AI-driven portfolios designed for long-term growth.'
+            }
+        };
+
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const mainIndicator = document.getElementById('main-indicator');
+        let isAnimating = false;
+        
+        
+          // 1. Initialize indicator position to match the default active element on load
+        const defaultActiveBtn = document.querySelector('[data-target="payments"]');
+        if (defaultActiveBtn) {
+            gsap.set(mainIndicator, { 
+                top: defaultActiveBtn.offsetTop + (defaultActiveBtn.offsetHeight / 2),
+                yPercent: -50
+            });
+        }
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if(isAnimating) return; // Prevent spam clicks
+                
+                const targetKey = btn.getAttribute('data-target');
+                const targetIndex = btn.getAttribute('data-index');
+                const data = categoryData[targetKey];
+
+                // 1. Update UI Classes for headings
+                categoryBtns.forEach(b => {
+                    // Reset to inactive state
+                    b.classList.remove('text-white');
+                    b.classList.add('text-gray-600');
+                    const span = b.querySelector('span');
+                    span.classList.remove('text-neonyellow');
+                    span.classList.add('text-gray-500');
+                });
+
+                // Set active state on clicked
+                btn.classList.remove('text-gray-600');
+                btn.classList.add('text-white');
+                btn.querySelector('span').classList.remove('text-gray-500');
+                btn.querySelector('span').classList.add('text-neonyellow');
+
+                // ==========================================
+                // 2. THE MOVEMENT LOGIC
+                // Calculate the vertical center of the clicked button
+                const targetTop = btn.offsetTop + (btn.offsetHeight / 2);
+                
+                // Slide to the correct line smoothly using GSAP
+                gsap.to(mainIndicator, {
+                    top: targetTop,
+                    duration: 0.5,
+                    ease: "power3.inOut"
+                });
+
+                // Swap the text with a quick fade/slide left
+                gsap.to(mainIndicator, {
+                    x: -15, opacity: 0, duration: 0.2, 
+                    onComplete: () => {
+                        mainIndicator.textContent = targetIndex;
+                        gsap.to(mainIndicator, { x: 0, opacity: 1, duration: 0.3, ease: "back.out(2)" });
+                    }
+                });
+                // ==========================================
+
+                isAnimating = true;
+
+                // 2. Animate out old card content
+                const elementsToAnimate = ['#card1-img', '#card2-img', '#card1-text', '#card2-text', '#desc-text', '#desc-icon'];
+                
+                gsap.to(elementsToAnimate, {
+                    opacity: 0,
+                    y: 15,
+                    duration: 0.3,
+                    stagger: 0.05,
+                    onComplete: () => {
+                        
+                        // 3. Swap out content and styles
+                        document.getElementById('card1-img').src = data.card1Img;
+                        document.getElementById('card1-text').textContent = data.card1Text;
+                        document.getElementById('card1-bg').style.backgroundColor = data.card1Bg;
+
+                        document.getElementById('card2-img').src = data.card2Img;
+                        document.getElementById('card2-text').textContent = data.card2Text;
+                        document.getElementById('card2-bg').style.backgroundColor = data.card2Bg;
+                        document.getElementById('card2-overlay').style.backgroundColor = data.card2Overlay;
+
+                        document.getElementById('desc-text').textContent = data.descText;
+                        
+                        // Update Icon and its color
+                        const iconContainer = document.getElementById('desc-icon');
+                        iconContainer.setAttribute('data-lucide', data.descIcon);
+                        iconContainer.className = `${data.descIconColor} w-8 h-8 mb-4`;
+                        lucide.createIcons(); // Re-render new lucide icon
+
+                        // 4. Animate new card content in
+                        gsap.to(elementsToAnimate, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.5,
+                            stagger: 0.05,
+                            ease: "back.out(1.5)",
+                            onComplete: () => { isAnimating = false; }
+                        });
+                    }
+                });
+            });
+        });
+        
+        
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href'))?.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
