@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Carousel</title>
+    <style>
+        body {
+            margin: 5px;
+            background-color: #f0f0f0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Carousel Container Styles */
+        #my-carousel {
+            position: relative;
+            width: 90vw; /* Margin around carousel */
+            max-width: 98%; /* Maximum width for larger screens */
+            height: auto; /* Adjust height as needed */
+            margin: 30px auto; /* Center the carousel horizontally */
+            overflow: hidden;
+            border-radius: 25px; /* Rounded corners for carousel */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for effect */
+            background: transparent; /* Background color for carousel */
+        }
+
+        .carousel-wrapper {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-images {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+            gap: 20px; /* Add space between images */
+        }
+
+        .carousel-item {
+            width: calc(33.33% - 30px); /* Adjust width to account for gap */
+            height: 100%;
+            flex-shrink: 0; /* Prevent images from shrinking */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative; /* Needed for positioning the title */
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Crop images to fit the container */
+            border-radius: 25px; /* Rounded corners for images */
+        }
+
+        .image-title {
+            position: absolute;
+            bottom: 30px; /* Adjust as needed */
+            left: 10px; /* Adjust as needed */
+            color: white; /* White color */
+            font-family: 'Poppins', sans-serif; /* Ensure Poppins font is loaded */
+            font-weight: bold;
+            background: #7308fa; /* Optional background for better readability */
+            padding: 10px 20px; /* Optional padding for spacing */
+            border-radius: 5px; /* Optional rounded corners for background */
+        }
+
+        /* Carousel Button Styles */
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            z-index: 10;
+        }
+
+        .left-button {
+            left: 10px;
+        }
+
+        .right-button {
+            right: 10px;
+        }
+
+        .carousel-button img {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .carousel-item {
+                width: 100%; /* Show 1 image at a time on mobile */
+                margin: 0; /* Remove margin for mobile */
+            }
+
+            .carousel-images {
+                gap: 0; /* Remove gap for mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="my-carousel">
+        <button class="carousel-button left-button">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/a8e1328957074238eb9600f3ccb6bcaae01f300e.png" alt="Left">
+        </button>
+        <div class="carousel-wrapper">
+            <div class="carousel-images">
+
+                
+                <!-- Original images -->
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6e946394fccf30b400c44e885e842efe5c4dba81.jpeg" alt="Image 1">
+                    <div class="image-title">Trendísima RD</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/df9d82cd842a2fdaa1c4942f2d5d770809a1cc3f.jpeg" alt="Image 2">
+                    <div class="image-title">Poké 305</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/65629ce58d528725439bb242cff04b426197098f.jpeg" alt="Image 3">
+                    <div class="image-title">Decovintage Art</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/09c755f8f80ee8158e369bac182f0fe163d60273.jpeg" alt="Image 4">
+                    <div class="image-title">For Fun Travel</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/e751d18e47f73008863e8e7223e4d76c70383d27.jpeg" alt="Image 5">
+                    <div class="image-title">Santé Brand</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/c774ae33bb0405536675d648406b66ea41c580d7.jpeg" alt="Image 6">
+                    <div class="image-title">Delcora Music</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/664171b04f9a4ab2eeca76a4409772f84518db70.jpeg" alt="Image 7">
+                    <div class="image-title">Senses Luxury Spa</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/4850bba17a6e4dc97291e9cdcb4997f5d83f58ad.jpeg" alt="Image 8">
+                    <div class="image-title">Horus Spa</div>
+                </div>
+                
+                <!-- Duplicate images for infinite scroll effect -->
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6e946394fccf30b400c44e885e842efe5c4dba81.jpeg" alt="Image 1">
+                    <div class="image-title">Trendísima RD</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/df9d82cd842a2fdaa1c4942f2d5d770809a1cc3f.jpeg" alt="Image 2">
+                    <div class="image-title">Poké 305</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/65629ce58d528725439bb242cff04b426197098f.jpeg" alt="Image 3">
+                    <div class="image-title">For Fun Travel</div>
+                </div>
+
+<div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/09c755f8f80ee8158e369bac182f0fe163d60273.jpeg" alt="Image 4">
+                    <div class="image-title">For Fun Travel</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/e751d18e47f73008863e8e7223e4d76c70383d27.jpeg" alt="Image 5">
+                    <div class="image-title">Santé Brand</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/c774ae33bb0405536675d648406b66ea41c580d7.jpeg" alt="Image 6">
+                    <div class="image-title">Delcora Music</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/664171b04f9a4ab2eeca76a4409772f84518db70.jpeg" alt="Image 7">
+                    <div class="image-title">Senses Luxury Spa</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/4850bba17a6e4dc97291e9cdcb4997f5d83f58ad.jpeg" alt="Image 8">
+                    <div class="image-title">Horus Spa</div>
+                </div>
+
+                
+            </div>
+        </div>
+        <button class="carousel-button right-button">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/0f1dc62cad5171395877508dfebb311a55b03b45.png" alt="Right">
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carouselImages = document.querySelector('.carousel-images');
+            const images = document.querySelectorAll('.carousel-item');
+            const leftButton = document.querySelector('.left-button');
+            const rightButton = document.querySelector('.right-button');
+
+            let index = 0;
+            let imageWidth;
+            let visibleImages;
+
+            function calculateDimensions() {
+                visibleImages = window.innerWidth <= 768 ? 1 : 3;
+                imageWidth = images[0].offsetWidth + (window.innerWidth <= 768 ? 0 : 20);
+            }
+
+            function updateCarousel() {
+                calculateDimensions();
+                const maxIndex = images.length - visibleImages;
+                if (index > maxIndex) index = maxIndex;
+                if (index < 0) index = 0;
+                const offset = -index * imageWidth;
+                carouselImages.style.transform = `translateX(${offset}px)`;
+            }
+
+            leftButton.addEventListener('click', () => {
+                index = (index > 0) ? index - 1 : images.length - visibleImages;
+                updateCarousel();
+            });
+
+            rightButton.addEventListener('click', () => {
+                index = (index < images.length - visibleImages) ? index + 1 : 0;
+                updateCarousel();
+            });
+
+            window.addEventListener('resize', () => {
+                updateCarousel();
+            });
+
+            // Initialize
+            calculateDimensions();
+            updateCarousel();
+        });
+    </script>
+</body>
+</html>
