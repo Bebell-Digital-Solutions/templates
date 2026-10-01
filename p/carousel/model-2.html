@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News and Insights Carousel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #1a1a1a;
+        }
+
+        .font-serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* 3D Elastic Cross Animation Classes */
+        .cross-container {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card-front, .card-back {
+            transition: transform 0.6s cubic-bezier(0.68, -0.4, 0.32, 1.2);
+            transform-origin: bottom center;
+            will-change: transform;
+           
+        }
+
+        /* Default State */
+        .card-front {
+            /* Positioned closer to viewer, centered */
+            transform: translateZ(1px) scale(1) translateX(0) rotate(0deg);
+            margin-left: 10px;
+                    }
+        .card-back {
+            /* Positioned further back, shifted right, rotated clockwise */
+            transform: translateZ(-1px) scale(0.95) translateX(25%) rotate(3deg);
+        }
+
+        /* Hover State: Swap */
+        .group:hover .card-front {
+            /* Pushed to back, shifted left, rotated counter-clockwise */
+            transform: translateZ(-1px) scale(0.95) translateX(-15%) rotate(-5deg);
+            margin-left: 20px;
+        }
+        .group:hover .card-back {
+            /* Brought to front, aligned to center */
+            transform: translateZ(1px) scale(1) translateX(0) rotate(0deg);
+            margin-left: 30px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center py-20 px-4 md:px-8">
+
+    <div class="w-full max-w-[1400px] mx-auto">
+        <!-- Main Title -->
+        <h2 class="text-center text-xl md:text-2xl font-serif font-normal text-gray-900 mb-16">
+            Get the latest news and insights
+        </h2>
+        
+        
+        
+        
+        
+        
+
+        <!-- Carousel Container -->
+        <div class="relative w-full group/carousel">
+
+            <!-- Navigation Button: Left -->
+            <button id="prevBtn" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 md:-ml-6 z-30 bg-white shadow-xl border border-gray-200 rounded-full w-14 h-14 flex items-center justify-center text-gray-800 hover:bg-gray-50 hover:scale-105 transition-all opacity-0 group-hover/carousel:opacity-100 disabled:opacity-0 disabled:pointer-events-none focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            
+
+            <!-- Navigation Button: Right -->
+            <button id="nextBtn" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 md:-mr-6 z-30 bg-white shadow-xl border border-gray-200 rounded-full w-14 h-14 flex items-center justify-center text-gray-800 hover:bg-gray-50 hover:scale-105 transition-all opacity-0 group-hover/carousel:opacity-100 disabled:opacity-0 disabled:pointer-events-none focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            
+            
+            
+            
+            
+
+            <!-- Scrollable Track -->
+            <div id="carouselTrack" class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-6 pb-12 pt-4 px-4 md:px-8">
+            
+            
+            
+            
+
+                <!-- Card 1 -->
+                <div class="group min-w-[300px] w-[300px] md:min-w-[340px] md:w-[340px] flex-none snap-start bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-2xl transition-shadow duration-300 flex flex-col cursor-pointer overflow-hidden pb-0">
+                    <!-- Text Content -->
+                    <div class="px-6 pt-6 md:px-8 md:pt-8 flex flex-col flex-grow">
+                        <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-900 uppercase mb-4">Innovation</h3>
+                        <p class="font-serif text-[1.15rem] leading-snug text-gray-900 mb-6 flex-grow">
+                            Accelerating growth through technology adoption
+                        </p>
+                        <div class="flex items-center text-sm font-semibold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
+                            Read Now 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Image Container (Flush Bottom) -->
+                    <div class="relative w-full h-48 md:h-52 mt-auto cross-container">
+                        <!-- Second Image (Colored Card - Back) -->
+                        <div class="card-back absolute bottom-0 left-4 md:left-6 w-[68%] h-[100%] rounded-t-xl bg-[#4f39f6] text-white p-6 flex flex-col justify-center border border-[#4f39f6]">
+                            <span class="text-yellow-400 font-bold text-sm mb-2 block">reality,</span>
+                            <span class="text-xs leading-relaxed opacity-90 font-medium block">now with the latest integrated systems."</span>
+                        </div>
+                        
+                        
+                        
+                        
+
+                        <!-- First Image (Photo - Front) -->
+                        <div class="card-front absolute bottom-0 left-4 md:left-10 w-[68%] h-[100%] rounded-t-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=600&q=80" alt="Sticky notes on grid" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+                
+                
+                
+                
+                
+
+                <!-- Card 2 -->
+                <div class="group min-w-[300px] w-[300px] md:min-w-[340px] md:w-[340px] flex-none snap-start bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-2xl transition-shadow duration-300 flex flex-col cursor-pointer overflow-hidden pb-0">
+                    <div class="px-6 pt-6 md:px-8 md:pt-8 flex flex-col flex-grow">
+                        <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-900 uppercase mb-4">Employee Experience</h3>
+                        <p class="font-serif text-[1.15rem] leading-snug text-gray-900 mb-6 flex-grow">
+                            Designing inclusive workplace environments
+                        </p>
+                        <div class="flex items-center text-sm font-semibold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
+                            Read Now 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-48 md:h-52 mt-auto cross-container">
+                        <!-- Second Image (Colored Card - Back) -->
+                        <div class="card-back absolute bottom-0 left-4 md:left-6 w-[68%] h-[100%] rounded-t-xl bg-[#4f39f6] text-white p-6 flex flex-col justify-center border border-[#4f39f6]">
+                            <span class="text-yellow-400 font-bold text-sm mb-2 block">reality,</span>
+                            <span class="text-xs leading-relaxed opacity-90 font-medium block">now with the latest integrated systems."</span>
+                        </div>
+                        
+                        
+                        
+                        
+
+                        <!-- First Image (Photo - Front) -->
+                        <div class="card-front absolute bottom-0 left-4 md:left-10 w-[68%] h-[100%] rounded-t-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=600&q=80" alt="Sticky notes on grid" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+
+                <!-- Card 3 -->
+                <div class="group min-w-[300px] w-[300px] md:min-w-[340px] md:w-[340px] flex-none snap-start bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-2xl transition-shadow duration-300 flex flex-col cursor-pointer overflow-hidden pb-0">
+                    <div class="px-6 pt-6 md:px-8 md:pt-8 flex flex-col flex-grow">
+                        <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-900 uppercase mb-4">Customer Experience</h3>
+                        <p class="font-serif text-[1.15rem] leading-snug text-gray-900 mb-6 flex-grow">
+                            Turning feedback into meaningful action
+                        </p>
+                        <div class="flex items-center text-sm font-semibold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
+                            Read Now 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-48 md:h-52 mt-auto cross-container">
+                        <!-- Second Image (Colored Card - Back) -->
+                        <div class="card-back absolute bottom-0 left-4 md:left-6 w-[68%] h-[100%] rounded-t-xl bg-[#4f39f6] text-white p-6 flex flex-col justify-center border border-[#4f39f6]">
+                            <span class="text-yellow-400 font-bold text-sm mb-2 block">reality,</span>
+                            <span class="text-xs leading-relaxed opacity-90 font-medium block">now with the latest integrated systems."</span>
+                        </div>
+                        
+                        
+                        
+                        
+
+                        <!-- First Image (Photo - Front) -->
+                        <div class="card-front absolute bottom-0 left-4 md:left-10 w-[68%] h-[100%] rounded-t-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=600&q=80" alt="Sticky notes on grid" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+
+                <!-- Card 4 -->
+                <div class="group min-w-[300px] w-[300px] md:min-w-[340px] md:w-[340px] flex-none snap-start bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-2xl transition-shadow duration-300 flex flex-col cursor-pointer overflow-hidden pb-0">
+                    <div class="px-6 pt-6 md:px-8 md:pt-8 flex flex-col flex-grow">
+                        <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-900 uppercase mb-4">Leadership</h3>
+                        <p class="font-serif text-[1.15rem] leading-snug text-gray-900 mb-6 flex-grow">
+                            Five habits of highly effective team leaders
+                        </p>
+                        <div class="flex items-center text-sm font-semibold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
+                            Read Now 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-48 md:h-52 mt-auto cross-container">
+                        <!-- Second Image (Colored Card - Back) -->
+                        <div class="card-back absolute bottom-0 left-4 md:left-6 w-[68%] h-[100%] rounded-t-xl bg-[#4f39f6] text-white p-6 flex flex-col justify-center border border-[#4f39f6]">
+                            <span class="text-yellow-400 font-bold text-sm mb-2 block">reality,</span>
+                            <span class="text-xs leading-relaxed opacity-90 font-medium block">now with the latest integrated systems."</span>
+                        </div>
+                        
+                        
+                        
+                        
+
+                        <!-- First Image (Photo - Front) -->
+                        <div class="card-front absolute bottom-0 left-4 md:left-10 w-[68%] h-[100%] rounded-t-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=600&q=80" alt="Sticky notes on grid" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+
+                <!-- Card 5 -->
+                <div class="group min-w-[300px] w-[300px] md:min-w-[340px] md:w-[340px] flex-none snap-start bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-2xl transition-shadow duration-300 flex flex-col cursor-pointer overflow-hidden pb-0">
+                    <div class="px-6 pt-6 md:px-8 md:pt-8 flex flex-col flex-grow">
+                        <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-900 uppercase mb-4">Productivity</h3>
+                        <p class="font-serif text-[1.15rem] leading-snug text-gray-900 mb-6 flex-grow">
+                            Streamline collaboration across remote teams
+                        </p>
+                        <div class="flex items-center text-sm font-semibold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
+                            Read Now 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-48 md:h-52 mt-auto cross-container">
+                        <!-- Second Image (Colored Card - Back) -->
+                        <div class="card-back absolute bottom-0 left-4 md:left-6 w-[68%] h-[100%] rounded-t-xl bg-[#4f39f6] text-white p-6 flex flex-col justify-center border border-[#4f39f6]">
+                            <span class="text-yellow-400 font-bold text-sm mb-2 block">reality,</span>
+                            <span class="text-xs leading-relaxed opacity-90 font-medium block">now with the latest integrated systems."</span>
+                        </div>
+                        
+                        
+                        
+                        
+
+                        <!-- First Image (Photo - Front) -->
+                        <div class="card-front absolute bottom-0 left-4 md:left-10 w-[68%] h-[100%] rounded-t-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=600&q=80" alt="Sticky notes on grid" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+                
+                
+                
+                
+                
+
+                <!-- Card 6 -->
+                <div class="group min-w-[300px] w-[300px] md:min-w-[340px] md:w-[340px] flex-none snap-start bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-2xl transition-shadow duration-300 flex flex-col cursor-pointer overflow-hidden pb-0">
+                    <div class="px-6 pt-6 md:px-8 md:pt-8 flex flex-col flex-grow">
+                        <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-900 uppercase mb-4">Technology</h3>
+                        <p class="font-serif text-[1.15rem] leading-snug text-gray-900 mb-6 flex-grow">
+                            The future of AI in the modern enterprise
+                        </p>
+                        <div class="flex items-center text-sm font-semibold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
+                            Read Now 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-48 md:h-52 mt-auto cross-container">
+                        <!-- Second Image (Colored Card - Back) -->
+                        <div class="card-back absolute bottom-0 left-4 md:left-6 w-[68%] h-[100%] rounded-t-xl bg-[#4f39f6] text-white p-6 flex flex-col justify-center border border-[#4f39f6]">
+                            <span class="text-yellow-400 font-bold text-sm mb-2 block">reality,</span>
+                            <span class="text-xs leading-relaxed opacity-90 font-medium block">now with the latest integrated systems."</span>
+                        </div>
+                        
+                        
+                        
+                        
+
+                        <!-- First Image (Photo - Front) -->
+                        <div class="card-front absolute bottom-0 left-4 md:left-10 w-[68%] h-[100%] rounded-t-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=600&q=80" alt="Sticky notes on grid" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+                
+                
+                
+                
+                
+
+                <!-- Card 7 -->
+                <div class="group min-w-[300px] w-[300px] md:min-w-[340px] md:w-[340px] flex-none snap-start bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-2xl transition-shadow duration-300 flex flex-col cursor-pointer overflow-hidden pb-0">
+                    <div class="px-6 pt-6 md:px-8 md:pt-8 flex flex-col flex-grow">
+                        <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-900 uppercase mb-4">Culture</h3>
+                        <p class="font-serif text-[1.15rem] leading-snug text-gray-900 mb-6 flex-grow">
+                            Building organizational resilience in times of change
+                        </p>
+                        <div class="flex items-center text-sm font-semibold text-gray-900 mb-6 group-hover:text-indigo-600 transition-colors">
+                            Read Now 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-48 md:h-52 mt-auto cross-container">
+                        <!-- Second Image (Colored Card - Back) -->
+                        <div class="card-back absolute bottom-0 left-4 md:left-6 w-[68%] h-[100%] rounded-t-xl bg-[#4f39f6] text-white p-6 flex flex-col justify-center border border-[#4f39f6]">
+                            <span class="text-yellow-400 font-bold text-sm mb-2 block">reality,</span>
+                            <span class="text-xs leading-relaxed opacity-90 font-medium block">now with the latest integrated systems."</span>
+                        </div>
+                        
+                        
+                        
+                        
+
+                        <!-- First Image (Photo - Front) -->
+                        <div class="card-front absolute bottom-0 left-4 md:left-10 w-[68%] h-[100%] rounded-t-xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=600&q=80" alt="Sticky notes on grid" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const track = document.getElementById('carouselTrack');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            const scrollAmount = 364; 
+
+            const updateButtonStates = () => {
+                if (track.scrollLeft <= 0) {
+                    prevBtn.disabled = true;
+                } else {
+                    prevBtn.disabled = false;
+                }
+
+                if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 2) {
+                    nextBtn.disabled = true;
+                } else {
+                    nextBtn.disabled = false;
+                }
+            };
+
+            nextBtn.addEventListener('click', () => {
+                track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            });
+
+            prevBtn.addEventListener('click', () => {
+                track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            });
+
+            track.addEventListener('scroll', updateButtonStates);
+            window.addEventListener('resize', updateButtonStates);
+
+            updateButtonStates();
+        });
+    </script>
+</body>
+</html>
