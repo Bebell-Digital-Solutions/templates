@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logopack - Clone</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#FF6200',
+                        primaryDark: '#E55800',
+                        bgLight: '#FAFAFA',
+                        bgDark: '#1A1C1A',
+                        textMain: '#111827',
+                        textMuted: '#6B7280',
+                        borderLight: '#E5E7EB',
+                        cardBg: '#F3F4F6'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f7f7f6;
+            background-image: radial-gradient(#d4d4d4 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Custom Hover Effect for CTA Arrows */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button i, .cta-button svg {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cta-button:hover i, .cta-button:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Smooth reveal class for GSAP targeting */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+        
+        /* Hide scrollbar for the horizontal scrolling tabs if needed */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Added IDs to banner container and close button -->
+    <div id="top-banner" class="bg-primary text-white text-sm py-2 px-4 flex justify-between items-center z-50 relative">
+        <div class="flex-1 text-center font-medium">
+            <span class="inline-block bg-white text-primary text-xs font-bold px-2 py-0.5 rounded mr-2 uppercase tracking-wide">New</span>
+            Introducing Logopack Pro. Automatically generate brand guidelines. 
+            
+            <a href="#" class="underline hover:text-white/80 transition-colors ml-1">Read the announcement</a>
+        </div>
+        <button id="close-banner" class="text-white hover:text-white/70 transition-colors">
+            <i class="ph ph-x"></i>
+        </button>
+    </div>
+    
+    
+    
+
+    <header class="py-4 px-6 md:px-12 flex justify-between items-center sticky top-0 bg-bgLight/90 backdrop-blur-md z-40 border-b border-gray-200 transition-all duration-300" id="main-header">
+
+    
+    
+        <div class="flex items-center gap-2">
+            <!-- Logo Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 4H10V20H4V4Z" fill="#FF6200"/>
+                <path d="M14 4H20V12H14V4Z" fill="#FF6200"/>
+            </svg>
+            <span class="font-bold text-xl tracking-tight">logopack</span>
+        </div>
+
+        <nav class="hidden md:flex gap-8 text-sm font-medium text-textMuted">
+            <a href="#how-it-works" class="hover:text-textMain transition-colors">How it works</a>
+            <a href="#features" class="hover:text-textMain transition-colors">Features</a>
+            <a href="#pricing" class="hover:text-textMain transition-colors">Pricing</a>
+            <a href="#faq" class="hover:text-textMain transition-colors">FAQ</a>
+        </nav>
+
+        <div class="flex items-center gap-4 text-sm font-medium">
+            <a href="#" class="hidden sm:block text-textMuted hover:text-textMain transition-colors">Log in</a>
+            <a href="#" class="bg-primary hover:bg-primaryDark text-white px-5 py-2.5 rounded-full transition-colors cta-button">
+                Sign up
+                  <i class="ph-bold ph-arrow-right"></i>
+            </a>
+        </div>
+        
+
+    </header>
+    
+    
+    
+    
+    
+
+    <main>
+         <section class="pt-24 pb-16 px-6 max-w-5xl mx-auto text-center flex flex-col items-center">
+            <div class="flex items-center justify-center gap-2 mb-6 reveal-up">
+                <span class="w-2 h-2 rounded-full bg-primary block"></span>
+                <p class="text-xs font-bold text-gray-500 tracking-widest uppercase">The finishing touch for your logo project</p>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-textMain leading-[1.1] mb-6 reveal-up">
+           Your Brand Assets.<br>
+                Ready to <span class="italic font-medium text-gray-700 tracking-tight leading-[1.1]">hand over.</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-textMuted max-w-2xl mb-10 reveal-up">
+                Turn your SVGs into an organized, client-ready logo pack. All the files they need. None of the repetitive export work.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                <a href="#" class="bg-primary hover:bg-primaryDark text-white text-base font-medium px-8 py-4 rounded-full shadow-lg shadow-primary/20 cta-button reveal-up">
+                    Create a free logo pack
+                    <i class="ph-bold ph-arrow-right"></i>
+                </a>
+                
+                <a href="#" class="bg-white border border-borderLight hover:bg-gray-50 text-textMain text-base font-medium px-8 py-4 rounded-full shadow-sm cta-button reveal-up">
+                    View sample pack
+                    <i class="ph-bold ph-arrow-right"></i>
+                </a>
+            </div>
+
+            <p class="text-[11px] text-gray-400 font-medium mb-6 reveal-up">Free standard exports. No credit card required.</p>
+
+            <!-- Social Proof -->
+            <div class="flex items-center gap-3 text-sm text-textMuted mb-3 font-medium reveal-up">
+            
+                <div class="flex -space-x-1 reveal-up">
+                    <img class="w-9 h-9 rounded-full border-2 border-bgLight relative transition-transform duration-300 hover:scale-125 hover:z-10 cursor-pointer" src="https://i.pravatar.cc/100?img=1" alt="User">
+                    <img class="w-9 h-9 rounded-full border-2 border-bgLight relative transition-transform duration-300 hover:scale-125 hover:z-10 cursor-pointer" src="https://i.pravatar.cc/100?img=2" alt="User">
+                    <img class="w-9 h-9 rounded-full border-2 border-bgLight relative transition-transform duration-300 hover:scale-125 hover:z-10 cursor-pointer" src="https://i.pravatar.cc/100?img=3" alt="User">
+                    <img class="w-9 h-9 rounded-full border-2 border-bgLight relative transition-transform duration-300 hover:scale-125 hover:z-10 cursor-pointer" src="https://i.pravatar.cc/100?img=4" alt="User">
+                    <img class="w-9 h-9 rounded-full border-2 border-bgLight relative transition-transform duration-300 hover:scale-125 hover:z-10 cursor-pointer" src="https://i.pravatar.cc/100?img=5" alt="User">
+                    <img class="w-9 h-9 rounded-full border-2 border-bgLight relative transition-transform duration-300 hover:scale-125 hover:z-10 cursor-pointer" src="https://i.pravatar.cc/100?img=1" alt="User">
+                    <img class="w-9 h-9 rounded-full border-2 border-bgLight relative transition-transform duration-300 hover:scale-125 hover:z-10 cursor-pointer" src="https://i.pravatar.cc/100?img=2" alt="User">
+                    <img class="w-9 h-9 rounded-full border-2 border-bgLight relative transition-transform duration-300 hover:scale-125 hover:z-10 cursor-pointer" src="https://i.pravatar.cc/100?img=4" alt="User">
+                </div>
+            </div>
+            <p>
+                <span class="text-[14px] text-gray-400 font-medium mb-6 reveal-up">Trusted by <strong>500+</strong> designers</span>
+            </p>
+        </section>
+        
+        
+        
+        
+ <section class="max-w-6xl mx-auto px-6 mb-32 reveal-up">
+        
+            <div class="bg-[#F4F3ED] bg-dots rounded-[2rem] p-6 md:p-8 relative overflow-hidden shadow-2xl shadow-black/5 border border-[#E5E3D8]">
+                
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-6 text-[10px] sm:text-xs font-mono font-medium tracking-widest text-gray-500 uppercase px-2 reveal-up">
+                    <span>One logo. A complete handoff.</span>
+                    <span>Sample / Logopack</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 h-auto lg:h-[420px]">
+                    
+                    <!-- Left Panel: Original Artwork -->
+                    <div class="bg-white rounded-2xl p-6 flex flex-col justify-between shadow-sm border border-gray-100/80 reveal-up">
+                        <span class="text-[11px] tracking-widest text-gray-800 uppercase font-mono font-medium">Your original artwork</span>
+                        <div class="flex-grow flex items-center justify-center reveal-up">
+                            <div class="flex items-center gap-3">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 4H10V20H4V4Z" fill="#FF6200"/>
+                                    <path d="M14 4H20V12H14V4Z" fill="#FF6200"/>
+                                </svg>
+                                <span class="font-bold text-3xl tracking-tight text-gray-900">logopack</span>
+                            </div>
+                        </div>
+                        <span class="text-[11px] tracking-widest text-gray-500 uppercase font-mono font-medium">Primary_logo.svg</span>
+                    </div>
+
+                    <!-- Middle Panel: File Tree -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/80 flex flex-col font-mono text-[13px] text-gray-700 reveal-up">
+                        <!-- File Root -->
+                        <div class="flex items-center justify-between py-3 border-b border-gray-100 mb-3">
+                            <div class="flex items-center gap-2 font-semibold text-gray-900">
+                                <i class="ph-bold ph-folder-notch text-primary text-lg transform -scale-x-100"></i>
+                                Logopack_Logo_Asset_Pack.zip
+                            </div>
+                            <span class="text-[10px] border border-gray-200 text-gray-500 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Zip</span>
+                        </div>
+
+                        <!-- Tree Items -->
+                        <div class="flex-grow space-y-4 py-2 reveal-up">
+                            <div class="flex items-center gap-2 text-gray-900">
+                                <i class="ph-bold ph-folder-notch text-primary text-lg transform -scale-x-100"></i>
+                                01_Primary_Logo
+                            </div>
+                            
+                            <div class="pl-8 space-y-3 relative before:absolute before:left-3 before:top-[-10px] before:bottom-3 before:w-[1px] before:bg-gray-200">
+                                <div class="flex items-center gap-2 relative before:absolute before:-left-5 before:top-1/2 before:w-4 before:h-[1px] before:bg-gray-200">
+                                    <i class="ph-bold ph-folder-notch text-primary text-lg transform -scale-x-100"></i>
+                                    RGB_Digital
+                                </div>
+                                <div class="pl-7 text-gray-500 text-xs tracking-wide">
+                                    SVG · PNG · JPG · WebP
+                                </div>
+                                
+                                <div class="flex items-center gap-2 pt-2 relative before:absolute before:-left-5 before:top-[18px] before:w-4 before:h-[1px] before:bg-gray-200">
+                                    <i class="ph-bold ph-folder-notch text-primary text-lg transform -scale-x-100"></i>
+                                    CMYK_Print / EPS · PDF
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pro Document -->
+                        <div class="py-4 border-t border-gray-100 flex items-center gap-2 mt-auto reveal-up">
+                            <i class="ph-fill ph-file-pdf text-gray-400 text-lg"></i>
+                            Logopack_Logo_Guide.pdf
+                            <span class="text-[10px] bg-orange-50 text-primary border border-orange-200 px-1.5 py-0.5 rounded font-bold flex items-center gap-1 uppercase tracking-wider ml-auto">
+                                <i class="ph-fill ph-crown"></i> Pro
+                            </span>
+                        </div>
+                        
+                        <!-- Download action as Anchor -->
+                        <a href="#" class="py-2 flex items-center gap-2 font-bold text-gray-900 cursor-pointer hover:text-primary transition-colors block reveal-up">
+                            <i class="ph-bold ph-download-simple text-lg"></i>
+                            Download sample ZIP
+                        </a>
+                    </div>
+
+                    <!-- Right Panel: Grid of variations -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/80 flex flex-col justify-between reveal-up">
+                         <div class="grid grid-cols-3 gap-2 reveal-up">
+                             <!-- Mock grid items (12 gallery images) -->
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/1.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/2.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/3.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/4.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/5.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/6.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/7.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/8.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/9.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/10.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/11.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                             <div class="aspect-[4/3] rounded border border-gray-200 overflow-hidden p-2"><img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/12.webp" class="w-full h-full object-cover opacity-80" alt="thumb"></div>
+                         </div>
+                         
+                         <!-- Footer -->
+                         <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                             <span class="text-[11px] tracking-widest text-gray-800 uppercase font-mono font-medium reveal-up">Explore the full guide</span>
+                             <span class="text-[10px] bg-orange-50 text-primary border border-orange-200 px-1.5 py-0.5 rounded font-bold flex items-center gap-1 uppercase tracking-wider">
+                                 <i class="ph-fill ph-crown"></i> Pro
+                             </span>
+                         </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        
+        
+             
+        
+        
+        
+        
+        
+        
+        
+
+       <section id="how-it-works" class="max-w-[1200px] mx-auto px-6 lg:px-12 scroll-mt-24">
+        
+        <div class="flex flex-col lg:flex-row justify-between lg:items-end mb-16 gap-8">
+        
+            <div class="max-w-2xl reveal-up">
+            
+
+            
+                <p class="items-center flex gap-4 mb-6 text-gray-500 text-[11px] font-semibold tracking-[0.2em] uppercase mb-6 reveal-up">
+                            
+            <span class="w-2 h-2 rounded-full bg-primary block"></span>
+          
+                    01 / From Approved to Delivered
+                </p>
+                
+                <h2 class="text-5xl md:text-[3.5rem] font-medium tracking-tight leading-[1.1] text-gray-900 reveal-up">
+                    The design is done.<br>
+                    Make the handoff easy.
+                </h2>
+            </div>
+            
+            
+            <div class="max-w-md lg:mb-3 text-gray-500 text-[17px] leading-relaxed reveal-up reveal-up">
+                <p c;ass="reveal-up">For independent designers, small studios, and anyone who wants their logo files to feel as considered as the logo itself.</p>
+            </div>
+        </div>
+        
+        
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-16 reveal-up">
+            
+            <div class="flex flex-col reveal-up">
+                <div class="border-t border-gray-200 pt-6 mb-5 reveal-up">
+                    <span class="text-primary text-sm font-medium">01</span>
+                </div>
+                <h3 class="text-2xl font-medium mb-3 reveal-up">Bring your logo.</h3>
+                <p class="text-gray-500 text-base leading-relaxed mb-8 flex-grow reveal-up">
+                    Enter your brand name and upload your SVG artwork, including the logo variations you want to deliver.
+                </p>
+                
+                <div class="bg-[#F7F6F2] rounded-2xl h-56 w-full flex items-center justify-center relative border border-gray p-4 sm:p-6 reveal-up">
+                    <!-- Cards container responsive flex -->
+                    <div class="w-full h-full flex items-center justify-center max-w-full">
+                        <!-- Card 1 -->
+                        <div class="bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-gray-100 px-3 py-2 sm:px-4 sm:py-3 flex items-center gap-1.5 sm:gap-2 transform -rotate-[4deg] z-10 min-w-0 shrink reveal-up">
+                            <svg class="w-3.5 h-3.5 text-gray-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                            </svg>
+                            <span class="text-xs sm:text-[13px] font-medium text-gray-800 truncate">Primary.svg</span>
+                        </div>
+                        
+                        <!-- Card 2 -->
+                        <div class="bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-gray-100 px-3 py-2 sm:px-4 sm:py-3 flex items-center gap-1.5 sm:gap-2 transform rotate-[6deg] -ml-4 sm:-ml-2 mt-6 z-20 min-w-0 shrink reveal-up">
+                            <svg class="w-3.5 h-3.5 text-gray-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                            </svg>
+                            <span class="text-xs sm:text-[13px] font-medium text-gray-800 truncate">Mark.svg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+
+            <div class="flex flex-col reveal-up">
+                <div class="border-t border-gray-200 pt-6 mb-5 reveal-up">
+                    <span class="text-primary text-sm font-medium reveal-up">02</span>
+                </div>
+                <h3 class="text-2xl font-medium mb-3 reveal-up">Make it your pack.</h3>
+                <p class="text-gray-500 text-base leading-relaxed mb-8 flex-grow reveal-up">
+                    Start with the free setup, or customize your export formats, sizes and background combinations with 
+                    <span class="inline-flex items-center gap-1 border border-brand-orange/30 text-primary rounded px-1.5 py-[2px] text-[10px] font-bold tracking-wide uppercase align-text-bottom bg-primary/5 ml-1">
+                        <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2 19h20v2H2v-2zm1.4-1.7l1.7-9.4 3.9 3.2 3-8.1 3 8.1 3.9-3.2 1.7 9.4H3.4z"/>
+                        </svg>
+                        PRO
+                    </span>.
+                </p>
+                
+                <div class="bg-[#F7F6F2] rounded-2xl h-56 w-full flex items-center justify-center relative border border-gray p-4 sm:p-6 reveal-up">
+                    <div class="flex flex-wrap items-center justify-center gap-2 max-w-full">
+                        <div class="bg-primary text-white font-medium text-xs sm:text-[13px] px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 shadow-sm shrink reveal-up">
+                            SVG 
+                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div class="bg-white text-gray-800 font-medium text-xs sm:text-[13px] px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 shadow-sm shrink reveal-up">
+                            PNG
+                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div class="bg-white text-gray-800 font-medium text-xs sm:text-[13px] px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 shadow-sm shrink reveal-up">
+                            JPG
+                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div class="bg-white text-gray-800 font-medium text-xs sm:text-[13px] px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 shadow-sm shrink reveal-up">
+                            EPS
+                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div class="bg-white text-gray-800 font-medium text-xs sm:text-[13px] px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 shadow-sm shrink reveal-up">
+                            WebP
+                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div class="bg-white text-gray-800 font-medium text-xs sm:text-[13px] pl-3 pr-2 py-2 sm:pl-4 sm:pr-3 sm:py-2.5 rounded-lg flex items-center gap-1.5 shadow-sm shrink reveal-up">
+                            PDF
+                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                            
+                            
+                 
+                            <span class="inline-flex items-center gap-1 border border-primary/30 text-primary rounded px-1.5 py-[2px] text-[10px] font-bold tracking-wide uppercase align-text-bottom bg-primary/5">
+                        <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2 19h20v2H2v-2zm1.4-1.7l1.7-9.4 3.9 3.2 3-8.1 3 8.1 3.9-3.2 1.7 9.4H3.4z"/>
+                        </svg>
+                        PRO
+                    </span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="border-t border-gray-200 pt-6 mb-5 reveal-up">
+                    <span class="text-primary text-sm font-medium reveal-up">03</span>
+                </div>
+                
+                <h3 class="text-2xl font-medium mb-3 reveal-up">Hand it over.</h3>
+                <p class="text-gray-500 text-base leading-relaxed mb-8 flex-grow reveal-up">
+                    Download your logo files in one organized ZIP, ready to hand over to your client or share with your team.
+                </p>
+                
+                <div class="bg-[#F7F6F2] rounded-2xl h-56 w-full flex items-center justify-center relative border border-gray p-4 sm:p-6 reveal-up">
+                    <button class="bg-[#1e1e1e] hover:bg-black transition-colors text-white rounded-xl px-4 py-3 sm:px-5 sm:py-3.5 flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium shadow-xl cursor-default max-w-full w-full sm:w-auto reveal-up">
+                        <svg class="w-4 h-4 text-gray-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        <span class="truncate">Logopack_Logo_Asset_Pack.zip</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+
+
+ <section id="features" class="max-w-6xl mx-auto px-6 mt-16 mb-32 reveal-up scroll-mt-24">
+            <div class="rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row shadow-xl">
+                
+                <!-- Dark Side -->
+                <div class="bg-bgDark text-white p-12 lg:w-5/12 flex flex-col justify-center relative overflow-hidden">
+                    <!-- Subtle background decoration -->
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+                    
+                    <p class="text-xs text-primary tracking-widest uppercase mb-4 z-10 reveal-up items-center flex gap-4">
+                    
+                                                
+            <span class="w-2 h-2 rounded-full bg-primary block"></span>
+                    
+                    02 / A more complete delivery
+                    <span class="inline-flex items-center gap-1 border border-primary/30 text-primary rounded px-1.5 py-[2px] text-[10px] font-bold tracking-wide uppercase align-text-bottom bg-primary/5">
+                        <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2 19h20v2H2v-2zm1.4-1.7l1.7-9.4 3.9 3.2 3-8.1 3 8.1 3.9-3.2 1.7 9.4H3.4z"/>
+                        </svg>
+                        PRO
+                    </span>
+                    </p>
+                    
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 z-10 reveal-up">Give the files<br>a little context.</h2>
+                    <p class="space-y-4 text-gray-300 text-sm mb-5 z-10 reveal-up">
+                    Add a PDF Logo Guide to your package. Your original logo, clear space, brand colors, usage rules and examples on real-world items — alongside the assets.
+
+For a handoff that feels finished — not just exported.
+                    </p>
+                    
+                    <ul class="space-y-4 text-gray-300 text-sm mb-10 z-10 reveal-up">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-bold ph-check text-primary mt-0.5"></i>
+                            <span>Automatically extract brand colors and fonts.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="ph-bold ph-check text-primary mt-0.5"></i>
+                            <span>Explain clear space and minimum sizes visually.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="ph-bold ph-check text-primary mt-0.5"></i>
+                            <span>Show correct and incorrect usage examples.</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="z-10">
+                        <a href="#" class="inline-flex items-center gap-2 border border-gray-600 hover:border-primary hover:bg-gray-800/50 text-white hover:text-primary text-sm font-medium px-6 py-3 rounded-full transition-colors cta-button reveal-up">
+                            View example guidelines
+                            <i class="ph-bold ph-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+               <!-- Light Side (Interactive Demo Mockup) -->
+<div class="bg-[#ECECEC] p-8 lg:w-7/12 flex flex-col items-center justify-center gap-6 reveal-up">
+    <div class="bg-white w-full max-w-md rounded-xl shadow-lg border border-gray-100 overflow-hidden reveal-up">
+        <!-- Browser Header Mockup -->
+        <div class="bg-gray-50 border-b border-gray-100 px-4 py-3 flex items-center gap-4">
+            <div class="flex gap-1.5 shrink-0">
+                <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+            </div>
+            
+            <!-- URL Bar -->
+            <div class="flex-1 bg-white border border-gray-200 rounded-md px-3 py-1.5 text-[10px] text-gray-400 flex items-center justify-start gap-1.5 w-full">
+                <i class="ph-fill ph-lock text-gray-300"></i> guidelines.client.com
+            </div>
+        </div>
+        
+        <!-- Content Area Carousel -->
+        <div class="p-8 h-64 flex flex-col justify-center items-center text-center relative overflow-hidden bg-white">
+            
+            <!-- Carousel Images -->
+            <div class="relative w-full h-full mb-8 flex items-center justify-center" id="guidelines-carousel">
+                <!-- Slides with unified logic class -->
+                <img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/logopack-image-assets%20(1).webp" alt="Slide 1: Cover" class="carousel-slide absolute w-full h-full object-contain transition-opacity duration-500 opacity-100">
+                <img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/2.webp" alt="Slide 2: Index" class="carousel-slide absolute w-full h-full object-contain transition-opacity duration-500 opacity-0 pointer-events-none">
+                <img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/3.webp" alt="Slide 3: Color Palette" class="carousel-slide absolute w-full h-full object-contain transition-opacity duration-500 opacity-0 pointer-events-none">
+                <img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/4.webp" alt="Slide 4" class="carousel-slide absolute w-full h-full object-contain transition-opacity duration-500 opacity-0 pointer-events-none">
+                <img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/5.webp" alt="Slide 5" class="carousel-slide absolute w-full h-full object-contain transition-opacity duration-500 opacity-0 pointer-events-none">
+                <img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/6.webp" alt="Slide 6" class="carousel-slide absolute w-full h-full object-contain transition-opacity duration-500 opacity-0 pointer-events-none">
+                <img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/7.webp" alt="Slide 7" class="carousel-slide absolute w-full h-full object-contain transition-opacity duration-500 opacity-0 pointer-events-none">
+                <img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/8.webp" alt="Slide 8" class="carousel-slide absolute w-full h-full object-contain transition-opacity duration-500 opacity-0 pointer-events-none">
+                <img src="https://ik.imagekit.io/bebell/html-lab/Templates/landingpage-branding/14.webp" alt="Slide 9" class="carousel-slide absolute w-full h-full object-contain transition-opacity duration-500 opacity-0 pointer-events-none">
+            </div>
+
+            <!-- Navigation Dots Mockup -->
+            <div class="absolute bottom-4 left-0 w-full flex justify-center items-center gap-4 px-6 z-10">
+                <button onclick="prevSlide()" class="w-6 h-6 rounded-full bg-gray-100 shadow-sm flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors focus:outline-none"><i class="ph-bold ph-caret-left"></i></button>
+                
+                <div class="flex gap-1.5" id="carousel-dots">
+                    <button onclick="goToSlide(0)" class="carousel-dot w-2 h-2 rounded-full bg-primary transition-colors focus:outline-none"></button>
+                    
+                    <button onclick="goToSlide(1)" class="carousel-dot w-2 h-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"></button>
+                    <button onclick="goToSlide(2)" class="carousel-dot w-2 h-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"></button>
+                    <button onclick="goToSlide(3)" class="carousel-dot w-2 h-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"></button>
+                    <button onclick="goToSlide(4)" class="carousel-dot w-2 h-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"></button>
+                    
+          <button onclick="goToSlide(5)" class="carousel-dot w-2 h-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"></button>
+          
+          <button onclick="goToSlide(6)" class="carousel-dot w-2 h-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"></button>
+          
+          <button onclick="goToSlide(7)" class="carousel-dot w-2 h-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"></button>
+          
+          <button onclick="goToSlide(8)" class="carousel-dot w-2 h-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"></button>
+                
+                    
+                    
+                </div>
+                <button onclick="nextSlide()" class="w-6 h-6 rounded-full bg-gray-100 shadow-sm flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors focus:outline-none"><i class="ph-bold ph-caret-right"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Download action Anchor -->
+    <a href="#" class="py-2 flex items-center justify-center gap-2 font-bold text-gray-900 cursor-pointer hover:text-primary transition-colors reveal-up">
+        <i class="ph-bold ph-download-simple text-lg"></i>
+        Download sample ZIP
+    </a>
+</div>
+
+            </div>
+        </section>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+     <section id="pricing" class="py-24 reveal-up scroll-mt-24 reveal-up">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+        <p class="text-xs font-semibold text-gray-500 tracking-widest uppercase mb-4 reveal-up items-center justify-center flex gap-4">
+                    <span class="w-2 h-2 rounded-full bg-primary block"></span>
+        
+        03 / Start free. Get particular with 
+            <span class="inline-flex items-center gap-1 border border-orange-200 text-primary rounded px-1.5 py-[2px] text-[10px] font-bold tracking-wide uppercase align-text-bottom bg-primary/5 ml-1">
+                <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2 19h20v2H2v-2zm1.4-1.7l1.7-9.4 3.9 3.2 3-8.1 3 8.1 3.9-3.2 1.7 9.4H3.4z"/>
+                </svg>
+                PRO
+            </span>
+        </p>
+        <h2 class="text-5xl md:text-[3.5rem] font-medium tracking-tight leading-[1.1] mb-4 text-gray-900 reveal-up">
+            A good handoff.<br>At either price.
+        </h2>
+        
+        <p class="text-[10px] font-semibold text-gray-500 tracking-widest uppercase mb-4 reveal-up items-center justify-center flex gap-2">Free for the essentials. 
+            <span class="inline-flex items-center gap-1 border border-orange-200 text-primary rounded px-1.5 py-[2px] text-[10px] font-bold tracking-wide uppercase align-text-bottom bg-primary/5">
+                <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2 19h20v2H2v-2zm1.4-1.7l1.7-9.4 3.9 3.2 3-8.1 3 8.1 3.9-3.2 1.7 9.4H3.4z"/>
+                </svg>
+                PRO 
+            </span> for the details.
+        </p>
+
+        <!-- Added IDs to Toggle Buttons for JS -->
+        <!-- Billing Toggle -->
+        <div class="inline-flex bg-gray-100 rounded-full p-1 mb-12 relative reveal-up">
+            <button id="btn-monthly" class="px-6 py-2 rounded-full text-sm font-medium text-textMain bg-white shadow-sm relative z-10 transition-colors">Monthly</button>
+            <button id="btn-yearly" class="px-6 py-2 rounded-full text-sm font-medium text-textMuted hover:text-textMain relative z-10 transition-colors">
+                Yearly <span class="text-[10px] text-green-600 font-bold bg-green-100 px-1.5 py-0.5 rounded ml-1">Save 20%</span>
+            </button>
+        </div>
+
+        <!-- Pricing Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
+            
+            <!-- Free Card -->
+            <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm relative text-left flex flex-col reveal-up">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900">Free</h3>
+                    <span class="text-[10px] text-gray-500 font-semibold tracking-widest uppercase border border-gray-200 rounded px-2 py-1">The Essentials</span>
+                </div>
+                
+                <div class="mb-4">
+                    <span class="text-5xl font-bold tracking-tight">$0</span>
+                    <span class="text-textMuted text-sm ml-1">forever</span>
+                </div>
+                
+                <p class="text-sm text-gray-600 mb-6 pb-6 border-b border-gray-100">Your standard logo delivery, sorted.</p>
+
+                <ul class="space-y-4 mb-8 flex-1">
+                    <li class="flex items-start gap-3 text-sm font-medium text-gray-700">
+                        <i class="ph-bold ph-check text-orange-500 mt-0.5 text-lg"></i>
+                        SVG, PNG, JPG and WebP
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600">
+                        <i class="ph-bold ph-check text-orange-500 mt-0.5 text-lg"></i>
+                        CMYK EPS for print
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600">
+                        <i class="ph-bold ph-check text-orange-500 mt-0.5 text-lg"></i>
+                        Standard sizes and backgrounds
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600">
+                        <i class="ph-bold ph-check text-orange-500 mt-0.5 text-lg"></i>
+                        Organized ZIP package
+                    </li>
+                </ul>
+
+                <a href="#" class="block text-center w-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-900 font-bold py-4 rounded-full transition-colors text-lg shadow-sm reveal-up">
+                    Create a free pack
+                </a>
+                <p class="text-center text-xs text-gray-400 mt-4">Free account. No credit card.</p>
+            </div>
+
+            <!-- Pricing Card (Pro) -->
+            <div class="bg-white rounded-3xl p-8 border border-orange-200 shadow-xl shadow-orange-100/50 relative text-left flex flex-col reveal-up">
+                <!-- Centered PRO Badge -->
+                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-orange-100 text-primary text-xs font-bold px-3 py-1 rounded-full border border-orange-200 flex items-center gap-1">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2 19h20v2H2v-2zm1.4-1.7l1.7-9.4 3.9 3.2 3-8.1 3 8.1 3.9-3.2 1.7 9.4H3.4z"/>
+                    </svg>
+                    PRO: FULL ACCESS
+                </div>
+                
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-1">Pro Plan</h3>
+                        <p class="text-sm text-textMuted">Everything you need.</p>
+                    </div>
+                    <div class="text-right">
+                        <!-- Added ID to price amount for JS -->
+                        <span id="price-amount" class="text-5xl font-bold tracking-tight">$7</span>
+                        <span class="text-textMuted text-sm">/mo</span>
+                    </div>
+                </div>
+                
+                <p class="text-sm text-gray-600 mb-6 pb-6 border-b border-gray-100">Billed monthly. Cancel anytime.</p>
+
+                <ul class="space-y-4 mb-8 flex-1">
+                    <li class="flex items-start gap-3 text-sm font-medium text-gray-700">
+                        <i class="ph-bold ph-check text-primary mt-0.5 text-lg"></i>
+                        Unlimited Logo Packs
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600">
+                        <i class="ph-bold ph-check text-primary mt-0.5 text-lg"></i>
+                        100+ File Variations Generated
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600">
+                        <i class="ph-bold ph-check text-primary mt-0.5 text-lg"></i>
+                        Hosted Client Delivery Pages
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600">
+                        <i class="ph-bold ph-check text-primary mt-0.5 text-lg"></i>
+                        Interactive Brand Guidelines
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600">
+                        <i class="ph-bold ph-check text-primary mt-0.5 text-lg"></i>
+                        Remove Logopack Branding
+                    </li>
+                    <li class="flex items-start gap-3 text-sm text-gray-600">
+                        <i class="ph-bold ph-check text-primary mt-0.5 text-lg"></i>
+                        Custom Domain Support (Soon)
+                    </li>
+                </ul>
+
+                <a href="#" class="cta-button w-full bg-primary hover:bg-primaryDark text-white font-bold py-4 rounded-full transition-colors text-lg shadow-md shadow-primary/20 flex items-center justify-center reveal-up">
+                    Choose Pro
+                      <i class="ph-bold ph-arrow-right"></i>
+                </a>
+                <p class="text-center text-xs text-gray-400 mt-4">7-day money-back guarantee.</p>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<section id="faq" class="max-w-5xl mx-auto px-6 py-24 reveal-up scroll-mt-24">
+    <!-- Top Division Line -->
+    <div class="w-full border-t border-gray-200 mb-16  reveal-up"></div>
+
+    <div class="flex flex-col md:flex-row gap-16">
+        
+        <!-- Left: Heading -->
+        <div class="md:w-1/3">
+            <p class="text-xs font-semibold text-gray-600 tracking-widest uppercase mb-4 items-center flex gap-4 reveal-up">
+                                <span class="w-2 h-2 rounded-full bg-primary block"></span>   
+            
+          04 / BEFORE YOU PACK</p>
+            <h2 class="text-4xl md:text-[3rem] font-medium tracking-tight leading-[1.1] text-gray-900 mb-6 reveal-up">A few useful<br>answers.</h2>
+            <div class="text-gray-500 text-lg reveal-up">
+                <p class="mb-1">Have the artwork.</p>
+                <p>Know what comes next.</p>
+            </div>
+        </div>
+
+        <!-- Right: Accordion -->
+        <div class="md:w-2/3 flex flex-col">
+            <!-- Top border for the first item to match the screenshot style -->
+            <div class="border-t border-gray-200"></div>
+
+            <!-- FAQ Item 1 -->
+            <div class="faq-item border-b border-gray-200 py-5 reveal-up">
+                <button class="w-full text-left flex justify-between items-center font-medium text-lg text-gray-900 hover:text-orange-500 transition-colors focus:outline-none" onclick="toggleFaq(this)">
+                    Does Logopack create a logo for me?
+                    <i class="ph-bold ph-plus text-orange-500 faq-icon transition-transform duration-300"></i>
+                </button>
+                <div class="faq-answer text-gray-600 text-sm mt-4">
+                    <p>Logopack is designed to take your existing completed logo artwork and automatically generate all the necessary file formats and color modes for your client delivery.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 2 -->
+            <div class="faq-item border-b border-gray-200 py-5 reveal-up">
+                <button class="w-full text-left flex justify-between items-center font-medium text-lg text-gray-900 hover:text-orange-500 transition-colors focus:outline-none" onclick="toggleFaq(this)">
+                    What do I need to get started?
+                    <i class="ph-bold ph-plus text-orange-500 faq-icon transition-transform duration-300"></i>
+                </button>
+                <div class="faq-answer text-gray-600 text-sm mt-4">
+                    <p>All you need is a valid vector file (such as .AI, .EPS, or .SVG) of your final logo design.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 3 -->
+            <div class="faq-item border-b border-gray-200 py-5 reveal-up">
+                <button class="w-full text-left flex justify-between items-center font-medium text-lg text-gray-900 hover:text-orange-500 transition-colors focus:outline-none" onclick="toggleFaq(this)">
+                    What can I export for free?
+                    <i class="ph-bold ph-plus text-orange-500 faq-icon transition-transform duration-300"></i>
+                </button>
+                <div class="faq-answer text-gray-600 text-sm mt-4">
+                    <p>The free tier allows you to generate standard logo packages including SVG, PNG, JPG, WebP, and CMYK EPS files in standard sizes and backgrounds.</p>
+                </div>
+            </div>
+            
+            <!-- FAQ Item 4 -->
+            <div class="faq-item border-b border-gray-200 py-5 reveal-up">
+                <button class="w-full text-left flex justify-between items-center font-medium text-lg text-gray-900 hover:text-orange-500 transition-colors focus:outline-none" onclick="toggleFaq(this)">
+                    <span class="flex items-center">
+                        What does 
+                        <span class="inline-flex items-center gap-1 border border-orange-200 text-orange-600 rounded px-2 py-[2px] text-[10px] font-bold tracking-wide uppercase align-text-bottom bg-orange-50 mx-2">
+                            <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M2 19h20v2H2v-2zm1.4-1.7l1.7-9.4 3.9 3.2 3-8.1 3 8.1 3.9-3.2 1.7 9.4H3.4z"/>
+                            </svg>
+                            PRO
+                        </span> 
+                        add?
+                    </span>
+                    <i class="ph-bold ph-plus text-orange-500 faq-icon transition-transform duration-300"></i>
+                </button>
+                <div class="faq-answer text-gray-600 text-sm mt-4">
+                    <p>Pro adds custom export formats (including PDF), custom PNG/JPG sizes, custom background combinations, hosted client delivery pages, and interactive brand guidelines.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 5 -->
+            <div class="faq-item border-b border-gray-200 py-5 reveal-up">
+                <button class="w-full text-left flex justify-between items-center font-medium text-lg text-gray-900 hover:text-orange-500 transition-colors focus:outline-none" onclick="toggleFaq(this)">
+                    Which files are prepared in CMYK?
+                    <i class="ph-bold ph-plus text-orange-500 faq-icon transition-transform duration-300"></i>
+                </button>
+                <div class="faq-answer text-gray-600 text-sm mt-4">
+                    <p>EPS and PDF files are prepared in CMYK color mode to ensure they are print-ready for your clients.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 6 -->
+            <div class="faq-item border-b border-gray-200 py-5 reveal-up">
+                <button class="w-full text-left flex justify-between items-center font-medium text-lg text-gray-900 hover:text-orange-500 transition-colors focus:outline-none" onclick="toggleFaq(this)">
+                    Do I need to install anything?
+                    <i class="ph-bold ph-plus text-orange-500 faq-icon transition-transform duration-300"></i>
+                </button>
+                <div class="faq-answer text-gray-600 text-sm mt-4">
+                    <p>No, Logopack is entirely web-based. You don't need to install any software or plugins to generate your logo packages.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+        <section class="max-w-5xl mx-auto px-6 pb-24 reveal-up">
+            <div class="bg-primary rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl shadow-primary/30">
+                <!-- Decorative background elements -->
+                <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                    <div class="absolute -top-24 -left-24 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl"></div>
+                    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-black opacity-10 rounded-full blur-3xl"></div>
+                </div>
+
+                <div class="relative z-10">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white tracking-tight mb-4 reveal-up">
+                        Made something good?<br>Send it out properly.
+                    </h2>
+                    <p class="text-orange-100 text-lg mb-10 max-w-lg mx-auto">
+                        Impress your clients with a professional delivery experience and save hours of export time.
+                    </p>
+                    <a href="#" class="inline-flex bg-bgDark hover:bg-black text-white text-lg font-medium px-10 py-5 rounded-full transition-colors cta-button shadow-lg shadow-black/20 reveal-up">
+                        Create your first pack
+                        <i class="ph-bold ph-arrow-right text-primary"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        
+        
+        
+    </main>
+    
+    
+    
+    
+    
+
+    <footer class="bg-bgDark text-white pt-16 pb-8 px-6 md:px-12 border-t border-gray-800">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            
+            <!-- Brand Column -->
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center gap-2 mb-6">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 4H10V20H4V4Z" fill="#FF6200"/>
+                        <path d="M14 4H20V12H14V4Z" fill="#FF6200"/>
+                    </svg>
+                    <span class="font-bold text-xl tracking-tight">logopack</span>
+                </div>
+                <p class="text-sm text-gray-400 mb-6">The professional way to hand over logo designs and brand assets to your clients.</p>
+                <div class="flex gap-4 text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors"><i class="ph-fill ph-twitter-logo text-xl"></i></a>
+                    <a href="#" class="hover:text-white transition-colors"><i class="ph-fill ph-instagram-logo text-xl"></i></a>
+                    <a href="#" class="hover:text-white transition-colors"><i class="ph-fill ph-dribbble-logo text-xl"></i></a>
+                </div>
+            </div>
+
+            <!-- Links Columns -->
+            <div>
+                <h4 class="font-semibold mb-4 text-gray-200">Product</h4>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li><a href="#" class="hover:text-white transition-colors">Features</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Sample Pack</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Changelog</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-semibold mb-4 text-gray-200">Resources</h4>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Logo Design Guide</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Contact Support</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-4 text-gray-200">Legal</h4>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Refund Policy</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-800 text-xs text-gray-500">
+            <p>&copy; 2026 Logopack Inc. All rights reserved.</p>
+            <div class="flex gap-4 mt-4 md:mt-0">
+                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-green-500"></div> All systems operational</span>
+            </div>
+        </div>
+    </footer>
+
+
+  
+
+    <!-- Back To Top -->
+    <button 
+        id="backToTopBtn" 
+        class="fixed bottom-8 right-8 z-[100] p-3 bg-primary text-white rounded-full shadow-glow opacity-0 pointer-events-none translate-y-10 transition-all duration-500 hover:bg-[#e6460f] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary focus:ring-offset-black"
+        aria-label="Back to top"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m5 12 7-7 7 7"/>
+            <path d="M12 19V5"/>
+        </svg>
+    </button>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const backToTopBtn = document.getElementById('backToTopBtn');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-10');
+                    backToTopBtn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                } else {
+                    backToTopBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-10');
+                    backToTopBtn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                }
+            });
+
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+
+  
+
+    <script>
+        // FAQ Accordion Logic
+        function toggleFaq(button) {
+            const item = button.parentElement;
+            const allItems = document.querySelectorAll('.faq-item');
+            
+            allItems.forEach(el => {
+                if(el !== item) el.classList.remove('active');
+            });
+            
+            item.classList.toggle('active');
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-sm', 'border-borderLight');
+            } else {
+                header.classList.remove('shadow-sm', 'border-borderLight');
+            }
+        });
+
+        // GSAP Animations
+        document.addEventListener("DOMContentLoaded", (event) => {
+            gsap.registerPlugin(ScrollTrigger);
+            const revealElements = document.querySelectorAll('.reveal-up');
+
+            revealElements.forEach((el, index) => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%", 
+                        toggleActions: "play none none reverse", 
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power3.out",
+                });
+            });
+        });
+
+        // Improved Carousel Logic
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+
+        function updateCarousel() {
+            slides.forEach((slide, index) => {
+                if(index === currentSlide) {
+                    slide.classList.remove('opacity-0', 'pointer-events-none');
+                    slide.classList.add('opacity-100');
+                } else {
+                    slide.classList.remove('opacity-100');
+                    slide.classList.add('opacity-0', 'pointer-events-none');
+                }
+            });
+
+            dots.forEach((dot, index) => {
+                if(index === currentSlide) {
+                    dot.classList.replace('bg-gray-200', 'bg-primary');
+                    dot.classList.remove('hover:bg-gray-300');
+                } else {
+                    dot.classList.replace('bg-primary', 'bg-gray-200');
+                    dot.classList.add('hover:bg-gray-300');
+                }
+            });
+        }
+
+        window.prevSlide = () => {
+            currentSlide = (currentSlide === 0) ? slides.length - 1 : currentSlide - 1;
+            updateCarousel();
+        };
+
+        window.nextSlide = () => {
+            currentSlide = (currentSlide === slides.length - 1) ? 0 : currentSlide + 1;
+            updateCarousel();
+        };
+
+        window.goToSlide = (index) => {
+            currentSlide = index;
+            updateCarousel();
+        };
+
+        // --- NEW LOGIC INTEGRATIONS ---
+        
+        // Banner Close Logic
+        const closeBannerBtn = document.getElementById('close-banner');
+        if (closeBannerBtn) {
+            closeBannerBtn.addEventListener('click', () => {
+                document.getElementById('top-banner').style.display = 'none';
+            });
+        }
+
+        // Pricing Toggle & Counter Animation Logic
+        const btnMonthly = document.getElementById('btn-monthly');
+        const btnYearly = document.getElementById('btn-yearly');
+        const priceAmount = document.getElementById('price-amount');
+        
+        let currentPriceObj = { val: 7 };
+
+        if (btnMonthly && btnYearly && priceAmount) {
+            function updatePrice(targetPrice) {
+                gsap.to(currentPriceObj, {
+                    val: targetPrice,
+                    duration: 1,
+                    ease: "power3.out", 
+                    onUpdate: function() {
+                        // Smoothly updates number formatting. .00 is stripped for whole numbers ($7), decimals kept for $5.60
+                        priceAmount.innerText = "$" + currentPriceObj.val.toFixed(2).replace(/\.00$/, '');
+                    }
+                });
+            }
+
+            btnMonthly.addEventListener('click', () => {
+                // Update styles
+                btnMonthly.classList.add('bg-white', 'shadow-sm', 'text-textMain');
+                btnMonthly.classList.remove('text-textMuted');
+                btnYearly.classList.remove('bg-white', 'shadow-sm', 'text-textMain');
+                btnYearly.classList.add('text-textMuted');
+                
+                // Trigger Counter
+                updatePrice(7);
+            });
+
+            btnYearly.addEventListener('click', () => {
+                // Update styles
+                btnYearly.classList.add('bg-white', 'shadow-sm', 'text-textMain');
+                btnYearly.classList.remove('text-textMuted');
+                btnMonthly.classList.remove('bg-white', 'shadow-sm', 'text-textMain');
+                btnMonthly.classList.add('text-textMuted');
+                
+                // Trigger Counter for 20% discount off 7
+                updatePrice(5.60); 
+            });
+        }
+    </script>
+</body>
+</html>
