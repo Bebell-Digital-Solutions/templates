@@ -1,1 +1,634 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Group F Consulting</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Config to match brand colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0e1f3d',
+                            blue: '#1a365d',
+                            light: '#f4f6f9',
+                            accent: '#2b6cb0'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for specific animations -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* Hover Card Animations */
+        .hover-card {
+            transition: all 0.3s ease;
+        }
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Back to Top Button */
+        #backToTop {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            transform: translateY(20px);
+        }
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Link Hover Effects */
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #2b6cb0;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Background with Overlay */
+        .hero-bg {
+            background-image: linear-gradient(rgba(14, 31, 61, 0.85), rgba(14, 31, 61, 0.95)), url('https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/Hero-Banners.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Modal Transitions */
+        .modal-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            transform: scale(0.95);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased bg-brand-light">
+
+
+
+
+
+    <!-- Top Bar -->
+    <div class="bg-brand-dark text-white text-[10px] sm:text-xs py-2 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center">
+            <p class="text-gray-300 text-center sm:text-left mb-1 sm:mb-0">Enterprise procurement, sourcing and logistics for commercial, institutional and government clients.</p>
+            <a href="#" class="font-semibold text-white hover:text-gray-300 tracking-wider">CLIENT PORTAL</a>
+        </div>
+    </div>
+    
+    
+    
+ 
+ 
+ 
+
+<nav class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+        
+        
+        <!-- Logo -->
+                <a href="/" class="flex-shrink-0 flex items-center cursor-pointer">
+                    <div class="text-brand-dark font-bold flex items-center">
+                        <i class="fa-solid fa-cube text-brand-accent mr-2 text-3xl"></i>
+                        <div class="flex flex-col leading-none">
+               
+             <span class="text-2xl tracking-tight">GROUP <span class="font-light">F</span></span>
+                            <span class="text-[9px] tracking-[0.2em] font-semibold text-gray-500 mt-1">CONSULTING LLC</span>                   
+                </div>
+            </div>
+            </a>
+            
+
+            <!-- Desktop Menu + Actions -->
+            <div class="hidden md:flex items-center space-x-8">
+            
+            
+                <!-- Nav Links -->
+                <div class="flex items-center space-x-8">
+                    <a href="#" class="nav-link text-sm font-medium text-gray-700 hover:text-brand-accent">About</a>
+                    
+                    
+                    <a href="#" class="nav-link text-sm font-medium text-gray-700 hover:text-brand-accent">Sectors</a>
+                    
+                    
+                  <a href="#" class="nav-link text-sm font-medium text-gray-700 hover:text-brand-accent flex items-center">
+          Services <i class="fa-solid fa-chevron-down ml-1 text-[10px]"></i>
+                   </a>
+                        
+                        
+                        
+                    <a href="#" class="nav-link text-sm font-medium text-gray-700 hover:text-brand-accent">Insights</a>
+                    
+                    
+                    <a href="#" class="nav-link text-sm font-medium text-gray-700 hover:text-brand-accent">Contact</a>
+                </div>
+
+
+
+                <!-- Action Buttons Group -->
+                <div class="flex items-center space-x-3">
+                    <!-- Language Dropdown -->
+                    <div class="relative">
+                        <button onclick="document.getElementById('language-dropdown').classList.toggle('hidden')" class="h-10 w-full flex justify-between items-center bg-transparent border border-gray-300 hover:border-gray-400 text-gray-700 px-4 text-sm font-medium transition-colors">
+                            <span class="flex items-center">
+                                <i class="fa-solid fa-language mr-2 text-lg"></i>
+                                English
+                            </span>
+                            <i class="fa-solid fa-chevron-down ml-3 text-xs"></i>
+                        </button>
+
+
+
+
+                        <!-- Dropdown Menu -->
+                        <div id="language-dropdown" class="hidden absolute left-0 top-full w-full mt-1 bg-white border border-gray-200 shadow-lg py-1 z-50">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand-accent transition-colors">Spanish</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand-accent transition-colors">Japanese</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand-accent transition-colors">French</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand-accent transition-colors">German</a>
+                        </div>
+                    </div>
+
+
+
+                    <!-- CTA Button -->
+                    <button onclick="openModal('Partner Modal')" class="h-10 bg-brand-dark hover:bg-brand-blue text-white px-4 border border-transparent text-sm font-medium transition-colors shadow-md hover:shadow-lg">
+                        Partner with us
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+                <button class="text-gray-700 hover:text-brand-dark focus:outline-none">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    
+    
+ 
+ 
+ 
+ 
+ 
+ 
+
+    <!-- Hero Section -->
+    <section class="hero-bg py-20 lg:py-28 relative border-b-4 border-[#0a1f44]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl">
+                <div class="text-white font-semibold tracking-widest text-xs mb-4 uppercase">
+                    SERVICES
+                </div>
+                <h1 class="text-white text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                    Procurement, sourcing,<br>technology and logistics services
+                </h1>
+                <p class="text-white text-lg max-w-2xl leading-relaxed">
+                    Each service area can operate independently or as part of a single coordinated program covering sourcing, supply and delivery.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Services Grid Section -->
+    <section class="py-20 bg-brand-light relative z-10 -mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Card 1 -->
+                <div class="bg-white p-8 border border-gray-100 hover-card group cursor-pointer shadow-sm">
+                    <h4 class="text-lg font-bold text-brand-dark mb-4">Procurement & Business Solutions</h4>
+                    <p class="text-gray-600 text-sm mb-8 leading-relaxed">End-to-end procurement coordination for technology equipment and specialized goods across multi-vendor supply chains.</p>
+                    <a href="#" class="text-brand-accent font-semibold text-xs tracking-wide uppercase inline-flex items-center group-hover:underline mt-auto">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white p-8 border border-gray-100 hover-card group cursor-pointer shadow-sm">
+                    <h4 class="text-lg font-bold text-brand-dark mb-4">Technology Procurement</h4>
+                    <p class="text-gray-600 text-sm mb-8 leading-relaxed">Laptops, workstations, displays, printers, mobile devices, peripherals and networking equipment for organizations and bulk requirements.</p>
+                    <a href="#" class="text-brand-accent font-semibold text-xs tracking-wide uppercase inline-flex items-center group-hover:underline mt-auto">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-8 border border-gray-100 hover-card group cursor-pointer shadow-sm">
+                    <h4 class="text-lg font-bold text-brand-dark mb-4">Global Sourcing</h4>
+                    <p class="text-gray-600 text-sm mb-8 leading-relaxed">International supplier identification, vendor assessment, and sourcing-to-delivery coordination.</p>
+                    <a href="#" class="text-brand-accent font-semibold text-xs tracking-wide uppercase inline-flex items-center group-hover:underline mt-auto">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-white p-8 border border-gray-100 hover-card group cursor-pointer shadow-sm">
+                    <h4 class="text-lg font-bold text-brand-dark mb-4">Logistics & Transportation</h4>
+                    <p class="text-gray-600 text-sm mb-8 leading-relaxed">Freight coordination, carrier and owner operator networks, delivery planning and cross-border movements.</p>
+                    <a href="#" class="text-brand-accent font-semibold text-xs tracking-wide uppercase inline-flex items-center group-hover:underline mt-auto">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="bg-white p-8 border border-gray-100 hover-card group cursor-pointer shadow-sm">
+                    <h4 class="text-lg font-bold text-brand-dark mb-4">Consulting</h4>
+                    <p class="text-gray-600 text-sm mb-8 leading-relaxed">Procurement consulting, sourcing strategy, project coordination and operational support.</p>
+                    <a href="#" class="text-brand-accent font-semibold text-xs tracking-wide uppercase inline-flex items-center group-hover:underline mt-auto">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="bg-white p-8 border border-gray-100 hover-card group cursor-pointer shadow-sm">
+                    <h4 class="text-lg font-bold text-brand-dark mb-4">Government / RFQ & Bids</h4>
+                    <p class="text-gray-600 text-sm mb-8 leading-relaxed">RFQ review, solicitation sourcing, quote preparation support and procurement research for public sector and institutional buyers.</p>
+                    <a href="#" class="text-brand-accent font-semibold text-xs tracking-wide uppercase inline-flex items-center group-hover:underline mt-auto">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Card 7 -->
+                <div class="bg-white p-8 border border-gray-100 hover-card group cursor-pointer shadow-sm">
+                    <h4 class="text-lg font-bold text-brand-dark mb-4">Contract Support</h4>
+                    <p class="text-gray-600 text-sm mb-8 leading-relaxed">Requirement review, supplier coordination, pricing and fulfillment support across active procurement projects.</p>
+                    <a href="#" class="text-brand-accent font-semibold text-xs tracking-wide uppercase inline-flex items-center group-hover:underline mt-auto">
+                        Learn more <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Transportation Partners Section -->
+    <section class="py-24 bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start">
+            <div class="max-w-3xl w-full">
+                <div class="text-brand-accent font-semibold tracking-widest text-xs mb-4 uppercase">
+                    TRANSPORTATION PARTNERS
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-dark mb-6">
+                    Carrier, owner-operator and<br class="hidden md:block">logistics partner opportunities
+                </h2>
+                <p class="text-gray-600 mb-8">
+                    Transportation partners can register interest for future freight and logistics opportunities with Group F Consulting.
+                </p>
+                <a href="#" onclick="openModal(event, 'Freight Opportunities')" class="bg-brand-dark hover:bg-brand-blue text-white px-6 py-3 text-xs font-semibold tracking-wide uppercase inline-flex items-center transition-colors">
+                    FREIGHT OPPORTUNITIES <i class="fa-solid fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- CTA Banner -->
+    <section class="py-16 bg-brand-dark text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+                <div class="max-w-2xl w-full">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4">Request a quote</h2>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        Send your requirement, product list or solicitation details and our team will respond with sourcing and pricing coordination.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto shrink-0">
+                    <a href="#" onclick="openModal(event, 'Request a Quote')" class="bg-white text-brand-dark hover:bg-gray-100 px-8 py-3 text-xs font-bold tracking-wider uppercase transition-colors text-center whitespace-nowrap">
+                        REQUEST A QUOTE
+                    </a>
+                    <a href="#" onclick="openModal(event, 'Capability Statement')" class="border border-white text-white hover:bg-white hover:text-brand-dark px-8 py-3 text-xs font-bold tracking-wider uppercase transition-colors text-center whitespace-nowrap">
+                        CAPABILITY STATEMENT
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+         
+      
+        <!-- Footer -->
+    <footer class="bg-brand-light pt-16 pb-8 border-t border-gray-200">
+    
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Col 1 -->
+                <div>
+                    <div class="text-brand-dark font-bold flex items-center mb-6">
+                        <i class="fa-solid fa-cube text-brand-accent mr-2 text-3xl"></i>
+                        <div class="flex flex-col leading-none">
+                            <span class="text-2xl tracking-tight">GROUP <span class="font-light">F</span></span>
+                            <span class="text-[9px] tracking-[0.2em] font-semibold text-gray-500 mt-1">CONSULTING LLC</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-600 leading-relaxed pr-4">
+                        Enterprise procurement, global sourcing, technology supply, logistics and contracting for commercial, institutional and government clients.
+                    </p>
+                </div>  
+      
+      
+      
+                
+                
+                <!-- Col 2 -->
+                <div>
+                    <h4 class="text-sm font-bold text-gray-900 uppercase tracking-widest mb-6">SERVICES</h4>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">Procurement & Business Solutions</a></li>
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">Technology Procurement</a></li>
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">Global Sourcing</a></li>
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">Logistics & Transportation</a></li>
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">Consulting</a></li>
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">Government / RFQ & Bids</a></li>
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">Contract Support</a></li>
+                    </ul>
+                </div>
+                
+                
+                
+                
+                
+                <!-- Col 3 -->
+                <div>
+                    <h4 class="text-sm font-bold text-brand-dark uppercase tracking-wider mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">Leadership</a></li>
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">News & Insights</a></li>
+                        <li><a href="#" class="hover:text-brand-accent transition-colors">Locations</a></li>
+                    </ul>
+                </div>
+                
+                
+                
+
+                <!-- Col 4 -->
+                <div>
+                    <h4 class="text-sm font-bold text-brand-dark uppercase tracking-wider mb-4">Connect</h4>
+                    <p class="text-xs text-gray-500 mb-4">
+                        Get in touch with our team for inquiries or to discuss partnership opportunities.
+                    </p>
+                    <button onclick="openModal('Footer Contact')" class="bg-brand-dark text-white hover:bg-brand-blue px-6 py-2 text-sm font-semibold transition-colors shadow-sm">
+                        Contact Us
+                    </button>
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="text-gray-400 hover:text-brand-accent"><i class="fa-brands fa-linkedin text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-accent"><i class="fa-brands fa-twitter text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+                <p>&copy; 2026 Group F Consulting. All rights reserved.</p>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-brand-dark">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-dark">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- Back to Top Button -->
+<button id="backToTop" onclick="scrollToTop()" class="fixed bottom-8 right-8 bg-brand-blue/80 text-white w-12 h-12 flex items-center justify-center shadow-lg hover:bg-[#0a1f44] focus:outline-none z-50 transition-opacity">
+    <i class="fa-solid fa-arrow-up"></i>
+</button>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Reusable Modal Overlay -->
+    <div id="genericModal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay bg-brand-dark bg-opacity-80 backdrop-blur-sm">
+        <div class="bg-white shadow-2xl max-w-md w-full mx-4 modal-content overflow-hidden relative">
+            <!-- Modal Header -->
+            <div class="bg-brand-light px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 id="modalTitle" class="text-lg font-bold text-brand-dark">Information Request</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500 transition-colors focus:outline-none">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            
+            
+            <!-- Modal Body -->
+            <div class="p-6">
+                <p class="text-gray-600 text-sm mb-6">
+                    Thank you for your interest. Please leave your contact details below and one of our specialists will reach out shortly.
+                </p>
+                <form onsubmit="handleFormSubmit(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Full Name</label>
+                            <input type="text" required class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Business Email</label>
+                            <input type="email" required class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Message (Optional)</label>
+                            <textarea rows="3" class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent text-sm"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <button type="submit" class="w-full bg-brand-dark text-white hover:bg-brand-blue py-2.5 font-semibold text-sm transition-colors shadow-md">
+                            Submit Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+
+    <script>
+        // Modal Logic
+        const modal = document.getElementById('genericModal');
+
+        function openModal(e, title) {
+            if(e) e.preventDefault();
+            if(title) {
+                document.getElementById('modalTitle').innerText = title;
+            } else {
+                document.getElementById('modalTitle').innerText = "Information Request";
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Form Submit
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const formContainer = e.target.parentElement;
+            formContainer.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-green-100 text-green-500 flex items-center justify-center mx-auto mb-4 text-3xl rounded-full">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-brand-dark mb-2">Request Received</h4>
+                    <p class="text-sm text-gray-600 mb-6">Our team will contact you within 24 business hours.</p>
+                    <button onclick="closeModal()" class="text-brand-accent hover:underline text-sm font-semibold">Close Window</button>
+                </div>
+            `;
+            setTimeout(() => {
+                modal.addEventListener('transitionend', function handler() {
+                    if(!modal.classList.contains('active')) {
+                       window.location.reload(); 
+                    }
+                });
+            }, 500);
+        }
+
+        // Back to Top Logic
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
