@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelcraft Summit - Production AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Georgia&display=swap');
+
+        :root {
+            --bg-cream: #f4f1ec;
+            --border-black: #111111;
+            --accent-red: #db142c;
+            --accent-blue: #1d6bba;
+        }
+
+        body {
+            background-color: #e5e5e5; /* Outer background to show off the poster-like page */
+            color: var(--border-black);
+            font-family: Arial, Helvetica, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Custom Typography */
+        .font-impact {
+            font-family: Impact, 'Arial Black', sans-serif;
+        }
+        
+        .font-serif {
+            font-family: Georgia, serif;
+        }
+
+        /* Strict Borders matching the brutalist design */
+        .b-black { border-color: var(--border-black); }
+
+        /* Vertical text styling */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="p-0 md:p-8 flex justify-center min-h-screen">
+
+    <!-- Main Container -->
+    <main class="w-full max-w-[1200px] bg-[#f4f1ec] border border-[#111111] shadow-2xl flex flex-col box-border">
+    
+    
+    
+    
+    
+
+        <!-- HEADER BAR -->
+        <header class="grid grid-cols-4 md:grid-cols-6 border-b-8 border-[#111111] uppercase font-bold text-sm tracking-widest bg-[#f4f1ec]">
+            <div class="col-span-4 md:col-span-3 border-b md:border-b-0 border-r-0 md:border-r border-[#111111] p-4 flex items-center">
+                <h1 class="font-impact text-3xl md:text-4xl tracking-normal leading-none m-0">MODELCRAFT</h1>
+            </div>
+            <div class="col-span-2 md:col-span-1 border-r border-[#111111] p-4 flex items-center justify-center md:justify-start">
+                CHICAGO
+            </div>
+            <div class="col-span-2 md:col-span-1 border-r border-[#111111] p-4 flex items-center justify-center md:justify-start">
+                10.16.27
+            </div>
+            <div class="col-span-4 md:col-span-1 p-4 flex items-center justify-center md:justify-start border-t md:border-t-0 border-[#111111]">
+                ISSUE 01
+            </div>
+        </header>
+        
+        
+        
+        
+
+        <!-- HERO SECTION -->
+        <section class="border-b-8 border-[#111111] flex flex-col bg-[#f4f1ec]">
+            <!-- Top Labels -->
+            <div class="flex justify-between items-center p-4 text-[10px] md:text-xs font-bold uppercase tracking-widest">
+                <span>FIELD NOTES / 01</span>
+                <span>AN IN-PERSON CONFERENCE FOR PRODUCTION AI</span>
+            </div>
+
+            <!-- Massive Headline -->
+            <div class="px-4 pb-6">
+                <h2 class="font-impact text-[13vw] md:text-[110px] leading-[0.85] uppercase tracking-tight m-0 break-words">
+                    BUILD & OPERATE<br>
+                    PRODUCTION AI
+                    <span class="inline-block w-[0.4em] h-[0.4em] bg-[#db142c] ml-1 align-baseline "></span>
+                </h2>
+            </div>
+
+            <!-- Hero Bottom Columns -->
+            <div class="grid grid-cols-1 md:grid-cols-3 mb-4 border-t border-b border-[#111111] items-stretch">
+                <!-- Col 1 -->
+                <div class="p-6 border-b md:border-b-0 md:border-r border-[#111111]">
+                    <p class="font-bold text-xl uppercase leading-tight pr-4">
+                        A ONE-DAY FIELD GUIDE FOR SYSTEMS THAT HAVE TO WORK.
+                    </p>
+                </div>
+                <!-- Col 2 -->
+                <div class="p-6 border-b md:border-b-0 md:border-r border-[#111111]">
+                    <p class="font-serif text-base leading-snug">
+                        Modelcraft Summit brings practitioners together to examine evaluation, retrieval, inference, agents, and reliability—the decisions that make production AI useful when the conditions are not controlled.
+                    </p>
+                </div>
+                <!-- Col 3 (Dark Box) -->
+                <div class="bg-[#111111] text-white p-6 m-4 flex flex-col justify-between h-[auto] min-h-[160px] md:m-4">
+                    <p class="font-bold text-sm leading-snug mb-6">
+                        Registration includes every session, lunch, and the evening gathering.
+                    </p>
+                    <button class="bg-[#db142c] hover:bg-red-700 transition-colors text-white font-bold uppercase text-xs py-3 px-4 w-full tracking-widest">
+                        REGISTER NOW
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+        
+
+        <!-- THE PROGRAM SECTION -->
+        <section class="flex flex-col md:flex-row border-b border-[#111111] bg-[#f4f1ec] items-stretch">
+            
+            <!-- Left Vertical Label -->
+            <div class="hidden md:flex w-[8%] border-r border-[#111111] items-center justify-center p-4">
+                <h3 class="font-impact text-4xl vertical-text m-0 uppercase">THE PROGRAM</h3>
+            </div>
+
+            <!-- Middle Area (Talks Grid) -->
+            <div class="w-full md:w-[62%] flex flex-col md:border-r border-[#111111]">
+                
+                <!-- Row 1 -->
+                <div class="flex flex-col md:flex-row flex-1 border-b border-[#111111]">
+                    <!-- Talk 01 -->
+                    <div class="w-full md:w-1/2 p-6 border-b md:border-b-0 md:border-r border-[#111111] flex flex-col justify-start">
+                        <span class="text-[#db142c] font-bold text-[10px] uppercase tracking-widest mb-2">01 / TALK</span>
+                        <h4 class="font-impact text-3xl uppercase mb-2">MODEL<br>EVALUATION</h4>
+                        <p class="font-serif text-sm">metrics, calibration, and what your benchmark missed</p>
+                    </div>
+                    <!-- Talk 02 -->
+                    <div class="w-full md:w-1/2 p-6 flex flex-col justify-start">
+                        <span class="text-[#1d6bba] font-bold text-[10px] uppercase tracking-widest mb-2">02 / TALK</span>
+                        <h4 class="font-impact text-3xl uppercase mb-2">RETRIEVAL<br>SYSTEMS</h4>
+                        <p class="font-serif text-sm">freshness, context windows, and recall at scale</p>
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="flex flex-col md:flex-row flex-1 border-b border-[#111111]">
+                    <!-- Talk 03 -->
+                    <div class="w-full md:w-1/2 p-6 border-b md:border-b-0 md:border-r border-[#111111] flex flex-col justify-start">
+                        <span class="text-[#db142c] font-bold text-[10px] uppercase tracking-widest mb-2">03 / TALK</span>
+                        <h4 class="font-impact text-3xl uppercase mb-2">INFERENCE</h4>
+                        <p class="font-serif text-sm">latency, throughput, and the economics of serving</p>
+                    </div>
+                    <!-- Talk 04 -->
+                    <div class="w-full md:w-1/2 p-6 flex flex-col justify-start">
+                        <span class="text-[#1d6bba] font-bold text-[10px] uppercase tracking-widest mb-2">04 / TALK</span>
+                        <h4 class="font-impact text-3xl uppercase mb-2">AGENTS</h4>
+                        <p class="font-serif text-sm">bounded autonomy, tool use, and failure modes</p>
+                    </div>
+                </div>
+
+                <!-- Row 3 (Full Width Talk 05) -->
+                <div class="flex flex-col md:flex-row flex-1 p-6 items-start md:items-end justify-between border-b md:border-b-0 border-[#111111]">
+                    <div>
+                        <span class="text-[#db142c] font-bold text-[10px] uppercase tracking-widest mb-2 block">05 / TALK</span>
+                        <h4 class="font-impact text-3xl md:text-4xl uppercase m-0 leading-none">PRODUCTION RELIABILITY</h4>
+                    </div>
+                    <p class="font-serif text-sm mt-4 md:mt-0 text-left md:text-right max-w-[200px]">shipping systems that change under load</p>
+                </div>
+            </div>
+
+                        <!-- Right Area (Image + Label) -->
+            <div class="w-full md:w-[30%] flex flex-col min-h-[300px]">
+                <div class="flex-1 bg-[#d4d4d4] relative overflow-hidden">
+                    <img src="https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/Backgrounds/others/Complexe%20d'appartements%20modernes.avif" alt="Brutalist Architecture" class="absolute inset-0 w-full h-full object-cover grayscale" onerror="this.style.display='none'">
+                </div>
+                <div class="bg-[#1d6bba] text-white text-[9px] p-2 text-center font-bold uppercase tracking-widest">
+                    CONCRETE / SYSTEMS / PEOPLE
+                </div>
+            </div>
+
+        </section>
+
+
+
+
+
+
+
+        
+
+        <!-- SCHEDULE STRIP -->
+        <section class="bg-[#111111] text-white border-b border-[#111111] flex flex-col md:flex-row items-stretch uppercase font-bold text-[10px] tracking-widest">
+            <!-- Col 1 -->
+            <div class="hidden md:flex w-[8%] border-b md:border-b-0 border-r border-[#333] p-4 items-center justify-center">
+                01—05
+            </div>
+            <!-- Col 2 -->
+            <div class="w-full md:w-[31%] border-b md:border-b-0 md:border-r border-[#333] p-4 flex flex-col justify-center">
+                <span class="text-lg mb-1 block">09:00</span>
+                <span class="text-[8px] text-gray-400">OPENING / SYSTEMS</span>
+            </div>
+            <!-- Col 3 -->
+            <div class="w-full md:w-[31%] border-b md:border-b-0 md:border-r border-[#333] p-4 flex flex-col justify-center">
+                <span class="text-lg mb-1 block">11:10</span>
+                <span class="text-[8px] text-gray-400">RETRIEVAL / LAB</span>
+            </div>
+            <!-- Col 4 -->
+            <div class="w-full md:w-[15%] border-b md:border-b-0 md:border-r border-[#333] p-4 flex flex-col justify-center">
+                <span class="text-lg mb-1 block">14:00</span>
+                <span class="text-[8px] text-gray-400">FAILURE / ANALYSIS</span>
+            </div>
+            <!-- Col 5 -->
+            <div class="w-full md:w-[15%] p-4 flex flex-col justify-center">
+                <span class="text-lg mb-1 block">16:20</span>
+                <span class="text-[8px] text-gray-400">OFFICE HOURS</span>
+            </div>
+        </section>
+
+
+
+        
+
+        <!-- LIVE FAILURE SECTION (RED) -->
+        <section class="bg-[#db142c] text-white border-b border-[#111111] flex flex-col md:flex-row">
+            
+            <!-- Left Side -->
+            <div class="w-full md:w-[40%] p-8 flex flex-col justify-between min-h-[300px]">
+                <span class="font-bold text-[10px] uppercase tracking-widest mb-8">SESSION / 06</span>
+                <h2 class="font-impact text-5xl md:text-6xl uppercase leading-[0.9] m-0 mb-8">
+                    LIVE<br>FAILURE-<br>ANALYSIS<br>SESSION
+                </h2>
+                <span class="font-bold text-xs uppercase tracking-widest">HANDS-ON EVALUATION LAB</span>
+            </div>
+
+            <!-- Right Side (Quote) -->
+            <div class="w-full md:w-[60%] p-8 flex flex-col justify-center border-t md:border-t-0 md:border-l border-white/20">
+            
+            <hr class="border-t border-white mb-6">
+            
+                <h3 class="font-serif text-3xl md:text-[2.6rem] leading-tight mb-8 font-normal">
+                    “Examine how an AI application behaved differently in testing and production.”
+                </h3>
+                <hr class="border-t border-white mb-6">
+                <span class="font-bold text-[10px] uppercase tracking-widest">THE GAP IS THE CURRICULUM.</span>
+            </div>
+
+        </section>
+
+
+
+
+
+
+
+        
+
+        <!-- FOOTER SECTION -->
+        <footer class="flex flex-col md:flex-row bg-[#f4f1ec] items-stretch">
+            
+            <!-- Left Footer (Cream) -->
+            <div class="w-full md:w-1/2 flex flex-col border-b md:border-b-0 md:border-r border-[#111111]">
+                <div class="p-8 flex-1 flex flex-col justify-center">
+                    <span class="font-bold text-[10px] uppercase tracking-widest mb-4 block">ACCESS / SMALL GROUP</span>
+                    <h2 class="font-impact text-[5rem] leading-[0.8] uppercase mb-6">OFFICE<br>HOURS</h2>
+                    <p class="font-serif text-sm leading-relaxed max-w-sm">
+                        Small-group direct access to speakers and experienced AI engineering leaders. Bring the production problem that does not fit in a talk.
+                    </p>
+                </div>
+                
+                <!-- Bottom Lists -->
+                <div class="mt-auto">
+                    <div class="grid grid-cols-3 border-t border-[#111111] text-[9px] font-bold uppercase tracking-widest text-center">
+                        <div class="p-3 border-r border-[#111111]">ALL SESSIONS</div>
+                        <div class="p-3 border-r border-[#111111]">LUNCH</div>
+                        <div class="p-3">EVENING GATHERING</div>
+                    </div>
+                    <div class="border-t border-[#111111] p-3 text-[9px] font-bold uppercase tracking-widest text-center md:text-left">
+                        MODELCRAFT SUMMIT - ONE DAY - CHICAGO
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Footer (Blue) -->
+            <div class="w-full md:w-1/2 bg-[#1d6bba] text-white p-8 flex flex-col justify-between min-h-[400px]">
+                <div class="flex justify-between items-center font-bold text-[10px] uppercase tracking-widest mb-12">
+                    <span>CHICAGO / 10.16.27</span>
+                    <span>ONE DAY</span>
+                </div>
+                
+                <h2 class="font-impact text-[5rem] md:text-[6rem] leading-[0.85] uppercase mb-12 text-center md:text-left">
+                    OBTAIN<br>PASS
+                </h2>
+                
+                <div class="flex flex-col md:flex-row justify-between items-center mt-auto space-y-6 md:space-y-0">
+                    <div class="flex flex-col text-center md:text-left">
+                        <span class="font-bold text-[10px] uppercase tracking-widest mb-1">ADMISSION</span>
+                        <span class="font-impact text-4xl leading-none">$395</span>
+                    </div>
+                    <button class="border border-white hover:bg-white hover:text-[#1d6bba] transition-colors font-bold uppercase text-[10px] tracking-widest py-4 px-8">
+                        REGISTER FOR 10.16.27
+                    </button>
+                </div>
+            </div>
+
+        </footer>
+
+    </main>
+
+</body>
+</html>
