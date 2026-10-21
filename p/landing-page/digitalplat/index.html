@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigitalPlat - Ideas deserve a place on the internet.</title>
+    
+    <!-- Google Fonts: Syne for massive, tight-tracked headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#fc5800',
+                            dark: '#111111',
+                            offwhite: '#f9f9f9',
+                            blue: '#1a36ff',
+                            slate: '#1a1a2e',
+                            yellow: '#e8e500',
+                            gray: '#e5e5e5'
+                        }
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    },
+                    animation: {
+                        float: 'float 6s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Styles & Utilities */
+        body {
+            background-color: #f9f9f9;
+            color: #111111;
+            overflow-x: hidden;
+        }
+        
+        .heading-massive {
+            font-family: 'Syne', sans-serif;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+        }
+
+        /* Glassmorphism nav background */
+        .nav-scrolled {
+            background: rgba(17, 17, 17, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Hide scrollbar for carousel */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Smooth image rendering */
+        img, video {
+            -webkit-user-drag: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-orange selection:text-white">
+
+
+
+
+    <!-- 1. Header -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 text-white">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <a href="#" class="font-syne font-bold text-2xl tracking-tighter flex items-center gap-2">
+                <i data-lucide="layers" class="w-6 h-6"></i>
+                DigitalPlat
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                <a href="#" class="hover:text-brand-orange transition-colors">Product</a>
+                <a href="#" class="hover:text-brand-orange transition-colors">Solutions</a>
+                <a href="#" class="hover:text-brand-orange transition-colors">Learn</a>
+                <a href="#" class="hover:text-brand-orange transition-colors">Documentation</a>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#" class="text-sm font-medium hover:text-brand-orange transition-colors">Sign in</a>
+                <a href="#" class="bg-white text-black px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-brand-orange hover:text-white transition-all transform hover:scale-105">
+                    Contact Sales
+                </a>
+            </div>
+            
+            <button class="md:hidden">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- 2. Hero Section -->
+    <header class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden bg-brand-dark text-white">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2070&auto=format&fit=crop" alt="Cityscape" class="w-full h-full object-cover opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-brand-dark/90"></div>
+        </div>
+
+        <div class="max-w-10xl mx- px-6 pl-16 w-[60%] relative z-10 grid lg:grid-cols-1 gap-0 items-center">
+            <!-- Left: Text content -->
+            <div class="gsap-hero-el">
+                <p class="text-brand-orange font-semibold tracking-wider text-sm mb-4 uppercase">Cloud Infrastructure Platform</p>
+                <h1 class="heading-massive text-6xl md:text-8xl lg:text-[7rem] font-bold mb-6">
+                    Ideas deserve a place on the internet.
+                </h1>
+                <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-lg leading-relaxed">
+                    DigitalPlat provides the infrastructure, tools, and edge network to build, run, and secure your applications seamlessly.
+                </p>
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="#" class="bg-brand-orange text-white px-8 py-4 rounded-full font-semibold hover:bg-orange-600 transition-all transform hover:-translate-y-1 hover:shadow-lg flex items-center gap-2">
+                        Explore infrastructure <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#" class="px-8 py-4 rounded-full font-semibold border border-white/30 hover:bg-white hover:text-black transition-all">
+                        View documentation
+                    </a>
+                </div>
+            </div>
+
+          
+            </div>
+ 
+    </header>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- 3. Orange Banner -->
+    <div class="bg-brand-orange text-black py-4 border-y border-orange-600 overflow-hidden relative z-20">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center whitespace-nowrap overflow-x-auto hide-scrollbar text-sm font-semibold tracking-wide">
+            <span class="mr-8">Operating continuously globally.</span>
+            <span class="mr-8">500K+ Applications</span>
+            <span class="mr-8">200+ Edge Nodes</span>
+            <span class="mr-8">24/7 Support Available</span>
+            <span>99.99% Uptime SLA</span>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- 4. Infrastructure Section -->
+    <section class="py-24 bg-brand-offwhite relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <p class="text-brand-orange font-semibold text-sm mb-6 uppercase tracking-wider gsap-fade-up">Platform</p>
+            <h2 class="heading-massive text-5xl md:text-7xl max-w-3xl mb-16 gsap-fade-up">
+                Infrastructure for an internet people can build on.
+            </h2>
+
+            <div class="grid md:grid-cols-3 gap-12 border-t border-gray-200 pt-12 gsap-fade-up">
+                <!-- Col 1 -->
+                <div class="group cursor-pointer">
+                    <p class="text-brand-orange text-sm mb-4">01</p>
+                    <h3 class="text-2xl font-syne font-bold mb-4 group-hover:text-brand-orange transition-colors">Access infrastructure</h3>
+                    <p class="text-gray-600 mb-6 line-clamp-3">Provide seamless connectivity across regions. We optimize routing to ensure your users experience minimal latency worldwide.</p>
+                    <a href="#" class="text-brand-blue font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Explore global network <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+                <!-- Col 2 -->
+                <div class="group cursor-pointer">
+                    <p class="text-brand-orange text-sm mb-4">02</p>
+                    <h3 class="text-2xl font-syne font-bold mb-4 group-hover:text-brand-orange transition-colors">Reliable operations</h3>
+                    <p class="text-gray-600 mb-6 line-clamp-3">Built with redundancy at every layer. Outages in one region won't affect your core services, keeping your business running.</p>
+                    <a href="#" class="text-brand-blue font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        View architecture <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+                <!-- Col 3 -->
+                <div class="group cursor-pointer">
+                    <p class="text-brand-orange text-sm mb-4">03</p>
+                    <h3 class="text-2xl font-syne font-bold mb-4 group-hover:text-brand-orange transition-colors">Open knowledge</h3>
+                    <p class="text-gray-600 mb-6 line-clamp-3">We believe in transparent documentation and open-source contributions. Learn exactly how our systems function.</p>
+                    <a href="#" class="text-brand-blue font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Read the docs <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- 5. Dark Foundation Section -->
+    <section class="relative py-32 bg-black text-white overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2034&auto=format&fit=crop" alt="Servers" class="w-full h-full object-cover opacity-30">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/90 to-transparent"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10 gsap-fade-up">
+            <p class="text-brand-orange font-semibold text-sm mb-6 uppercase tracking-wider">Enterprise Architecture</p>
+            <h2 class="heading-massive text-5xl md:text-7xl max-w-2xl mb-8">
+                A durable foundation for being online.
+            </h2>
+            <p class="text-gray-400 text-lg max-w-xl mb-10">
+                Advanced DDoS mitigation, intelligent edge caching, and scalable object storage. Built for mission-critical deployments that require absolute resilience.
+            </p>
+            <a href="#" class="inline-flex bg-white text-black px-8 py-4 rounded-full font-semibold hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-1">
+                Explore platform tools
+            </a>
+        </div>
+    </section>
+
+    <!-- 6. Video Grid Section -->
+    <section class="py-24 bg-brand-offwhite">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gsap-fade-up">
+                <div>
+                    <p class="text-brand-orange font-semibold text-sm mb-4 uppercase tracking-wider">Showcase</p>
+                    <h2 class="heading-massive text-5xl md:text-7xl max-w-md">
+                        Built to be useful. Designed to endure.
+                    </h2>
+                </div>
+                <p class="text-gray-500 max-w-sm mt-6 md:mt-0">
+                    See how industry leaders are leveraging our infrastructure to scale their applications effortlessly.
+                </p>
+            </div>
+
+            <!-- 2x2 Grid -->
+            <div class="grid md:grid-cols-2 gap-4 gsap-fade-up">
+                
+                <!-- Card 1: Orange -->
+                <div class="relative bg-brand-orange text-black p-10 h-[400px] flex flex-col justify-between group overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="relative z-10">
+                        <p class="text-sm font-semibold uppercase mb-2">Customer Story</p>
+                        <h3 class="font-syne text-5xl font-bold mb-4 tracking-tight">DigitalPlat One</h3>
+                        <p class="max-w-xs text-black/80 font-medium">How we helped scale their streaming service to 10M concurrent users.</p>
+                    </div>
+                    <div class="relative z-10 flex justify-between items-end">
+                        <span class="font-semibold text-sm border-b border-black pb-1">Watch case study</span>
+                        <div class="w-12 h-12 rounded-full bg-black/10 flex items-center justify-center backdrop-blur-sm group-hover:bg-black group-hover:text-white transition-colors">
+                            <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Blue -->
+                <div class="relative bg-brand-blue text-white p-10 h-[400px] flex flex-col justify-between group overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="relative z-10">
+                        <p class="text-sm font-semibold uppercase mb-2 text-white/70">Integration</p>
+                        <h3 class="font-syne text-5xl font-bold mb-4 tracking-tight">OpenSource.ng</h3>
+                        <p class="max-w-xs text-white/80 font-medium">Seamless deployment pipeline integration for open-source maintainers.</p>
+                    </div>
+                    <div class="relative z-10 flex justify-between items-end">
+                        <span class="font-semibold text-sm border-b border-white pb-1">Explore integration</span>
+                        <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm group-hover:bg-white group-hover:text-brand-blue transition-colors">
+                            <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Dark Slate -->
+                <div class="relative bg-brand-slate text-white p-10 h-[400px] flex flex-col justify-between group overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="relative z-10">
+                        <p class="text-sm font-semibold uppercase mb-2 text-white/50">Global Network</p>
+                        <h3 class="font-syne text-5xl font-bold mb-4 tracking-tight">Internet<br>Freedom Index</h3>
+                        <p class="max-w-xs text-white/70 font-medium">Mapping connectivity and uptime across emerging markets.</p>
+                    </div>
+                    <div class="relative z-10 flex justify-between items-end">
+                        <span class="font-semibold text-sm border-b border-white pb-1">View the map</span>
+                        <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm group-hover:bg-white group-hover:text-brand-slate transition-colors">
+                            <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Light Gray -->
+                <div class="relative bg-brand-gray text-black p-10 h-[400px] flex flex-col justify-between group overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="relative z-10">
+                        <p class="text-sm font-semibold uppercase mb-2 text-black/50">Core Technology</p>
+                        <h3 class="font-syne text-5xl font-bold mb-4 tracking-tight">EdgeOS Kernel</h3>
+                        <p class="max-w-xs text-black/70 font-medium">A deep dive into our custom Linux kernel optimized for edge compute.</p>
+                    </div>
+                    <div class="relative z-10 flex justify-between items-end">
+                        <span class="font-semibold text-sm border-b border-black pb-1">Read whitepaper</span>
+                        <div class="w-12 h-12 rounded-full bg-black/5 flex items-center justify-center backdrop-blur-sm group-hover:bg-black group-hover:text-white transition-colors">
+                            <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Video Carousel -->
+    <section class="pb-24 bg-brand-offwhite overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <h3 class="font-syne text-2xl font-bold mb-8">More from our network</h3>
+        </div>
+        <!-- Horizontal Scroll Container -->
+        <div class="flex gap-6 overflow-x-auto hide-scrollbar px-6 md:px-12 pb-8 snap-x snap-mandatory">
+            
+            <!-- Carousel Item 1 -->
+            <div class="min-w-[300px] md:min-w-[400px] bg-black rounded-xl overflow-hidden relative group cursor-pointer snap-start flex-shrink-0 aspect-video">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500">
+                <div class="absolute inset-0 flex flex-col justify-end p-6">
+                    <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center mb-4 transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <i data-lucide="play" class="w-4 h-4 ml-1"></i>
+                    </div>
+                    <h4 class="text-white font-syne font-bold text-xl">Data Center Tour</h4>
+                </div>
+            </div>
+
+            <!-- Carousel Item 2 -->
+            <div class="min-w-[300px] md:min-w-[400px] bg-black rounded-xl overflow-hidden relative group cursor-pointer snap-start flex-shrink-0 aspect-video">
+                <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500">
+                <div class="absolute inset-0 flex flex-col justify-end p-6">
+                    <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center mb-4 transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <i data-lucide="play" class="w-4 h-4 ml-1"></i>
+                    </div>
+                    <h4 class="text-white font-syne font-bold text-xl">Latency Optimization</h4>
+                </div>
+            </div>
+
+            <!-- Carousel Item 3 -->
+            <div class="min-w-[300px] md:min-w-[400px] bg-black rounded-xl overflow-hidden relative group cursor-pointer snap-start flex-shrink-0 aspect-video">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500">
+                <div class="absolute inset-0 flex flex-col justify-end p-6">
+                    <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center mb-4 transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <i data-lucide="play" class="w-4 h-4 ml-1"></i>
+                    </div>
+                    <h4 class="text-white font-syne font-bold text-xl">Security Protocols</h4>
+                </div>
+            </div>
+
+             <!-- Carousel Item 4 -->
+             <div class="min-w-[300px] md:min-w-[400px] bg-black rounded-xl overflow-hidden relative group cursor-pointer snap-start flex-shrink-0 aspect-video">
+                <img src="https://images.unsplash.com/photo-1614064641913-6b83ca205362?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500">
+                <div class="absolute inset-0 flex flex-col justify-end p-6">
+                    <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center mb-4 transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <i data-lucide="play" class="w-4 h-4 ml-1"></i>
+                    </div>
+                    <h4 class="text-white font-syne font-bold text-xl">Edge Compute Explained</h4>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 8. Stats Section -->
+    <section class="py-32 bg-brand-dark text-white border-y border-white/10">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div class="gsap-fade-up">
+                <p class="text-brand-orange text-3xl mb-2">***</p>
+                <h2 class="heading-massive text-5xl md:text-7xl">
+                    Global reach.<br>Long-term<br>responsibility.
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-y-16 gap-x-8 gsap-fade-up">
+                <div>
+                    <h3 class="font-syne text-5xl md:text-6xl font-bold mb-2">500K+</h3>
+                    <p class="text-gray-400 text-sm uppercase tracking-wider font-semibold">Active Applications</p>
+                </div>
+                <div>
+                    <h3 class="font-syne text-5xl md:text-6xl font-bold mb-2">200+</h3>
+                    <p class="text-gray-400 text-sm uppercase tracking-wider font-semibold">Global Edge Nodes</p>
+                </div>
+                <div>
+                    <h3 class="font-syne text-5xl md:text-6xl font-bold mb-2">150K+</h3>
+                    <p class="text-gray-400 text-sm uppercase tracking-wider font-semibold">Daily Deployments</p>
+                </div>
+                <div>
+                    <h3 class="font-syne text-5xl md:text-6xl font-bold mb-2">24/7</h3>
+                    <p class="text-gray-400 text-sm uppercase tracking-wider font-semibold">Dedicated Support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Technology Section -->
+    <section class="py-24 bg-brand-offwhite">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16 gsap-fade-up">
+                <p class="text-brand-orange font-semibold text-sm mb-4 uppercase tracking-wider">Commitment</p>
+                <div class="flex flex-col md:flex-row md:items-end justify-between">
+                    <h2 class="heading-massive text-5xl md:text-7xl max-w-2xl">
+                        Technology and public purpose, moving together.
+                    </h2>
+                    <p class="text-gray-500 max-w-xs mt-6 md:mt-0 text-sm">
+                        A portion of our network is dedicated to empowering public interest projects and NGOs worldwide.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 gsap-fade-up">
+                <!-- Yellow Card -->
+                <div class="bg-brand-yellow text-black p-12 flex flex-col justify-between h-[450px] group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                    <div>
+                        <p class="text-sm font-bold uppercase mb-4 opacity-70">Sustainability</p>
+                        <h3 class="font-syne text-5xl font-bold mb-6 tracking-tight">EdgeAlpha DigitalPlat</h3>
+                        <p class="max-w-md font-medium opacity-80 text-lg">Running a carbon-neutral infrastructure is a core directive, not an afterthought.</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-sm border-b-2 border-black pb-1">View the initiative</span>
+                        <i data-lucide="arrow-up-right" class="w-6 h-6 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Dark Purple Card -->
+                <div class="bg-brand-slate text-white p-12 flex flex-col justify-between h-[450px] group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                    <div>
+                        <p class="text-sm font-bold uppercase mb-4 text-white/50">Grants for Good</p>
+                        <h3 class="font-syne text-5xl font-bold mb-6 tracking-tight">DigitalPlat Foundation</h3>
+                        <p class="max-w-md font-medium text-white/80 text-lg">We provide free bandwidth and compute to organizations defending human rights online.</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-sm border-b-2 border-white pb-1">Apply for infrastructure</span>
+                        <i data-lucide="arrow-up-right" class="w-6 h-6 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-brand-orange"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 border-b border-gray-300 pb-4 text-right">
+                <a href="#" class="text-sm font-bold uppercase hover:text-brand-orange transition-colors flex justify-end items-center gap-1">Read our annual report <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. Final CTA -->
+    <section class="py-32 bg-brand-offwhite">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="bg-brand-orange p-12 md:p-24 flex flex-col justify-center min-h-[400px] relative overflow-hidden group">
+                <!-- Decorative BG effect -->
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.2),_transparent_50%)]"></div>
+                
+                <div class="relative z-10 gsap-fade-up">
+                    <h2 class="heading-massive text-6xl md:text-8xl text-black max-w-3xl mb-12">
+                        Make your place in what comes next.
+                    </h2>
+                    <div class="flex flex-wrap items-center gap-6">
+                        <a href="#" class="bg-black text-white px-8 py-4 rounded-full font-bold hover:bg-gray-800 transition-colors flex items-center gap-2 transform hover:scale-105">
+                            Create an account <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#" class="text-black font-bold border-b-2 border-black pb-1 hover:text-white hover:border-white transition-colors">
+                            Talk to an expert
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. Footer -->
+    <footer class="bg-brand-offwhite pt-16 pb-8 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
+                <!-- Brand col -->
+                <div class="col-span-2">
+                    <a href="#" class="font-syne font-bold text-2xl tracking-tighter flex items-center gap-2 mb-6">
+                        <i data-lucide="layers" class="w-6 h-6 text-brand-orange"></i>
+                        DigitalPlat
+                    </a>
+                    <p class="text-gray-500 text-sm max-w-xs">
+                        Secure, fast, and scalable edge infrastructure for modern internet applications.
+                    </p>
+                </div>
+                
+                <!-- Links cols -->
+                <div>
+                    <h4 class="font-bold mb-4">Platform</h4>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Network</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Compute</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Security</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Storage</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Company</h4>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Foundation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Resources</h4>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Documentation</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">API Reference</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Community</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">System Status</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-200 text-xs text-gray-500">
+                <p>&copy; 2026 DigitalPlat Inc. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-brand-orange transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-orange transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-brand-orange transition-colors">Cookie Settings</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+                navbar.classList.remove('py-4');
+                navbar.classList.add('py-2');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-2');
+            }
+        });
+
+        // Initialize GSAP & ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Elements Entry Animation
+        gsap.from(".gsap-hero-el", {
+            y: 40,
+            opacity: 0,
+            duration: 1.2,
+            stagger: 0.2,
+            ease: "power3.out",
+            delay: 0.2
+        });
+
+        // Scroll Reveal Animations
+        const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
+        fadeUpElements.forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    toggleActions: "play none none none"
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        });
+
+        // Drag to scroll for Carousel (Vanilla JS implementation for simple usability)
+        const carousel = document.querySelector('.hide-scrollbar');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        if(carousel) {
+            carousel.addEventListener('mousedown', (e) => {
+                isDown = true;
+                carousel.classList.add('cursor-grabbing');
+                startX = e.pageX - carousel.offsetLeft;
+                scrollLeft = carousel.scrollLeft;
+            });
+            carousel.addEventListener('mouseleave', () => {
+                isDown = false;
+                carousel.classList.remove('cursor-grabbing');
+            });
+            carousel.addEventListener('mouseup', () => {
+                isDown = false;
+                carousel.classList.remove('cursor-grabbing');
+            });
+            carousel.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - carousel.offsetLeft;
+                const walk = (x - startX) * 2; // Scroll-fast
+                carousel.scrollLeft = scrollLeft - walk;
+            });
+        }
+    </script>
+</body>
+</html>
