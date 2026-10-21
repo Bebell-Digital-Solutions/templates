@@ -17,7 +17,7 @@ A collection of ready-to-use **portal page templates** — landing pages, entry 
 
 | | |
 |---|---|
-| **Example A** ![Example A](https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/portal-entrance/1.png) | **Example B** ![Example B](https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/portal-entrance/1.png) |
+| **Example A** ![Example A](https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/portal-entrance/1.png) | **Example B** ![Example B](https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/portal-entrance/2.png) |
 | **Example C** ![Example C](./screenshots/example-c.png) | **Example D** ![Example D](./screenshots/example-d.png) |
 
 </details>
