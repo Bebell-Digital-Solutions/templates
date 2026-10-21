@@ -1,6 +1,14 @@
 # Portal Entrance
 
 A collection of ready-to-use **portal page templates** — landing pages, entry screens, and gateway layouts you can drop into a project and adapt. Part of the web templates repo, kept here for easy access and reuse.
+ 
+
+  <div align="center">
+  <img src="https://ik.imagekit.io/bebell/Domain%20Vault/image-assets/mediamodifier_image.png" alt="DOMAIN VAULT Banner" width="100%" />
+  </div>
+
+
+  
 
 ## Contents preview
 
