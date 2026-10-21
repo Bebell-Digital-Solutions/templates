@@ -1,4 +1,13 @@
 <div align="center">
+  <img src="https://ik.imagekit.io/bebell/Domain%20Vault/image-assets/domain-vault-logo-horizontal.png" alt="DOMAIN VAULT Logo" width="350" />  
+  
+
+  <div align="center">
+  <img src="https://ik.imagekit.io/bebell/Domain%20Vault/image-assets/mediamodifier_image.png" alt="DOMAIN VAULT Banner" width="100%" />
+  </div>
+</div>
+
+<div align="center">
   <table>
     <!-- Row 1: Languages -->
     <tr>
