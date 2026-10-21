@@ -4,7 +4,7 @@ A collection of ready-to-use **portal page templates** — landing pages, entry 
  
 
   <div align="center">
-  <img src="https://ik.imagekit.io/bebell/Domain%20Vault/image-assets/mediamodifier_image.png" alt="DOMAIN VAULT Banner" width="100%" />
+  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/portal-entrance/portal-cover.png" alt="Portal Templates Cover" width="100%" />
   </div>
 
 
@@ -17,7 +17,7 @@ A collection of ready-to-use **portal page templates** — landing pages, entry 
 
 | | |
 |---|---|
-| **Example A** ![Example A](./screenshots/example-a.png) | **Example B** ![Example B](./screenshots/example-b.png) |
+| **Example A** ![Example A](https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/portal-entrance/1.png) | **Example B** ![Example B](https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/portal-entrance/1.png) |
 | **Example C** ![Example C](./screenshots/example-c.png) | **Example D** ![Example D](./screenshots/example-d.png) |
 
 </details>
