@@ -769,7 +769,34 @@
     
     
     
-    
+ <!-- Back to Top Button -->
+<button 
+    id="backToTopBtn" 
+    onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+    class="fixed bottom-8 right-8 z-50 bg-brand-orange text-white p-3.5 rounded-full shadow-lg hover:bg-orange-600 transition-all duration-300 transform hover:-translate-y-1 opacity-0 pointer-events-none flex items-center justify-center group"
+    aria-label="Back to top"
+>
+    <i data-lucide="arrow-up" class="w-5 h-5 transition-transform duration-300 group-hover:-translate-y-1"></i>
+</button>
+
+<!-- JavaScript to handle scroll visibility -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                // Show button
+                backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+                backToTopBtn.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                // Hide button
+                backToTopBtn.classList.remove('opacity-100', 'pointer-events-auto');
+                backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+    });
+</script>  
     
     
 
