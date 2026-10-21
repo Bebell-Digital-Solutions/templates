@@ -7,6 +7,8 @@
   </div>
 </div>
 
+---
+
 <div align="center">
   <table>
     <!-- Row 1: Languages -->
