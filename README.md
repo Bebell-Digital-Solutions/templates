@@ -3,7 +3,7 @@
   
 
   <div align="center">
-  <img src="https://ik.imagekit.io/bebell/Domain%20Vault/image-assets/mediamodifier_image.png" alt="DOMAIN VAULT Banner" width="100%" />
+  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/socialshare-banners/pro-business-page-socialshare.webp" alt="DOMAIN VAULT Banner" width="100%" />
   </div>
 </div>
 
