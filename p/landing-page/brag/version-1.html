@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brag - You built it. Now brag.</title>
+    
+    <!-- Fonts: Inter for massive text, JetBrains Mono for terminal blocks -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,800;0,900;1,800;1,900&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#FA4F18', // Vibrant primary orange
+                            dark: '#0F0D0E',   // Deep black/charcoal
+                            cream: '#F9F4F0',  // Off-white background
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    letterSpacing: {
+                        tighter: '-.04em',
+                        tightest: '-.06em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Hide scrollbar for the carousel but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        /* Brutalist text shadow utility if needed */
+        .text-outline {
+            -webkit-text-stroke: 1px black;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-brand-orange text-brand-dark selection:bg-black selection:text-brand-orange overflow-x-hidden">
+
+    <!-- Navbar / Top Bar -->
+    <nav class="w-full flex justify-between items-center py-4 px-6 md:px-12 fixed top-0 z-50 text-white">
+        <div class="text-xs font-bold tracking-widest uppercase">/brag</div>
+        <div class="hidden md:flex space-x-6 text-sm font-medium">
+            <a href="#" class="hover:underline">how it works</a>
+            <a href="#" class="hover:underline">examples</a>
+            <a href="#" class="hover:underline">pricing</a>
+        </div>
+        <button class="text-sm font-bold bg-white text-black px-8 py-4 rounded-full hover:scale-105 transition-transform">
+            login
+        </button>
+    </nav>
+    
+    
+    
+    
+    
+    
+
+    <!-- 1. Hero Section -->
+    <section class="min-h-screen pt-32 pb-20 px-6 md:px-12 flex flex-col lg:flex-row items-center justify-between gap-0 relative overflow-hidden bg-brand-orange">
+        
+        <!-- Left Content -->
+        <div class="w-full lg:w-[60%] flex flex-col items-start z-10 reveal-up">
+            <h1 class="text-[5rem] sm:text-[7rem] md:text-[9rem] lg:text-[10rem] font-black leading-[0.85] tracking-tightest mb-6">
+            
+                you built it.<br>
+                now <span class="bg-black text-brand-orange italic px-2 inline-block -skew-x-6">brag.</span>
+            </h1>
+            
+            
+            
+            <p class="text-lg md:text-xl font-medium max-w-xl mb-12 leading-relaxed">
+                An agent skill that turns the project you created into a twenty-second launch video. One command. Music, motion, share copy included.
+            </p>
+            
+            
+
+            <!-- Terminal Inputs -->
+            <div class="w-full max-w-xl space-y-4">
+                <!-- Input 1 -->
+                <div class="bg-brand-dark text-white p-3 rounded-lg flex items-center shadow-2xl relative overflow-hidden group">
+                    <span class="text-brand-orange font-mono mr-3">&gt;</span>
+                    <input type="text" value="github.com/your-username/your-repo" readonly class="bg-transparent border-none outline-none font-mono text-sm w-full text-gray-300">
+                    <button class="absolute right-2 top-2 bottom-2 bg-white/10 hover:bg-white/20 px-4 rounded text-xs font-bold transition-colors">copy</button>
+                </div>
+                
+                
+                
+                <!-- Input 2 -->
+                <div class="bg-brand-dark text-white p-3 rounded-lg flex items-center shadow-2xl relative group">
+                    <span class="text-brand-orange font-mono mr-3">&gt;</span>
+                    <div class="font-mono text-sm flex items-center gap-2 text-gray-300">
+                        <span class="text-green-400">/brag</span> 
+                        <span>--style fast</span>
+                    </div>
+                    <button class="absolute right-2 top-2 bottom-2 bg-brand-orange text-black px-4 rounded text-xs font-bold hover:bg-brand-orange/90 transition-colors">run</button>
+                </div>
+            </div>
+            
+            
+            
+            <!-- Small floating info card -->
+            <div class="mt-8 bg-white text-black p-4 rounded-xl shadow-xl border-2 border-black max-w-sm rotate-1 hover:rotate-0 transition-transform">
+                <p class="font-bold text-sm mb-1">we run /brag for you.</p>
+                <p class="text-xs text-gray-600">Connect your repo, set the vibe, get a ready-to-post video in minutes.</p>
+            </div>
+        </div>
+        
+        
+        
+
+        <!-- Right Content: Floating Phone Mockup -->
+        <div class="w-full lg:w-[40%] flex justify-center lg:justify-center z-10 mt-12 lg:mt-0">
+            <!-- GSAP Floating Wrapper -->
+            <div class="floating-phone perspective-1000">
+                <!-- CSS Rotation and Hover Wrapper -->
+                <div class="relative w-[280px] h-[580px] md:w-[320px] md:h-[650px] bg-black rounded-[3rem] border-[12px] border-black shadow-2xl overflow-hidden transform rotate-6 hover:rotate-0 transition-all duration-500 ease-out cursor-pointer group">
+                    
+                    <!-- Top Notch -->
+                    <div class="absolute top-0 inset-x-0 h-6 flex justify-center z-20">
+                        <div class="w-32 h-6 bg-black rounded-b-xl"></div>
+                    </div>
+
+                    <!-- Inner Video Placeholder -->
+                    <video class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" autoplay loop muted playsinline poster="https://cdn.shopify.com/videos/c/o/v/bfc9444bab404a4bad8fe92f1a80f810.mp4">
+                        <!-- Using a standard HTML5 test video -->
+                        <source src="https://cdn.shopify.com/videos/c/o/v/bfc9444bab404a4bad8fe92f1a80f810.mp4" type="video/mp4">
+                        Your browser does not support HTML video.
+                    </video>
+                    
+                    <!-- Overlay text for phone -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6 z-10 pointer-events-none">
+                        <h3 class="text-white font-bold text-2xl mb-1">twenty</h3>
+                        <h3 class="text-white font-bold text-2xl leading-none">seconds.</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- 2. Features Section (Off-white) -->
+    <section class="bg-brand-cream py-24 px-6 md:px-12 flex flex-col lg:flex-row items-center gap-16 relative">
+        <!-- Left Side -->
+        <div class="w-full lg:w-1/2 reveal-up">
+            <div class="bg-brand-orange text-black font-mono text-xs font-bold inline-block px-2 py-1 rounded mb-6 uppercase tracking-wider">
+                New Update
+            </div>
+            <h2 class="font-mono font-bold text-xl md:text-2xl mb-2 text-gray-500">/brag-slim</h2>
+            <h3 class="text-4xl md:text-6xl font-black leading-tight tracking-tighter mb-8">
+                the same /brag, <br>
+                <span class="bg-black text-brand-orange italic px-2 -skew-x-3 inline-block">rebuilt lean</span> <br>
+                for opus 5.5.
+            </h3>
+            <p class="text-gray-700 font-medium mb-8 max-w-lg">
+                Faster rendering. Lighter assets. The exact same high-conversion aesthetic. Designed for rapid iteration and instant social sharing.
+            </p>
+            
+            <div class="bg-brand-dark rounded-xl p-6 shadow-xl max-w-lg">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <div class="font-mono text-sm text-gray-300">
+                    <span class="text-brand-orange">npm</span> install -g @brag/cli <br>
+                    <span class="text-gray-500"># Setting up lean mode...</span><br>
+                    <span class="text-green-400">Success!</span> Ready to brag.
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Big Terminal Mockup -->
+        <div class="w-full lg:w-1/2 reveal-up" style="transition-delay: 200ms;">
+            <div class="bg-brand-dark rounded-2xl shadow-2xl border border-gray-800 overflow-hidden transform -rotate-2 hover:rotate-0 transition-transform duration-500">
+                <!-- Terminal Header -->
+                <div class="bg-[#1A1A1A] px-4 py-3 border-b border-gray-800 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">opus_5.5_agent --running</div>
+                </div>
+                <!-- Terminal Body -->
+                <div class="p-8 font-mono text-sm leading-relaxed">
+                    <p class="text-gray-400 mb-6">built something cool?</p>
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-brand-orange mt-1">&gt;</span>
+                        <div class="bg-[#1A1A1A] p-2 rounded text-white flex-1 border border-gray-800">
+                            let's <span class="text-brand-orange">/brag</span> about this
+                        </div>
+                    </div>
+                    <div class="animate-pulse flex items-center gap-2 text-gray-500 mt-6">
+                        <div class="w-2 h-2 bg-brand-orange rounded-full"></div>
+                        Generating aesthetics...
+                    </div>
+                    <div class="mt-4 bg-brand-orange text-black p-2 font-bold inline-block rounded">
+                        [ Video Mix Compiled ]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Showcase Section (Dark) -->
+    <section class="bg-brand-dark text-white py-24 px-6 md:px-12">
+        <!-- Section Header -->
+        <div class="max-w-6xl mx-auto mb-16 reveal-up">
+            <h2 class="text-5xl md:text-7xl font-black tracking-tightest leading-none mb-6">
+                what twenty <br> seconds of <span class="text-brand-orange italic">brag</span> <br> looks like.
+            </h2>
+            <div class="h-px w-full bg-gray-800 mt-12 mb-6"></div>
+            <div class="flex justify-between items-center font-mono text-sm text-gray-400">
+                <span>/brag-slim</span>
+                <span>Tap to preview</span>
+            </div>
+        </div>
+
+        <!-- 2x2 Grid -->
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mb-24">
+            
+            <!-- Video Item 1 -->
+            <div class="group relative rounded-xl overflow-hidden bg-[#1A1A1A] aspect-video border border-gray-800 hover:border-brand-orange transition-colors cursor-pointer reveal-up">
+                <!-- Faux Video Poster/Styling -->
+                <div class="absolute inset-0 bg-[#FAD9C1] flex flex-col items-center justify-center p-8 text-black text-center">
+                    <h3 class="text-4xl font-black tracking-tighter mb-4">Find your <span class="text-pink-500 italic">soulmate.</span></h3>
+                    <!-- Decorative shapes mimicking a product shot -->
+                    <div class="flex gap-4">
+                        <div class="w-16 h-16 bg-orange-800 rounded-full"></div>
+                        <div class="w-16 h-16 bg-pink-200 rounded-full"></div>
+                    </div>
+                </div>
+                <!-- Faux Player Controls -->
+                <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black pl-1">▶</div>
+                    <div class="flex-1 h-1 bg-gray-600 rounded-full"><div class="w-1/3 h-full bg-brand-orange rounded-full"></div></div>
+                </div>
+            </div>
+
+            <!-- Video Item 2 -->
+            <div class="group relative rounded-xl overflow-hidden bg-[#1A1A1A] aspect-video border border-gray-800 hover:border-brand-orange transition-colors cursor-pointer reveal-up" style="transition-delay: 100ms;">
+                <div class="absolute inset-0 bg-[#89CFF0] flex flex-col items-center justify-center p-8 text-black text-center">
+                    <h3 class="text-3xl font-black uppercase tracking-tight mb-2">We teach fish to <span class="text-brand-orange">fly.</span></h3>
+                    <!-- Decorative shapes -->
+                    <div class="mt-4 w-24 h-12 bg-orange-500 rounded-full relative">
+                        <div class="absolute -top-4 right-0 w-8 h-8 bg-white rotate-45"></div>
+                    </div>
+                </div>
+                <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black pl-1">▶</div>
+                    <div class="flex-1 h-1 bg-gray-600 rounded-full"><div class="w-1/2 h-full bg-brand-orange rounded-full"></div></div>
+                </div>
+            </div>
+
+            <!-- Video Item 3 -->
+            <div class="group relative rounded-xl overflow-hidden bg-[#1A1A1A] aspect-video border border-gray-800 hover:border-brand-orange transition-colors cursor-pointer reveal-up">
+                <div class="absolute inset-0 bg-[#2B3A67] flex flex-col items-center justify-center p-8 text-white text-center">
+                    <h3 class="text-3xl font-black uppercase tracking-tighter mb-4 text-left w-full max-w-sm">When your <br> taxi needs a <br><span class="text-yellow-400 text-4xl">TAXI.</span></h3>
+                    <div class="w-32 h-16 bg-yellow-400 rounded-t-xl rounded-b-sm border-b-4 border-black mt-2"></div>
+                </div>
+                <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black pl-1">▶</div>
+                    <div class="flex-1 h-1 bg-gray-600 rounded-full"><div class="w-2/3 h-full bg-brand-orange rounded-full"></div></div>
+                </div>
+            </div>
+
+            <!-- Video Item 4 (Brag generic) -->
+            <div class="group relative rounded-xl overflow-hidden bg-brand-orange aspect-video border border-brand-orange hover:border-white transition-colors cursor-pointer reveal-up" style="transition-delay: 100ms;">
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-black text-center">
+                    <h3 class="text-2xl font-black tracking-tightest leading-none">your <br> brag <br> here</h3>
+                </div>
+                <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/50 to-transparent flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black pl-1">▶</div>
+                    <div class="flex-1 h-1 bg-gray-600 rounded-full"><div class="w-1/4 h-full bg-black rounded-full"></div></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Carousel: /brag --full -->
+        <div class="max-w-6xl mx-auto reveal-up">
+            <div class="h-px w-full bg-gray-800 mb-6"></div>
+            <div class="flex justify-between items-center font-mono text-sm text-gray-400 mb-8">
+                <span>/brag --full</span>
+                <span class="hidden md:inline">Swipe or scroll</span>
+            </div>
+
+            <!-- Horizontal Scroll Container -->
+            <div class="flex overflow-x-auto gap-4 pb-8 snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing" id="carousel">
+                
+                <!-- Carousel Item 1 -->
+                <div class="min-w-[85vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[30vw] aspect-video bg-[#1A1A1A] rounded-lg border border-gray-800 snap-center relative group overflow-hidden flex-shrink-0">
+                    <img src="https://placehold.co/600x338/222/aaa?text=Cinematic+Intro" alt="Video Placeholder" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
+                    <div class="absolute bottom-3 left-3 right-3 flex items-center gap-2">
+                        <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-[10px]">▶</div>
+                        <div class="flex-1 h-1 bg-white/20 rounded-full"></div>
+                    </div>
+                </div>
+
+                <!-- Carousel Item 2 -->
+                <div class="min-w-[85vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[30vw] aspect-video bg-[#4B8BBE] rounded-lg border border-gray-800 snap-center relative group overflow-hidden flex-shrink-0">
+                    <div class="absolute inset-0 flex items-center p-6">
+                        <h4 class="text-white font-bold text-xl leading-tight">We teach fish <br> to fly.</h4>
+                    </div>
+                    <div class="absolute bottom-3 left-3 right-3 flex items-center gap-2">
+                        <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-[10px]">▶</div>
+                        <div class="flex-1 h-1 bg-white/20 rounded-full"></div>
+                    </div>
+                </div>
+
+                <!-- Carousel Item 3 -->
+                <div class="min-w-[85vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[30vw] aspect-video bg-[#111] rounded-lg border border-gray-800 snap-center relative group overflow-hidden flex-shrink-0">
+                    <div class="absolute inset-0 flex items-center p-6">
+                        <h4 class="text-white font-bold text-xl leading-tight">Don't be a <br> hero, be <br><span class="text-yellow-400 italic">the sidekick.</span></h4>
+                    </div>
+                    <div class="absolute bottom-3 left-3 right-3 flex items-center gap-2">
+                        <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-[10px]">▶</div>
+                        <div class="flex-1 h-1 bg-white/20 rounded-full"></div>
+                    </div>
+                </div>
+
+                <!-- Carousel Item 4 -->
+                <div class="min-w-[85vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[30vw] aspect-video bg-[#FA4F18] rounded-lg border border-gray-800 snap-center relative group overflow-hidden flex-shrink-0">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                         <h4 class="text-black font-black text-2xl uppercase">Launch Day</h4>
+                    </div>
+                    <div class="absolute bottom-3 left-3 right-3 flex items-center gap-2">
+                        <div class="w-6 h-6 rounded-full bg-black/20 flex items-center justify-center text-[10px] text-black">▶</div>
+                        <div class="flex-1 h-1 bg-black/20 rounded-full"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Footer Section -->
+    <footer class="bg-brand-orange text-brand-dark py-24 px-6 md:px-12 border-t-4 border-black">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start gap-16">
+            
+            <!-- Left: Huge CTA -->
+            <div class="w-full lg:w-1/2 reveal-up">
+                <h2 class="text-[5rem] sm:text-[7rem] md:text-[9rem] font-black leading-[0.85] tracking-tightest mb-8">
+                    now go <br>
+                    <span class="bg-black text-brand-orange italic px-2 inline-block">brag.</span>
+                </h2>
+                <p class="text-sm font-medium max-w-sm mt-8">
+                    We built <em>/brag</em> to integrate seamlessly. Drop it in your terminal, point it at a repo, watch the magic. Ship fast, share faster.
+                </p>
+                <div class="mt-12 text-xs font-bold uppercase tracking-widest text-black/50 hover:text-black transition-colors cursor-pointer">
+                    © 2024 Brag Inc. All rights reserved.
+                </div>
+            </div>
+
+            <!-- Right: Stacked Terminals -->
+            <div class="w-full lg:w-1/2 flex flex-col gap-4 max-w-xl lg:mt-12 reveal-up" style="transition-delay: 200ms;">
+                
+                <!-- Stacked Terminal 1 -->
+                <div class="bg-brand-dark text-white p-4 rounded-lg flex items-center justify-between shadow-xl hover:-translate-y-1 transition-transform cursor-pointer border border-transparent hover:border-black">
+                    <div class="flex items-center gap-3 w-full">
+                        <span class="text-brand-orange font-mono text-sm">&gt;</span>
+                        <div class="font-mono text-sm text-gray-300 w-full">
+                            git commit -m "added /brag action"
+                        </div>
+                    </div>
+                    <div class="bg-white/10 px-2 py-1 rounded text-xs font-mono text-gray-400">bash</div>
+                </div>
+
+                <!-- Stacked Terminal 2 -->
+                <div class="bg-brand-dark text-white p-4 rounded-lg flex items-center justify-between shadow-xl hover:-translate-y-1 transition-transform cursor-pointer border border-transparent hover:border-black">
+                    <div class="flex items-center gap-3 w-full">
+                        <span class="text-brand-orange font-mono text-sm">&gt;</span>
+                        <div class="font-mono text-sm text-gray-300 w-full flex items-center justify-between">
+                            <span>npx create-brag-app@latest</span>
+                            <span class="text-green-400">v2.1.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stacked Terminal 3 -->
+                <div class="bg-brand-dark text-white p-4 rounded-lg flex items-center justify-between shadow-xl hover:-translate-y-1 transition-transform cursor-pointer border border-transparent hover:border-black">
+                    <div class="flex items-center gap-3 w-full">
+                        <span class="text-brand-orange font-mono text-sm">&gt;</span>
+                        <div class="font-mono text-sm text-gray-300 w-full">
+                            export BRAG_TOKEN=**************
+                        </div>
+                    </div>
+                    <button class="bg-brand-orange text-black px-3 py-1 rounded text-xs font-bold hover:bg-white transition-colors">auth</button>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts: GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script>
+        // Register ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Wait for DOM to load
+        document.addEventListener("DOMContentLoaded", (event) => {
+            
+            // 1. Scroll Reveal Animations (Slide up & Fade in)
+            const revealElements = document.querySelectorAll('.reveal-up');
+            
+            revealElements.forEach((element) => {
+                gsap.from(element, {
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 85%", // Animation starts when top of element hits 85% of viewport height
+                        toggleActions: "play none none reverse" // Play on scroll down, reverse on scroll up
+                    },
+                    y: 60,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+            });
+
+            // 2. Floating Phone Animation
+            // Animates the wrapper continuously
+            gsap.to('.floating-phone', {
+                y: -20, // Move up by 20px
+                duration: 2.5,
+                ease: "power1.inOut",
+                yoyo: true, // Go back to original position
+                repeat: -1 // Infinite loop
+            });
+
+            // Optional: Basic mouse drag logic for the carousel to make it feel premium
+            const carousel = document.getElementById('carousel');
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            carousel.addEventListener('mousedown', (e) => {
+                isDown = true;
+                carousel.classList.add('active');
+                startX = e.pageX - carousel.offsetLeft;
+                scrollLeft = carousel.scrollLeft;
+            });
+            
+            carousel.addEventListener('mouseleave', () => {
+                isDown = false;
+                carousel.classList.remove('active');
+            });
+            
+            carousel.addEventListener('mouseup', () => {
+                isDown = false;
+                carousel.classList.remove('active');
+            });
+            
+            carousel.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - carousel.offsetLeft;
+                const walk = (x - startX) * 2; // Scroll-fast multiplier
+                carousel.scrollLeft = scrollLeft - walk;
+            });
+        });
+    </script>
+</body>
+</html>
