@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HorizonX - Premium UI & Code Library</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            50: '#f9fafb',
+                            100: '#f3f4f6',
+                            500: '#6b7280',
+                            600: '#4b5563',
+                            900: '#111827',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* 
+         * Card Gallery Styling
+         * Manages the fanned layout, aspect ratio, and dual-layered hover effects.
+         */
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 4rem;
+            perspective: 1200px;
+        }
+
+        .fan-card {
+            position: absolute;
+            width: 220px;
+            aspect-ratio: 1080 / 1350; /* Requested Aspect Ratio */
+            border-radius: 16px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.25), 
+                        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-origin: 50% 80%; /* Anchor near bottom for realistic fanning */
+            cursor: pointer;
+        }
+
+        .fan-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        /* Default Fanned Positions */
+        .card-1 { transform: translateX(-180px) rotate(-16deg) translateY(20px); z-index: 1; }
+        .card-2 { transform: translateX(-90px) rotate(-8deg) translateY(5px); z-index: 2; }
+        .card-3 { transform: translateX(0px) rotate(0deg) translateY(0px); z-index: 3; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.4); }
+        .card-4 { transform: translateX(90px) rotate(8deg) translateY(5px); z-index: 2; }
+        .card-5 { transform: translateX(180px) rotate(16deg) translateY(20px); z-index: 1; }
+
+        /* Level 1 Hover: Spread out when hovering the container */
+        .gallery-container:hover .card-1 { transform: translateX(-240px) rotate(-22deg) translateY(30px); }
+        .gallery-container:hover .card-2 { transform: translateX(-120px) rotate(-11deg) translateY(10px); }
+        .gallery-container:hover .card-3 { transform: translateX(0px) rotate(0deg) translateY(-10px); }
+        .gallery-container:hover .card-4 { transform: translateX(120px) rotate(11deg) translateY(10px); }
+        .gallery-container:hover .card-5 { transform: translateX(240px) rotate(22deg) translateY(30px); }
+
+        /* Level 2 Hover: Focus & bring to front when hovering a specific card */
+        .gallery-container .fan-card:hover {
+            transform: translateX(var(--hover-x, 0)) scale(1.15) translateY(-30px) rotate(0deg) !important;
+            z-index: 20;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Adjust specific card hover X offsets to prevent them going off-screen/overlapping awkwardly */
+        .gallery-container .card-1:hover { --hover-x: -180px; }
+        .gallery-container .card-2:hover { --hover-x: -90px; }
+        .gallery-container .card-3:hover { --hover-x: 0px; }
+        .gallery-container .card-4:hover { --hover-x: 90px; }
+        .gallery-container .card-5:hover { --hover-x: 180px; }
+
+        /* Mobile Adjustments for Gallery */
+        @media (max-width: 768px) {
+            .fan-card { width: 140px; }
+            .gallery-container { height: 260px; }
+            
+            .card-1 { transform: translateX(-100px) rotate(-14deg) translateY(15px); }
+            .card-2 { transform: translateX(-50px) rotate(-7deg) translateY(5px); }
+            .card-3 { transform: translateX(0px) rotate(0deg) translateY(0px); }
+            .card-4 { transform: translateX(50px) rotate(7deg) translateY(5px); }
+            .card-5 { transform: translateX(100px) rotate(14deg) translateY(15px); }
+
+            .gallery-container:hover .card-1, .gallery-container:hover .card-2, 
+            .gallery-container:hover .card-3, .gallery-container:hover .card-4, 
+            .gallery-container:hover .card-5 {
+                transform: inherit; /* Disable spread on mobile */
+            }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="w-full px-6 lg:px-12 py-5 flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center gap-2 cursor-pointer">
+            <div class="w-7 h-7 bg-black rounded-full flex items-center justify-center">
+                <!-- Simple stylized cross/star icon for logo -->
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v20"></path>
+                    <path d="M2 12h20"></path>
+                </svg>
+            </div>
+            <span class="font-bold text-xl tracking-tight text-gray-900">HorizonX</span>
+        </div>
+
+        <!-- Desktop Links -->
+        <div class="hidden lg:flex items-center space-x-8">
+            <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1 transition-colors">
+                Explore
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </a>
+            <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1 transition-colors">
+                Tools
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </a>
+            <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">MCP</a>
+            <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
+            <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Community</a>
+            <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Affiliate</a>
+            <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1 transition-colors">
+                Resources
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </a>
+        </div>
+
+        <!-- Auth Actions -->
+        <div class="hidden sm:flex items-center space-x-6">
+            <a href="#" class="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">Log in</a>
+            <a href="#" class="text-sm font-medium bg-black text-white px-5 py-2.5 rounded-full hover:bg-gray-800 transition-all shadow-md hover:shadow-lg">Sign up</a>
+        </div>
+        
+        <!-- Mobile Menu Button (Hamburger) -->
+        <button class="lg:hidden p-2 text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
+    </nav>
+
+    <!-- Main Hero Section -->
+    <main class="flex-1 flex flex-col items-center justify-center px-4 pt-16 pb-24 lg:pt-24">
+        
+        <!-- Hero Heading -->
+        <h1 class="text-[40px] leading-[1.1] md:text-[56px] lg:text-[64px] font-extrabold text-center text-gray-900 tracking-[-0.02em] max-w-[800px] mx-auto">
+            The premium UI & code library<br class="hidden sm:block" /> for the vibecoding era.
+        </h1>
+
+        <!-- Interactive Fanned Cards Gallery -->
+        <div class="gallery-container">
+            <!-- Card 1: Green abstract/3d -->
+            <div class="fan-card card-1 group">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1080&auto=format&fit=crop" alt="Green abstract design">
+            </div>
+            
+            <!-- Card 2: Dark futuristic/wireframe -->
+            <div class="fan-card card-2">
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1080&auto=format&fit=crop" alt="Futuristic tech">
+            </div>
+            
+            <!-- Card 3: Central sleek product/blue -->
+            <div class="fan-card card-3">
+                <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1080&auto=format&fit=crop" alt="Abstract fluid blue">
+            </div>
+            
+            <!-- Card 4: Light futuristic/character -->
+            <div class="fan-card card-4">
+                <img src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=1080&auto=format&fit=crop" alt="Futuristic robot woman">
+            </div>
+            
+            <!-- Card 5: Red/Lava 3d object -->
+            <div class="fan-card card-5">
+                <img src="https://images.unsplash.com/photo-1618172193763-c511deb635ca?q=80&w=1080&auto=format&fit=crop" alt="Abstract red shape">
+            </div>
+        </div>
+
+        <!-- Subheading Paragraph -->
+        <p class="text-[15px] sm:text-base text-gray-500 text-center max-w-[480px] mx-auto mt-14 mb-8 leading-relaxed">
+            Browse a library of UI kits, components and Figma files for real projects. Download what you need, then make it yours.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+            <button class="w-full sm:w-auto bg-black text-white px-6 py-3.5 rounded-full text-sm font-medium hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl shadow-black/10 flex items-center justify-center gap-2">
+                Subscribe <span class="opacity-50">·</span> $24.99/mo
+            </button>
+            <button class="w-full sm:w-auto bg-white text-gray-900 px-6 py-3.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-all border border-transparent hover:border-gray-200">
+                Explore library
+            </button>
+        </div>
+
+    </main>
+
+</body>
+</html>
