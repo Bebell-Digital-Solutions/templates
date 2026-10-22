@@ -1,0 +1,86 @@
+<script>
+(function () {
+  const btn = document.createElement('button');
+  btn.id = 'backToTopBtn';
+  btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.title = 'Back to top';
+
+  const BASE_COLOR  = '#f15b11';
+  const HOVER_COLOR = '#ff3900';
+
+  Object.assign(btn.style, {
+    position: 'fixed',
+    bottom: '24px',
+    right: '24px',
+    width: '48px',
+    height: '48px',
+    padding: '0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '50%',
+    border: 'none',
+    background: BASE_COLOR,
+    color: '#fff',
+    cursor: 'pointer',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+    opacity: '0',
+    visibility: 'hidden',
+    transform: 'translateY(10px) scale(1)',
+    transition: 'opacity 0.25s ease, transform 0.25s ease, visibility 0.25s, background 0.2s ease, box-shadow 0.25s ease',
+    zIndex: '9999'
+  });
+
+  // Animate the SVG on hover
+  const svg = btn.querySelector('svg');
+  svg.style.transition = 'transform 0.2s ease';
+
+  btn.addEventListener('mouseenter', () => {
+    btn.style.background = HOVER_COLOR;
+    btn.style.boxShadow = '0 8px 20px rgba(241,91,17,0.45)';
+    svg.style.transform = 'translateY(-2px)';
+  });
+
+  btn.addEventListener('mouseleave', () => {
+    btn.style.background = BASE_COLOR;
+    btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+    svg.style.transform = 'translateY(0)';
+  });
+
+  // Subtle press feedback
+  btn.addEventListener('mousedown', () => {
+    btn.style.transform = btn.dataset.visible === 'true'
+      ? 'translateY(0) scale(0.92)'
+      : 'translateY(10px) scale(0.92)';
+  });
+  btn.addEventListener('mouseup', () => {
+    btn.style.transform = btn.dataset.visible === 'true'
+      ? 'translateY(0) scale(1)'
+      : 'translateY(10px) scale(1)';
+  });
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.body.appendChild(btn);
+
+  const toggleVisibility = () => {
+    if (window.scrollY > 300) {
+      btn.dataset.visible = 'true';
+      btn.style.opacity = '1';
+      btn.style.visibility = 'visible';
+      btn.style.transform = 'translateY(0) scale(1)';
+    } else {
+      btn.dataset.visible = 'false';
+      btn.style.opacity = '0';
+      btn.style.visibility = 'hidden';
+      btn.style.transform = 'translateY(10px) scale(1)';
+    }
+  };
+
+  window.addEventListener('scroll', toggleVisibility, { passive: true });
+  toggleVisibility();
+})();
+</script>
