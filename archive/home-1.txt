@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Component Gallery — Isolated Demos</title>
+<style>
+  /* ---------------------------------------------------------
+     Page shell
+  --------------------------------------------------------- */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  :root {
+    --bg:            #0b0b0f;
+    --surface:       #14141b;
+    --surface-2:     #1b1b24;
+    --line:          rgba(255,255,255,.08);
+    --line-strong:   rgba(255,255,255,.16);
+    --text:          #f2f3f7;
+    --muted:         #9a9baa;
+    --accent:        #7c9cff;
+    --radius:        18px;
+    --ease:          cubic-bezier(.2,.8,.2,1);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(124,156,255,.16), transparent 60%),
+      radial-gradient(800px 500px at 90% 0%,   rgba(192,132,252,.12), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 72px 24px 96px;
+  }
+
+  /* ---------------------------------------------------------
+     Hero
+  --------------------------------------------------------- */
+  .hero { max-width: 640px; margin-bottom: 56px; }
+
+  .hero__eyebrow {
+    margin: 0 0 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .hero__title {
+    margin: 0 0 16px;
+    font-size: clamp(30px, 4.6vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -.035em;
+    font-weight: 800;
+  }
+
+  .hero__sub {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .hero__sub code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .88em;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid var(--line);
+    color: #cdd3e8;
+  }
+
+  /* ---------------------------------------------------------
+     Grid gallery
+  --------------------------------------------------------- */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 26px;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform .4s var(--ease),
+                border-color .4s var(--ease),
+                box-shadow .4s var(--ease);
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: var(--line-strong);
+    box-shadow: 0 26px 50px -28px rgba(0,0,0,.9),
+                0 0 0 1px rgba(124,156,255,.14);
+  }
+
+  /* --- the iframe "window" ------------------------------- */
+  .card__frame {
+    position: relative;
+    background: #ffffff;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .card__iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    border: 0;
+  }
+
+  /* --- floating circle launch button --------------------- */
+  .card__launch {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgba(12,12,20,.10);
+    background: rgba(255,255,255,.82);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+    backdrop-filter: blur(10px) saturate(160%);
+    color: #14141b;
+    cursor: pointer;
+    box-shadow: 0 6px 18px -8px rgba(10,10,25,.55);
+    transition: transform .4s var(--ease),
+                background .4s var(--ease),
+                color .4s var(--ease),
+                box-shadow .4s var(--ease),
+                border-color .4s var(--ease);
+  }
+
+  /* expanding halo ring on hover */
+  .card__launch::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    opacity: 0;
+    transform: scale(.72);
+    transition: opacity .45s var(--ease), transform .45s var(--ease);
+    pointer-events: none;
+  }
+
+  .card__launch:hover,
+  .card__launch:focus-visible {
+    background: #14141b;
+    color: #ffffff;
+    border-color: rgba(255,255,255,.2);
+    transform: scale(1.12) rotate(-6deg);
+    box-shadow: 0 14px 32px -10px rgba(124,156,255,.75);
+    outline: none;
+  }
+
+  .card__launch:hover::before,
+  .card__launch:focus-visible::before {
+    opacity: .35;
+    transform: scale(1.04);
+  }
+
+  .card__launch svg {
+    width: 18px;
+    height: 18px;
+    transition: transform .4s var(--ease);
+  }
+
+  /* the 45° arrow slides diagonally on hover */
+  .card__launch:hover svg,
+  .card__launch:focus-visible svg {
+    transform: translate(3px, -3px);
+  }
+
+  .card__launch:active { transform: scale(1.02); }
+
+  /* --- card body ----------------------------------------- */
+  .card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 20px 22px;
+    flex: 1;
+  }
+
+  .card__title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -.015em;
+  }
+
+  .card__desc {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--muted);
+    flex: 1;
+  }
+
+  .card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card__tags li {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #b7bfe0;
+    background: rgba(124,156,255,.10);
+    border: 1px solid rgba(124,156,255,.22);
+    border-radius: 999px;
+    padding: 4px 9px;
+  }
+
+  /* ---------------------------------------------------------
+     Full-screen modal
+  --------------------------------------------------------- */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(6,6,10,.72);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s var(--ease), visibility .3s var(--ease);
+  }
+
+  .modal.is-open { opacity: 1; visibility: visible; }
+
+  .modal__panel {
+    width: min(920px, 100%);
+    background: var(--surface-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    overflow: hidden;
+    transform: translateY(14px) scale(.97);
+    transition: transform .35s var(--ease);
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,.95);
+  }
+
+  .modal.is-open .modal__panel { transform: translateY(0) scale(1); }
+
+  .modal__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 12px 12px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .modal__title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .modal__close {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--text);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .25s, transform .25s var(--ease);
+  }
+
+  .modal__close:hover { background: rgba(255,255,255,.1); transform: rotate(90deg); }
+
+  .modal__iframe {
+    display: block;
+    width: 100%;
+    height: min(70vh, 560px);
+    border: 0;
+    background: #fff;
+  }
+
+  /* ---------------------------------------------------------
+     Reduced motion
+  --------------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="hero__eyebrow">Component gallery</p>
+    <h1 class="hero__title">Isolated demos, zero page weight</h1>
+    <p class="hero__sub">
+      Every card is a sandboxed <code>iframe</code> rendered straight from
+      <code>srcdoc</code> — no extra network requests, no style leakage,
+      no heavy page to load.
+    </p>
+  </header>
+
+  <main class="gallery" id="gallery"></main>
+</div>
+
+<!-- Full-screen viewer -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal__panel">
+    <div class="modal__bar">
+      <span class="modal__title" id="modal-title">Demo</span>
+      <button class="modal__close" id="modal-close" aria-label="Close preview">&times;</button>
+    </div>
+    <iframe class="modal__iframe" id="modal-frame" sandbox="" title="Demo preview"></iframe>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   1. Demo catalogue
+   Each `html` string is a fully self-contained document rendered via srcdoc.
+   They are CSS-only, so a fully locked-down `sandbox=""` is safe.
+   ========================================================================= */
+const DEMOS = [
+
+  /* ------------------------------------------------------------------ 1 */
+  {
+    title: 'Gradient Orb',
+    desc:  'A slowly rotating conic gradient wrapped in a soft radial highlight. Pure CSS, no assets.',
+    tags:  ['CSS', 'Animation', 'Gradient'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+      *{box-sizing:border-box}
+      html,body{height:100%;margin:0}
+      body{display:grid;place-items:center;background:#0f1020;overflow:hidden}
+      .orb{
+        position:relative;
+        width:min(46%,150px);
+        aspect-ratio:1;
+        border-radius:50%;
+        background:conic-gradient(from 0deg,#ff5f6d,#ffc371,#7ef0c4,#60a5fa,#a78bfa,#ff5f6d);
+        box-shadow:0 24px 70px -20px rgba(124,156,255,.9);
+        animation:spin 7s linear infinite;
+      }
+      .orb::after{
+        content:"";position:absolute;inset:0;border-radius:50%;
+        background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.9),transparent 58%);
+        mix-blend-mode:overlay;
+      }
+      @keyframes spin{to{transform:rotate(1turn)}}
+    </style></head><body><div class="orb"></div></body></html>`
+  },
+
+  /* ------------------------------------------------------------------ 2 */
+  {
+    title: 'Pricing Card',
+    desc:  'A compact plan card with a gradient badge, feature list and a full-width call to action.',
+    tags:  ['UI', 'Layout', 'Marketing'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+      *{box-sizing:border-box}
+      html,body{height:100%;margin:0}
+      body{
+        display:grid;place-items:center;padding:18px;
+        background:#f7f7fb;color:#16161d;
+        font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+      }
+      .plan{
+        width:100%;max-width:236px;padding:18px;
+        background:#fff;border:1px solid #e8e8f0;border-radius:16px;
+        box-shadow:0 14px 34px -20px rgba(20,20,40,.55);
+      }
+      .badge{
+        display:inline-block;padding:4px 9px;border-radius:999px;
+        font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+        color:#5b6cff;background:#eef0ff;
+      }
+      .price{margin:10px 0 2px;font-size:32px;font-weight:800;letter-spacing:-.04em}
+      .price span{font-size:15px;font-weight:600;color:#8b8ba3}
+      .note{margin:0 0 12px;font-size:12px;color:#8b8ba3}
+      ul{margin:0 0 14px;padding:0;list-style:none;font-size:12.5px;line-height:2;color:#3d3d52}
+      li::before{content:"✓";margin-right:8px;font-weight:800;color:#22c55e}
+      button{
+        width:100%;padding:11px;border:0;border-radius:10px;cursor:pointer;
+        font:inherit;font-size:13px;font-weight:700;color:#fff;
+        background:linear-gradient(135deg,#5b6cff,#8b5cf6);
+        transition:filter .25s, transform .25s;
+      }
+      button:hover{filter:brightness(1.1);transform:translateY(-1px)}
+    </style></head><body>
+      <div class="plan">
+        <div class="badge">Pro</div>
+        <div class="price">$24<span>/mo</span></div>
+        <p class="note">For growing teams</p>
+        <ul><li>Unlimited projects</li><li>Priority support</li><li>Custom domains</li></ul>
+        <button>Choose plan</button>
+      </div>
+    </body></html>`
+  },
+
+  /* ------------------------------------------------------------------ 3 */
+  {
+    title: 'Micro-interactions',
+    desc:  'Three button hover treatments: scale, sliding gradient fill and a soft neon lift.',
+    tags:  ['Buttons', 'Hover', 'Interaction'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+      *{box-sizing:border-box}
+      html,body{height:100%;margin:0}
+      body{
+        display:grid;place-items:center;padding:20px;background:#0f1020;
+        font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+      }
+      .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+      .btn{
+        padding:10px 16px;border:0;border-radius:10px;cursor:pointer;
+        font:700 12.5px/1 ui-sans-serif,system-ui,sans-serif;
+        transition:transform .3s cubic-bezier(.2,.8,.2,1),
+                   background .3s, color .3s, box-shadow .3s;
+      }
+      .b1{background:#fff;color:#111}
+      .b1:hover{background:#7c9cff;color:#fff;transform:scale(1.08)}
+      .b2{
+        position:relative;z-index:0;overflow:hidden;
+        background:transparent;color:#fff;border:1px solid #3a3a55;
+      }
+      .b2::before{
+        content:"";position:absolute;inset:0;z-index:-1;
+        background:linear-gradient(90deg,#7c9cff,#c084fc);
+        transform:translateX(-101%);transition:transform .35s ease;
+      }
+      .b2:hover::before{transform:translateX(0)}
+      .b3{background:#1c1c2b;color:#cfd2e6;box-shadow:0 2px 0 #000}
+      .b3:hover{color:#fff;transform:translateY(-3px);box-shadow:0 12px 22px -10px #7c9cff}
+    </style></head><body>
+      <div class="row">
+        <button class="btn b1">Hover me</button>
+        <button class="btn b2">Slide</button>
+        <button class="btn b3">Lift</button>
+      </div>
+    </body></html>`
+  },
+
+  /* ------------------------------------------------------------------ 4 */
+  {
+    title: 'Bar Chart',
+    desc:  'Staggered scaleY keyframes create a live, pulsing chart with no charting library.',
+    tags:  ['Data Viz', 'Keyframes'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+      *{box-sizing:border-box}
+      html,body{height:100%;margin:0}
+      body{display:grid;place-items:center;padding:26px;background:#0f1020}
+      .chart{display:flex;align-items:flex-end;gap:9px;height:120px;width:100%;max-width:230px}
+      .chart span{
+        flex:1;height:var(--h);border-radius:6px 6px 3px 3px;
+        background:linear-gradient(180deg,#8aa6ff,#4f46e5);
+        transform-origin:bottom;
+        animation:pulse 2.2s ease-in-out infinite alternate;
+        animation-delay:var(--d);
+        box-shadow:0 0 18px -6px rgba(124,156,255,.8);
+      }
+      @keyframes pulse{from{transform:scaleY(.5)}to{transform:scaleY(1)}}
+    </style></head><body>
+      <div class="chart">
+        <span style="--h:48%;--d:0s"></span>
+        <span style="--h:74%;--d:.12s"></span>
+        <span style="--h:36%;--d:.24s"></span>
+        <span style="--h:92%;--d:.36s"></span>
+        <span style="--h:58%;--d:.48s"></span>
+        <span style="--h:80%;--d:.60s"></span>
+        <span style="--h:44%;--d:.72s"></span>
+      </div>
+    </body></html>`
+  },
+
+  /* ------------------------------------------------------------------ 5 */
+  {
+    title: 'Profile Card',
+    desc:  'An avatar framed by a rotating conic-gradient ring, with a compact stat row below.',
+    tags:  ['Card', 'Avatar', 'Profile'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+      *{box-sizing:border-box}
+      html,body{height:100%;margin:0}
+      body{
+        display:grid;place-items:center;padding:18px;background:#f7f7fb;color:#16161d;
+        font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+      }
+      .card{
+        width:100%;max-width:230px;padding:22px 18px;text-align:center;
+        background:#fff;border:1px solid #e8e8f0;border-radius:18px;
+        box-shadow:0 16px 36px -22px rgba(20,20,40,.55);
+      }
+      .ring{
+        width:64px;height:64px;margin:0 auto 12px;border-radius:50%;padding:3px;
+        background:conic-gradient(from 0deg,#5b6cff,#c084fc,#f472b6,#5b6cff);
+        animation:spin 6s linear infinite;
+      }
+      .avatar{
+        width:100%;height:100%;border-radius:50%;display:grid;place-items:center;
+        background:#111227;color:#fff;font-weight:800;font-size:17px;letter-spacing:.02em;
+        animation:spin 6s linear infinite reverse;
+      }
+      @keyframes spin{to{transform:rotate(1turn)}}
+      h3{margin:0 0 3px;font-size:14.5px;letter-spacing:-.01em}
+      p{margin:0 0 14px;font-size:11.5px;color:#8b8ba3}
+      .stats{display:flex;justify-content:space-around;border-top:1px solid #eeeff5;padding-top:12px}
+      .stats b{display:block;font-size:13px}
+      .stats small{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:#9a9ab0}
+    </style></head><body>
+      <div class="card">
+        <div class="ring"><div class="avatar">AR</div></div>
+        <h3>Ava Ruiz</h3>
+        <p>Product Designer</p>
+        <div class="stats">
+          <div><b>128</b><small>Shots</small></div>
+          <div><b>4.2k</b><small>Followers</small></div>
+          <div><b>312</b><small>Likes</small></div>
+        </div>
+      </div>
+    </body></html>`
+  },
+
+  /* ------------------------------------------------------------------ 6 */
+  {
+    title: 'Toggle Switches',
+    desc:  'Accessible checkbox toggles styled entirely with the :checked sibling selector.',
+    tags:  ['Forms', 'CSS Only', 'A11y'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+      *{box-sizing:border-box}
+      html,body{height:100%;margin:0}
+      body{
+        display:grid;place-items:center;padding:20px;background:#0f1020;
+        font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+        color:#e6e8f2;
+      }
+      .list{display:flex;flex-direction:column;gap:14px;width:100%;max-width:210px}
+      .tg{display:flex;align-items:center;gap:12px;cursor:pointer;font-size:13px}
+      .tg input{position:absolute;opacity:0;pointer-events:none}
+      .track{
+        position:relative;flex:0 0 auto;width:40px;height:22px;border-radius:999px;
+        background:#2a2a3d;transition:background .3s ease;
+      }
+      .track::after{
+        content:"";position:absolute;top:3px;left:3px;
+        width:16px;height:16px;border-radius:50%;background:#fff;
+        transition:transform .3s cubic-bezier(.2,.8,.2,1);
+        box-shadow:0 2px 6px rgba(0,0,0,.4);
+      }
+      .tg input:checked + .track{background:linear-gradient(135deg,#5b6cff,#c084fc)}
+      .tg input:checked + .track::after{transform:translateX(18px)}
+      .tg input:focus-visible + .track{outline:2px solid #7c9cff;outline-offset:3px}
+    </style></head><body>
+      <div class="list">
+        <label class="tg"><input type="checkbox" checked><span class="track"></span>Notifications</label>
+        <label class="tg"><input type="checkbox"><span class="track"></span>Dark mode</label>
+        <label class="tg"><input type="checkbox" checked><span class="track"></span>Auto-save</label>
+      </div>
+    </body></html>`
+  }
+];
+
+/* =========================================================================
+   2. Build the gallery
+   ========================================================================= */
+const gallery = document.getElementById('gallery');
+
+const ARROW_SVG = `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M7 17 17 7"/>
+    <path d="M8 7h9v9"/>
+  </svg>`;
+
+DEMOS.forEach((demo, index) => {
+  const card = document.createElement('article');
+  card.className = 'card';
+
+  /* --- iframe (created separately so we can set .srcdoc as a property) --- */
+  const frame = document.createElement('div');
+  frame.className = 'card__frame';
+
+  const iframe = document.createElement('iframe');
+  iframe.className = 'card__iframe';
+  iframe.setAttribute('sandbox', '');          // fully locked down — demos are CSS-only
+  iframe.setAttribute('title', demo.title + ' demo');
+  iframe.srcdoc = demo.html;
+  frame.appendChild(iframe);
+
+  /* --- floating circle button --- */
+  const launch = document.createElement('button');
+  launch.type = 'button';
+  launch.className = 'card__launch';
+  launch.setAttribute('aria-label', 'Open ' + demo.title + ' preview');
+  launch.innerHTML = ARROW_SVG;
+  launch.addEventListener('click', () => openModal(demo));
+  frame.appendChild(launch);
+
+  /* --- body: title / description / tags --- */
+  const body = document.createElement('div');
+  body.className = 'card__body';
+
+  const title = document.createElement('h2');
+  title.className = 'card__title';
+  title.textContent = demo.title;
+
+  const desc = document.createElement('p');
+  desc.className = 'card__desc';
+  desc.textContent = demo.desc;
+
+  const tags = document.createElement('ul');
+  tags.className = 'card__tags';
+  demo.tags.forEach(tag => {
+    const li = document.createElement('li');
+    li.textContent = tag;
+    tags.appendChild(li);
+  });
+
+  body.append(title, desc, tags);
+  card.append(frame, body);
+  gallery.appendChild(card);
+});
+
+/* =========================================================================
+   3. Full-screen modal viewer
+   ========================================================================= */
+const modal      = document.getElementById('modal');
+const modalFrame = document.getElementById('modal-frame');
+const modalTitle = document.getElementById('modal-title');
+const modalClose = document.getElementById('modal-close');
+
+let lastFocused = null;
+
+function openModal(demo) {
+  lastFocused = document.activeElement;
+  modalTitle.textContent = demo.title;
+  modalFrame.srcdoc = demo.html;
+  modal.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  modalClose.focus();
+}
+
+function closeModal() {
+  modal.classList.remove('is-open');
+  document.body.style.overflow = '';
+  /* clear the iframe after the fade-out to free the document */
+  window.setTimeout(() => {
+    if (!modal.classList.contains('is-open')) modalFrame.srcdoc = '';
+  }, 320);
+  if (lastFocused) lastFocused.focus();
+}
+
+modalClose.addEventListener('click', closeModal);
+
+/* click on the backdrop (but not the panel) closes */
+modal.addEventListener('click', (event) => {
+  if (event.target === modal) closeModal();
+});
+
+/* Esc closes */
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+});
+</script>
+</body>
+</html>
