@@ -33,6 +33,7 @@
     color: var(--text);
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
+    padding: 0 2rem;
   }
 
   .wrap {
@@ -105,6 +106,19 @@
     border: 1px solid var(--line);
     color: #cdd3e8;
   }
+
+
+  @media (max-width: 640px) {
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero__logo {
+    flex-basis: auto;
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
 
   /* ---------------------------------------------------------
      Filter Bar
