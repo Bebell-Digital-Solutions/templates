@@ -1,1 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Component & Page Gallery</title>
+<style>
+  /* ---------------------------------------------------------
+     Page shell & variables
+  --------------------------------------------------------- */
+  *, *::before, *::after { box-sizing: border-box; }
 
+  :root {
+    --bg:            #0b0b0f;
+    --surface:       #14141b;
+    --surface-2:     #1b1b24;
+    --line:          rgba(255,255,255,.08);
+    --line-strong:   rgba(255,255,255,.16);
+    --text:          #f2f3f7;
+    --muted:         #9a9baa;
+    --accent:        #7c9cff;
+    --radius:        18px;
+    --ease:          cubic-bezier(.2,.8,.2,1);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(124,156,255,.16), transparent 60%),
+      radial-gradient(800px 500px at 90% 0%,   rgba(192,132,252,.12), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 72px 24px 96px;
+  }
+
+  /* ---------------------------------------------------------
+     Hero
+  --------------------------------------------------------- */
+  .hero { max-width: 640px; margin-bottom: 42px; }
+
+  .hero__eyebrow {
+    margin: 0 0 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .hero__title {
+    margin: 0 0 16px;
+    font-size: clamp(30px, 4.6vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -.035em;
+    font-weight: 800;
+  }
+
+  .hero__sub {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .hero__sub code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .88em;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid var(--line);
+    color: #cdd3e8;
+  }
+
+  /* ---------------------------------------------------------
+     Filter Bar
+  --------------------------------------------------------- */
+  .filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin-bottom: 28px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    flex: 0 0 auto;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--muted);
+    font: 600 12px/1 ui-sans-serif, system-ui, sans-serif;
+    cursor: pointer;
+    transition: background .25s, color .25s, border-color .25s, transform .2s;
+  }
+  .filter-btn:hover {
+    background: rgba(255,255,255,.07);
+    color: var(--text);
+    transform: translateY(-1px);
+  }
+  .filter-btn.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 14px -4px rgba(124,156,255,.6);
+  }
+
+  /* ---------------------------------------------------------
+     Grid gallery
+  --------------------------------------------------------- */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 26px;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform .4s var(--ease),
+                border-color .4s var(--ease),
+                box-shadow .4s var(--ease),
+                opacity .4s var(--ease);
+  }
+
+  .card.is-hidden {
+    display: none;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: var(--line-strong);
+    box-shadow: 0 26px 50px -28px rgba(0,0,0,.9),
+                0 0 0 1px rgba(124,156,255,.14);
+  }
+
+  /* --- the iframe "window" ------------------------------- */
+  .card__frame {
+    position: relative;
+    background: #ffffff;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .card__iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    border: 0;
+  }
+
+  /* --- floating circle launch button --------------------- */
+  .card__launch {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgba(12,12,20,.10);
+    background: rgba(255,255,255,.82);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+    backdrop-filter: blur(10px) saturate(160%);
+    color: #14141b;
+    cursor: pointer;
+    box-shadow: 0 6px 18px -8px rgba(10,10,25,.55);
+    transition: transform .4s var(--ease),
+                background .4s var(--ease),
+                color .4s var(--ease),
+                box-shadow .4s var(--ease),
+                border-color .4s var(--ease);
+  }
+
+  .card__launch::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    opacity: 0;
+    transform: scale(.72);
+    transition: opacity .45s var(--ease), transform .45s var(--ease);
+    pointer-events: none;
+  }
+
+  .card__launch:hover,
+  .card__launch:focus-visible {
+    background: #14141b;
+    color: #ffffff;
+    border-color: rgba(255,255,255,.2);
+    transform: scale(1.12) rotate(-6deg);
+    box-shadow: 0 14px 32px -10px rgba(124,156,255,.75);
+    outline: none;
+  }
+
+  .card__launch:hover::before,
+  .card__launch:focus-visible::before {
+    opacity: .35;
+    transform: scale(1.04);
+  }
+
+  .card__launch svg {
+    width: 18px;
+    height: 18px;
+    transition: transform .4s var(--ease);
+  }
+
+  .card__launch:hover svg,
+  .card__launch:focus-visible svg {
+    transform: translate(3px, -3px);
+  }
+
+  /* --- card body ----------------------------------------- */
+  .card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 20px 22px;
+    flex: 1;
+  }
+
+  .card__title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -.015em;
+  }
+
+  .card__desc {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--muted);
+    flex: 1;
+  }
+
+  .card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card__tags li {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #b7bfe0;
+    background: rgba(124,156,255,.10);
+    border: 1px solid rgba(124,156,255,.22);
+    border-radius: 999px;
+    padding: 4px 9px;
+  }
+
+  /* ---------------------------------------------------------
+     Full-screen modal
+  --------------------------------------------------------- */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(6,6,10,.72);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s var(--ease), visibility .3s var(--ease);
+  }
+
+  .modal.is-open { opacity: 1; visibility: visible; }
+
+  .modal__panel {
+    width: min(920px, 100%);
+    background: var(--surface-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    overflow: hidden;
+    transform: translateY(14px) scale(.97);
+    transition: transform .35s var(--ease);
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,.95);
+  }
+
+  .modal.is-open .modal__panel { transform: translateY(0) scale(1); }
+
+  .modal__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 12px 12px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .modal__title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .modal__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    background: rgba(255,255,255,.05);
+    color: var(--text);
+    font: 600 12px/1 ui-sans-serif, system-ui, sans-serif;
+    cursor: pointer;
+    transition: all .25s var(--ease);
+  }
+
+  .btn-copy:hover {
+    background: rgba(255,255,255,.1);
+    border-color: rgba(255,255,255,.3);
+  }
+
+  .btn-copy.is-copied {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.4);
+    color: #4ade80;
+  }
+
+  .modal__close {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--text);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .25s, transform .25s var(--ease);
+  }
+
+  .modal__close:hover { background: rgba(255,255,255,.1); transform: rotate(90deg); }
+
+  .modal__iframe {
+    display: block;
+    width: 100%;
+    height: min(70vh, 560px);
+    border: 0;
+    background: #fff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="hero__eyebrow">Component & Page Gallery</p>
+    <h1 class="hero__title">Isolated demos & live pages</h1>
+    <p class="hero__sub">
+      Browse hand-coded components (with copyable source) or explore live external pages.
+    </p>
+  </header>
+
+  <!-- Filter Tabs -->
+  <nav class="filters" id="filters" aria-label="Filter demos by category">
+    <button class="filter-btn is-active" data-filter="components">Components</button>
+    <button class="filter-btn" data-filter="404">404</button>
+    <button class="filter-btn" data-filter="backgrounds">Backgrounds</button>
+    <button class="filter-btn" data-filter="blocks">Blocks</button>
+    <button class="filter-btn" data-filter="carousel">Carousel</button>
+    <button class="filter-btn" data-filter="hero">Hero</button>
+    <button class="filter-btn" data-filter="landing-page">Landing Page</button>
+    <button class="filter-btn" data-filter="loaders">Loaders</button>
+    <button class="filter-btn" data-filter="payment-page">Payment Page</button>
+    <button class="filter-btn" data-filter="portal-entrance">Portal Entrance</button>
+    <button class="filter-btn" data-filter="reviews">Reviews</button>
+    <button class="filter-btn" data-filter="slider">Slider</button>
+    <button class="filter-btn" data-filter="tailwind-blocks">Tailwind Blocks</button>
+  </nav>
+
+  <main class="gallery" id="gallery"></main>
+</div>
+
+<!-- Full-screen viewer -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal__panel">
+    <div class="modal__bar">
+      <span class="modal__title" id="modal-title">Demo</span>
+      <div class="modal__actions">
+        <!-- Copy button is hidden by default for URL cards -->
+        <button class="btn-copy" id="modal-copy">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copy Code
+        </button>
+        <button class="modal__close" id="modal-close" aria-label="Close preview">&times;</button>
+      </div>
+    </div>
+    <iframe class="modal__iframe" id="modal-frame" sandbox="allow-scripts allow-same-origin" title="Demo preview"></iframe>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   1. Demo catalogue
+   `type: 'srcdoc'` is for the components (copy code works).
+   `type: 'url'` is for external pages (copy code hidden).
+   ========================================================================= */
+const DEMOS = [
+  /* --- COMPONENTS (18 existing cards) --- */
+  {
+    category: 'components', type: 'srcdoc', title: 'Gradient Orb', desc: 'A slowly rotating conic gradient wrapped in a soft radial highlight. Pure CSS, no assets.', tags: ['CSS', 'Animation', 'Gradient'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020;overflow:hidden}.orb{position:relative;width:min(46%,150px);aspect-ratio:1;border-radius:50%;background:conic-gradient(from 0deg,#ff5f6d,#ffc371,#7ef0c4,#60a5fa,#a78bfa,#ff5f6d);box-shadow:0 24px 70px -20px rgba(124,156,255,.9);animation:spin 7s linear infinite}.orb::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.9),transparent 58%);mix-blend-mode:overlay}@keyframes spin{to{transform:rotate(1turn)}}</style></head><body><div class="orb"></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Pricing Card', desc: 'A compact plan card with a gradient badge, feature list and a full-width call to action.', tags: ['UI', 'Layout', 'Marketing'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:18px;background:#f7f7fb;color:#16161d;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}.plan{width:100%;max-width:236px;padding:18px;background:#fff;border:1px solid #e8e8f0;border-radius:16px;box-shadow:0 14px 34px -20px rgba(20,20,40,.55)}.badge{display:inline-block;padding:4px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#5b6cff;background:#eef0ff}.price{margin:10px 0 2px;font-size:32px;font-weight:800;letter-spacing:-.04em}.price span{font-size:15px;font-weight:600;color:#8b8ba3}.note{margin:0 0 12px;font-size:12px;color:#8b8ba3}ul{margin:0 0 14px;padding:0;list-style:none;font-size:12.5px;line-height:2;color:#3d3d52}li::before{content:"✓";margin-right:8px;font-weight:800;color:#22c55e}button{width:100%;padding:11px;border:0;border-radius:10px;cursor:pointer;font:inherit;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,#5b6cff,#8b5cf6);transition:filter .25s, transform .25s}button:hover{filter:brightness(1.1);transform:translateY(-1px)}</style></head><body><div class="plan"><div class="badge">Pro</div><div class="price">$24<span>/mo</span></div><p class="note">For growing teams</p><ul><li>Unlimited projects</li><li>Priority support</li><li>Custom domains</li></ul><button>Choose plan</button></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Micro-interactions', desc: 'Three button hover treatments: scale, sliding gradient fill and a soft neon lift.', tags: ['Buttons', 'Hover', 'Interaction'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:20px;background:#0f1020;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.btn{padding:10px 16px;border:0;border-radius:10px;cursor:pointer;font:700 12.5px/1 ui-sans-serif,system-ui,sans-serif;transition:transform .3s cubic-bezier(.2,.8,.2,1),background .3s, color .3s, box-shadow .3s}.b1{background:#fff;color:#111}.b1:hover{background:#7c9cff;color:#fff;transform:scale(1.08)}.b2{position:relative;z-index:0;overflow:hidden;background:transparent;color:#fff;border:1px solid #3a3a55}.b2::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#7c9cff,#c084fc);transform:translateX(-101%);transition:transform .35s ease}.b2:hover::before{transform:translateX(0)}.b3{background:#1c1c2b;color:#cfd2e6;box-shadow:0 2px 0 #000}.b3:hover{color:#fff;transform:translateY(-3px);box-shadow:0 12px 22px -10px #7c9cff}</style></head><body><div class="row"><button class="btn b1">Hover me</button><button class="btn b2">Slide</button><button class="btn b3">Lift</button></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Bar Chart', desc: 'Staggered scaleY keyframes create a live, pulsing chart with no charting library.', tags: ['Data Viz', 'Keyframes'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:26px;background:#0f1020}.chart{display:flex;align-items:flex-end;gap:9px;height:120px;width:100%;max-width:230px}.chart span{flex:1;height:var(--h);border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,#8aa6ff,#4f46e5);transform-origin:bottom;animation:pulse 2.2s ease-in-out infinite alternate;animation-delay:var(--d);box-shadow:0 0 18px -6px rgba(124,156,255,.8)}@keyframes pulse{from{transform:scaleY(.5)}to{transform:scaleY(1)}}</style></head><body><div class="chart"><span style="--h:48%;--d:0s"></span><span style="--h:74%;--d:.12s"></span><span style="--h:36%;--d:.24s"></span><span style="--h:92%;--d:.36s"></span><span style="--h:58%;--d:.48s"></span><span style="--h:80%;--d:.60s"></span><span style="--h:44%;--d:.72s"></span></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Profile Card', desc: 'An avatar framed by a rotating conic-gradient ring, with a compact stat row below.', tags: ['Card', 'Avatar', 'Profile'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:18px;background:#f7f7fb;color:#16161d;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}.card{width:100%;max-width:230px;padding:22px 18px;text-align:center;background:#fff;border:1px solid #e8e8f0;border-radius:18px;box-shadow:0 16px 36px -22px rgba(20,20,40,.55)}.ring{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,#5b6cff,#c084fc,#f472b6,#5b6cff);animation:spin 6s linear infinite}.avatar{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;background:#111227;color:#fff;font-weight:800;font-size:17px;letter-spacing:.02em;animation:spin 6s linear infinite reverse}@keyframes spin{to{transform:rotate(1turn)}}h3{margin:0 0 3px;font-size:14.5px;letter-spacing:-.01em}p{margin:0 0 14px;font-size:11.5px;color:#8b8ba3}.stats{display:flex;justify-content:space-around;border-top:1px solid #eeeff5;padding-top:12px}.stats b{display:block;font-size:13px}.stats small{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:#9a9ab0}</style></head><body><div class="card"><div class="ring"><div class="avatar">AR</div></div><h3>Ava Ruiz</h3><p>Product Designer</p><div class="stats"><div><b>128</b><small>Shots</small></div><div><b>4.2k</b><small>Followers</small></div><div><b>312</b><small>Likes</small></div></div></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Toggle Switches', desc: 'Accessible checkbox toggles styled entirely with the :checked sibling selector.', tags: ['Forms', 'CSS Only', 'A11y'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:20px;background:#0f1020;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#e6e8f2}.list{display:flex;flex-direction:column;gap:14px;width:100%;max-width:210px}.tg{display:flex;align-items:center;gap:12px;cursor:pointer;font-size:13px}.tg input{position:absolute;opacity:0;pointer-events:none}.track{position:relative;flex:0 0 auto;width:40px;height:22px;border-radius:999px;background:#2a2a3d;transition:background .3s ease}.track::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .3s cubic-bezier(.2,.8,.2,1);box-shadow:0 2px 6px rgba(0,0,0,.4)}.tg input:checked + .track{background:linear-gradient(135deg,#5b6cff,#c084fc)}.tg input:checked + .track::after{transform:translateX(18px)}.tg input:focus-visible + .track{outline:2px solid #7c9cff;outline-offset:3px}</style></head><body><div class="list"><label class="tg"><input type="checkbox" checked><span class="track"></span>Notifications</label><label class="tg"><input type="checkbox"><span class="track"></span>Dark mode</label><label class="tg"><input type="checkbox" checked><span class="track"></span>Auto-save</label></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Minimal 404', desc: 'Clean typography with a subtle gradient text effect.', tags: ['CSS', 'Typography'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center}h1{margin:0;font-size:72px;font-weight:800;background:linear-gradient(135deg,#5b6cff,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}p{margin:8px 0 0;color:#8b8ba3;font-size:14px}</style></head><body><div><h1>404</h1><p>Page not found</p></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Dark 404', desc: 'Glitchy text effect using CSS text-shadows.', tags: ['CSS', 'Animation'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020;font-family:system-ui,sans-serif;text-align:center}h1{margin:0;font-size:80px;font-weight:900;color:#fff;text-shadow:3px 0 #ff5f6d,-3px 0 #5b6cff;animation:glitch 1s infinite alternate}p{color:#6b6b8a;font-size:13px;margin-top:10px}@keyframes glitch{0%{text-shadow:3px 0 #ff5f6d,-3px 0 #5b6cff}100%{text-shadow:-3px 0 #ff5f6d,3px 0 #5b6cff}}</style></head><body><div><h1>404</h1><p>Oops, something broke.</p></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Terminal 404', desc: 'Retro terminal style with monospace font.', tags: ['Retro', 'CSS'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#000;font-family:monospace;color:#0f0;text-align:left;padding:20px}h1{margin:0 0 10px;font-size:32px}p{margin:0;font-size:14px;line-height:1.6}.cursor{display:inline-block;width:10px;height:18px;background:#0f0;animation:blink 1s step-end infinite;vertical-align:bottom}@keyframes blink{50%{opacity:0}}</style></head><body><div><h1>Error 404</h1><p>> Requested file not found.<br>> Check URL and try again.<br>> _<span class="cursor"></span></p></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Mesh Gradient', desc: 'Animated multi-point gradient background.', tags: ['Gradient', 'Animation'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:linear-gradient(45deg,#ff6b6b,#feca57,#48dbfb,#1dd1a1);background-size:400% 400%;animation:gradient 8s ease infinite}@keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}</style></head><body></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Dot Grid', desc: 'Clean, scalable dot matrix pattern.', tags: ['Pattern', 'CSS'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{background-color:#0f1020;background-image:radial-gradient(#2a2a45 1px,transparent 1px);background-size:20px 20px}</style></head><body></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Diagonal Stripes', desc: 'High-contrast repeating linear gradients.', tags: ['Pattern', 'CSS'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:repeating-linear-gradient(45deg,#1a1a2e,#1a1a2e 10px,#16213e 10px,#16213e 20px)}</style></head><body></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Centered Hero', desc: 'Classic centered layout with call-to-action.', tags: ['Layout', 'Marketing'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center;padding:20px}h1{margin:0 0 12px;font-size:36px;letter-spacing:-.03em;color:#111}p{margin:0 0 24px;color:#666;font-size:14px;max-width:300px}.btn{padding:12px 24px;border:0;border-radius:8px;background:#5b6cff;color:#fff;font-weight:700;cursor:pointer;transition:transform .2s}.btn:hover{transform:scale(1.05)}</style></head><body><h1>Build better products</h1><p>The all-in-one platform for modern teams to ship faster.</p><button class="btn">Get Started</button></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Split Hero', desc: 'Text on the left, visual on the right.', tags: ['Layout', 'Split'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:space-between;padding:40px;background:#0f1020;font-family:system-ui,sans-serif;color:#fff}.text{flex:1;max-width:250px}h1{margin:0 0 12px;font-size:28px;line-height:1.2}p{margin:0 0 20px;color:#9a9baa;font-size:13px}.btn{padding:10px 20px;border:0;border-radius:6px;background:#fff;color:#000;font-weight:700;cursor:pointer}.visual{flex:1;height:180px;border-radius:16px;background:linear-gradient(135deg,#7c9cff,#c084fc);box-shadow:0 20px 40px -20px rgba(124,156,255,.6)}</style></head><body><div class="text"><h1>Design without limits</h1><p>Create stunning interfaces with our new component library.</p><button class="btn">Explore</button></div><div class="visual"></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Dark Hero', desc: 'Neon accents and a bold headline.', tags: ['Dark', 'Neon'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;font-family:system-ui,sans-serif;text-align:center;padding:20px}h1{margin:0 0 16px;font-size:42px;letter-spacing:-.04em;color:#fff;text-shadow:0 0 20px rgba(124,156,255,.5)}p{margin:0 0 24px;color:#888;font-size:14px}.btn{padding:10px 24px;border:1px solid #7c9cff;border-radius:30px;background:transparent;color:#7c9cff;font-weight:700;cursor:pointer;transition:all .3s}.btn:hover{background:#7c9cff;color:#000;box-shadow:0 0 20px rgba(124,156,255,.4)}</style></head><body><h1>THE FUTURE IS NOW</h1><p>Experience the next generation of web design.</p><button class="btn">ENTER</button></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Bouncing Dots', desc: 'Three dots with staggered bounce animation.', tags: ['Animation', 'Spinner'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020}.dots{display:flex;gap:8px}.dot{width:12px;height:12px;border-radius:50%;background:#7c9cff;animation:bounce 1.4s ease-in-out infinite both}.dot:nth-child(1){animation-delay:-.32s}.dot:nth-child(2){animation-delay:-.16s}@keyframes bounce{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}</style></head><body><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Ring Spinner', desc: 'Classic circular loading ring.', tags: ['CSS', 'Spinner'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#fff}.ring{width:40px;height:40px;border:4px solid #e0e0e0;border-top-color:#5b6cff;border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}</style></head><body><div class="ring"></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Pulse Bar', desc: 'A horizontal progress bar with a pulsing fill.', tags: ['Animation', 'Progress'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb}.bar{width:60%;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden}.fill{width:50%;height:100%;background:#5b6cff;border-radius:4px;animation:pulse 1.5s ease-in-out infinite}@keyframes pulse{0%{opacity:.4;transform:translateX(-100%)}100%{opacity:1;transform:translateX(200%)}}</style></head><body><div class="bar"><div class="fill"></div></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Card Input', desc: 'Credit card form with clean inputs.', tags: ['Form', 'UI'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif}.card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 10px 30px -10px rgba(0,0,0,.1);width:260px}h3{margin:0 0 16px;font-size:14px;color:#666}input{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:6px;font-size:13px;box-sizing:border-box}button{width:100%;padding:12px;border:0;border-radius:6px;background:#5b6cff;color:#fff;font-weight:700;cursor:pointer}</style></head><body><div class="card"><h3>Payment Details</h3><input placeholder="Card Number"><input placeholder="MM / YY"><input placeholder="CVC"><button>Pay $49.00</button></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Apple Pay Style', desc: 'Minimalist alternative payment button.', tags: ['Button', 'UI'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#fff;font-family:system-ui,sans-serif}.btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#000;color:#fff;border:0;padding:14px 28px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:transform .2s}.btn:hover{transform:scale(1.02)}.btn svg{width:20px;height:20px;fill:currentColor}</style></head><body><button class="btn"><svg viewBox="0 0 24 24"><path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"/></svg> Pay</button></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Success State', desc: 'Animated checkmark on successful payment.', tags: ['Animation', 'Success'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center}.circle{width:60px;height:60px;border-radius:50%;background:#22c55e;display:grid;place-items:center;margin:0 auto 16px;animation:pop .5s cubic-bezier(.2,.8,.2,1)}.check{width:24px;height:14px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(-45deg) translate(2px,-2px)}h3{margin:0 0 4px;font-size:18px;color:#111}p{margin:0;font-size:13px;color:#666}@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}</style></head><body><div><div class="circle"><div class="check"></div></div><h3>Payment Successful</h3><p>Your receipt has been sent.</p></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Star Rating', desc: 'Simple 5-star rating display.', tags: ['Stars', 'UI'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#fff}.stars{display:flex;gap:4px;color:#fbbf24;font-size:24px;letter-spacing:2px}</style></head><body><div class="stars">★★★★★</div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Testimonial Card', desc: 'User avatar, quote, and name.', tags: ['Card', 'Testimonial'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif}.quote{background:#fff;padding:20px;border-radius:12px;box-shadow:0 10px 30px -10px rgba(0,0,0,.1);width:260px}p{margin:0 0 16px;font-size:13px;line-height:1.5;color:#333;font-style:italic}.user{display:flex;align-items:center;gap:10px}.avatar{width:32px;height:32px;border-radius:50%;background:#c084fc;display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px}.name{font-size:12px;font-weight:700;color:#111}.role{font-size:10px;color:#888}</style></head><body><div class="quote"><p>"This library saved me hours of work. Highly recommended!"</p><div class="user"><div class="avatar">JD</div><div><div class="name">Jane Doe</div><div class="role">Developer</div></div></div></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Rating Bars', desc: 'Breakdown of ratings with progress bars.', tags: ['Stats', 'UI'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020;font-family:system-ui,sans-serif;color:#fff}.row{display:flex;align-items:center;gap:10px;font-size:12px;margin-bottom:6px}.bar{flex:1;height:6px;background:#2a2a45;border-radius:3px;overflow:hidden;width:120px}.fill{height:100%;background:#7c9cff;border-radius:3px}</style></head><body><div><div class="row">5 <div class="bar"><div class="fill" style="width:80%"></div></div></div><div class="row">4 <div class="bar"><div class="fill" style="width:15%"></div></div></div><div class="row">3 <div class="bar"><div class="fill" style="width:5%"></div></div></div></div></body></html>`
+  },
+
+  /* =========================================================================
+     URL CARDS (For the remaining tabs)
+     Replace `src` with your actual URLs, and update title/desc/tags.
+     ========================================================================= */
+
+  /* --- 404 --- */
+  { category: '404', type: 'url', title: '404 Page 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: '404', type: 'url', title: '404 Page 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: '404', type: 'url', title: '404 Page 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Backgrounds --- */
+  { category: 'backgrounds', type: 'url', title: 'Background 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'backgrounds', type: 'url', title: 'Background 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'backgrounds', type: 'url', title: 'Background 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Blocks --- */
+  { category: 'blocks', type: 'url', title: 'Block 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'blocks', type: 'url', title: 'Block 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Carousel --- */
+  { category: 'carousel', type: 'url', title: 'Carousel 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'carousel', type: 'url', title: 'Carousel 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'carousel', type: 'url', title: 'Carousel 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Hero --- */
+  { category: 'hero', type: 'url', title: 'Hero 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'hero', type: 'url', title: 'Hero 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'hero', type: 'url', title: 'Hero 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Landing Page --- */
+  { category: 'landing-page', type: 'url', title: 'Landing 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'landing-page', type: 'url', title: 'Landing 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'landing-page', type: 'url', title: 'Landing 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Loaders --- */
+  { category: 'loaders', type: 'url', title: 'Loader 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'loaders', type: 'url', title: 'Loader 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'loaders', type: 'url', title: 'Loader 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Payment Page --- */
+  { category: 'payment-page', type: 'url', title: 'Payment 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'payment-page', type: 'url', title: 'Payment 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'payment-page', type: 'url', title: 'Payment 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Portal Entrance --- */
+  { category: 'portal-entrance', type: 'url', title: 'Portal 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'portal-entrance', type: 'url', title: 'Portal 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'portal-entrance', type: 'url', title: 'Portal 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Reviews --- */
+  { category: 'reviews', type: 'url', title: 'Reviews 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'reviews', type: 'url', title: 'Reviews 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'reviews', type: 'url', title: 'Reviews 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Slider --- */
+  { category: 'slider', type: 'url', title: 'Slider 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'slider', type: 'url', title: 'Slider 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'slider', type: 'url', title: 'Slider 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  /* --- Tailwind Blocks --- */
+  { category: 'tailwind-blocks', type: 'url', title: 'Tailwind 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'tailwind-blocks', type: 'url', title: 'Tailwind 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'tailwind-blocks', type: 'url', title: 'Tailwind 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' }
+];
+
+/* =========================================================================
+   2. Build the gallery
+   ========================================================================= */
+const gallery = document.getElementById('gallery');
+
+const ARROW_SVG = `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M7 17 17 7"/>
+    <path d="M8 7h9v9"/>
+  </svg>`;
+
+DEMOS.forEach((demo, index) => {
+  const card = document.createElement('article');
+  card.className = 'card';
+  card.dataset.category = demo.category;
+
+  const frame = document.createElement('div');
+  frame.className = 'card__frame';
+
+  const iframe = document.createElement('iframe');
+  iframe.className = 'card__iframe';
+  iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+  iframe.setAttribute('title', demo.title + ' demo');
+  
+  // Render srcdoc for components, src for urls
+  if (demo.type === 'srcdoc') {
+    iframe.srcdoc = demo.html;
+  } else {
+    iframe.src = demo.src;
+  }
+  
+  frame.appendChild(iframe);
+
+  const launch = document.createElement('button');
+  launch.type = 'button';
+  launch.className = 'card__launch';
+  launch.setAttribute('aria-label', 'Open ' + demo.title + ' preview');
+  launch.innerHTML = ARROW_SVG;
+  launch.addEventListener('click', () => openModal(demo));
+  frame.appendChild(launch);
+
+  const body = document.createElement('div');
+  body.className = 'card__body';
+
+  const title = document.createElement('h2');
+  title.className = 'card__title';
+  title.textContent = demo.title;
+
+  const desc = document.createElement('p');
+  desc.className = 'card__desc';
+  desc.textContent = demo.desc;
+
+  const tags = document.createElement('ul');
+  tags.className = 'card__tags';
+  demo.tags.forEach(tag => {
+    const li = document.createElement('li');
+    li.textContent = tag;
+    tags.appendChild(li);
+  });
+
+  body.append(title, desc, tags);
+  card.append(frame, body);
+  gallery.appendChild(card);
+});
+
+/* =========================================================================
+   3. Filtering Logic
+   ========================================================================= */
+const filterButtons = document.querySelectorAll('.filter-btn');
+const cards = document.querySelectorAll('.card');
+
+filterButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterButtons.forEach(b => b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+
+    const selected = btn.dataset.filter;
+
+    cards.forEach(card => {
+      const match = selected === 'all' || card.dataset.category === selected;
+      card.classList.toggle('is-hidden', !match);
+    });
+  });
+});
+
+/* =========================================================================
+   4. Modal & Clipboard Logic
+   ========================================================================= */
+const modal      = document.getElementById('modal');
+const modalFrame = document.getElementById('modal-frame');
+const modalTitle = document.getElementById('modal-title');
+const modalClose = document.getElementById('modal-close');
+const modalCopy  = document.getElementById('modal-copy');
+
+let lastFocused = null;
+let currentDemo = null;
+
+function openModal(demo) {
+  currentDemo = demo;
+  lastFocused = document.activeElement;
+  modalTitle.textContent = demo.title;
+  
+  // Render srcdoc or src in modal
+  if (demo.type === 'srcdoc') {
+    modalFrame.removeAttribute('src');
+    modalFrame.srcdoc = demo.html;
+    modalCopy.style.display = 'inline-flex'; // Show copy button
+  } else {
+    modalFrame.removeAttribute('srcdoc');
+    modalFrame.src = demo.src;
+    modalCopy.style.display = 'none'; // Hide copy button for external URLs
+  }
+
+  modal.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  
+  // Reset copy button state
+  modalCopy.classList.remove('is-copied');
+  modalCopy.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy Code`;
+  
+  modalClose.focus();
+}
+
+function closeModal() {
+  modal.classList.remove('is-open');
+  document.body.style.overflow = '';
+  window.setTimeout(() => {
+    if (!modal.classList.contains('is-open')) {
+      modalFrame.srcdoc = '';
+      modalFrame.src = 'about:blank';
+    }
+  }, 320);
+  if (lastFocused) lastFocused.focus();
+}
+
+// Copy to clipboard
+modalCopy.addEventListener('click', async () => {
+  if (!currentDemo || currentDemo.type !== 'srcdoc') return;
+  try {
+    await navigator.clipboard.writeText(currentDemo.html);
+    modalCopy.classList.add('is-copied');
+    modalCopy.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!`;
+    
+    setTimeout(() => {
+      modalCopy.classList.remove('is-copied');
+      modalCopy.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy Code`;
+    }, 2000);
+  } catch (err) {
+    console.error('Failed to copy', err);
+  }
+});
+
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+});
+</script>
+</body>
+</html>
