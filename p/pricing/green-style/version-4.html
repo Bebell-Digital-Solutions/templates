@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Pricing Component</title>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    
+    
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #070B14;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Dotted grid pattern background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: radial-gradient(circle, rgba(16, 185, 129, 0.15) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -2;
+        }
+
+        /* Subtle glowing background effect */
+        .bg-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.05) 0%, rgba(7, 11, 20, 1) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Animated Blob Background for highlighted card */
+        .blob-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140%;
+            height: 120%;
+            z-index: -1;
+            overflow: visible;
+            pointer-events: none;
+        }
+
+        .animated-blob {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, rgba(16, 185, 129, 0) 70%);
+            filter: blur(60px);
+            border-radius: 50%;
+            animation: rotate 10s infinite linear, pulse 5s infinite alternate ease-in-out;
+            transform-origin: center center;
+        }
+
+        @keyframes rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+
+        /* Card styles */
+        .card-outer {
+            border-radius: 2rem;
+            padding: 16px; /* Thick outer frame */
+            background: linear-gradient(145deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 100%);
+            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card-outer:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-inner {
+            background-color: #11151c;
+            border-radius: 1.25rem;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Highlighted card specifics */
+        .card-outer.highlighted {
+            background: linear-gradient(180deg, #10b981 0%, #064e3b 100%);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.25), inset 0 2px 5px rgba(255,255,255,0.3);
+            padding-top: 40px; /* Space for RECOMMENDED tag */
+            transform: scale(1.05);
+            z-index: 10;
+        }
+        
+        .card-outer.highlighted:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .card-outer.highlighted .card-inner {
+            background-color: #0f171e;
+        }
+
+        .recommended-badge {
+            position: absolute;
+            top: 14px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            color: #022c22;
+            text-transform: uppercase;
+        }
+        
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.0) 100%);
+            margin: 24px 0;
+            width: 100%;
+        }
+
+        /* Bullet points */
+        .bullet-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 12px;
+            font-size: 0.875rem;
+            color: #d1d5db;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #9ca3af;
+        }
+        
+        .bullet-list.highlighted-list li::before {
+            background-color: #10b981;
+        }
+        
+        .bullet-list li strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Metallic Effects */
+        .text-metallic {
+            background: linear-gradient(135deg, #e4e4e7 0%, #a1a1aa 40%, #ffffff 60%, #71717a 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            /* Replaced the heavy black shadow with a brighter reflection style used in the buttons */
+            text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.3);
+        }
+        
+        
+
+        .btn-metallic {
+            background: linear-gradient(135deg, #e4e4e7 0%, #a1a1aa 40%, #ffffff 60%, #71717a 100%);
+            color: #18181b !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+            border: 1px solid #d4d4d8;
+        }
+
+        .btn-metallic:hover {
+            background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 40%, #ffffff 60%, #a1a1aa 100%);
+            transform: translateY(-2px);
+        }
+        
+        
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col justify-between">
+
+    <!-- Backgrounds -->
+    <div class="bg-pattern"></div>
+    <div class="bg-glow"></div>
+
+    <!-- Header area (decorative) -->
+    <header class="w-full p-8 flex justify-between items-center text-sm font-medium tracking-wider text-gray-400 absolute top-0 z-20 hidden">
+        <div>HORIZONX</div>
+        <div>//</div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center justify-center py-20 px-4 w-full max-w-[1200px] mx-auto z-10 relative min-h-screen">
+        
+        <!-- Toggle Switch -->
+        <div class="relative flex items-center p-1.5 bg-white/5 backdrop-blur-md rounded-full border border-white/10 mx-auto mb-12 shadow-[0_4px_15px_rgba(0,0,0,0.2)]">
+            <button id="btn-monthly" class="relative z-10 px-8 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 btn-metallic">Monthly</button>
+            
+            <div class="relative group ml-2">
+                <button id="btn-yearly" class="relative z-10 px-8 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 text-gray-400 hover:text-white">Yearly</button>
+                
+                <!-- Tooltip -->
+                <div class="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
+                    <div class="bg-[#10b981] text-[#022c22] text-xs font-bold px-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] whitespace-nowrap relative">
+                        Save 20%
+                        <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#10b981] rotate-45"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing Cards Container -->
+        <div class="w-full flex flex-col xl:flex-row justify-center items-center xl:items-stretch gap-8 z-20">
+            
+            <!-- Card 1: Essentials -->
+            <div class="w-full md:w-[360px] flex-shrink-0 card-outer relative group">
+                <div class="card-inner p-8">
+                    <h3 class="text-2xl font-bold text-metallic mb-3">Essentials</h3>
+                    <p class="text-sm text-gray-400 mb-8 leading-relaxed h-[60px]">
+                        All the core AI tools you need to get your first projects off the ground.
+                    </p>
+                    
+                    <div class="mb-8 flex items-baseline gap-1">
+                        <span class="text-[2.75rem] font-bold text-white leading-none">$<span class="price-val" data-monthly="27" data-yearly="259">27</span></span>
+                        <span class="price-period text-sm text-gray-400 font-medium">/month</span>
+                    </div>
+                    
+                    <button class="w-full py-3.5 px-4 font-semibold rounded-[0.85rem] transition-all duration-200 mb-8 btn-metallic">
+                        Upgrade to Pro
+                    </button>
+                    
+                    <div class="divider"></div>
+                    
+                    <ul class="bullet-list">
+                        <li><strong>10,000</strong> AI words/month</li>
+                        <li><strong>12+</strong> Content formats</li>
+                        <li>Standard email support</li>
+                        <li>1 User seat</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 2: Standard (Highlighted) -->
+            <div class="w-full md:w-[360px] flex-shrink-0 relative">
+                <!-- Animated Blob Background -->
+                <div class="blob-container hidden md:block">
+                    <div class="animated-blob"></div>
+                </div>
+                
+                <div class="card-outer highlighted relative h-full group">
+                    <div class="recommended-badge">RECOMMENDED</div>
+                    <div class="card-inner p-8">
+                        <h3 class="text-2xl font-bold title-gradient-highlight mb-3">Standard</h3>
+                        <p class="text-sm text-gray-400 mb-8 leading-relaxed h-[60px]">
+                            Supercharge your content production with advanced tools and higher limits.
+                        </p>
+                        
+                        <div class="mb-8 flex items-baseline gap-1">
+                            <span class="text-[2.75rem] font-bold text-white leading-none">$<span class="price-val" data-monthly="59" data-yearly="566">59</span></span>
+                            <span class="price-period text-sm text-gray-400 font-medium">/month</span>
+                        </div>
+                        
+                        <button class="w-full py-3.5 px-4 bg-[#10b981] hover:bg-[#059669] text-gray-900 font-bold rounded-[0.85rem] transition-colors duration-200 mb-8 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                            Upgrade to Pro
+                        </button>
+                        
+                        <div class="divider"></div>
+                        
+                        <ul class="bullet-list highlighted-list">
+                            <li><strong>50,000</strong> AI words/month</li>
+                            <li><strong>50+</strong> Content formats</li>
+                            <li>Priority 24/7 support</li>
+                            <li>Up to 5 User seats</li>
+                            <li>Advanced analytics dashboard</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Custom -->
+            <div class="w-full md:w-[360px] flex-shrink-0 card-outer relative group">
+                <div class="card-inner p-8">
+                    <h3 class="text-2xl font-bold text-metallic mb-3">Custom</h3>
+                    <p class="text-sm text-gray-400 mb-8 leading-relaxed h-[60px]">
+                        Maximum performance, tailored security, and dedicated power for large teams.
+                    </p>
+                    
+                    <div class="mb-8 flex items-baseline gap-1 h-[2.75rem] items-end">
+                        <span class="text-[2.75rem] font-bold text-white leading-none">Custom</span>
+                    </div>
+                    
+                    <button class="w-full py-3.5 px-4 font-semibold rounded-[0.85rem] transition-all duration-200 mb-8 btn-metallic">
+                        Contact Sales
+                    </button>
+                    
+                    <div class="divider"></div>
+                    
+                    <ul class="bullet-list">
+                        <li><strong>Unlimited</strong> AI words/month</li>
+                        <li>Custom content workflows</li>
+                        <li>Dedicated account manager</li>
+                        <li>Unlimited User seats</li>
+                        <li>API & custom integrations</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer area (decorative) -->
+    <footer class="w-full p-8 flex justify-between items-end text-sm font-medium tracking-wider text-gray-400 absolute bottom-0 z-20 hidden">
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer area (decorative) -->
+    <footer class="w-full p-8 flex justify-between items-end text-sm font-medium tracking-wider text-gray-400 absolute bottom-0 z-20">
+        <div>COMPONENT</div>
+        <div>V2.5</div>
+    </footer>
+
+    <script>
+        const btnMonthly = document.getElementById('btn-monthly');
+        const btnYearly = document.getElementById('btn-yearly');
+        const priceVals = document.querySelectorAll('.price-val');
+        const pricePeriods = document.querySelectorAll('.price-period');
+        let isYearly = false;
+
+        function updatePricing() {
+            priceVals.forEach(el => {
+                const targetPrice = isYearly ? el.dataset.yearly : el.dataset.monthly;
+                
+                gsap.to(el, {
+                    innerHTML: targetPrice,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    snap: { innerHTML: 1 },
+                    onUpdate: function() {
+                        el.innerHTML = Math.round(el.innerHTML);
+                    }
+                });
+            });
+            
+            pricePeriods.forEach(el => {
+                el.innerText = isYearly ? "/year" : "/month";
+            });
+            
+            if (isYearly) {
+                btnYearly.classList.add('btn-metallic');
+                btnYearly.classList.remove('text-gray-400', 'hover:text-white');
+                btnMonthly.classList.remove('btn-metallic');
+                btnMonthly.classList.add('text-gray-400', 'hover:text-white');
+            } else {
+                btnMonthly.classList.add('btn-metallic');
+                btnMonthly.classList.remove('text-gray-400', 'hover:text-white');
+                btnYearly.classList.remove('btn-metallic');
+                btnYearly.classList.add('text-gray-400', 'hover:text-white');
+            }
+        }
+
+        btnMonthly.addEventListener('click', () => {
+            if (isYearly) { isYearly = false; updatePricing(); }
+        });
+        btnYearly.addEventListener('click', () => {
+            if (!isYearly) { isYearly = true; updatePricing(); }
+        });
+    </script>
+</body>
+</html>
