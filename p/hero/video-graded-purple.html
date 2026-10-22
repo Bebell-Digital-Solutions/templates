@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datacore - Instant Resort Booking</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=Manrope:wght@400;500;600;700&display=swap');
+
+    .font-manrope { font-family: 'Manrope', sans-serif; }
+    .font-cabin { font-family: 'Cabin', sans-serif; }
+    .font-instrument { font-family: 'Instrument Serif', serif; }
+    .font-inter { font-family: 'Inter', sans-serif; }
+
+    .bg-primary-gradient {
+      background: linear-gradient(135deg, #b9e754 0%, #a7da32 50%, #7cb518 100%);
+    }
+
+    .glass-pill {
+      background: rgba(58, 71, 40, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(167, 218, 50, 0.45);
+    }
+
+    .ambient-hero-glow {
+      background: radial-gradient(circle at 50% 45%, rgba(167, 218, 50, 0.18) 0%, rgba(167, 218, 50, 0) 70%);
+    }
+
+    /* Modal Animation Utilities */
+    .fade-in { animation: fadeIn 0.15s ease-out forwards; }
+    .fade-out { animation: fadeOut 0.15s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    
+    .slide-up { animation: slideUp 0.2s ease-out forwards; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="relative min-h-screen w-full bg-[#151517] text-white overflow-x-hidden selection:bg-[#a7da32] selection:text-[#151517]" id="top">
+
+  <!-- ================= 0. GRADED HTML5 VIDEO BACKGROUND ================= -->
+  <!-- Applied cinematic color grading using Tailwind filter utilities -->
+  <video
+    autoplay
+    loop
+    muted
+    playsinline
+    class="absolute inset-0 w-full h-full min-h-screen object-cover z-0 pointer-events-none filter brightness-[0.65] contrast-[1.1] saturate-[1.2]"
+  >
+    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260210_031346_d87182fb-b0af-4273-84d1-c6fd17d6bf0f.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Ambient Hero Glow at z-0 -->
+  <div class="ambient-hero-glow absolute inset-0 pointer-events-none z-0" aria-hidden="true"></div>
+
+  <!-- ================= 1. NAVBAR COMPONENT (Top Overlay, z-20) ================= -->
+  <header class="relative z-20 w-full bg-transparent px-6 lg:px-[120px] py-[16px]">
+    <div class="max-w-[1440px] mx-auto flex items-center justify-between">
+      
+      <!-- Left Side: Logo + Desktop Navigation -->
+      <div class="flex items-center gap-10 xl:gap-14">
+        <!-- Logo -->
+        <a href="#top" onclick="triggerToast('Returned to Datacore Home')" class="flex items-center gap-2.5 group focus:outline-none" aria-label="Datacore Home">
+          <svg width="132" height="28" viewBox="0 0 132 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="transition-transform duration-300 group-hover:scale-[1.02]">
+            <path d="M1.04356 6.35771L13.6437 0.666504C14.1892 0.42012 14.8108 0.42012 15.3563 0.666504L27.9564 6.35771C28.7654 6.72311 29.2857 7.52842 29.2857 8.4162V19.5838C29.2857 20.4716 28.7654 21.2769 27.9564 21.6423L15.3563 27.3335C14.8108 27.5799 14.1892 27.5799 13.6437 27.3335L1.04356 21.6423C0.234582 21.2769 -0.285714 20.4716 -0.285714 19.5838V8.4162C-0.285714 7.52842 0.234582 6.72311 1.04356 6.35771ZM14.5 4.25L4.75 8.65V19.35L14.5 23.75L24.25 19.35V8.65L14.5 4.25Z" fill="#FFFFFF"/>
+            <path d="M14.5 8.5L20.5 11.2V16.8L14.5 19.5L8.5 16.8V11.2L14.5 8.5Z" fill="#a7da32"/>
+            <text x="38" y="19.5" fill="#FFFFFF" class="font-manrope" font-weight="700" font-size="17" letter-spacing="-0.03em">DATACORE</text>
+          </svg>
+        </a>
+
+        <!-- Desktop Links -->
+        <nav class="hidden lg:flex items-center gap-8 font-manrope font-medium text-[14px] text-white">
+          <a href="#home" onclick="triggerToast('Viewing Home')" class="hover:opacity-80 transition-opacity py-1">Home</a>
+
+          <!-- Services Dropdown -->
+          <div class="relative" id="services-dropdown-container">
+            <button type="button" onclick="toggleDropdown(event)" class="flex items-center gap-1.5 hover:opacity-80 transition-opacity py-1 focus:outline-none">
+              <span>Services</span>
+              <i data-lucide="chevron-down" id="dropdown-icon" class="w-4 h-4 transition-transform duration-200"></i>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div id="services-dropdown" class="hidden absolute left-0 mt-3 w-80 rounded-[12px] glass-pill bg-[#151517]/90 p-2.5 shadow-2xl z-30 slide-up">
+              <div class="px-3 py-1.5 text-[11px] font-cabin uppercase tracking-wider text-[#a7da32]">
+                Datacore Hospitality Suite
+              </div>
+              <div class="space-y-1 mt-1">
+                
+                <button onclick="closeDropdown(); triggerToast('Exploring Instant Resort Booking')" class="w-full flex items-start gap-3 p-2.5 rounded-[8px] hover:bg-[#2b3a1e]/70 transition-colors text-left group">
+                  <div class="p-2 rounded-[8px] bg-[#2b3a1e] text-[#a7da32] group-hover:bg-[#a7da32] group-hover:text-[#151517] transition-colors mt-0.5">
+                    <i data-lucide="building-2" class="w-4 h-4"></i>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                      <span class="font-manrope font-semibold text-[13px] text-white">Instant Resort Booking</span>
+                      <span class="px-1.5 py-0.5 text-[10px] font-cabin font-semibold rounded bg-[#a7da32] text-[#151517]">Popular</span>
+                    </div>
+                    <p class="font-inter text-[12px] text-white/70 mt-0.5 leading-snug">Real-time availability across 14,000+ luxury stays</p>
+                  </div>
+                </button>
+
+                <button onclick="closeDropdown(); triggerToast('Exploring Curated Itineraries')" class="w-full flex items-start gap-3 p-2.5 rounded-[8px] hover:bg-[#2b3a1e]/70 transition-colors text-left group">
+                  <div class="p-2 rounded-[8px] bg-[#2b3a1e] text-[#a7da32] group-hover:bg-[#a7da32] group-hover:text-[#151517] transition-colors mt-0.5">
+                    <i data-lucide="compass" class="w-4 h-4"></i>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                      <span class="font-manrope font-semibold text-[13px] text-white">Curated Itineraries</span>
+                      <span class="px-1.5 py-0.5 text-[10px] font-cabin font-semibold rounded bg-[#a7da32] text-[#151517]">New</span>
+                    </div>
+                    <p class="font-inter text-[12px] text-white/70 mt-0.5 leading-snug">AI-assisted travel planning synced with Datacore v3.2</p>
+                  </div>
+                </button>
+
+                <button onclick="closeDropdown(); triggerToast('Exploring 24/7 Concierge Desk')" class="w-full flex items-start gap-3 p-2.5 rounded-[8px] hover:bg-[#2b3a1e]/70 transition-colors text-left group">
+                  <div class="p-2 rounded-[8px] bg-[#2b3a1e] text-[#a7da32] group-hover:bg-[#a7da32] group-hover:text-[#151517] transition-colors mt-0.5">
+                    <i data-lucide="headphones" class="w-4 h-4"></i>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                      <span class="font-manrope font-semibold text-[13px] text-white">24/7 Concierge Desk</span>
+                    </div>
+                    <p class="font-inter text-[12px] text-white/70 mt-0.5 leading-snug">Direct VIP priority support anywhere in the world</p>
+                  </div>
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <a href="#reviews" onclick="triggerToast('4.98/5 Average Guest Rating across 120k+ stays')" class="hover:opacity-80 transition-opacity py-1">Reviews</a>
+          <a href="#contact" onclick="openModal('demo')" class="hover:opacity-80 transition-opacity py-1">Contact us</a>
+        </nav>
+      </div>
+
+      <!-- Right Side: Action Buttons -->
+      <div class="hidden lg:flex items-center gap-3">
+        <button onclick="openModal('signin')" class="font-manrope font-semibold text-[14px] bg-white text-[#171717] border border-[#d4d4d4] rounded-[8px] px-4 py-2.5 hover:bg-[#f6f7f9] active:scale-[0.99] transition-all">
+          Sign In
+        </button>
+        <button onclick="openModal('get-started')" class="font-manrope font-semibold text-[14px] bg-[#a7da32] hover:bg-[#b9e754] text-[#151517] rounded-[8px] px-4 py-2.5 shadow-[0_4px_20px_rgba(167,218,50,0.25)] active:scale-[0.99] transition-all">
+          Get Started
+        </button>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-[8px] text-white hover:bg-white/10 transition-colors focus:outline-none">
+        <i data-lucide="menu" class="w-6 h-6 text-white"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MOBILE FULL-SCREEN OVERLAY MENU ================= -->
+  <div id="mobile-menu" class="hidden fixed inset-0 z-50 bg-[#151517] flex-col justify-between px-6 py-[16px] fade-in lg:hidden">
+    <div class="flex items-center justify-between">
+      <a href="#top" onclick="toggleMobileMenu()" class="flex items-center gap-2">
+        <svg width="132" height="28" viewBox="0 0 132 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1.04356 6.35771L13.6437 0.666504C14.1892 0.42012 14.8108 0.42012 15.3563 0.666504L27.9564 6.35771C28.7654 6.72311 29.2857 7.52842 29.2857 8.4162V19.5838C29.2857 20.4716 28.7654 21.2769 27.9564 21.6423L15.3563 27.3335C14.8108 27.5799 14.1892 27.5799 13.6437 27.3335L1.04356 21.6423C0.234582 21.2769 -0.285714 20.4716 -0.285714 19.5838V8.4162C-0.285714 7.52842 0.234582 6.72311 1.04356 6.35771ZM14.5 4.25L4.75 8.65V19.35L14.5 23.75L24.25 19.35V8.65L14.5 4.25Z" fill="#FFFFFF"/>
+          <path d="M14.5 8.5L20.5 11.2V16.8L14.5 19.5L8.5 16.8V11.2L14.5 8.5Z" fill="#a7da32"/>
+          <text x="38" y="19.5" fill="#FFFFFF" class="font-manrope" font-weight="700" font-size="17" letter-spacing="-0.03em">DATACORE</text>
+        </svg>
+      </a>
+      <button onclick="toggleMobileMenu()" class="p-2 rounded-[8px] text-white hover:bg-white/10 transition-colors">
+        <i data-lucide="x" class="w-6 h-6 text-white"></i>
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-6 my-auto py-8">
+      <a href="#home" onclick="toggleMobileMenu(); triggerToast('Viewing Home')" class="font-manrope font-medium text-2xl text-white hover:text-[#a7da32] transition-colors">Home</a>
+      
+      <div class="space-y-3">
+        <div class="flex items-center justify-between font-manrope font-medium text-2xl text-white">
+          <span>Services</span>
+          <i data-lucide="chevron-down" class="w-5 h-5 text-[#a7da32]"></i>
+        </div>
+        <div class="pl-4 border-l border-[#a7da32]/40 space-y-3">
+          <button onclick="toggleMobileMenu(); triggerToast('Selected Instant Resort Booking')" class="block text-left font-manrope text-base text-white/80 hover:text-[#a7da32]">Instant Resort Booking</button>
+          <button onclick="toggleMobileMenu(); triggerToast('Selected Curated Itineraries')" class="block text-left font-manrope text-base text-white/80 hover:text-[#a7da32]">Curated Itineraries</button>
+          <button onclick="toggleMobileMenu(); triggerToast('Selected 24/7 Concierge Desk')" class="block text-left font-manrope text-base text-white/80 hover:text-[#a7da32]">24/7 Concierge Desk</button>
+        </div>
+      </div>
+
+      <a href="#reviews" onclick="toggleMobileMenu(); triggerToast('4.98/5 Average Guest Rating')" class="font-manrope font-medium text-2xl text-white hover:text-[#a7da32] transition-colors">Reviews</a>
+      <a href="#contact" onclick="toggleMobileMenu(); openModal('demo')" class="font-manrope font-medium text-2xl text-white hover:text-[#a7da32] transition-colors">Contact us</a>
+    </div>
+
+    <div class="flex flex-col gap-3 pb-6">
+      <button onclick="toggleMobileMenu(); openModal('signin')" class="w-full font-manrope font-semibold text-[14px] bg-white text-[#171717] border border-[#d4d4d4] rounded-[8px] py-3.5 hover:bg-[#f6f7f9] transition-colors">Sign In</button>
+      <button onclick="toggleMobileMenu(); openModal('get-started')" class="w-full font-manrope font-semibold text-[14px] bg-[#a7da32] hover:bg-[#b9e754] text-[#151517] rounded-[8px] py-3.5 shadow-[0_4px_20px_rgba(167,218,50,0.25)] transition-colors">Get Started</button>
+    </div>
+  </div>
+
+  <!-- ================= 2. HERO CONTENT ================= -->
+  <main class="relative z-10 flex flex-col items-center text-center px-6 mt-24 sm:mt-32 pb-20 max-w-[1140px] mx-auto">
+    <!-- Tagline Pill -->
+    <button onclick="openModal('release')" class="glass-pill h-[38px] rounded-[10px] px-3 inline-flex items-center gap-2.5 font-cabin font-medium text-[14px] text-white hover:border-[#b9e754] transition-all duration-200 group cursor-pointer">
+      <span class="bg-[#a7da32] text-[#151517] font-cabin font-semibold text-[12px] leading-none px-2 py-1 rounded-[6px] tracking-tight">New</span>
+      <span class="tracking-wide">Say Hello to Datacore v3.2</span>
+      <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-[#a7da32] transition-transform duration-200 group-hover:translate-x-0.5"></i>
+    </button>
+
+    <!-- Headline -->
+    <h1 class="font-instrument text-white text-5xl sm:text-7xl lg:text-[96px] leading-[1.1] tracking-tight mt-7 max-w-[980px]">
+      Book your perfect stay instantly
+      <span class="italic font-normal px-1.5 sm:px-2 inline-block">and</span>
+      hassle-free
+    </h1>
+
+    <!-- Subtext -->
+    <p class="font-inter font-normal text-[18px] text-white/70 max-w-[662px] mt-6 leading-relaxed">
+      Discover handpicked hotels, resorts, and stays across your favorite destinations. Enjoy exclusive deals, fast booking, and 24/7 support.
+    </p>
+
+    <!-- CTAs -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 w-full sm:w-auto">
+      <button onclick="openModal('demo')" class="w-full sm:w-auto font-cabin font-medium text-[16px] bg-[#a7da32] hover:bg-[#b9e754] text-[#151517] rounded-[10px] px-7 py-3.5 shadow-[0_4px_24px_rgba(167,218,50,0.3)] hover:shadow-[0_6px_28px_rgba(185,231,84,0.45)] active:scale-[0.99] transition-all cursor-pointer">
+        Book a Free Demo
+      </button>
+      <button onclick="openModal('get-started')" class="w-full sm:w-auto font-cabin font-medium text-[16px] bg-[#2b3a1e] hover:bg-[#384a24] text-[#f6f7f9] rounded-[10px] px-7 py-3.5 border border-[#a7da32]/25 active:scale-[0.99] transition-all cursor-pointer">
+        Get Started Now
+      </button>
+    </div>
+  </main>
+
+  <!-- ================= MODALS ================= -->
+  <div id="modal-overlay" class="hidden fixed inset-0 z-50 items-center justify-center px-4 bg-black/75 backdrop-blur-sm fade-in" onclick="closeModal()">
+    <div class="relative w-full max-w-md rounded-[16px] glass-pill bg-[#151517]/95 p-6 sm:p-8 text-left shadow-2xl" onclick="event.stopPropagation()">
+      <button onclick="closeModal()" class="absolute top-5 right-5 p-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Demo Modal -->
+      <div id="modal-demo" class="hidden">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-[#a7da32] text-[#151517] font-cabin font-semibold text-xs">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Live Concierge Walkthrough
+        </span>
+        <h2 class="font-instrument text-3xl sm:text-4xl text-white mt-3">Book your personalized demo</h2>
+        <p class="font-inter text-sm text-white/70 mt-1.5">See how Datacore v3.2 unlocks instant wholesale rates and zero-friction reservations.</p>
+        <form onsubmit="handleFormSubmit(event, 'Demo session')" class="mt-5 space-y-4">
+          <div>
+            <label class="block font-manrope text-xs font-medium text-white/80 mb-1.5">Full Name</label>
+            <input type="text" required placeholder="Elena Rostova" class="w-full rounded-[8px] bg-[#2b3a1e]/60 border border-[#a7da32]/30 px-3.5 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:border-[#a7da32]" />
+          </div>
+          <div>
+            <label class="block font-manrope text-xs font-medium text-white/80 mb-1.5">Email</label>
+            <input type="email" required placeholder="elena@domain.com" class="w-full rounded-[8px] bg-[#2b3a1e]/60 border border-[#a7da32]/30 px-3.5 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:border-[#a7da32]" />
+          </div>
+          <div>
+            <label class="block font-manrope text-xs font-medium text-white/80 mb-1.5">Preferred Date</label>
+            <input type="date" required class="w-full rounded-[8px] bg-[#2b3a1e]/60 border border-[#a7da32]/30 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#a7da32]" />
+          </div>
+          <button type="submit" class="w-full font-cabin font-medium text-[16px] bg-[#a7da32] hover:bg-[#b9e754] text-[#151517] rounded-[10px] py-3 shadow-[0_4px_20px_rgba(167,218,50,0.25)] transition-all mt-2">Confirm Free Demo</button>
+        </form>
+      </div>
+
+      <!-- Get Started Modal -->
+      <div id="modal-get-started" class="hidden">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-[#a7da32] text-[#151517] font-cabin font-semibold text-xs">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Instant Access
+        </span>
+        <h2 class="font-instrument text-3xl sm:text-4xl text-white mt-3">Start your next stay with Datacore</h2>
+        <p class="font-inter text-sm text-white/70 mt-1.5">Create your free traveler profile in seconds and unlock member-only rates.</p>
+        <form onsubmit="handleFormSubmit(event, 'Datacore membership')" class="mt-5 space-y-4">
+          <div>
+            <label class="block font-manrope text-xs font-medium text-white/80 mb-1.5">Email Address</label>
+            <input type="email" required placeholder="you@example.com" class="w-full rounded-[8px] bg-[#2b3a1e]/60 border border-[#a7da32]/30 px-3.5 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:border-[#a7da32]" />
+          </div>
+          <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+            <div class="p-2.5 rounded-[8px] bg-[#2b3a1e]/50 border border-[#a7da32]/20">
+              <i data-lucide="globe" class="w-4 h-4 text-[#a7da32] mx-auto mb-1"></i>
+              <span class="block font-manrope text-[11px] text-white/80">190+ Countries</span>
+            </div>
+            <div class="p-2.5 rounded-[8px] bg-[#2b3a1e]/50 border border-[#a7da32]/20">
+              <i data-lucide="shield-check" class="w-4 h-4 text-[#a7da32] mx-auto mb-1"></i>
+              <span class="block font-manrope text-[11px] text-white/80">Price Match</span>
+            </div>
+            <div class="p-2.5 rounded-[8px] bg-[#2b3a1e]/50 border border-[#a7da32]/20">
+              <i data-lucide="clock" class="w-4 h-4 text-[#a7da32] mx-auto mb-1"></i>
+              <span class="block font-manrope text-[11px] text-white/80">24/7 Support</span>
+            </div>
+          </div>
+          <button type="submit" class="w-full font-cabin font-medium text-[16px] bg-[#a7da32] hover:bg-[#b9e754] text-[#151517] rounded-[10px] py-3 shadow-[0_4px_20px_rgba(167,218,50,0.25)] transition-all">Create Free Account</button>
+        </form>
+      </div>
+
+      <!-- Sign In Modal -->
+      <div id="modal-signin" class="hidden">
+        <h2 class="font-instrument text-3xl sm:text-4xl text-white">Welcome back</h2>
+        <p class="font-inter text-sm text-white/70 mt-1">Sign in to manage your upcoming reservations and loyalty perks.</p>
+        <form onsubmit="handleFormSubmit(event, 'Sign-in magic link')" class="mt-5 space-y-4">
+          <div>
+            <label class="block font-manrope text-xs font-medium text-white/80 mb-1.5">Account Email</label>
+            <input type="email" required placeholder="traveler@datacore.io" class="w-full rounded-[8px] bg-[#2b3a1e]/60 border border-[#a7da32]/30 px-3.5 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:border-[#a7da32]" />
+          </div>
+          <button type="submit" class="w-full font-manrope font-semibold text-[14px] bg-[#a7da32] hover:bg-[#b9e754] text-[#151517] rounded-[8px] py-3 shadow-[0_4px_20px_rgba(167,218,50,0.25)] transition-all">Send Magic Login Link</button>
+        </form>
+      </div>
+
+      <!-- Release Modal -->
+      <div id="modal-release" class="hidden">
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-[6px] bg-[#a7da32] text-[#151517] font-cabin font-semibold text-xs">Release Notes • v3.2</div>
+        <h2 class="font-instrument text-3xl sm:text-4xl text-white mt-3">Say Hello to Datacore v3.2</h2>
+        <p class="font-inter text-sm text-white/70 mt-1.5">Our fastest hospitality engine yet—engineered for zero-latency room locks and verified resort perks.</p>
+        <ul class="mt-4 space-y-2.5 font-inter text-sm text-white/85">
+          <li class="flex items-start gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-[#a7da32] shrink-0 mt-0.5"></i><span>Instant confirmation with direct property ledger sync.</span></li>
+          <li class="flex items-start gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-[#a7da32] shrink-0 mt-0.5"></i><span>Zero hidden resort fees with transparent checkout breakdown.</span></li>
+          <li class="flex items-start gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-[#a7da32] shrink-0 mt-0.5"></i><span>One-tap itinerary sharing and 24/7 live travel specialist chat.</span></li>
+        </ul>
+        <button onclick="openModal('get-started')" class="w-full mt-6 font-cabin font-medium text-[16px] bg-[#a7da32] hover:bg-[#b9e754] text-[#151517] rounded-[10px] py-3 shadow-[0_4px_20px_rgba(167,218,50,0.25)] transition-all">Try Datacore v3.2 Now</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= TOAST NOTIFICATION ================= -->
+  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 items-center gap-3 px-4 py-3 rounded-[10px] glass-pill bg-[#151517]/90 text-white shadow-2xl slide-up">
+    <span class="w-2.5 h-2.5 rounded-full bg-[#a7da32]"></span>
+    <span id="toast-message" class="font-manrope text-sm font-medium"></span>
+    <button onclick="hideToast()" class="text-white/60 hover:text-white ml-1">
+      <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
+  </div>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // Mobile Menu State
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        menu.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      } else {
+        menu.classList.add('hidden');
+        menu.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Dropdown State
+    let dropdownOpen = false;
+    const dropdownMenu = document.getElementById('services-dropdown');
+    const dropdownIcon = document.getElementById('dropdown-icon');
+
+    function toggleDropdown(e) {
+      if(e) e.stopPropagation();
+      dropdownOpen = !dropdownOpen;
+      if (dropdownOpen) {
+        dropdownMenu.classList.remove('hidden');
+        dropdownIcon.classList.add('rotate-180', 'text-[#a7da32]');
+      } else {
+        dropdownMenu.classList.add('hidden');
+        dropdownIcon.classList.remove('rotate-180', 'text-[#a7da32]');
+      }
+    }
+
+    function closeDropdown() {
+      if (!dropdownOpen) return;
+      dropdownOpen = false;
+      dropdownMenu.classList.add('hidden');
+      dropdownIcon.classList.remove('rotate-180', 'text-[#a7da32]');
+    }
+
+    // Click outside to close dropdown
+    document.addEventListener('click', function(e) {
+      const container = document.getElementById('services-dropdown-container');
+      if (container && !container.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    // Modals State
+    const allModals = ['modal-demo', 'modal-get-started', 'modal-signin', 'modal-release'];
+    
+    function openModal(id) {
+      // Hide all sub-modals first
+      allModals.forEach(m => document.getElementById(m).classList.add('hidden'));
+      
+      // Show the requested one
+      document.getElementById(`modal-${id}`).classList.remove('hidden');
+      
+      // Show overlay
+      const overlay = document.getElementById('modal-overlay');
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const overlay = document.getElementById('modal-overlay');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function handleFormSubmit(e, actionLabel) {
+      e.preventDefault();
+      closeModal();
+      triggerToast(`${actionLabel} confirmed! Check your inbox shortly.`);
+      e.target.reset();
+    }
+
+    // Toast State
+    let toastTimeout;
+    function triggerToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-message');
+      
+      toastMsg.textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        hideToast();
+      }, 4000);
+    }
+
+    function hideToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('hidden');
+      toast.classList.remove('flex');
+    }
+  </script>
+</body>
+</html>
