@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hexagon pattern + radial glow Background</title>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <style>
+        /* === BASE PAGE BACKGROUND === */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfbfe;
+            /* Hexagon / Honeycomb faint background pattern */
+            background-image: url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21 0L0 11v22l21 11 21-11V11L21 0zm0 41.5L2.3 32V12L21 2.5 39.7 12v20L21 41.5z' fill='%236D28D9' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+            overflow-x: hidden;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* === SOFT PURPLE RADIAL GLOW (behind content) === */
+        .radial-glow {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1200px;
+            height: 800px;
+            background: radial-gradient(circle at 50% 40%, rgba(124, 58, 237, 0.12) 0%, rgba(255,255,255,0) 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- The glowing radial layer -->
+    <div class="radial-glow"></div>
+
+    <!-- 
+      No foreground content needed — this is a pure background extraction.
+      The body itself already carries the hexagon pattern and the off-white base colour.
+      The .radial-glow div adds the soft purple radial gradient on top of the pattern.
+    -->
+</body>
+</html>
