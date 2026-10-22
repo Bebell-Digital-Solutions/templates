@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datacore - Animated Background</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .ambient-hero-glow {
+      background: radial-gradient(circle at 50% 45%, rgba(167, 218, 50, 0.22) 0%, rgba(167, 218, 50, 0) 70%);
+    }
+
+    /* Shift the original purple video directly into Neon Green #a7da32 and Deep Lime */
+    .video-green-graded {
+      filter: hue-rotate(228deg) saturate(2.4) brightness(0.92) contrast(1.15);
+    }
+  </style>
+</head>
+<body class="relative min-h-screen w-full bg-[#151517] overflow-hidden">
+
+  <!-- ================= ANIMATED BACKGROUND SYSTEM (100% PURE GREEN PALETTE) ================= -->
+  <div class="absolute inset-0 w-full h-full min-h-screen z-0 pointer-events-none">
+    <div class="absolute inset-0 w-full h-full">
+      <video
+        autoplay
+        loop
+        muted
+        playsinline
+        class="w-full h-full min-h-screen object-cover video-green-graded opacity-100"
+      >
+        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260210_031346_d87182fb-b0af-4273-84d1-c6fd17d6bf0f.mp4" type="video/mp4" />
+      </video>
+      <!-- Duotone tint pass to eliminate any residual purple hue -->
+      <div class="absolute inset-0 bg-[#2b3a1e]/30 mix-blend-color pointer-events-none"></div>
+    </div>
+
+    <!-- Ambient Hero Glow Center Anchor (#a7da32 radial glow) -->
+    <div class="ambient-hero-glow absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+
+    <!-- Subtle Bottom Grid/Vignette for Depth -->
+    <div class="absolute inset-0 bg-gradient-to-t from-[#151517] via-transparent to-transparent opacity-60"></div>
+  </div>
+
+</body>
+</html>
