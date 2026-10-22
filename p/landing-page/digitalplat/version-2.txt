@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigitalPlat - Ideas deserve a place on the internet</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            offwhite: '#f8f9fa',
+                            orange: '#fc5800',
+                            navy: '#111827',
+                            blue: '#2563eb',
+                            yellow: '#facc15',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #111827;
+            overflow-x: hidden;
+        }
+
+        /* Hide scrollbar for carousel */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Floating Phone Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .phone-container {
+            animation: float 6s ease-in-out infinite;
+            perspective: 1000px; /* Adds depth to the tilt */
+        }
+
+        .phone-mockup {
+            width: 280px;
+            aspect-ratio: 9/16;
+            background-color: #000;
+            border: 10px solid #1f2937; /* Dark gray border */
+            border-radius: 36px;
+            overflow: hidden;
+            position: relative;
+            transform: rotate(-12deg) rotateY(10deg);
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: -15px 25px 40px -10px rgba(0, 0, 0, 0.6), inset 0 0 0 2px #4b5563;
+        }
+
+        /* Notch simulation */
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 20px;
+            background-color: #1f2937;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 20;
+        }
+
+        .phone-container:hover .phone-mockup {
+            transform: rotate(0deg) rotateY(0deg) scale(1.05);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), inset 0 0 0 2px #4b5563;
+        }
+
+        /* Custom Parallax background class */
+        .bg-parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-orange selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="absolute top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center text-white">
+        <div class="flex items-center gap-2 text-xl font-bold tracking-tighter">
+            <i data-lucide="boxes" class="w-6 h-6"></i>
+            DigitalPlat
+        </div>
+        <div class="hidden md:flex gap-8 text-sm font-medium">
+            <a href="#" class="hover:text-gray-300 transition-colors">Products</a>
+            <a href="#" class="hover:text-gray-300 transition-colors">Solutions</a>
+            <a href="#" class="hover:text-gray-300 transition-colors">Learn</a>
+            <a href="#" class="hover:text-gray-300 transition-colors">Documentation</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="#" class="hidden md:block text-sm font-medium hover:text-gray-300">Sign in</a>
+            <a href="#" class="bg-white text-black px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-100 transition-colors">Create account &rarr;</a>
+        </div>
+    </nav>
+
+
+
+
+
+
+
+
+
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden bg-brand-navy">
+        <!-- Generic Cityscape Placeholder Background with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&q=80&w=2000" alt="Cityscape" class="w-full h-full object-cover opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/80 to-transparent"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <!-- Left Text Content -->
+            <div class="max-w-2xl text-white gs-fade-up">
+                <p class="text-brand-orange font-semibold tracking-wider text-sm mb-4 uppercase">Web Infrastructure Platform</p>
+                <h1 class="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-8">
+                    Ideas deserve a<br>place on the<br>internet.
+                </h1>
+                <p class="text-lg text-gray-300 mb-10 max-w-lg leading-relaxed">
+                    DigitalPlat provides the foundational infrastructure to build, secure, and deliver fast, reliable websites and applications anywhere in the world.
+                </p>
+                <div class="flex flex-wrap gap-4 items-center">
+                    <a href="#" class="bg-brand-orange text-white px-8 py-4 rounded-full font-bold hover:bg-orange-600 transition-colors inline-flex items-center gap-2">
+                        Explore infrastructure <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-gray-300 font-medium px-4 py-4 transition-colors">
+                        View documentation
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Phone Mockup -->
+            <div class="flex justify-center lg:justify-center hidden md:flex gs-fade-up" style="transition-delay: 200ms;">
+                <div class="phone-container group cursor-pointer">
+                    <div class="phone-mockup">
+                        <!-- Vertical Video Placeholder -->
+                        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover pointer-events-none">
+                            <source src="https://assets.mixkit.co/videos/preview/mixkit-urban-traffic-in-a-city-at-night-148-large.mp4" type="video/mp4">
+                        </video>
+                        <!-- Overlay for styling -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                            <div class="text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                                <p class="font-bold text-lg leading-tight">Global Network</p>
+                                <p class="text-xs text-gray-300">Always online.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Orange Ticker Banner -->
+    <div class="bg-brand-orange text-white py-3 overflow-hidden border-b border-t border-orange-700 gs-reveal">
+        <div class="flex items-center gap-8 whitespace-nowrap animate-[marquee_20s_linear_infinite]">
+            <style>
+                @keyframes marquee {
+                    0% { transform: translateX(0%); }
+                    100% { transform: translateX(-50%); }
+                }
+            </style>
+            <!-- Duplicated content for seamless scrolling -->
+            <span class="font-medium text-sm flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4"></i> Blazing fast delivery network</span>
+            <span class="opacity-50">•</span>
+            <span class="font-medium text-sm">99.99% Uptime guarantee</span>
+            <span class="opacity-50">•</span>
+            <span class="font-medium text-sm flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4"></i> Enterprise-grade security</span>
+            <span class="opacity-50">•</span>
+            <span class="font-medium text-sm">300+ Edge locations</span>
+            <span class="opacity-50">•</span>
+            <!-- Repeat -->
+             <span class="font-medium text-sm flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4"></i> Blazing fast delivery network</span>
+            <span class="opacity-50">•</span>
+            <span class="font-medium text-sm">99.99% Uptime guarantee</span>
+            <span class="opacity-50">•</span>
+            <span class="font-medium text-sm flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4"></i> Enterprise-grade security</span>
+            <span class="opacity-50">•</span>
+            <span class="font-medium text-sm">300+ Edge locations</span>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Features Section -->
+    <section class="py-24 bg-brand-offwhite">
+        <div class="container mx-auto px-6">
+            <div class="mb-16 gs-fade-up">
+                <p class="text-brand-orange text-sm font-bold uppercase tracking-widest mb-4">Core Focus</p>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-6">
+                    <h2 class="text-4xl md:text-5xl font-black tracking-tighter leading-tight max-w-2xl text-brand-navy">
+                        Infrastructure for an internet people can build on.
+                    </h2>
+                    <p class="text-gray-600 max-w-md text-sm md:text-base">
+                        We build tools that are resilient, scalable, and designed to keep applications online regardless of traffic spikes or regional outages.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 border-t border-gray-200 pt-10 gs-grid-stagger">
+                
+                <!-- Feature 1 -->
+                <div class="flex flex-col gap-4 pr-6">
+                    <div class="text-brand-orange text-sm font-bold">01</div>
+                    <h3 class="text-2xl font-bold tracking-tight">Access infrastructure</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">Connect securely to global networks with low latency routing and localized edge processing capabilities.</p>
+                    <a href="#" class="text-brand-blue text-sm font-semibold hover:underline inline-flex items-center gap-1 mt-auto">
+                        Explore connections <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="flex flex-col gap-4 px-0 md:px-6 md:border-l border-gray-200">
+                    <div class="text-brand-orange text-sm font-bold">02</div>
+                    <h3 class="text-2xl font-bold tracking-tight">Reliable operations</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">Automated failovers, DDoS mitigation, and robust load balancing ensure your services stay up.</p>
+                    <a href="#" class="text-brand-blue text-sm font-semibold hover:underline inline-flex items-center gap-1 mt-auto">
+                        View reliability stats <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="flex flex-col gap-4 pl-0 md:pl-6 md:border-l border-gray-200">
+                    <div class="text-brand-orange text-sm font-bold">03</div>
+                    <h3 class="text-2xl font-bold tracking-tight">Open knowledge</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">Comprehensive documentation, open-source SDKs, and a thriving community of developers.</p>
+                    <a href="#" class="text-brand-blue text-sm font-semibold hover:underline inline-flex items-center gap-1 mt-auto">
+                        Read documentation <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Parallax Mid-Banner -->
+    <section class="relative h-[60vh] min-h-[400px] flex items-center bg-parallax bg-gray-900 gs-reveal" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=2000');">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-2xl text-white gs-fade-up">
+                <p class="text-brand-orange text-sm font-bold uppercase tracking-widest mb-4">Hardware & Software</p>
+                <h2 class="text-5xl md:text-6xl font-black tracking-tighter leading-tight mb-6">
+                    A durable foundation for being online.
+                </h2>
+                <p class="text-lg text-gray-300 mb-8 max-w-lg">
+                    Purpose-built servers located in key exchange points around the world, engineered for maximum throughput and minimum latency.
+                </p>
+                <a href="#" class="bg-white text-black px-6 py-3 rounded-full font-bold hover:bg-gray-200 transition-colors inline-block">
+                    Network Map
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Video Grid Section -->
+    <section class="py-24 bg-brand-offwhite">
+        <div class="container mx-auto px-6">
+            
+            <div class="mb-12 gs-fade-up flex flex-col md:flex-row justify-between items-end gap-6">
+                <div>
+                    <p class="text-brand-orange text-sm font-bold uppercase tracking-widest mb-4">Products</p>
+                    <h2 class="text-4xl md:text-5xl font-black tracking-tighter leading-tight text-brand-navy">
+                        Built to be useful.<br>Designed to endure.
+                    </h2>
+                </div>
+                <p class="text-gray-500 max-w-xs text-sm pb-2">
+                    Explore our suite of tools designed for modern development workflows.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 gs-grid-stagger">
+                
+                <!-- Grid Item 1: Orange -->
+                <div class="group relative overflow-hidden rounded-2xl h-80 md:h-[400px] cursor-pointer">
+                    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-network-lines-and-dots-27339-large.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-brand-orange mix-blend-multiply opacity-90 transition-opacity group-hover:opacity-80"></div>
+                    <div class="absolute inset-0 p-8 flex flex-col justify-between text-white z-10">
+                        <div>
+                            <p class="text-xs font-bold tracking-widest uppercase mb-2 opacity-80">Cloud Compute</p>
+                            <h3 class="text-3xl font-bold tracking-tight">DigitalPlat One</h3>
+                            <p class="mt-4 text-sm max-w-xs opacity-90">Serverless execution environments distributed globally at the edge.</p>
+                        </div>
+                        <div class="flex justify-between items-center w-full">
+                            <span class="text-sm font-semibold underline decoration-transparent group-hover:decoration-white transition-all">Explore service</span>
+                            <i data-lucide="arrow-up-right" class="w-5 h-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid Item 2: Blue -->
+                <div class="group relative overflow-hidden rounded-2xl h-80 md:h-[400px] cursor-pointer">
+                    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-code-41738-large.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-brand-blue mix-blend-multiply opacity-90 transition-opacity group-hover:opacity-80"></div>
+                    <div class="absolute inset-0 p-8 flex flex-col justify-between text-white z-10">
+                        <div>
+                            <p class="text-xs font-bold tracking-widest uppercase mb-2 opacity-80">Community Driven</p>
+                            <h3 class="text-3xl font-bold tracking-tight">OpenSource.ngo</h3>
+                            <p class="mt-4 text-sm max-w-xs opacity-90">Funding and resources for critical open-source internet infrastructure.</p>
+                        </div>
+                        <div class="flex justify-between items-center w-full">
+                            <span class="text-sm font-semibold underline decoration-transparent group-hover:decoration-white transition-all">Explore initiative</span>
+                            <i data-lucide="arrow-up-right" class="w-5 h-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid Item 3: Navy -->
+                <div class="group relative overflow-hidden rounded-2xl h-80 md:h-[400px] cursor-pointer">
+                    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-world-map-global-internet-connections-31718-large.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-[#0f172a] mix-blend-multiply opacity-90 transition-opacity group-hover:opacity-80"></div>
+                    <div class="absolute inset-0 p-8 flex flex-col justify-between text-white z-10">
+                        <div>
+                            <p class="text-xs font-bold tracking-widest uppercase mb-2 opacity-80">Data Insights</p>
+                            <h3 class="text-3xl font-bold tracking-tight">Internet Freedom Index</h3>
+                            <p class="mt-4 text-sm max-w-xs opacity-90">Real-time metrics on global internet accessibility, censorship, and outages.</p>
+                        </div>
+                        <div class="flex justify-between items-center w-full">
+                            <span class="text-sm font-semibold underline decoration-transparent group-hover:decoration-white transition-all">View the index</span>
+                            <i data-lucide="arrow-up-right" class="w-5 h-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid Item 4: Light Gray -->
+                <div class="group relative overflow-hidden rounded-2xl h-80 md:h-[400px] cursor-pointer bg-gray-200">
+                    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-40 mix-blend-overlay">
+                         <source src="https://assets.mixkit.co/videos/preview/mixkit-cpu-processor-with-neon-lights-and-sparks-42065-large.mp4" type="video/mp4">
+                    </video>
+                    <!-- No strong color overlay, letting background color and video texture mix -->
+                    <div class="absolute inset-0 bg-white/20"></div>
+                    <div class="absolute inset-0 p-8 flex flex-col justify-between text-brand-navy z-10">
+                        <div>
+                            <p class="text-xs font-bold tracking-widest uppercase mb-2 text-gray-500">Systems Engineering</p>
+                            <h3 class="text-3xl font-bold tracking-tight">EdgeOS Kernel</h3>
+                            <p class="mt-4 text-sm max-w-xs text-gray-700">Our custom lightweight operating system built for high-performance edge computing.</p>
+                        </div>
+                        <div class="flex justify-between items-center w-full text-brand-navy">
+                            <span class="text-sm font-semibold underline decoration-transparent group-hover:decoration-brand-navy transition-all">Technical docs</span>
+                            <i data-lucide="arrow-up-right" class="w-5 h-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Video Carousel Section -->
+    <section class="pb-24 bg-brand-offwhite overflow-hidden gs-reveal">
+        <div class="container mx-auto px-6 mb-6">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold tracking-tight text-brand-navy">Customer Stories</h3>
+                <div class="flex gap-2">
+                    <button class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+                    <button class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Carousel Container -->
+        <div class="flex overflow-x-auto gap-6 px-6 pb-8 snap-x snap-mandatory hide-scrollbar">
+            
+            <!-- Carousel Item 1 -->
+            <div class="min-w-[85vw] md:min-w-[400px] h-[250px] rounded-2xl snap-center relative overflow-hidden group cursor-pointer">
+                <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-young-woman-working-on-a-laptop-in-a-coffee-shop-43407-large.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 text-white">
+                    <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center mb-4 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+                        <i data-lucide="play" class="fill-white w-5 h-5 ml-1"></i>
+                    </div>
+                    <h4 class="font-bold text-lg leading-tight mb-1">E-commerce Startup Scales Globally</h4>
+                    <p class="text-xs text-gray-300">How they handled Black Friday traffic.</p>
+                </div>
+            </div>
+
+            <!-- Carousel Item 2 -->
+            <div class="min-w-[85vw] md:min-w-[400px] h-[250px] rounded-2xl snap-center relative overflow-hidden group cursor-pointer">
+                <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-colleagues-discussing-a-project-in-the-office-42646-large.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/80 via-black/20 to-transparent flex flex-col justify-end p-6 text-white">
+                     <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center mb-4 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+                        <i data-lucide="play" class="fill-white w-5 h-5 ml-1"></i>
+                    </div>
+                    <h4 class="font-bold text-lg leading-tight mb-1">Financial Data Real-time Processing</h4>
+                    <p class="text-xs text-gray-300">Using EdgeOS for low-latency trades.</p>
+                </div>
+            </div>
+
+            <!-- Carousel Item 3 -->
+            <div class="min-w-[85vw] md:min-w-[400px] h-[250px] rounded-2xl snap-center relative overflow-hidden group cursor-pointer">
+                <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-server-room-blinking-lights-11910-large.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-orange/80 via-black/20 to-transparent flex flex-col justify-end p-6 text-white">
+                     <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center mb-4 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+                        <i data-lucide="play" class="fill-white w-5 h-5 ml-1"></i>
+                    </div>
+                    <h4 class="font-bold text-lg leading-tight mb-1">Media Streaming Migration</h4>
+                    <p class="text-xs text-gray-300">Cutting bandwidth costs by 40%.</p>
+                </div>
+            </div>
+
+            <!-- Carousel Item 4 -->
+            <div class="min-w-[85vw] md:min-w-[400px] h-[250px] rounded-2xl snap-center relative overflow-hidden group cursor-pointer bg-gray-900 flex items-center justify-center">
+                 <div class="text-center p-6">
+                    <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center mx-auto mb-4 border border-gray-700">
+                        <i data-lucide="arrow-right" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h4 class="font-bold text-white text-lg">View all case studies</h4>
+                 </div>
+            </div>
+
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Stats Section -->
+    <section class="py-24 bg-brand-navy text-white relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <!-- Left text -->
+                <div class="gs-fade-up">
+                    <div class="flex items-center gap-2 mb-4 text-brand-orange">
+                        <div class="w-2 h-2 bg-brand-orange rounded-full"></div>
+                        <div class="w-2 h-2 bg-brand-orange rounded-full"></div>
+                        <div class="w-2 h-2 bg-brand-orange rounded-full"></div>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-black tracking-tighter leading-tight">
+                        Global reach.<br>Long-term<br>responsibility.
+                    </h2>
+                </div>
+
+                <!-- Right Stats Grid -->
+                <div class="grid grid-cols-2 gap-y-12 gap-x-8 gs-grid-stagger">
+                    <div>
+                        <div class="text-5xl md:text-6xl font-black tracking-tighter mb-2">500K+</div>
+                        <div class="text-sm text-gray-400 font-medium uppercase tracking-wider">Developers deployed</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl md:text-6xl font-black tracking-tighter mb-2">200+</div>
+                        <div class="text-sm text-gray-400 font-medium uppercase tracking-wider">Points of presence</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl md:text-6xl font-black tracking-tighter mb-2">150K+</div>
+                        <div class="text-sm text-gray-400 font-medium uppercase tracking-wider">Enterprise networks</div>
+                    </div>
+                    <div>
+                        <div class="text-5xl md:text-6xl font-black tracking-tighter mb-2">24/7</div>
+                        <div class="text-sm text-gray-400 font-medium uppercase tracking-wider">Dedicated support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Purpose Section -->
+    <section class="py-24 bg-brand-offwhite">
+        <div class="container mx-auto px-6">
+            <div class="mb-12 gs-fade-up flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                <div>
+                    <p class="text-brand-orange text-sm font-bold uppercase tracking-widest mb-4">Our Mission</p>
+                    <h2 class="text-4xl md:text-5xl font-black tracking-tighter leading-tight text-brand-navy max-w-md">
+                        Technology and public purpose, moving together.
+                    </h2>
+                </div>
+                <p class="text-gray-600 max-w-sm text-sm border-l-2 border-brand-orange pl-4">
+                    A good internet doesn't just happen. It requires deliberate effort, investment, and a commitment to open standards.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 gs-grid-stagger">
+                
+                <!-- Yellow Card -->
+                <div class="bg-brand-yellow p-10 flex flex-col justify-between rounded-xl h-[350px] group cursor-pointer hover:shadow-xl transition-shadow">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-black/60 mb-2">Accelerator Program</p>
+                        <h3 class="text-4xl font-black tracking-tight text-black mb-4 leading-none">EdgeAlpha<br>DigitalPlat</h3>
+                        <p class="text-black/80 text-sm font-medium">Supporting the next generation of infrastructure pioneers with grants and mentorship.</p>
+                    </div>
+                    <div class="flex justify-between items-center text-black font-bold">
+                        <span class="underline decoration-2 decoration-transparent group-hover:decoration-black transition-all">Meet the startups</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 transform group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Navy Card -->
+                <div class="bg-brand-navy p-10 flex flex-col justify-between rounded-xl h-[350px] group cursor-pointer hover:shadow-xl transition-shadow text-white">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-white/60 mb-2">Non-profit Arm</p>
+                        <h3 class="text-4xl font-black tracking-tight mb-4 leading-none">DigitalPlat<br>Foundation</h3>
+                        <p class="text-white/80 text-sm font-medium">Defending digital rights, privacy, and providing free access for humanitarian organizations.</p>
+                    </div>
+                    <div class="flex justify-between items-center font-bold">
+                        <span class="underline decoration-2 decoration-transparent group-hover:decoration-white transition-all">Partner with the foundation</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 transform group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="py-20 bg-brand-offwhite">
+        <div class="container mx-auto px-6">
+            <div class="bg-brand-orange rounded-2xl p-12 md:p-20 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-10 gs-reveal">
+                <h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-none text-brand-navy max-w-xl">
+                    Make your place in what comes next.
+                </h2>
+                <div class="flex flex-col sm:flex-row items-center gap-4 shrink-0">
+                    <a href="#" class="bg-brand-navy text-white px-8 py-4 rounded-full font-bold hover:bg-gray-800 transition-colors w-full sm:w-auto text-center">
+                        Create account &rarr;
+                    </a>
+                    <a href="#" class="text-brand-navy font-bold hover:underline px-4 py-4 w-full sm:w-auto text-center">
+                        Talk to an expert
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Footer -->
+    <footer class="bg-brand-offwhite pt-16 pb-8 border-t border-gray-200">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-16">
+                
+                <div class="col-span-2 lg:col-span-2">
+                    <div class="flex items-center gap-2 text-xl font-bold tracking-tighter mb-4 text-brand-navy">
+                        <i data-lucide="boxes" class="w-6 h-6"></i>
+                        DigitalPlat
+                    </div>
+                    <p class="text-sm text-gray-500 max-w-xs">
+                        Building the durable foundation for the internet's next era. Secure, fast, and everywhere.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm mb-4 text-brand-navy">Products</h4>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Compute</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Network</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Security</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Edge AI</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm mb-4 text-brand-navy">Resources</h4>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Documentation</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Community</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">System Status</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm mb-4 text-brand-navy">Company</h4>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">About</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Foundation</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors">Legal</a></li>
+                    </ul>
+                </div>
+                
+                 <div>
+                    <h4 class="font-bold text-sm mb-4 text-brand-navy">Connect</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-gray-400 hover:text-brand-navy transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-navy transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-navy transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-200 text-xs text-gray-400">
+                <p>&copy; 2026 DigitalPlat Inc. All rights reserved.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-gray-600">Privacy Policy</a>
+                    <a href="#" class="hover:text-gray-600">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Initialization Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // GSAP & ScrollTrigger Animations
+        document.addEventListener("DOMContentLoaded", (event) => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // General Fade Up Elements
+            const fadeUpElements = gsap.utils.toArray('.gs-fade-up');
+            fadeUpElements.forEach((el) => {
+                gsap.fromTo(el, 
+                    { y: 40, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: el,
+                            start: "top 85%", // Triggers when top of element hits 85% from top of viewport
+                            toggleActions: "play none none reverse"
+                        }
+                    }
+                );
+            });
+
+            // Grid Stagger Animations
+            const staggerGrids = gsap.utils.toArray('.gs-grid-stagger');
+            staggerGrids.forEach((grid) => {
+                const items = grid.children;
+                gsap.fromTo(items,
+                    { y: 50, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.7,
+                        stagger: 0.15,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: grid,
+                            start: "top 80%",
+                            toggleActions: "play none none reverse"
+                        }
+                    }
+                );
+            });
+
+            // Simple Reveal (Opacity only)
+            const revealElements = gsap.utils.toArray('.gs-reveal');
+            revealElements.forEach((el) => {
+                gsap.fromTo(el,
+                    { opacity: 0 },
+                    {
+                        opacity: 1,
+                        duration: 1,
+                        ease: "power2.inOut",
+                        scrollTrigger: {
+                            trigger: el,
+                            start: "top 85%",
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+</body>
+</html>
