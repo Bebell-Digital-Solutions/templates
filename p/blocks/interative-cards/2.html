@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Image Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* 
+          CSS Custom Properties for exact positioning.
+          We explicitly map every translation and rotation so that the individual card hover
+          can perfectly match the spread state without any straightening or scaling.
+        */
+        :root {
+            /* 1) Base State (Stacked with a very subtle arc) */
+            --b-x1: -30px; --b-y1: 8px;  --b-r1: -4deg;
+            --b-x2: -15px; --b-y2: 2px;  --b-r2: -2deg;
+            --b-x3: 0px;   --b-y3: 0px;  --b-r3: 0deg;
+            --b-x4: 15px;  --b-y4: 2px;  --b-r4: 2deg;
+            --b-x5: 30px;  --b-y5: 8px;  --b-r5: 4deg;
+
+            /* 2) Spread State (Fanned out on container hover) */
+            --s-x1: -220px; --s-y1: 45px; --s-r1: -15deg;
+            --s-x2: -110px; --s-y2: 12px; --s-r2: -5deg;
+            --s-x3: 0px;    --s-y3: 0px;  --s-r3: 0deg;
+            --s-x4: 110px;  --s-y4: 12px; --s-r4: 5deg;
+            --s-x5: 220px;  --s-y5: 45px; --s-r5: 15deg;
+        }
+
+        /* Mobile adjustments for spread to fit smaller screens */
+        @media (max-width: 768px) {
+            :root {
+                --s-x1: -140px; --s-y1: 30px;
+                --s-x2: -70px;  --s-y2: 8px;
+                --s-x4: 70px;   --s-y4: 8px;
+                --s-x5: 140px;  --s-y5: 30px;
+            }
+        }
+
+        /* 
+          Core Transition:
+          Delay the z-index on mouse-out so the card stays visible on top 
+          while sliding back into the stack. 
+        */
+        .card {
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                        box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                        z-index 0s 0.5s;
+            transform-origin: bottom center;
+            will-change: transform;
+        }
+
+        /* 
+          STATE 1: Base Transforms & Initial Stack Z-index 
+          (Back cards have lower z-index, center is highest)
+        */
+        .c1 { transform: translate(var(--b-x1), var(--b-y1)) rotate(var(--b-r1)); z-index: 10; }
+        .c2 { transform: translate(var(--b-x2), var(--b-y2)) rotate(var(--b-r2)); z-index: 20; }
+        .c3 { transform: translate(var(--b-x3), var(--b-y3)) rotate(var(--b-r3)); z-index: 30; }
+        .c4 { transform: translate(var(--b-x4), var(--b-y4)) rotate(var(--b-r4)); z-index: 20; }
+        .c5 { transform: translate(var(--b-x5), var(--b-y5)) rotate(var(--b-r5)); z-index: 10; }
+
+        /* 
+          STATE 2: Container Hover (Fan Out)
+          Applies the spread variables to each card when the parent is hovered.
+        */
+        .gallery-container:hover .c1 { transform: translate(var(--s-x1), var(--s-y1)) rotate(var(--s-r1)); }
+        .gallery-container:hover .c2 { transform: translate(var(--s-x2), var(--s-y2)) rotate(var(--s-r2)); }
+        .gallery-container:hover .c3 { transform: translate(var(--s-x3), var(--s-y3)) rotate(var(--s-r3)); }
+        .gallery-container:hover .c4 { transform: translate(var(--s-x4), var(--s-y4)) rotate(var(--s-r4)); }
+        .gallery-container:hover .c5 { transform: translate(var(--s-x5), var(--s-y5)) rotate(var(--s-r5)); }
+
+        /* 
+          STATE 3: Individual Card Hover
+          Card comes to the VERY FRONT (z-index 50) and gets a darker drop shadow,
+          but STRICTLY keeps its fanned-out angle and position.
+          Instant z-index change on hover (0s delay).
+        */
+        .gallery-container .c1:hover { 
+            z-index: 50; 
+            transition: transform 0.5s, box-shadow 0.5s, z-index 0s 0s; 
+            transform: translate(var(--s-x1), var(--s-y1)) rotate(var(--s-r1)); 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+        }
+        .gallery-container .c2:hover { 
+            z-index: 50; 
+            transition: transform 0.5s, box-shadow 0.5s, z-index 0s 0s; 
+            transform: translate(var(--s-x2), var(--s-y2)) rotate(var(--s-r2)); 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+        }
+        .gallery-container .c3:hover { 
+            z-index: 50; 
+            transition: transform 0.5s, box-shadow 0.5s, z-index 0s 0s; 
+            transform: translate(var(--s-x3), var(--s-y3)) rotate(var(--s-r3)); 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+        }
+        .gallery-container .c4:hover { 
+            z-index: 50; 
+            transition: transform 0.5s, box-shadow 0.5s, z-index 0s 0s; 
+            transform: translate(var(--s-x4), var(--s-y4)) rotate(var(--s-r4)); 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+        }
+        .gallery-container .c5:hover { 
+            z-index: 50; 
+            transition: transform 0.5s, box-shadow 0.5s, z-index 0s 0s; 
+            transform: translate(var(--s-x5), var(--s-y5)) rotate(var(--s-r5)); 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+        }
+    </style>
+</head>
+<body class="bg-white antialiased flex flex-col items-center justify-center min-h-screen overflow-hidden selection:bg-indigo-500 selection:text-white">
+
+    <div class="text-center mb-2 sm:mb-4 px-4">
+        <h1 class="text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 mb-3">
+            Dynamic Accordion
+        </h1>
+        <p class="text-gray-500 text-lg max-w-md mx-auto">
+            Hover the cluster to spread. Hover a tilted card to bring it front row while keeping its exact angle.
+        </p>
+    </div>
+
+    <!-- 
+      The Gallery Container 
+      Generous bounding box height so that hovered edges remain interactive.
+    -->
+    <div class="gallery-container relative w-full max-w-5xl h-[450px] sm:h-[500px] flex items-center justify-center group">
+        
+        <!-- Card 1 (Far Left) - Aspect Ratio 4:5 (1080x1350 roughly translates to w-[260px] h-[325px]) -->
+        <img 
+            src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/cinematic-posters/1.webp" 
+            alt="Blue Aesthetic Sport" 
+            class="card c1 absolute w-[200px] h-[250px] sm:w-[260px] sm:h-[325px] object-cover rounded-2xl sm:rounded-3xl shadow-lg border border-black/5"
+        />
+
+        <!-- Card 2 (Mid Left) -->
+        <img 
+            src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/cinematic-posters/2.webp" 
+            alt="Tennis Court Net" 
+            class="card c2 absolute w-[200px] h-[250px] sm:w-[260px] sm:h-[325px] object-cover rounded-2xl sm:rounded-3xl shadow-lg border border-black/5"
+        />
+
+        <!-- Card 3 (Center) -->
+        <img 
+            src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/cinematic-posters/3.webp" 
+            alt="Red Light Silhouette" 
+            class="card c3 absolute w-[200px] h-[250px] sm:w-[260px] sm:h-[325px] object-cover rounded-2xl sm:rounded-3xl shadow-xl border border-black/5"
+        />
+
+        <!-- Card 4 (Mid Right) -->
+        <img 
+            src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/cinematic-posters/5.webp" 
+            alt="Dark Profile Silhouette" 
+            class="card c4 absolute w-[200px] h-[250px] sm:w-[260px] sm:h-[325px] object-cover rounded-2xl sm:rounded-3xl shadow-lg border border-black/5"
+        />
+
+        <!-- Card 5 (Far Right) -->
+        <img 
+            src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/cinematic-posters/5.webp" 
+            alt="Athletic Track Lines" 
+            class="card c5 absolute w-[200px] h-[250px] sm:w-[260px] sm:h-[325px] object-cover rounded-2xl sm:rounded-3xl shadow-lg border border-black/5"
+        />
+
+    </div>
+
+</body>
+</html>
