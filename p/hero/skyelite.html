@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyElite - Premium Private Jets</title>
+    
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Configuration and Base Styles -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#202A36',
+                            darker: '#1a2229'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Ensure no horizontal scroll from animations or absolute positioning */
+            overflow-x: hidden; 
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-900">
+
+    <section class="relative h-screen overflow-hidden w-full">
+        
+        <!-- Background Video -->
+        <video 
+            class="absolute inset-0 w-full h-full object-cover z-0"
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_091828_e240eb17-6edc-4129-ad9d-98678e3fd238.mp4" 
+            autoplay 
+            muted 
+            loop 
+            playsinline>
+        </video>
+
+        <!-- Main Content Wrapper -->
+        <div class="relative z-10 h-full flex flex-col">
+            
+            <!-- Navigation Bar -->
+            <nav class="w-full flex justify-between items-center max-w-7xl mx-auto px-8 py-6">
+                <!-- Logo -->
+                <div class="text-2xl font-semibold tracking-tight text-gray-900">
+                    SkyElite
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex gap-8 items-center">
+                    <a href="#start" class="font-medium text-gray-900 hover:text-gray-700 transition-colors">Start</a>
+                    <a href="#story" class="font-medium text-gray-900 hover:text-gray-700 transition-colors">Story</a>
+                    <a href="#rates" class="font-medium text-gray-900 hover:text-gray-700 transition-colors">Rates</a>
+                    <a href="#benefits" class="font-medium text-gray-900 hover:text-gray-700 transition-colors">Benefits</a>
+                    <a href="#faq" class="font-medium text-gray-900 hover:text-gray-700 transition-colors">FAQ</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-gray-900 p-2 z-50 focus:outline-none" aria-label="Toggle Menu">
+                    <!-- Hamburger Icon -->
+                    <svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block">
+                        <line x1="4" x2="20" y1="12" y2="12"/>
+                        <line x1="4" x2="20" y1="6" y2="6"/>
+                        <line x1="4" x2="20" y1="18" y2="18"/>
+                    </svg>
+                    <!-- Close Icon -->
+                    <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
+                        <path d="M18 6 6 18"/>
+                        <path d="m6 6 12 12"/>
+                    </svg>
+                </button>
+
+                <!-- Mobile Dropdown Menu -->
+                <div id="mobile-dropdown" class="hidden absolute top-20 left-4 right-4 bg-white/95 backdrop-blur rounded-lg shadow-lg p-4 flex-col gap-2 md:hidden transition-all duration-300">
+                    <a href="#start" class="font-medium text-gray-900 hover:text-gray-700 transition-colors px-4 py-3 hover:bg-gray-100 rounded-md block">Start</a>
+                    <a href="#story" class="font-medium text-gray-900 hover:text-gray-700 transition-colors px-4 py-3 hover:bg-gray-100 rounded-md block">Story</a>
+                    <a href="#rates" class="font-medium text-gray-900 hover:text-gray-700 transition-colors px-4 py-3 hover:bg-gray-100 rounded-md block">Rates</a>
+                    <a href="#benefits" class="font-medium text-gray-900 hover:text-gray-700 transition-colors px-4 py-3 hover:bg-gray-100 rounded-md block">Benefits</a>
+                    <a href="#faq" class="font-medium text-gray-900 hover:text-gray-700 transition-colors px-4 py-3 hover:bg-gray-100 rounded-md block">FAQ</a>
+                </div>
+            </nav>
+
+            <!-- Hero Content -->
+            <!-- Adjusted -mt-20 to optically center the content ignoring the navbar height -->
+            <main class="flex-1 flex flex-col items-center justify-center px-4 -mt-20">
+                
+                <span class="text-sm font-semibold text-gray-600 tracking-wider mb-4 uppercase">
+                    Private Jets
+                </span>
+                
+                <div class="flex flex-col items-center text-center">
+                    <h1 class="text-6xl md:text-7xl lg:text-8xl font-normal text-gray-500 leading-none tracking-tighter">
+                        Premium.
+                    </h1>
+                    <!-- Negative margin for overlapping text effect -->
+                    <h1 class="text-6xl md:text-7xl lg:text-8xl font-normal text-brand-dark leading-none tracking-tighter -mt-3 md:-mt-4">
+                        Accessible.
+                    </h1>
+                </div>
+
+                <p class="text-lg md:text-xl text-gray-600 mt-4 mb-6 max-w-2xl text-center">
+                    Your dedication deserves recognition.
+                </p>
+
+                <div class="flex flex-row gap-4 justify-center">
+                    <button class="px-6 py-2 rounded-full bg-gray-300 text-gray-800 font-medium hover:bg-gray-400 transition-colors">
+                        Discover
+                    </button>
+                    <button class="px-6 py-2 rounded-full text-white bg-brand-dark hover:bg-brand-darker transition-colors font-medium shadow-md hover:shadow-lg">
+                        Book Now
+                    </button>
+                </div>
+                
+            </main>
+        </div>
+    </section>
+
+    <!-- Vanilla JavaScript for Interaction -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const dropdown = document.getElementById('mobile-dropdown');
+            const iconMenu = document.getElementById('icon-menu');
+            const iconClose = document.getElementById('icon-close');
+
+            menuBtn.addEventListener('click', () => {
+                // Toggle Dropdown Visibility
+                if (dropdown.classList.contains('hidden')) {
+                    dropdown.classList.remove('hidden');
+                    dropdown.classList.add('flex');
+                    
+                    // Switch Icons
+                    iconMenu.classList.add('hidden');
+                    iconMenu.classList.remove('block');
+                    iconClose.classList.remove('hidden');
+                    iconClose.classList.add('block');
+                } else {
+                    dropdown.classList.add('hidden');
+                    dropdown.classList.remove('flex');
+                    
+                    // Switch Icons
+                    iconMenu.classList.remove('hidden');
+                    iconMenu.classList.add('block');
+                    iconClose.classList.add('hidden');
+                    iconClose.classList.remove('block');
+                }
+            });
+
+            // Close dropdown when a link is clicked
+            const dropdownLinks = dropdown.querySelectorAll('a');
+            dropdownLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    dropdown.classList.add('hidden');
+                    dropdown.classList.remove('flex');
+                    
+                    iconMenu.classList.remove('hidden');
+                    iconMenu.classList.add('block');
+                    iconClose.classList.add('hidden');
+                    iconClose.classList.remove('block');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
