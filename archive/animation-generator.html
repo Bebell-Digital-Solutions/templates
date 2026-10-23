@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Predictive Arc</title>
+  <link rel="stylesheet" href="style.css" />
+  
+  
+  
+  <style>
+  *, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #050506;
+  color: #e8e8ec;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  min-height: 100%;
+  padding: 32px;
+}
+
+.shader-frame {
+  position: relative;
+  width: min(100%, 960px);
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px -20px rgba(120, 100, 255, 0.35),
+              0 0 0 1px rgba(255, 255, 255, 0.04);
+  isolation: isolate;
+}
+
+/* Mirrors the authored .threeui-background rules for the predictive variant */
+.shader-frame.predictive-arc {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: #030304;
+}
+
+.shader-frame.predictive-arc--light {
+  background: #f3f6f1;
+}
+
+.shader-frame.predictive-arc > canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  width: min(100%, 960px);
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8d8d99;
+}
+
+.controls input[type="range"] {
+  width: 100%;
+  accent-color: #8b7bff;
+}
+
+.controls select {
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  background: #14141a;
+  color: #e8e8ec;
+  font: inherit;
+  font-size: 12px;
+}
+  
+  </style>
+  
+  
+</head>
+<body>
+  <main class="stage">
+    <div class="shader-frame" id="predictive-arc">
+      <canvas id="predictive-canvas"></canvas>
+    </div>
+
+    <div class="controls">
+      <label>
+        <span>Mode</span>
+        <select id="mode">
+          <option value="dark" selected>Dark</option>
+          <option value="light">Light</option>
+        </select>
+      </label>
+      <label>
+        <span>Speed</span>
+        <input id="speed" type="range" min="0" max="3" step="0.05" value="1" />
+      </label>
+      <label>
+        <span>Hue</span>
+        <input id="hue" type="range" min="-180" max="180" step="1" value="0" />
+      </label>
+      <label>
+        <span>Saturation</span>
+        <input id="saturation" type="range" min="0" max="2" step="0.05" value="1" />
+      </label>
+      <label>
+        <span>Brightness</span>
+        <input id="brightness" type="range" min="0.35" max="1.65" step="0.05" value="1" />
+      </label>
+    </div>
+  </main>
+
+  <script src="predictiveArc.js"></script>
+  
+  
+  <script>
+  
+  
+  (() => {
+  "use strict";
+
+  // --- Authored defaults (mirrors PREDICTIVE_ARC_DEFAULTS) ---
+  const DEFAULTS = {
+    mode: "dark",
+    speed: 1,
+    spacing: 5,
+    dotSize: 6,
+    archHeight: 0.7,
+    thickness: 1,
+    brightness: 1,
+    hue: 0,
+    saturation: 1,
+  };
+
+  function resolveMode(mode) {
+    if (mode === "light" || mode === 1 || mode === "1") return "light";
+    return "dark";
+  }
+
+  // --- Renderer (direct port of createPredictiveArcRenderer) ---
+  function createPredictiveArcRenderer(canvas, getOptions) {
+    const context = canvas.getContext("2d", { alpha: false });
+    if (!context) return null;
+
+    let width = 1;
+    let height = 1;
+    let time = 0;
+
+    const resize = (nextWidth, nextHeight) => {
+      width = Math.max(1, nextWidth);
+      height = Math.max(1, nextHeight);
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(width * pixelRatio);
+      canvas.height = Math.round(height * pixelRatio);
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    };
+
+    const render = () => {
+      const options = getOptions();
+      const mode = resolveMode(options.mode);
+      const isLight = mode === "light";
+
+      context.fillStyle = isLight ? "#eef1f6" : "#030303";
+      context.fillRect(0, 0, width, height);
+      time += 0.015 * options.speed;
+
+      const centerX = width / 2;
+      const archPeakY = height * 0.35;
+      const archWidth = width * 1.5;
+      const archHeight = height * options.archHeight;
+      context.globalCompositeOperation = isLight ? "source-over" : "lighter";
+
+      for (let x = 0; x < width; x += options.spacing) {
+        const normX = (x - centerX) / (archWidth / 2);
+        const curveY = archPeakY + normX * normX * archHeight;
+
+        for (let y = 0; y < height; y += options.spacing) {
+          const distanceToCurve = Math.abs(y - curveY);
+          const thickness = (140 + (1 - Math.abs(normX)) * 80) * options.thickness;
+          if (distanceToCurve >= thickness) continue;
+
+          let intensity = 1 - distanceToCurve / thickness;
+          const waveX = Math.sin(x * 0.015 + time);
+          const waveY = Math.cos(y * 0.02 + time);
+          intensity = intensity * 0.7 + waveX * waveY * 0.3 * intensity;
+          intensity *= Math.max(0, 1 - Math.pow(Math.abs(normX), 2.5));
+          if (intensity <= 0.02) continue;
+
+          let r, g, b;
+          if (isLight) {
+            r = Math.min(255, 48 * intensity + 70 * Math.pow(intensity, 3));
+            g = Math.min(255, 28 * intensity + 45 * Math.pow(intensity, 4));
+            b = Math.min(255, 120 * intensity + 110 * Math.pow(intensity, 2));
+            if (intensity > 0.7) {
+              const coreBoost = (intensity - 0.7) * 3.3;
+              r = Math.min(255, r + 90 * coreBoost);
+              g = Math.min(255, g + 70 * coreBoost);
+              b = Math.min(255, b + 110 * coreBoost);
+            }
+          } else {
+            r = Math.min(255, 60 * intensity + 100 * Math.pow(intensity, 3));
+            g = Math.min(255, 20 * intensity + 60 * Math.pow(intensity, 4));
+            b = Math.min(255, 120 * intensity + 135 * Math.pow(intensity, 2));
+            if (intensity > 0.7) {
+              const coreBoost = (intensity - 0.7) * 3.3;
+              r = Math.min(255, r + 150 * coreBoost);
+              g = Math.min(255, g + 150 * coreBoost);
+              b = Math.min(255, b + 150 * coreBoost);
+            }
+          }
+
+          context.fillStyle = `rgb(${Math.floor(r * options.brightness)}, ${Math.floor(g * options.brightness)}, ${Math.floor(b * options.brightness)})`;
+          context.fillRect(
+            x,
+            y,
+            options.dotSize * intensity,
+            options.dotSize * intensity,
+          );
+        }
+      }
+      context.globalCompositeOperation = "source-over";
+    };
+
+    return { resize, render };
+  }
+
+  // --- Mount (mirrors PredictiveArcRenderer component lifecycle) ---
+  function mount() {
+    const host = document.getElementById("predictive-arc");
+    const canvas = document.getElementById("predictive-canvas");
+    if (!host || !canvas) return;
+
+    const options = { ...DEFAULTS };
+    const renderer = createPredictiveArcRenderer(canvas, () => options);
+    if (!renderer) return;
+
+    // Apply CSS filter the same way the authored component does, per-property
+    const applyFilter = () => {
+      canvas.style.filter = `hue-rotate(${options.hue}deg) saturate(${options.saturation})`;
+    };
+    applyFilter();
+
+    let frame = 0;
+    let visible = true;
+
+    const resize = () => {
+      const bounds = host.getBoundingClientRect();
+      renderer.resize(bounds.width, bounds.height);
+      renderer.render();
+    };
+
+    const tick = () => {
+      renderer.render();
+      frame = visible && !document.hidden ? requestAnimationFrame(tick) : 0;
+    };
+
+    const observer = new ResizeObserver(resize);
+
+    const intersection = new IntersectionObserver(([entry]) => {
+      visible = entry ? entry.isIntersecting : true;
+      if (visible && !frame) frame = requestAnimationFrame(tick);
+      if (!visible && frame) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    });
+
+    const visibility = () => {
+      if (document.hidden && frame) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      } else if (!document.hidden && visible && !frame) {
+        frame = requestAnimationFrame(tick);
+      }
+    };
+
+    observer.observe(host);
+    intersection.observe(host);
+    document.addEventListener("visibilitychange", visibility);
+
+    resize();
+    frame = requestAnimationFrame(tick);
+
+    // --- Wire the controls ---
+    const $ = (id) => document.getElementById(id);
+
+    $("mode").addEventListener("change", (event) => {
+      const next = resolveMode(event.target.value);
+      options.mode = next;
+      host.dataset.mode = next;
+      host.classList.toggle("predictive-arc--dark", next === "dark");
+      host.classList.toggle("predictive-arc--light", next === "light");
+      // Repaint immediately, even if paused
+      renderer.render();
+    });
+
+    const bindRange = (id, key, transform = (v) => v) => {
+      const el = $(id);
+      el.addEventListener("input", () => {
+        options[key] = transform(parseFloat(el.value));
+        if (key === "hue" || key === "saturation") applyFilter();
+      });
+    };
+
+    bindRange("speed", "speed");
+    bindRange("hue", "hue");
+    bindRange("saturation", "saturation");
+    bindRange("brightness", "brightness");
+
+    // Initial classes matching the authored markup
+    host.classList.add("predictive-arc", `predictive-arc--${options.mode}`);
+    host.dataset.mode = options.mode;
+
+    // Tear down on page unload (harmless, keeps it tidy)
+    window.addEventListener("beforeunload", () => {
+      if (frame) cancelAnimationFrame(frame);
+      observer.disconnect();
+      intersection.disconnect();
+      document.removeEventListener("visibilitychange", visibility);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mount, { once: true });
+  } else {
+    mount();
+  }
+})();
+
+</script>
+  
+  
+  
+  
+  
+  
+</body>
+</html>
