@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fluid Aurora Background</title>
+  <style>
+    /* Reset and base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #151517;
+      overflow: hidden; /* prevent scrollbars, full-screen canvas */
+    }
+
+    /* Background system container */
+    .background-system {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Canvas fills the container */
+    #aurora-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none; /* allow mouse events to pass through if needed, but we handle on window */
+    }
+
+    /* Ambient glow overlay */
+    .ambient-hero-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 45%, rgba(167, 218, 50, 0.22) 0%, rgba(167, 218, 50, 0) 70%);
+      pointer-events: none;
+    }
+
+    /* Bottom fade gradient */
+    .bottom-fade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, #151517, transparent 60%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Interactive aurora background only -->
+  <div class="background-system">
+    <canvas id="aurora-canvas"></canvas>
+    <div class="ambient-hero-glow"></div>
+    <div class="bottom-fade"></div>
+  </div>
+
+  <script>
+    (function() {
+      // Initialize canvas and context
+      const canvas = document.getElementById('aurora-canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Set initial dimensions
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      // Mouse tracking (global)
+      let mouse = { x: -1000, y: -1000 };
+
+      // Resize handler
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      // Mouse events
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      window.addEventListener('mouseout', () => {
+        mouse.x = -1000;
+        mouse.y = -1000;
+      });
+
+      // Orb definitions (based on original)
+      const orbs = [
+        { baseColor: 'rgba(167, 218, 50, 0.4)', x: width * 0.25, y: height * 0.35, vx: 0.45, vy: 0.3, radius: Math.min(width, height) * 0.45, color: 'rgba(167, 218, 50, 0.4)' },
+        { baseColor: 'rgba(124, 181, 24, 0.35)', x: width * 0.75, y: height * 0.65, vx: -0.35, vy: -0.25, radius: Math.min(width, height) * 0.5, color: 'rgba(124, 181, 24, 0.35)' },
+        { baseColor: 'rgba(185, 231, 84, 0.28)', x: width * 0.5, y: height * 0.2, vx: 0.3, vy: -0.4, radius: Math.min(width, height) * 0.4, color: 'rgba(185, 231, 84, 0.28)' },
+        { baseColor: 'rgba(43, 58, 30, 0.6)', x: width * 0.8, y: height * 0.25, vx: -0.4, vy: 0.35, radius: Math.min(width, height) * 0.42, color: 'rgba(43, 58, 30, 0.6)' },
+        { baseColor: 'rgba(167, 218, 50, 0.25)', x: width * 0.3, y: height * 0.8, vx: 0.35, vy: 0.2, radius: Math.min(width, height) * 0.48, color: 'rgba(167, 218, 50, 0.25)' },
+      ];
+
+      // Particles
+      const particles = Array.from({ length: 70 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 2.2 + 0.8,
+        speedX: (Math.random() - 0.5) * 0.6,
+        speedY: -Math.random() * 0.7 - 0.2,
+        opacity: Math.random() * 0.6 + 0.2,
+      }));
+
+      let time = 0;
+
+      // Animation loop
+      function render() {
+        time += 0.006;
+
+        // Clear background
+        ctx.fillStyle = '#151517';
+        ctx.fillRect(0, 0, width, height);
+
+        // Mouse interaction glow
+        if (mouse.x > -1000) {
+          ctx.globalCompositeOperation = 'screen';
+          const mouseRadial = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 250);
+          mouseRadial.addColorStop(0, 'rgba(167, 218, 50, 0.15)');
+          mouseRadial.addColorStop(1, 'rgba(21, 21, 23, 0)');
+          ctx.fillStyle = mouseRadial;
+          ctx.beginPath();
+          ctx.arc(mouse.x, mouse.y, 250, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Render orbs with repulsion
+        orbs.forEach((orb, i) => {
+          let targetX = orb.x + Math.sin(time + i) * 1.2 + orb.vx;
+          let targetY = orb.y + Math.cos(time + i * 1.3) * 1.2 + orb.vy;
+
+          // Mouse repulsion
+          if (mouse.x > -1000) {
+            const dx = targetX - mouse.x;
+            const dy = targetY - mouse.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const interactionRadius = 400;
+
+            if (distance < interactionRadius && distance > 0) {
+              const force = (interactionRadius - distance) / interactionRadius;
+              targetX += (dx / distance) * force * 15;
+              targetY += (dy / distance) * force * 15;
+            }
+          }
+
+          // Smooth movement
+          orb.x += (targetX - orb.x) * 0.1;
+          orb.y += (targetY - orb.y) * 0.1;
+
+          // Bounce boundaries
+          if (orb.x < -orb.radius * 0.2) orb.vx = Math.abs(orb.vx);
+          if (orb.x > width + orb.radius * 0.2) orb.vx = -Math.abs(orb.vx);
+          if (orb.y < -orb.radius * 0.2) orb.vy = Math.abs(orb.vy);
+          if (orb.y > height + orb.radius * 0.2) orb.vy = -Math.abs(orb.vy);
+
+          // Draw radial gradient for orb
+          const radial = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.radius);
+          radial.addColorStop(0, orb.color);
+          radial.addColorStop(0.5, orb.color.replace(/[\d\.]+\)$/, '0.12)')); // semi-transparent version
+          radial.addColorStop(1, 'rgba(21, 21, 23, 0)');
+
+          ctx.globalCompositeOperation = 'screen';
+          ctx.fillStyle = radial;
+          ctx.beginPath();
+          ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Render particles
+        ctx.globalCompositeOperation = 'source-over';
+        particles.forEach((p) => {
+          p.x += p.speedX;
+          p.y += p.speedY;
+
+          // Particle scatter on mouse proximity
+          if (mouse.x > -1000) {
+            const pdx = p.x - mouse.x;
+            const pdy = p.y - mouse.y;
+            const pdistance = Math.sqrt(pdx * pdx + pdy * pdy);
+
+            if (pdistance < 180 && pdistance > 0) {
+              const force = (180 - pdistance) / 180;
+              p.x += (pdx / pdistance) * force * 4;
+              p.y += (pdy / pdistance) * force * 4;
+            }
+          }
+
+          // Wrap around edges
+          if (p.y < -10) { p.y = height + 10; p.x = Math.random() * width; }
+          if (p.x < -10) p.x = width + 10;
+          if (p.x > width + 10) p.x = -10;
+
+          ctx.fillStyle = `rgba(185, 231, 84, ${p.opacity})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        requestAnimationFrame(render);
+      }
+
+      // Start animation
+      render();
+    })();
+  </script>
+</body>
+</html>
