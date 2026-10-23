@@ -746,7 +746,7 @@ const DEMOS = [
   },
   {
     category: 'components', type: 'srcdoc', title: 'Pricing Card', desc: 'A compact plan card with a gradient badge, feature list and a full-width call to action.', tags: ['UI', 'Layout', 'Marketing'],
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:18px;background:#f7f7fb;color:#16161d;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}.plan{width:100%;max-width:236px;padding:18px;background:#fff;border:1px solid #e8e8f0;border-radius:16px;box-shadow:0 14px 34px -20px rgba(20,20,40,.55)}.badge{display:inline-block;padding:4px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#ff3900;background:#ffdeca}.price{margin:10px 0 2px;font-size:32px;font-weight:800;letter-spacing:-.04em}.price span{font-size:15px;font-weight:600;color:#8b8ba3}.note{margin:0 0 12px;font-size:12px;color:#8b8ba3}ul{margin:0 0 14px;padding:0;list-style:none;font-size:12.5px;line-height:2;color:#3d3d52}li::before{content:"✓";margin-right:8px;font-weight:800;color:#22c55e}button{width:100%;padding:11px;border:0;border-radius:10px;cursor:pointer;font:inherit;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,#fb9a60,#ff3900);transition:filter .25s, transform .25s}button:hover{filter:brightness(1.1);transform:translateY(-1px)}</style></head><body><div class="plan"><div class="badge">Pro</div><div class="price">$24<span>/mo</span></div><p class="note">For growing teams</p><ul><li>Unlimited projects</li><li>Priority support</li><li>Custom domains</li></ul><button>Choose plan</button></div></body></html>`
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:18px;background:#f7f7fb;color:#16161d;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}.plan{width:100%;max-width:236px;padding:18px;background:#fff;border:1px solid #e8e8f0;border-radius:16px;box-shadow:0 14px 34px -20px rgba(20,20,40,.55)}.badge{display:inline-block;padding:4px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#ff3900;background:#ffdeca}.price{margin:10px 0 2px;font-size:32px;font-weight:800;letter-spacing:-.04em}.price span{font-size:15px;;font-weight:600;color:#8b8ba3}.note{margin:0 0 12px;font-size:12px;color:#8b8ba3}ul{margin:0 0 14px;padding:0;list-style:none;font-size:12.5px;line-height:2;color:#3d3d52}li::before{content:"✓";margin-right:8px;font-weight:800;color:#22c55e}button{width:100%;padding:11px;border:0;border-radius:10px;cursor:pointer;font:inherit;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,#fb9a60,#ff3900);transition:filter .25s, transform .25s}button:hover{filter:brightness(1.1);transform:translateY(-1px)}</style></head><body><div class="plan"><div class="badge">Pro</div><div class="price">$24 <span>/ mo</span></div><p class="note">For growing teams</p><ul><li>Unlimited projects</li><li>Priority support</li><li>Custom domains</li></ul><button>Choose plan</button></div></body></html>`
   },
   {
     category: 'components', type: 'srcdoc', title: 'Toggle Switches', desc: 'Accessible checkbox toggles styled entirely with the :checked sibling selector.', tags: ['Forms', 'CSS Only', 'A11y'],
@@ -832,49 +832,61 @@ const DEMOS = [
   { category: '404', type: 'url', title: '404 Page - Gold Browers', desc: 'Interactive browsers with question mark.', tags: ['404 Page', 'Browsers','Gold'], src: '/templates/p/404/interactive-browsers-2' },  
   { category: '404', type: 'url', title: '404 Page - Orange Matrix', desc: 'Update description here.', tags: ['404 Page', 'Matrix'], src: '/templates/p/404/matrix/orange-interactive-2' },
 
-  { category: 'backgrounds', type: 'url', title: 'Background 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'backgrounds', type: 'url', title: 'Background 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'backgrounds', type: 'url', title: 'Background 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'backgrounds', type: 'url', title: 'Background 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/backgrounds/soft-honeycomb' },
+  { category: 'backgrounds', type: 'url', title: 'Background 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/backgrounds.video-grader-green' },
+  { category: 'backgrounds', type: 'url', title: 'Background 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/backgrounds/video-grader-purple' },
+  { category: 'backgrounds', type: 'url', title: 'Background 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/backgrounds/matrix' },
+  { category: 'backgrounds', type: 'url', title: 'Background 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/backgrounds/matrix-2' },
+  
 
-  { category: 'blocks', type: 'url', title: 'Block 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'blocks', type: 'url', title: 'Interactive Content Block', desc: 'Content block with interactive tabs.', tags: ['Blocks', 'Interactive'], src: 'templates/p/blocks/dynamic-card/comp-1' },
-  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'blocks', type: 'url', title: 'Block 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/blocks/dynamic-card' },
+  { category: 'blocks', type: 'url', title: 'Interactive Content Block', desc: 'Content block with interactive tabs.', tags: ['Blocks', 'Interactive'], src: '/templates/p/blocks/dynamic-card/comp-1' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/blocks/interactive-cards' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/blocks/' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/blocks/sticky-scroll-deck/light' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/blocks/sticky-scroll-deck/dark' },
 
-  { category: 'carousel', type: 'url', title: 'Carousel 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'carousel', type: 'url', title: 'Carousel 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'carousel', type: 'url', title: 'Carousel 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'cards', type: 'url', title: 'Cards 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'cards', type: 'url', title: 'Cards 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'cards', type: 'url', title: 'Cards 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+
+  
+  { category: 'carousel', type: 'url', title: 'Carousel 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/carousel/animated-cards' },
+  { category: 'carousel', type: 'url', title: 'Carousel 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/carousel/interactive-cards' },
+  { category: 'carousel', type: 'url', title: 'Carousel 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/carousel/model-1' },
+  { category: 'carousel', type: 'url', title: 'Carousel 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/carousel/model-2' },
 
   { category: 'hero', type: 'url', title: 'Hero with infinite media carousel', desc: 'Animated Media Carousel with video and image embeds.', tags: ['Hero Section', 'Carousel'], src: 'templates/p/hero/infinite-carousel' },
-  { category: 'hero', type: 'url', title: 'Hero 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'hero', type: 'url', title: 'Hero 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'hero', type: 'url', title: 'Hero 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/hero/' },
+  { category: 'hero', type: 'url', title: 'Hero 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p//hero/' },
 
-  { category: 'landing-page', type: 'url', title: 'Digitalplat', desc: 'Update description here.', tags: ['Landing Page', 'Tailwind CSS'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/digitalplat/index.html' },
-  { category: 'landing-page', type: 'url', title: 'Landing 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'landing-page', type: 'url', title: 'Landing 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'landing-page', type: 'url', title: 'Digitalplat', desc: 'Update description here.', tags: ['Landing Page', 'Tailwind CSS'], src: '/templates/p/landing-page/digitalplat/index.html' },
+  { category: 'landing-page', type: 'url', title: 'Landing 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'landing-page', type: 'url', title: 'Landing 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
 
-  { category: 'loaders', type: 'url', title: 'Loader 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'loaders', type: 'url', title: 'Loader 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'loaders', type: 'url', title: 'Loader 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'loaders', type: 'url', title: 'Loader 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'loaders', type: 'url', title: 'Loader 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'loaders', type: 'url', title: 'Loader 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
 
-  { category: 'payment-page', type: 'url', title: 'Payment 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'payment-page', type: 'url', title: 'Payment 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
   { category: 'payment-page', type: 'url', title: 'Payment 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
   { category: 'payment-page', type: 'url', title: 'Payment 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
 
-  { category: 'portal-entrance', type: 'url', title: 'Portal 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'portal-entrance', type: 'url', title: 'Portal 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'portal-entrance', type: 'url', title: 'Portal 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'portal-entrance', type: 'url', title: 'Portal 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'portal-entrance', type: 'url', title: 'Portal 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'portal-entrance', type: 'url', title: 'Portal 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
 
-  { category: 'reviews', type: 'url', title: 'Reviews 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'reviews', type: 'url', title: 'Reviews 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'reviews', type: 'url', title: 'Reviews 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'reviews', type: 'url', title: 'Reviews 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'reviews', type: 'url', title: 'Reviews 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'reviews', type: 'url', title: 'Reviews 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
 
-  { category: 'slider', type: 'url', title: 'Slider 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'slider', type: 'url', title: 'Slider 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'slider', type: 'url', title: 'Slider 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
+  { category: 'slider', type: 'url', title: 'Slider 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'slider', type: 'url', title: 'Slider 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'slider', type: 'url', title: 'Slider 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
 
-  { category: 'tailwind-blocks', type: 'url', title: 'Tailwind 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'tailwind-blocks', type: 'url', title: 'Tailwind 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' },
-  { category: 'tailwind-blocks', type: 'url', title: 'Tailwind 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://example.com' }
+  { category: 'tailwind-blocks', type: 'url', title: 'Tailwind 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'tailwind-blocks', type: 'url', title: 'Tailwind 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' },
+  { category: 'tailwind-blocks', type: 'url', title: 'Tailwind 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: '/templates/p/' }
 ];
 
 /* =========================================================================
