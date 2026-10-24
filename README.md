@@ -1,9 +1,9 @@
 <div align="center">
-  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png" alt="DOMAIN VAULT Logo" width="150" />  
+  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png" alt="Pro Business Page Logo" width="150" />  
   
 
   <div align="center">
-  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/socialshare-banners/pro-business-page-socialshare.webp" alt="DOMAIN VAULT Banner" width="100%" />
+  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/screenshots/Macbook-Air-bebell-digital-solutions.github.io.webp" alt="Banner" width="100%" />
   </div>
 </div>
 
