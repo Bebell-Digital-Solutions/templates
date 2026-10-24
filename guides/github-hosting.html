@@ -9,12 +9,17 @@
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="https://ik.imagekit.io/bebell/Domain%20Vault/domain-assets-logos/Domain-vault-logo.webp">
+    
+    
+    <link rel="icon" href="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro-Business-Page-favicon.webp?updatedAt=1792529834777">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -115,6 +120,9 @@
         
         
         img { max-width: 100%; height: auto; display: block; }
+        
+        
+        
         a { text-decoration: none; cursor: pointer; }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -161,15 +169,23 @@
 }
         
         
-        #nav-logo {
-        font-size: 30px;
-        font: 
-        }
-        
-        #nav-logo img { 
-        height: 45px; 
-        gap: 10px;
-        }
+        /* NEW */
+#nav-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1;
+    gap: 10px;
+}
+
+#nav-logo img {
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+}
         
         
         #nav-menu { 
@@ -263,6 +279,7 @@
         .hero {
             text-align: center;
             margin-bottom: 4rem;
+            margin-top: 4rem;
         }
         
         
@@ -272,7 +289,7 @@
             align-items: center;
             gap: 10px;
             padding: 9px 20px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--mirage-color);
             border-radius: 50px;
             background: #000;
             font-family: var(--font-tech);
@@ -282,7 +299,7 @@
             color: var(--text-muted);
             text-transform: uppercase;
             transition: transform var(--transition),
-            border-color var(--transition),
+            border-color var(--mirage-color),
             color var(--transition),
             box-shadow var(--transition);
         }
@@ -339,6 +356,13 @@
             font-size: 1rem;
             color: var(--title-color);
         }
+        
+        
+        
+        
+        
+        
+        
 
         /* --- Step Cards --- */
         .steps-container {
@@ -415,6 +439,13 @@
             position: static;
             flex-shrink: 0;
         }
+        
+        
+        
+        
+        
+        
+        
 
         /* --- Risk Cards --- */
         .risks-grid {
@@ -489,6 +520,12 @@
             opacity: 0.5;
             text-decoration: line-through;
         }
+        
+        
+        
+        
+        
+        
 
         /* --- Tool Section --- */
         .tool-box {
@@ -521,17 +558,58 @@
             margin-bottom: 1rem;
             font-size: 1rem;
         }
+        
+        
+        
+        
+        
+        
+        
+        
 
         /* --- Footer --- */
-        .footer { padding-top: 2rem; margin-top: 3rem; }
-        .footer-bg { background-color: var(--box-color); padding: 3rem 0 3.5rem; }
-        .footer-container { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 1.6rem; }
-        .footer-title { font-size: var(--h3-font-size); margin-bottom: 0.25rem; color: var(--title-color); }
-        .footer-links { list-style: none; display: flex; justify-self: center; column-gap: 2rem; }
-        .footer-links a { color: var(--title-color); transition: color 0.3s; }
-        .footer-links a:hover { color: var(--skin-color); }
-        .footer-socials { justify-self: flex-end; display: flex; align-items: center; gap: var(--mb15); }
-        .footer-social { font-size: 1.25rem; color: var(--title-color); }
+        .footer { 
+        padding-top: 2rem; 
+        margin-top: 3rem; }
+        
+        .footer-bg { 
+        background-color: var(--box-color); 
+        padding: 3rem 0 3.5rem; }
+        
+        .footer-container { 
+        display: grid; 
+        grid-template-columns: repeat(3, 1fr); 
+        column-gap: 1.6rem; }
+        
+        .footer-title { 
+        font-size: var(--h3-font-size); 
+        margin-bottom: 0.25rem; 
+        color: var(--title-color); }
+        .footer-links { 
+        list-style: none; 
+        display: flex; 
+        justify-self: center; 
+        column-gap: 2rem; }
+        
+        .footer-links a { 
+        color: var(--title-color); 
+        transition: color 0.3s; }
+        
+        .footer-links a:hover { 
+        color: var(--skin-color); }
+        
+        
+        .footer-socials { 
+        justify-self: flex-end; 
+        display: flex; 
+        align-items: center; 
+        gap: var(--mb15); 
+        }
+        
+        .footer-social { 
+        font-size: 1.25rem; 
+        color: var(--title-color); }
+        
         .footer-copy { font-size: var(--smaller-font-size); text-align: center; margin-top: 4.5rem; color: var(--title-color); }
         
         
@@ -540,7 +618,7 @@
 
         /* --- Back to Top --- */
         #back-to-top {
-            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
+            position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px;
             background: var(--skin-color); border: none;
             cursor: pointer; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 999;
             display: flex; align-items: center; justify-content: center; color: white;
@@ -607,32 +685,108 @@
 
 
         /* --- Responsive --- */
-        @media screen and (max-width: 767px) {
-            body { padding-top: 6rem; }
-            #nav-bar { width: 100%; top: 0; left: 0; }
-            #mobile-menu-toggle { display: block; }
-            #nav-menu {
-                display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-                background: var(--body-color); flex-direction: column; padding-top: 6rem;
-            }
-            #nav-menu.mobile-open { display: flex; }
-            .hero h1 { font-size: 2rem; }
-            .footer-container { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
-            .footer-links { flex-direction: column; gap: 1rem; align-items: center; }
-            .footer-socials { justify-content: center; margin-top: 1rem; }
-        }
+       @media screen and (max-width: 767px) {
+    body { padding-top: 5rem; }
+
+    #nav-bar {
+        width: 100%;
+        top: 0;
+        left: 0;
+        padding: 0.85rem 1rem;
+    }
+
+    /* 👇 ID, not .nav-logo — this is the actual fix */
+    #nav-logo {
+        font-family: 'Orbitron', monospace;
+        font-size: 18px;
+        letter-spacing: 0.06em;
+        gap: 8px;
+    }
+
+    #nav-logo img {
+        height: 52px;
+        width: auto;
+    }
+
+
+    #mobile-menu-toggle {
+        position: relative;
+        z-index: 1002;   /* 👈 keeps X above the fullscreen menu */
+        display: block;
+    }
+
+    #nav-menu {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: var(--body-color);
+        flex-direction: column;
+        padding-top: 6rem;
+        gap: 1rem;
+        z-index: 1001;
+    }
+
+    #nav-menu.mobile-open { display: flex; }
+
+    /* make submenus stack inside the fullscreen menu instead of floating */
+    .submenu {
+        position: static;
+        transform: none;
+        width: 100%;
+        box-shadow: none;
+        display: none;
+        opacity: 1;
+        visibility: visible;
+        margin-top: 0.5rem;
+    }
+    .submenu.active { display: block; top: auto; }
+    
+        
+    .nav-cta {
+    		margin-top: 3rem;
+            padding: 0.5rem 80px; 
+                   }
+
+    .hero { padding-top: 1rem; }
+    .hero h1 { font-size: 1.6rem; margin-top: 0.75rem; }
+
+    .step-card { padding: 1.25rem; border-left-width: 4px; }
+    .step-card:hover { transform: none; }   /* prevents sideways scroll */
+
+    .footer-container { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
+    .footer-links { flex-direction: column; gap: 1rem; align-items: center; }
+    .footer-socials { justify-content: center; margin-top: 1rem; }
+}
+        
+        
+        
+        
 
         /* --- Print Styles --- */
         @media print {
             body { background: white; color: black; padding: 0; }
+            
+            
             #nav-bar, #back-to-top, .footer, .tool-box, .copy-btn, .page-loader { display: none !important; }
+            
+            
             main { max-width: 100%; margin: 0; padding: 20px; }
+            
+            
             .step-card { border: 1px solid #ccc; break-inside: avoid; background: white; color: black; }
             .step-number { background: #333; }
+            
+            
             .code-block { background: #eee; border: 1px solid #ccc; color: black; }
+            
+            
             .risk-card { border: 1px solid #f00; color: black; }
+            
             h1, h2, h3 { color: black !important; }
         }
+        
     </style>
 </head>
 <body>
@@ -652,9 +806,11 @@
 
     <!-- Navigation -->
     <nav id="nav-bar">
-        <a href="#" id="nav-logo"  class="flex items-center gap-2 text-brand-textMain font-semibold tracking-tight text-sm group uppercase tracking-wider font-tech hover:opacity-80 transition-opacity">>
-            <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png?updatedAt=1792625756874" alt="HTML Lab Logo" />
-        </a> HTML Lab
+    
+    
+        <a href="/" id="nav-logo" class="flex items-center text-brand-textMain font-semibold uppercase hover:opacity-80 transition-opacity">
+            <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png?updatedAt=1792625756874" alt="Html Lab Logo" />
+         HTML Lab</a>
         
         <button id="mobile-menu-toggle" aria-label="Open Menu">
             <i class="fa-solid fa-bars" id="toggle-icon"></i>
@@ -748,19 +904,19 @@
                     <div class="code-block" style="display: flex; flex-direction: column; gap: 0.5rem;">
                         <div class="copy-row">
                             <span>Type: A | Name: @ | Value: 185.199.108.153</span>
-                            <button class="copy-btn" onclick="copyText('185.199.108.153')">Copy</button>
+                            <button class="copy-btn" onclick="copyText('185.199.108.153', this)">Copy</button>
                         </div>
                         <div class="copy-row">
                             <span>Type: A | Name: @ | Value: 185.199.109.153</span>
-                            <button class="copy-btn" onclick="copyText('185.199.109.153')">Copy</button>
+                            <button class="copy-btn" onclick="copyText('185.199.109.153', this)">Copy</button>
                         </div>
                         <div class="copy-row">
                             <span>Type: A | Name: @ | Value: 185.199.110.153</span>
-                            <button class="copy-btn" onclick="copyText('185.199.110.153')">Copy</button>
+                            <button class="copy-btn" onclick="copyText('185.199.110.153', this)">Copy</button>
                         </div>
                         <div class="copy-row">
                             <span>Type: A | Name: @ | Value: 185.199.111.153</span>
-                            <button class="copy-btn" onclick="copyText('185.199.111.153')">Copy</button>
+                            <button class="copy-btn" onclick="copyText('185.199.111.153', this)">Copy</button>
                         </div>
                     </div>
                     <p><strong>For the www version:</strong> Add one "CNAME".</p>
@@ -897,7 +1053,7 @@
             <div class="flex flex-col gap-2 md:col-span-3">
                 <a href="/" class="flex items-center gap-2 text-brand-textMain font-semibold tracking-tight text-sm group uppercase tracking-wider font-tech hover:opacity-80 transition-opacity">
                     <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png?updatedAt=1792625756874" alt="Html Lab Logo" class="w-8 h-8 object-contain">
-                    HTML Lab
+                    HTML LAB
                 </a>
                 <div class="text-xs text-brand-muted">
                     &copy; 2026 Domain Vault. All rights reserved.
@@ -962,107 +1118,161 @@
     
     
 
-    <script>
-    // --- Navigation Logic ---
-    document.addEventListener('DOMContentLoaded', () => {
-        const triggers = document.querySelectorAll('.dropdown-trigger');
-        const navBar = document.getElementById('nav-bar');
-        const loader = document.getElementById('loader');
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const triggers   = document.querySelectorAll('.dropdown-trigger');
+    const navBar     = document.getElementById('nav-bar');
+    const loader     = document.getElementById('loader');
+    const btt        = document.getElementById('back-to-top');
+    const mobileToggle = document.getElementById('mobile-menu-toggle');
+    const navMenu    = document.getElementById('nav-menu');
+    const toggleIcon = document.getElementById('toggle-icon');
 
-        // Loader dismiss
-        setTimeout(() => {
-            loader.classList.add('hidden');
-            setTimeout(() => loader.remove(), 500);
-        }, 1200);
+    /* ---------- Loader (matches the 1.5s bar animation) ---------- */
+    setTimeout(() => {
+        if (!loader) return;
+        loader.classList.add('hidden');
+        setTimeout(() => loader.remove(), 500);
+    }, 1500);
 
-        // Dropdowns
-        triggers.forEach(trigger => {
-            trigger.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = trigger.getAttribute('data-target');
-                const targetMenu = document.getElementById(targetId);
-                
-                // Close others
-                document.querySelectorAll('.submenu').forEach(menu => {
-                    if (menu !== targetMenu) menu.classList.remove('active');
-                });
+    /* ---------- Dropdown menus ---------- */
+    triggers.forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId  = trigger.getAttribute('data-target');
+            const targetMenu = document.getElementById(targetId);
+            if (!targetMenu) return;
 
-                targetMenu.classList.toggle('active');
-                e.stopPropagation();
+            // Close other menus
+            document.querySelectorAll('.submenu').forEach(menu => {
+                if (menu !== targetMenu) menu.classList.remove('active');
             });
+
+            targetMenu.classList.toggle('active');
+            e.stopPropagation();
         });
-
-        // Close when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!navBar.contains(e.target)) {
-                document.querySelectorAll('.submenu').forEach(menu => menu.classList.remove('active'));
-            }
-        });
-
-        // Mobile Toggle
-        const mobileToggle = document.getElementById('mobile-menu-toggle');
-        const navMenu = document.getElementById('nav-menu');
-        const toggleIcon = document.getElementById('toggle-icon');
-
-        mobileToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('mobile-open');
-            toggleIcon.classList.toggle('fa-bars');
-            toggleIcon.classList.toggle('fa-xmark');
-        });
-
-        // Back to top + hide navbar on scroll down
-        const btt = document.getElementById('back-to-top');
-        let lastScrollY = window.scrollY;
-
-        window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-
-            // Back to top visibility
-            if (currentScrollY > 300) btt.classList.add('show');
-            else btt.classList.remove('show');
-
-            // Hide navbar when scrolling down, show when scrolling up
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                navBar.classList.add('nav-hidden');
-                // Close any open dropdowns when hiding
-                document.querySelectorAll('.submenu').forEach(menu => menu.classList.remove('active'));
-            } else {
-                navBar.classList.remove('nav-hidden');
-            }
-
-            lastScrollY = currentScrollY;
-        });
-
-        btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     });
 
-    // --- Interactive Features ---
-    function toggleCheck(el) {
-        const cb = el.querySelector('input');
-        cb.checked = !cb.checked;
-        el.classList.toggle('checked');
-    }
+    // Close dropdowns when clicking outside the navbar
+    document.addEventListener('click', (e) => {
+        if (!navBar.contains(e.target)) {
+            document.querySelectorAll('.submenu').forEach(menu => menu.classList.remove('active'));
+        }
+    });
 
-    function copyText(text) {
-        const el = document.createElement('textarea');
-        el.value = text;
-        document.body.appendChild(el);
-        el.select();
+    /* ---------- Mobile menu toggle ---------- */
+    const closeMobileMenu = () => {
+        navMenu.classList.remove('mobile-open');
+        toggleIcon.classList.remove('fa-xmark');
+        toggleIcon.classList.add('fa-bars');
+    };
+
+    mobileToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = navMenu.classList.toggle('mobile-open');
+        toggleIcon.classList.toggle('fa-xmark', isOpen);
+        toggleIcon.classList.toggle('fa-bars', !isOpen);
+    });
+
+    // Close the fullscreen mobile menu when a nav link is tapped
+    navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 767) closeMobileMenu();
+        });
+    });
+
+    // Close mobile menu with the Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeMobileMenu();
+            document.querySelectorAll('.submenu').forEach(m => m.classList.remove('active'));
+        }
+    });
+
+    /* ---------- Scroll: back-to-top + auto-hide navbar ---------- */
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+
+        // Back to top visibility
+        if (currentScrollY > 300) btt.classList.add('show');
+        else btt.classList.remove('show');
+
+        // Hide navbar on scroll down, reveal on scroll up
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            navBar.classList.add('nav-hidden');
+            document.querySelectorAll('.submenu').forEach(menu => menu.classList.remove('active'));
+        } else {
+            navBar.classList.remove('nav-hidden');
+        }
+
+        lastScrollY = currentScrollY;
+    });
+
+    btt.addEventListener('click', () =>
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    );
+});
+
+/* ============================================================
+   Global helpers (must stay outside DOMContentLoaded because
+   they are referenced from inline onclick="" attributes)
+   ============================================================ */
+
+/* ---------- Checklist ---------- */
+function toggleCheck(el) {
+    const cb = el.querySelector('input[type="checkbox"]');
+    if (!cb) return;
+    cb.checked = !cb.checked;
+    el.classList.toggle('checked', cb.checked);
+}
+
+/* ---------- Copy to clipboard ----------
+   Usage in HTML:  onclick="copyText('value', this)"           */
+function copyText(text, btn) {
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    el.style.top = '0';
+    document.body.appendChild(el);
+
+    el.select();
+    el.setSelectionRange(0, el.value.length);
+
+    try {
         document.execCommand('copy');
-        document.body.removeChild(el);
-        
-        const btn = event.target;
-        const original = btn.innerText;
-        btn.innerText = "Copied!";
-        setTimeout(() => btn.innerText = original, 2000);
+    } catch (err) {
+        console.warn('Copy failed:', err);
     }
 
-    function updateDigCommand() {
-        const input = document.getElementById('domainInput').value || 'example.com';
-        document.getElementById('digOutput').innerText = `dig ${input} +nostats +nocomments +nocmd`;
-    }
+    document.body.removeChild(el);
+
+    if (!btn) return;
+    const original = btn.innerText;
+    btn.innerText = 'Copied!';
+    btn.disabled = true;
+    setTimeout(() => {
+        btn.innerText = original;
+        btn.disabled = false;
+    }, 2000);
+}
+
+/* ---------- DNS command generator ---------- */
+function updateDigCommand() {
+    const raw   = document.getElementById('domainInput').value.trim();
+    const input = raw || 'example.com';
+    document.getElementById('digOutput').innerText =
+        `dig ${input} +nostats +nocomments +nocmd`;
+}
+
+/* ---------- Lucide icons (if you use them in the footer) ---------- */
+if (window.lucide) {
+    window.addEventListener('load', () => lucide.createIcons());
+}
 </script>
-
 
 </body>
 </html>
