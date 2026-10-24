@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png" alt="Pro Business Page Logo" width="150" />  
-  
 
   <div align="center">
   <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/screenshots/webdesign-resources-banner.png" alt="Banner" width="100%" />
