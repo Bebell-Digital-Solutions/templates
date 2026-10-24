@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://ik.imagekit.io/bebell/ONTO.DEV/logo-3d-onto_ab18JbQOC.png?updatedAt=1792806971489" alt="Ontolabs Logo" width="200" />  
+  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png?updatedAt=1792625756874" alt="Ontolabs Logo" width="200" />  
 </div>
 
 <div align="center">
