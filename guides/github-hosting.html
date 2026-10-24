@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connecting Custom Domains to GitHub - AIM™</title>
+    <meta name="description" content="A simple, interactive guide for connecting custom domains to GitHub Pages.">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://ik.imagekit.io/bebell/Domain%20Vault/domain-assets-logos/Domain-vault-logo.webp">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        code: ['Fira Code', 'monospace'],
+                        tech: ['Orbitron', 'monospace'],
+                    },
+                    colors: {
+                        black: '#000000',
+                        brand: {
+                            primary: '#ff5011', 
+                            secondary: '#333333',
+                            bgDark: '#000000',
+                            bgDarker: '#050505',
+                            card: '#121212',
+                            hover: '#1a1a1a',
+                            textMain: '#f5f5f5',
+                            muted: '#a0a0a0',
+                            border: 'rgba(255, 255, 255, 0.1)',
+                            success: '#51cf66',
+                            warning: '#ffd43b',
+                            danger: '#ef4444',
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 30px rgba(255, 80, 17, 0.15)',
+                    },
+                    letterSpacing: {
+                        tight: '-0.02em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    
+    <style>
+        /* --- AIM Brand Styles --- */
+        :root {
+            --skin-color: #ff5011;
+            --mirage-color: hsl(210, 10%, 23%);
+            --title-color: hsl(242, 8%, 98%);
+            --text-color: hsl(242, 8%, 80%);
+            --body-color: #0d0d0d;
+            --box-color: hsl(242, 14%, 12%);
+            --body-font: 'Inter', sans-serif;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            --small-font-size: 0.95rem;
+            --h3-font-size: 1.25rem;
+            --smaller-font-size: 0.75rem;
+            --mb15: 0.75rem;
+            --mb3: 1.5rem;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --danger-color: #e74c3c;
+            --primary: #ff5011;
+            --bg-dark: #000000;
+            --bg-card: #121212;
+            --bg-hover: #1a1a1a;
+            --text-main: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow-glow: 0 0 30px rgba(255, 80, 17, 0.15);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-primary: 'Inter', sans-serif;
+            --font-tech: 'Orbitron', monospace;
+            --nav-bg: rgba(25, 25, 25, 0.85);
+        }
+
+        /* --- Base & Scrollbar --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            font-family: var(--body-font);
+            background-color: var(--body-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-top: 8rem; 
+            overflow-x: hidden;
+        }
+        
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; cursor: pointer; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #333; }
+        ::-webkit-scrollbar-thumb { background: var(--skin-color); border-radius: 4px; }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* --- Navigation Bar (Full Width) --- */
+        #nav-bar {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0;
+            background: black; 
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--border); 
+            padding: 1.25rem 2.5rem; 
+            display: flex; 
+            align-items: center;
+            width: 100%; 
+            z-index: 1000;
+            max-width: 100%;
+            margin: 0 auto;
+            gap: 10px;
+                 }
+        
+        
+        
+        #nav-bar {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+
+
+#nav-bar.nav-hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+        
+        
+        #nav-logo {
+        font-size: 30px;
+        font: 
+        }
+        
+        #nav-logo img { 
+        height: 45px; 
+        gap: 10px;
+        }
+        
+        
+        #nav-menu { 
+            display: flex; 
+            gap: 1.5rem; 
+            margin-left: auto; 
+            align-items: center; 
+        }
+
+        .nav-link { 
+            color: var(--text-color); 
+            transition: color 0.3s, transform 0.2s; 
+            font-weight: 500; 
+        }
+        
+        
+        .nav-link:hover { 
+            color: var(--skin-color); 
+            transform: translateY(-1px); 
+        }
+        
+        
+        
+        .nav-cta {
+            background: linear-gradient(90deg, var(--skin-color), #d43a00);
+            color: var(--title-color); 
+            padding: 0.5rem 1rem; 
+            box-shadow: 0 2px 4px rgba(255, 80, 17, 0.4); 
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+        }
+        
+        
+        .nav-cta:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 8px rgba(255, 80, 17, 0.5); 
+        }
+        
+        
+        .has-submenu { 
+        position: relative; 
+        }
+        
+        
+        
+        .submenu {
+            position: absolute; 
+            top: 100%; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: var(--nav-bg); 
+            padding: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5); 
+            opacity: 0; 
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, top 0.3s; 
+            width: 250px;
+            z-index: 1001;
+            border: 1px solid var(--border);
+        }
+        
+        .submenu.active { 
+            opacity: 1; 
+            visibility: visible;
+            top: calc(100% + 10px);
+        }
+        .submenu-link { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+            color: var(--text-color); 
+            padding: 0.5rem; 
+            transition: background-color 0.3s, color 0.3s; 
+        }
+        .submenu-link:hover { 
+            background-color: rgba(255, 80, 17, 0.1); 
+            color: var(--skin-color); 
+        }
+
+        #mobile-menu-toggle { 
+            display: none; 
+            border: none;
+            background: transparent;
+            color: var(--skin-color);
+            font-size: 1.8rem;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        /* --- Content Sections --- */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        
+        
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 20px;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            background: #000;
+            font-family: var(--font-tech);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            transition: transform var(--transition),
+            border-color var(--transition),
+            color var(--transition),
+            box-shadow var(--transition);
+        }
+                
+        
+
+
+ .eyebrow::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+        
+        .eyebrow:hover {
+    transform: scale(1.08);
+    border-color: var(--primary);
+    color: var(--text-main);
+    box-shadow: var(--shadow-glow);
+}
+
+
+
+        
+        .hero h1 {
+            font-family: 'Fira Code', monospace;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--title-color);
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .guide-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--box-color);
+            padding-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            color: var(--title-color);
+        }
+
+        /* --- Step Cards --- */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .step-card {
+            background: var(--nav-bg);
+            padding: 2rem;
+            border-left: 5px solid var(--skin-color);
+            position: relative;
+            transition: transform 0.3s;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+            z-index: 30;
+        }
+        .step-card:hover {
+            transform: translateX(10px);
+        }
+        .step-number {
+            background: var(--skin-color);
+            color: white;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+        .step-card h3 {
+            font-family: 'Fira Code', monospace;
+            color: var(--title-color);
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: #000;
+            padding: 1rem;
+            font-family: monospace;
+            margin: 1rem 0;
+            position: relative;
+            border: 1px solid #333;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--mirage-color);
+            color: var(--text-color);
+            border: none;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .copy-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .copy-row .copy-btn {
+            position: static;
+            flex-shrink: 0;
+        }
+
+        /* --- Risk Cards --- */
+        .risks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .risk-card {
+            background: var(--nav-bg);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .risk-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+            z-index: 30;
+        }
+        .risk-card h3 {
+            font-family: 'Fira Code', monospace;
+            color: var(--danger-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+
+
+
+
+
+        /* --- Checklist --- */
+        .checklist {
+            background: var(--nav-bg);
+            padding: 2rem;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .checklist::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+            z-index: 30;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+        }
+        .checklist-item:last-child { border: none; }
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--skin-color);
+        }
+        .checklist-item.checked {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+
+        /* --- Tool Section --- */
+        .tool-box {
+            background: var(--nav-bg);
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid var(--skin-color);
+            position: relative;
+            overflow: hidden;
+        }
+        .tool-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+            z-index: 30;
+        }
+        .tool-box h3 {
+            font-family: 'Fira Code', monospace;
+        }
+        .tool-input {
+            width: 100%;
+            padding: 1rem;
+            background: #000;
+            border: 1px solid #333;
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        /* --- Footer --- */
+        .footer { padding-top: 2rem; margin-top: 3rem; }
+        .footer-bg { background-color: var(--box-color); padding: 3rem 0 3.5rem; }
+        .footer-container { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 1.6rem; }
+        .footer-title { font-size: var(--h3-font-size); margin-bottom: 0.25rem; color: var(--title-color); }
+        .footer-links { list-style: none; display: flex; justify-self: center; column-gap: 2rem; }
+        .footer-links a { color: var(--title-color); transition: color 0.3s; }
+        .footer-links a:hover { color: var(--skin-color); }
+        .footer-socials { justify-self: flex-end; display: flex; align-items: center; gap: var(--mb15); }
+        .footer-social { font-size: 1.25rem; color: var(--title-color); }
+        .footer-copy { font-size: var(--smaller-font-size); text-align: center; margin-top: 4.5rem; color: var(--title-color); }
+        
+        
+        
+        
+
+        /* --- Back to Top --- */
+        #back-to-top {
+            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
+            background: var(--skin-color); border: none;
+            cursor: pointer; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 999;
+            display: flex; align-items: center; justify-content: center; color: white;
+        }
+        #back-to-top.show { opacity: 1; visibility: visible; }
+        
+        
+        
+        
+        
+/* --- Loader --- */
+.page-loader {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background-color: #000; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    z-index: 9999; 
+    transition: opacity 0.3s ease;
+}
+
+.loader-header { 
+    color: white; 
+    font-size: 24px; 
+    margin-bottom: 20px; 
+}
+
+.progress { 
+    width: 300px; 
+    height: 2.75rem; 
+    border-radius: 50px; 
+    color: #ff5011; 
+    border: 3px solid var(--mirage-color); 
+    position: relative;
+    overflow: hidden;
+}
+
+.progress::before { 
+    content: ""; 
+    position: absolute; 
+    inset: 2px 100% 2px 2px; 
+    background: currentColor; 
+    border-radius: 50px;
+    animation: progress-anim 1.5s forwards; 
+}
+
+@keyframes progress-anim { 
+    100% { 
+        inset: 2px 2px 2px 2px; 
+    } 
+}
+
+.page-loader.hidden { 
+    opacity: 0; 
+    pointer-events: none; 
+}
+
+
+
+
+        /* --- Responsive --- */
+        @media screen and (max-width: 767px) {
+            body { padding-top: 6rem; }
+            #nav-bar { width: 100%; top: 0; left: 0; }
+            #mobile-menu-toggle { display: block; }
+            #nav-menu {
+                display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+                background: var(--body-color); flex-direction: column; padding-top: 6rem;
+            }
+            #nav-menu.mobile-open { display: flex; }
+            .hero h1 { font-size: 2rem; }
+            .footer-container { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
+            .footer-links { flex-direction: column; gap: 1rem; align-items: center; }
+            .footer-socials { justify-content: center; margin-top: 1rem; }
+        }
+
+        /* --- Print Styles --- */
+        @media print {
+            body { background: white; color: black; padding: 0; }
+            #nav-bar, #back-to-top, .footer, .tool-box, .copy-btn, .page-loader { display: none !important; }
+            main { max-width: 100%; margin: 0; padding: 20px; }
+            .step-card { border: 1px solid #ccc; break-inside: avoid; background: white; color: black; }
+            .step-number { background: #333; }
+            .code-block { background: #eee; border: 1px solid #ccc; color: black; }
+            .risk-card { border: 1px solid #f00; color: black; }
+            h1, h2, h3 { color: black !important; }
+        }
+    </style>
+</head>
+<body>
+
+
+  
+
+    <div class="page-loader" id="loader">
+        <div class="loader-header">Loading...</div>
+        <div class="progress"></div>
+    </div>
+    
+    
+    
+    
+    
+
+    <!-- Navigation -->
+    <nav id="nav-bar">
+        <a href="#" id="nav-logo"  class="flex items-center gap-2 text-brand-textMain font-semibold tracking-tight text-sm group uppercase tracking-wider font-tech hover:opacity-80 transition-opacity">>
+            <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png?updatedAt=1792625756874" alt="HTML Lab Logo" />
+        </a> HTML Lab
+        
+        <button id="mobile-menu-toggle" aria-label="Open Menu">
+            <i class="fa-solid fa-bars" id="toggle-icon"></i>
+        </button>
+        
+        <div id="nav-menu">
+            <a href="#" class="nav-link">Home</a>
+            
+            <div class="nav-item has-submenu">
+                <a href="#" class="nav-link dropdown-trigger" data-target="courses-submenu">Courses <i class="fa-solid fa-angle-down"></i></a>
+                <div class="submenu" id="courses-submenu">
+                    <a href="#" class="submenu-link"><i class="fa-solid fa-list-ul"></i> All Courses</a>
+                    <a href="#" class="submenu-link"><i class="fa-solid fa-brain"></i> AI Foundation</a>
+                    <a href="#" class="submenu-link"><i class="fa-solid fa-wand-magic-sparkles"></i> Prompt Craftsmanship</a>
+                </div>
+            </div>
+
+          
+
+            <div class="nav-item has-submenu">
+                <a href="#" class="nav-link dropdown-trigger" data-target="tools-submenu">Tools <i class="fa-solid fa-screwdriver-wrench"></i></a>
+                <div class="submenu" id="tools-submenu">
+                    <a href="https://dnschecker.org" target="_blank" class="submenu-link"><i class="fa-solid fa-earth-americas"></i> DNS Propagation</a>
+                    <a href="https://whois.domaintools.com" target="_blank" class="submenu-link"><i class="fa-solid fa-search"></i> WHOIS Lookup</a>
+                    <a href="https://toolbox.googleapps.com/apps/dig/" target="_blank" class="submenu-link"><i class="fa-solid fa-terminal"></i> Google Dig Tool</a>
+                </div>
+            </div>
+            
+            <a href="javascript:window.print()" class="nav-cta"><i class="fa-solid fa-file-pdf"></i> DOWNLOAD PDF</a>
+        </div>
+    </nav>
+
+
+  
+
+    <main>
+        <section class="hero">
+        <div>
+            <span class="eyebrow">Downloads</span>
+            </div>
+            
+            <h1>Setup GitHub Custom Domains</h1>
+            <p>(Toddler Edition - Easy Peasy!)</p>
+        </section>
+
+
+      
+
+        <!-- Steps -->
+        <section class="guide-section">
+            <div class="section-header">
+                <i class="fa-solid fa-puzzle-piece" style="color: var(--skin-color); font-size: 2rem;"></i>
+                <h2>Step-by-Step Guide</h2>
+            </div>
+
+            <div class="steps-container">
+            
+            
+            
+            
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Get Your GitHub Site Ready</h3>
+                    <p>Go to your GitHub repository and follow these clicks:</p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Settings → Pages</li>
+                        <li>Type your domain (e.g., <code>example.com</code>)</li>
+                        <li>Click <strong>Save</strong></li>
+                    </ul>
+                </div>
+                
+                
+                
+                
+                
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Visit Your Domain Store</h3>
+                    <p>Log in to where you bought your name (GoDaddy, Namecheap, Google Domains, etc.). Look for "DNS Settings".</p>
+                </div>
+                
+                
+                
+                
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Add the Address Cards</h3>
+                    <p><strong>For the main address (@):</strong> Add four "A" records.</p>
+                    <div class="code-block" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <div class="copy-row">
+                            <span>Type: A | Name: @ | Value: 185.199.108.153</span>
+                            <button class="copy-btn" onclick="copyText('185.199.108.153')">Copy</button>
+                        </div>
+                        <div class="copy-row">
+                            <span>Type: A | Name: @ | Value: 185.199.109.153</span>
+                            <button class="copy-btn" onclick="copyText('185.199.109.153')">Copy</button>
+                        </div>
+                        <div class="copy-row">
+                            <span>Type: A | Name: @ | Value: 185.199.110.153</span>
+                            <button class="copy-btn" onclick="copyText('185.199.110.153')">Copy</button>
+                        </div>
+                        <div class="copy-row">
+                            <span>Type: A | Name: @ | Value: 185.199.111.153</span>
+                            <button class="copy-btn" onclick="copyText('185.199.111.153')">Copy</button>
+                        </div>
+                    </div>
+                    <p><strong>For the www version:</strong> Add one "CNAME".</p>
+                    <div class="code-block">
+                        <div class="copy-row">
+                            <span>Type: CNAME | Name: www | Value: YOUR-USERNAME.github.io</span>
+                            <button class="copy-btn" onclick="copyText('YOUR-USERNAME.github.io')">Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Wait for the Mailman</h3>
+                    <p>The internet mailman is slow! 🐢 It can take 5 minutes to 48 hours to deliver your new address cards everywhere.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3>The Safety Lock</h3>
+                    <p>Go back to GitHub Pages settings. Wait for the green checkmark ✅, then click <strong>"Enforce HTTPS"</strong>. This puts a lock on your door! 🔒</p>
+                </div>
+                
+                
+                
+            </div>
+        </section>
+
+
+
+
+
+      
+        <!-- Risks -->
+        <section class="guide-section">
+            <div class="section-header">
+                <i class="fa-solid fa-triangle-exclamation" style="color: var(--danger-color); font-size: 2rem;"></i>
+                <h2>Risks Explained for Toddlers</h2>
+            </div>
+            <div class="risks-grid">
+                <div class="risk-card">
+                    <h3>🎈 The Wildcard Trap</h3>
+                    <p>Don't use the <code>*</code> star! It's like leaving all your toys outside for anyone to take. Bad people could use your domain for things you don't want.</p>
+                </div>
+                <div class="risk-card">
+                    <h3>🔐 The HTTPS Lock</h3>
+                    <p>Always click "Enforce HTTPS". Without it, people can peek at your secret messages and passwords. Keep your door locked!</p>
+                </div>
+                <div class="risk-card">
+                    <h3>📝 The Forgotten Note</h3>
+                    <p>Never delete the <strong>CNAME file</strong> in your repository. It's the note that tells people where your house is!</p>
+                </div>
+            </div>
+        </section>
+
+
+
+      
+
+        <!-- Tool: DNS Command Generator -->
+        <section class="guide-section no-print">
+            <div class="section-header">
+                <i class="fa-solid fa-wrench" style="color: var(--skin-color); font-size: 2rem;"></i>
+                <h2>Helper Tool</h2>
+            </div>
+            <div class="tool-box">
+                <h3>DNS Command Generator</h3>
+                <p style="margin-bottom: 1rem;">Type your domain below to see the command to check your settings:</p>
+                <input type="text" id="domainInput" class="tool-input" placeholder="example.com" oninput="updateDigCommand()">
+                <div class="code-block" id="digOutput">
+                    dig example.com +nostats +nocomments +nocmd
+                </div>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem;">Copy this into your "Terminal" or "Command Prompt" to see if the address cards are working!</p>
+            </div>
+        </section>
+
+
+      
+
+        <!-- Checklist -->
+        <section class="guide-section">
+            <div class="section-header">
+                <i class="fa-solid fa-list-check" style="color: var(--success-color); font-size: 2rem;"></i>
+                <h2>Quick Checklist</h2>
+            </div>
+            <div class="checklist">
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox"> <span>Added 4 A-records for main domain</span>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox"> <span>Added CNAME for www version</span>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox"> <span>Waited for DNS to update (be patient!)</span>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox"> <span>Saw green checkmark in GitHub Settings</span>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox"> <span>Clicked "Enforce HTTPS"</span>
+                </div>
+                <div class="checklist-item" onclick="toggleCheck(this)">
+                    <input type="checkbox"> <span>DID NOT use wildcard (*) records</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+
+
+
+  
+    <button id="back-to-top" aria-label="Back to Top"><i class="fa-solid fa-arrow-up"></i></button>
+
+
+
+
+
+
+
+
+
+  
+    <!-- === FOOTER === -->
+    <footer class="border-t border-brand-border py-12 px-6 mt-auto bg-brand-bgDarker">
+        <!-- Main Footer Content Wrapper -->
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            
+            <!-- Left Info (Brand & Copyright) - Takes up 3 cols on desktop -->
+            <div class="flex flex-col gap-2 md:col-span-3">
+                <a href="/" class="flex items-center gap-2 text-brand-textMain font-semibold tracking-tight text-sm group uppercase tracking-wider font-tech hover:opacity-80 transition-opacity">
+                    <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png?updatedAt=1792625756874" alt="Html Lab Logo" class="w-8 h-8 object-contain">
+                    HTML Lab
+                </a>
+                <div class="text-xs text-brand-muted">
+                    &copy; 2026 Domain Vault. All rights reserved.
+                </div>
+            </div>
+
+            <!-- Center Links - Takes up 5 cols on desktop -->
+            <div class="flex flex-wrap gap-12 text-sm md:col-span-5 md:justify-center">
+                <div class="flex flex-col gap-3">
+                    <div class="text-brand-textMain font-medium mb-1">Product</div>
+                    <a href="/#features" class="text-brand-muted hover:text-brand-primary transition-colors">Features</a>
+                    <a href="/#download" class="text-brand-muted hover:text-brand-primary transition-colors">Download</a>
+                    <a href="/#pricing" class="text-brand-muted hover:text-brand-primary transition-colors">Pricing</a>
+                    <a href="#" class="text-brand-muted hover:text-brand-primary transition-colors">Changelog</a>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <div class="text-brand-textMain font-medium mb-1">Resources</div>
+                    <a href="#" class="text-brand-muted hover:text-brand-primary transition-colors">Documentation</a>
+                    <a href="#" class="text-brand-muted hover:text-brand-primary transition-colors">API Reference</a>
+                    <a href="#" class="text-brand-muted hover:text-brand-primary transition-colors">Status</a>
+                </div>
+                
+                <div class="flex flex-col gap-3">
+                    <div class="text-brand-textMain font-medium mb-1">Legal</div>
+                    <a href="/p/privacy" class="text-brand-muted hover:text-brand-primary transition-colors">Privacy</a>
+                    <a href="/p/terms" class="text-brand-muted hover:text-brand-primary transition-colors">Terms</a>
+                </div>
+            </div>
+
+            <!-- Right Column (Support Card) - Takes up 4 cols on desktop -->
+            <div class="md:col-span-4 mt-6 md:mt-0 w-full flex justify-center md:justify-end">
+                <div class="w-full max-w-full sm:max-w-[360px] aspect-[3/2] bg-brand-card p-5 sm:p-6 md:p-4 lg:p-6 relative overflow-hidden flex flex-col justify-center shadow-lg border border-brand-border hover:border-brand-primary/50 transition-colors group">
+                
+                <!-- Top glowing line -->
+                <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-primary to-transparent z-30"></div>              
+                                                                           
+                    <div class="relative z-10 w-[65%] sm:w-3/4 lg:w-2/3">
+                        <div class="flex items-center gap-2 mb-2">
+                            <h4 class="text-brand-textMain font-bold text-lg sm:text-xl md:text-base lg:text-xl" style="font-family: 'Fira Code', monospace;">Online Support</h4>
+                            <span class="bg-brand-primary/20 text-brand-primary border border-brand-primary/30 text-[10px] md:text-[9px] lg:text-[10px] font-bold px-2 py-0.5 md:px-1.5 md:py-0 lg:px-2 lg:py-0.5 uppercase tracking-wider">24/7</span>
+                        </div>
+                        <p class="text-brand-muted text-xs sm:text-sm md:text-[10px] lg:text-sm mb-4 md:mb-2 lg:mb-4 leading-snug">Contact us if you have any questions. Our team is here to help you.</p>
+                        <button onclick="window.open('https://wa.me/18296203970?text=Hello!%20%F0%9F%91%8B%20I%20have%20a%20question%20about%20Domain%20Vault.', '_blank')" class="bg-brand-bgDark hover:bg-brand-hover text-brand-textMain text-xs sm:text-sm md:text-[11px] lg:text-sm font-semibold py-2 px-3 md:py-1.5 md:px-2.5 lg:py-2 lg:px-3 flex items-center gap-2 transition-colors border border-brand-border shadow-sm w-fit">
+                            <i data-lucide="headset" class="w-4 h-4 md:w-3.5 md:h-3.5 lg:w-4 lg:h-4 text-brand-primary"></i>
+                            Message Us
+                        </button>
+                    </div>
+                    <img 
+                        src="https://ik.imagekit.io/bebell/Banners%20&%20Backgrounds/assets/support-agent.webp" 
+                        alt="24/7 Support" 
+                        class="absolute bottom-0 right-0 w-32 sm:w-36 md:w-36 lg:w-40 object-contain z-0 pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity" 
+                    />
+                </div>
+            </div>
+
+         </div>
+    </footer>
+    
+    
+    
+    
+    
+
+    <script>
+    // --- Navigation Logic ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const triggers = document.querySelectorAll('.dropdown-trigger');
+        const navBar = document.getElementById('nav-bar');
+        const loader = document.getElementById('loader');
+
+        // Loader dismiss
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            setTimeout(() => loader.remove(), 500);
+        }, 1200);
+
+        // Dropdowns
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = trigger.getAttribute('data-target');
+                const targetMenu = document.getElementById(targetId);
+                
+                // Close others
+                document.querySelectorAll('.submenu').forEach(menu => {
+                    if (menu !== targetMenu) menu.classList.remove('active');
+                });
+
+                targetMenu.classList.toggle('active');
+                e.stopPropagation();
+            });
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navBar.contains(e.target)) {
+                document.querySelectorAll('.submenu').forEach(menu => menu.classList.remove('active'));
+            }
+        });
+
+        // Mobile Toggle
+        const mobileToggle = document.getElementById('mobile-menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const toggleIcon = document.getElementById('toggle-icon');
+
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('mobile-open');
+            toggleIcon.classList.toggle('fa-bars');
+            toggleIcon.classList.toggle('fa-xmark');
+        });
+
+        // Back to top + hide navbar on scroll down
+        const btt = document.getElementById('back-to-top');
+        let lastScrollY = window.scrollY;
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+
+            // Back to top visibility
+            if (currentScrollY > 300) btt.classList.add('show');
+            else btt.classList.remove('show');
+
+            // Hide navbar when scrolling down, show when scrolling up
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                navBar.classList.add('nav-hidden');
+                // Close any open dropdowns when hiding
+                document.querySelectorAll('.submenu').forEach(menu => menu.classList.remove('active'));
+            } else {
+                navBar.classList.remove('nav-hidden');
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    });
+
+    // --- Interactive Features ---
+    function toggleCheck(el) {
+        const cb = el.querySelector('input');
+        cb.checked = !cb.checked;
+        el.classList.toggle('checked');
+    }
+
+    function copyText(text) {
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        
+        const btn = event.target;
+        const original = btn.innerText;
+        btn.innerText = "Copied!";
+        setTimeout(() => btn.innerText = original, 2000);
+    }
+
+    function updateDigCommand() {
+        const input = document.getElementById('domainInput').value || 'example.com';
+        document.getElementById('digOutput').innerText = `dig ${input} +nostats +nocomments +nocmd`;
+    }
+</script>
+
+
+</body>
+</html>
