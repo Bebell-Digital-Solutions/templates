@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Playfair Display SC' rel='stylesheet'>
+
+<style>
+/* ===== CENTER DEMO (ADDED) — remove this block to undo ===== */
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a; /* dark bg so the gold pops; optional */
+}
+/* ===== END CENTER DEMO ===== */
+
+body {
+    font-family: 'Playfair Display SC';
+    font-size: 22px;
+}
+
+.btn-metallic {
+    position: relative;
+    overflow: hidden;
+    background:  linear-gradient(135deg, #e4e4e7 0%, #a1a1aa 40%, #ffffff 60%, #71717a 100%);
+    color: #3d2b00 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+    border: 1px solid #d4d4d8;
+    text-decoration: none;
+    max-width: 250px;
+    font-family: 'Inter';
+    font-size: 24px;
+    transition: transform 0.3s ease;
+}
+
+.btn-metallic::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.0) 30%,
+        rgba(255, 255, 255, 0.75) 50%,
+        rgba(255, 255, 255, 0.0) 70%,
+        transparent 100%
+    );
+    transform: skewX(-25deg);
+    pointer-events: none;
+    animation: shine 3.5s ease-in-out infinite;
+}
+
+@keyframes shine {
+    0%   { left: -75%; }
+    60%  { left: 125%; }
+    100% { left: 125%; }
+}
+
+.btn-metallic:hover {
+    background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 40%, #ffffff 60%, #a1a1aa 100%);
+    transform: translateY(-2px);
+}
+
+.btn-metallic:hover::before {
+    animation-duration: 1.2s;
+}
+</style>
+</head>
+<body>
+
+<a href="https://your-url.com/signup?plan=essentials" target="_blank"
+   rel="noopener noreferrer"
+   class="block w-full mt-4 py-3.5 px-4 text-center font-semibold rounded-[0.85rem] transition-all duration-200 mb-8 btn-metallic">
+    Upgrade to Pro
+</a>
+
+</body>
+</html>
