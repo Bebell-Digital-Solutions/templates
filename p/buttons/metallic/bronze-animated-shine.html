@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Playfair Display SC' rel='stylesheet'>
+
+<style>
+/* ===== CENTER DEMO ===== */
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a;
+}
+/* ===== END CENTER DEMO ===== */
+
+body {
+    font-family: 'Playfair Display SC';
+    font-size: 22px;
+}
+
+/* ----- BRONZE METALLIC BUTTON (replaced gold gradient) ----- */
+.btn-metallic {
+    position: relative;
+    overflow: hidden;
+    /* bronze gradient: highlight → classic bronze → light highlight → shadow */
+    background: linear-gradient(135deg, #e8b98a 0%, #cd7f32 40%, #f5d5b0 60%, #8c5522 100%);
+    color: #2c1a0b !important;  /* deep brown for contrast */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 235, 200, 0.9), inset 0 -2px 4px rgba(60, 30, 10, 0.5);
+    text-shadow: 0 1px 1px rgba(255, 220, 170, 0.6);
+    border: 1px solid #a86a2c;  /* matching bronze border */
+    text-decoration: none;
+    max-width: 250px;
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    transition: transform 0.3s ease, background 0.2s ease;
+}
+
+/* subtle shine effect — same animation, just on bronze */
+.btn-metallic::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255, 240, 210, 0.0) 30%,
+        rgba(255, 240, 210, 0.8) 50%,  /* warm light shine */
+        rgba(255, 240, 210, 0.0) 70%,
+        transparent 100%
+    );
+    transform: skewX(-25deg);
+    pointer-events: none;
+    animation: shine 3.5s ease-in-out infinite;
+}
+
+@keyframes shine {
+    0%   { left: -75%; }
+    60%  { left: 125%; }
+    100% { left: 125%; }
+}
+
+/* hover: lighter bronze gradient (polished feel) */
+.btn-metallic:hover {
+    background: linear-gradient(135deg, #f5d5b0 0%, #e0a76b 40%, #ffe9cf 60%, #b87a3a 100%);
+    transform: translateY(-2px);
+}
+
+.btn-metallic:hover::before {
+    animation-duration: 1.2s;
+}
+/* ----- END BRONZE BUTTON ----- */
+</style>
+</head>
+<body>
+
+<a href="https://your-url.com/signup?plan=essentials" target="_blank"
+   rel="noopener noreferrer"
+   class="block w-full mt-4 py-3.5 px-4 text-center font-semibold rounded-[0.85rem] transition-all duration-200 mb-8 btn-metallic">
+    Upgrade to Pro
+</a>
+
+</body>
+</html>
