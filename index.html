@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B1220">
+
+<title>Components Gallery | Developer's Club</title>
+<meta name="description" content="Browse hand-coded UI components with copyable source, or explore live external page demos.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://your-domain.com/components-gallery">
+
+<link rel="icon" href="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro-Business-Page-favicon.webp?updatedAt=1792529834777">
+
+<!-- === OPEN GRAPH === -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://your-domain.com/components-gallery">
+<meta property="og:title" content="Components Gallery | Developer's Club">
+<meta property="og:description" content="Browse hand-coded UI components with copyable source, or explore live external page demos.">
+<meta property="og:image" content="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/socialshare-banners/homepage.webp">
+<meta property="og:image:secure_url" content="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/socialshare-banners/homepage.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="Components Gallery — Developer's Club">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Developer's Club">
+<meta property="og:locale" content="en_US">
+
+<!-- === TWITTER / X CARD === -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@domainvault">
+<meta name="twitter:creator" content="@domainvault">
+<meta name="twitter:url" content="https://your-domain.com/components-gallery">
+<meta name="twitter:title" content="Components Gallery | Developer's Club">
+<meta name="twitter:description" content="Browse hand-coded UI components with copyable source, or explore live external page demos.">
+<meta name="twitter:image" content="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/socialshare-banners/digitalplat.webp">
+<meta name="twitter:image:alt" content="Components Gallery — Developer's Club">
+
+<!-- === STRUCTURED DATA (JSON-LD) === -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Components Gallery",
+  "url": "https://your-domain.com/components-gallery",
+  "description": "Browse hand-coded UI components with copyable source, or explore live external page demos.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Developer's Club",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ik.imagekit.io/bebell/Domain%20Vault/image-assets/logo.webp"
+    }
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Edo&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+<style>
+  /* ---------------------------------------------------------
+     Page shell & variables
+  --------------------------------------------------------- */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 110px;
+  }
+
+  :root {
+    --bg:            #0b0b0f;
+    --surface:       #14141b;
+    --surface-2:     #1b1b24;
+    --line:          rgba(255,255,255,.08);
+    --line-strong:   rgba(255,255,255,.16);
+    --text:          #f2f3f7;
+    --muted:         #9a9baa;
+    --accent:        #ff5011;
+    --radius:        18px;
+    --ease:          cubic-bezier(.2,.8,.2,1);
+
+    --skin-color: #ff5011;
+    --title-color: hsl(242, 8%, 98%);
+    --text-color: hsl(242, 8%, 80%);
+    --body-color: #0d0d0d;
+    --box-color: hsl(242, 14%, 12%);
+    --body-font: 'Inter', sans-serif;
+    --shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    --small-font-size: 0.95rem;
+    --h3-font-size: 1.25rem;
+    --smaller-font-size: 0.75rem;
+    --mb15: 0.75rem;
+    --mb3: 1.5rem;
+  }
+
+  a { text-decoration: none; cursor: pointer; }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #333; }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(124,156,255,.16), transparent 60%),
+      radial-gradient(800px 500px at 90% 0%,   rgba(192,132,252,.12), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 0 2rem;
+  }
+
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 128px 24px 96px;
+  }
+
+  /* ----- Top Navigation Bar ----- */
+  #nav-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 0 2rem;
+    background: rgba(11, 11, 15, 0.85);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 10px 28px -22px rgba(0, 0, 0, .95);
+  }
+
+  .nav-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  #nav-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    flex: 0 0 auto;
+  }
+
+  #nav-logo img { height: 70px; display: block; }
+
+  .nav-brand {
+    font-family: 'Edo', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--title-color);
+    white-space: nowrap;
+  }
+
+  #nav-menu {
+    display: flex;
+    gap: 1.5rem;
+    margin-left: auto;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s, transform 0.2s;
+  }
+
+  .nav-link:hover { color: var(--accent); transform: translateY(-1px); }
+
+  .nav-cta {
+    background: linear-gradient(90deg, var(--skin-color), #d43a00);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0;
+    box-shadow: 0 2px 4px rgba(255, 80, 17, 0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+    font-weight: 700;
+  }
+
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(255, 80, 17, 0.5); }
+
+  .has-submenu { position: relative; }
+
+  .submenu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--box-color);
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s, top 0.3s, visibility 0.3s;
+    width: 220px;
+    z-index: 10;
+  }
+
+  .submenu.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    top: 100%;
+  }
+
+  .submenu-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-color);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 0.9rem;
+  }
+
+  .submenu-link:hover { background-color: rgba(255, 80, 17, 0.1); color: var(--skin-color); }
+  .submenu-link i { width: 15px; text-align: center; }
+
+  /* ---------------------------------------------------------
+     Hero
+  --------------------------------------------------------- */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: 0 0 48px;
+  }
+
+  .hero__content { flex: 1 1 auto; min-width: 0; }
+
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 18px;
+    padding: 7px 15px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(255, 80, 17, .09);
+    border: 1px solid rgba(255, 80, 17, .34);
+    border-radius: 999px;
+  }
+
+  .hero__title {
+    margin: 0 0 16px;
+    font-size: clamp(30px, 4.6vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -.035em;
+    font-weight: 800;
+  }
+
+  .hero__sub {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .hero__sub code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .88em;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid var(--line);
+    color: #cdd3e8;
+  }
+
+    /* ---------------------------------------------------------
+     Theme picker (hero right column)
+  --------------------------------------------------------- */
+  .hero {
+    align-items: flex-start; /* was: center — overrides earlier rule */
+  }
+
+  .hero__theme-picker {
+    flex: 0 0 auto;
+    width: 236px;
+  }
+
+  .theme-picker {
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    padding: 16px;
+  }
+
+  .theme-picker__label {
+    margin: 0 0 12px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .theme-swatches {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .swatch {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+  }
+
+  .swatch:hover { transform: scale(1.12); }
+
+  .swatch.is-active {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px rgba(255,255,255,.55);
+  }
+
+  .swatch:focus-visible {
+    outline: 2px solid #7c9cff;
+    outline-offset: 3px;
+  }
+
+  .theme-custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .theme-custom input[type="color"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 42px;
+    height: 28px;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .theme-custom input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
+  .theme-custom input[type="color"]::-webkit-color-swatch { border: none; border-radius: 2px; }
+  .theme-custom input[type="color"]::-moz-color-swatch { border: none; border-radius: 2px; }
+
+  .theme-picker__hint {
+    margin: 12px 0 0;
+    font-size: 10.5px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  /* Smooth color transition on thumbnails when theme changes */
+  .card__thumb {
+    transition: transform .5s var(--ease), filter .35s ease;
+  }
+
+  @media (max-width: 860px) {
+    .hero__theme-picker { width: 210px; }
+  }
+
+  @media (max-width: 640px) {
+    .hero { flex-direction: column; align-items: stretch; }
+    .hero__theme-picker { width: 100%; }
+    .theme-swatches { grid-template-columns: repeat(6, 1fr); }
+  }
+
+  /* ---------------------------------------------------------
+     Filter Bar
+  --------------------------------------------------------- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .filter-btn {
+    flex: 0 0 auto;
+    padding: 9px 16px;
+    border-radius: 0;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--muted);
+    font: 600 12px/1 ui-sans-serif, system-ui, sans-serif;
+    cursor: pointer;
+    transition: background .25s, color .25s, border-color .25s, transform .2s;
+  }
+
+  .filter-btn:hover {
+    background: rgba(255,255,255,.07);
+    color: var(--text);
+    transform: translateY(-1px);
+  }
+
+  .filter-btn.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 14px -4px rgba(255, 57, 0, 0.6);
+  }
+
+  .filter-btn:focus-visible,
+  .btn-copy:focus-visible,
+  .modal__close:focus-visible,
+  .card__launch:focus-visible {
+    outline: 2px solid #7c9cff;
+    outline-offset: 3px;
+  }
+
+  /* ---------------------------------------------------------
+     Grid gallery
+  --------------------------------------------------------- */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 26px;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: none;
+    overflow: hidden;
+    transition: transform .4s var(--ease),
+                border-color .4s var(--ease),
+                box-shadow .4s var(--ease),
+                opacity .4s var(--ease);
+  }
+
+  .card.is-hidden { display: none; }
+
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: var(--line-strong);
+    box-shadow: 0 26px 50px -28px rgba(0,0,0,.9),
+                0 0 0 1px rgba(124,156,255,.14);
+  }
+
+  .card__frame {
+    position: relative;
+    background: #0f1020;
+    overflow: hidden;
+    border-bottom: 1px solid var(--accent);
+    aspect-ratio: 16 / 11;
+  }
+
+  /* Thumbnail image (grid cards) */
+  .card__thumb {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform .5s var(--ease);
+    background: #0f1020;
+  }
+
+  .card:hover .card__thumb {
+    transform: scale(1.04);
+  }
+
+  /* Fallback when the screenshot is missing or fails to load */
+  .card__thumb--missing {
+    display: grid;
+    place-items: center;
+    color: #8b8ba3;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    background:
+      repeating-linear-gradient(45deg,
+        #14141b, #14141b 10px,
+        #1b1b24 10px, #1b1b24 20px);
+  }
+
+  .card__launch {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgba(12,12,20,.10);
+    background: rgba(255,255,255,.82);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+    backdrop-filter: blur(10px) saturate(160%);
+    color: #14141b;
+    cursor: pointer;
+    box-shadow: 0 6px 18px -8px rgba(10,10,25,.55);
+    transition: transform .4s var(--ease),
+                background .4s var(--ease),
+                color .4s var(--ease),
+                box-shadow .4s var(--ease),
+                border-color .4s var(--ease);
+    z-index: 10;
+  }
+
+  .card__launch::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    opacity: 0;
+    transform: scale(.72);
+    transition: opacity .45s var(--ease), transform .45s var(--ease);
+    pointer-events: none;
+  }
+
+  .card__launch:hover,
+  .card__launch:focus-visible {
+    background: #14141b;
+    color: #ffffff;
+    border-color: rgba(255,255,255,.2);
+    transform: scale(1.12) rotate(-6deg);
+    box-shadow: 0 14px 32px -10px rgba(124,156,255,.75);
+    outline: none;
+  }
+
+  .card__launch:hover::before,
+  .card__launch:focus-visible::before { opacity: .35; transform: scale(1.04); }
+
+  .card__launch svg { width: 18px; height: 18px; transition: transform .4s var(--ease); }
+  .card__launch:hover svg,
+  .card__launch:focus-visible svg { transform: translate(3px, -3px); }
+
+  .card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 20px 22px;
+    flex: 1;
+  }
+
+  .card__title { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -.015em; }
+
+  .card__desc {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--muted);
+    flex: 1;
+  }
+
+  .card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card__tags li {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #b7bfe0;
+    background: rgba(124,156,255,.10);
+    border: 1px solid rgba(124,156,255,.22);
+    border-radius: 0px;
+    padding: 4px 9px;
+  }
+
+  /* ---------------------------------------------------------
+     Full-screen modal
+  --------------------------------------------------------- */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(6,6,10,.72);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s var(--ease), visibility .3s var(--ease);
+  }
+
+  .modal.is-open { opacity: 1; visibility: visible; }
+
+  .modal__panel {
+    width: min(920px, 100%);
+    background: var(--surface-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    overflow: hidden;
+    transform: translateY(14px) scale(.97);
+    transition: transform .35s var(--ease);
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,.95);
+  }
+
+  .modal.is-open .modal__panel { transform: translateY(0) scale(1); }
+
+  .modal__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 12px 12px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .modal__title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .modal__actions { display: flex; align-items: center; gap: 10px; }
+
+  .btn-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 0px;
+    border: 1px solid var(--line-strong);
+    background: rgba(255,255,255,.05);
+    color: var(--text);
+    font: 600 12px/1 ui-sans-serif, system-ui, sans-serif;
+    cursor: pointer;
+    transition: all .25s var(--ease);
+  }
+
+  .btn-copy:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.3); }
+  .btn-copy:disabled { opacity: .5; cursor: wait; }
+
+  .btn-copy.is-copied {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.4);
+    color: #4ade80;
+  }
+
+  .modal__close {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 0%;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--text);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .25s, transform .25s var(--ease);
+  }
+
+  .modal__close:hover { background: rgba(255,255,255,.1); transform: rotate(90deg); }
+
+  /* Wrapper for the modal iframe — constrains the scaled desktop render */
+  .modal__frame-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    max-height: 70vh;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .modal__iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #fff;
+  }
+
+  /* When rendering a URL demo, the iframe uses a virtual desktop size and is scaled down */
+  .modal__iframe--scaled {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1440px;
+    height: 990px;
+    transform-origin: top left;
+  }
+
+  /* ---------------------------------------------------------
+     Responsive
+  --------------------------------------------------------- */
+  @media (max-width: 860px) {
+    #nav-menu { gap: 1rem; font-size: .9rem; }
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 0 1rem; }
+    #nav-bar { padding: 0 1rem; }
+    .nav-inner { padding: 8px 8px; }
+    #nav-logo img { height: 52px; }
+    .nav-brand { font-size: 1.3rem; letter-spacing: 0.005em; }
+    #nav-menu { width: 100%; margin-left: 0; justify-content: flex-start; gap: .85rem; }
+    .submenu { left: 0; transform: none; }
+    .wrap { padding: 150px 8px 64px; }
+    .gallery { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav id="nav-bar" aria-label="Main navigation">
+  <div class="nav-inner">
+
+    <a href="/" id="nav-logo">
+      <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png" alt="Developer's Club logo">
+      <span class="nav-brand">Developer's Club</span>
+    </a>
+
+    <div id="nav-menu">
+      <a href="/" class="nav-link">Home</a>
+
+      <div class="nav-item has-submenu">
+        <a href="#" class="nav-link" id="submenu-resources-toggle"
+           role="button" aria-haspopup="true" aria-expanded="false"
+           aria-controls="submenu-resources">
+          Resources
+          <i class="fa-solid fa-angle-down" aria-hidden="true" style="font-size: 0.8em;"></i>
+        </a>
+
+        <div class="submenu" id="submenu-resources" style="margin-top:1rem;">
+          <a href="/courses#all" class="submenu-link"><i class="fa-solid fa-list-ul" aria-hidden="true"></i> All Resources</a>
+          <a href="/courses#foundation" class="submenu-link"><i class="fa-solid fa-brain" aria-hidden="true"></i> AI Foundation</a>
+          <a href="/courses#prompting" class="submenu-link"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Prompt Craftsmanship</a>
+          <a href="/courses#building-ai-brain" class="submenu-link"><i class="fa-solid fa-database" aria-hidden="true"></i> Building Your AI Brain</a>
+          <a href="/courses#autonomous-ai-agents" class="submenu-link"><i class="fa-solid fa-robot" aria-hidden="true"></i> Autonomous AI Agents</a>
+        </div>
+      </div>
+
+      <div class="nav-item has-submenu">
+        <a href="#" class="nav-link" id="submenu-guides-toggle"
+           role="button" aria-haspopup="true" aria-expanded="false"
+           aria-controls="submenu-guides">
+          Guides
+          <i class="fa-solid fa-angle-down" aria-hidden="true" style="font-size: 0.8em;"></i>
+        </a>
+
+        <div class="submenu" id="submenu-guides" style="margin-top:1rem;">
+          <a href="/courses#all" class="submenu-link"><i class="fa-solid fa-list-ul" aria-hidden="true"></i> All Resources</a>
+          <a href="/courses#foundation" class="submenu-link"><i class="fa-solid fa-brain" aria-hidden="true"></i> AI Foundation</a>
+          <a href="/courses#prompting" class="submenu-link"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Prompt Craftsmanship</a>
+          <a href="/courses#building-ai-brain" class="submenu-link"><i class="fa-solid fa-database" aria-hidden="true"></i> Building Your AI Brain</a>
+          <a href="/courses#autonomous-ai-agents" class="submenu-link"><i class="fa-solid fa-robot" aria-hidden="true"></i> Autonomous AI Agents</a>
+        </div>
+      </div>
+
+      <div class="nav-item has-submenu">
+        <a href="#" class="nav-link" id="submenu-assets-toggle"
+           role="button" aria-haspopup="true" aria-expanded="false"
+           aria-controls="submenu-assets">
+          Assets
+          <i class="fa-solid fa-angle-down" aria-hidden="true" style="font-size: 0.8em;"></i>
+        </a>
+
+        <div class="submenu" id="submenu-assets" style="margin-top:1rem;">
+          <a href="/courses#all" class="submenu-link"><i class="fa-solid fa-list-ul" aria-hidden="true"></i> All Resources</a>
+          <a href="/courses#foundation" class="submenu-link"><i class="fa-solid fa-brain" aria-hidden="true"></i> AI Foundation</a>
+          <a href="/courses#prompting" class="submenu-link"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Prompt Craftsmanship</a>
+          <a href="/courses#building-ai-brain" class="submenu-link"><i class="fa-solid fa-database" aria-hidden="true"></i> Building Your AI Brain</a>
+          <a href="/courses#autonomous-ai-agents" class="submenu-link"><i class="fa-solid fa-robot" aria-hidden="true"></i> Autonomous AI Agents</a>
+        </div>
+      </div>
+
+      <a href="/pricing" class="nav-link">Pricing</a>
+      <a href="/helpcenter" class="nav-link">Help Center</a>
+      <a href="/login" class="nav-cta">Get Started</a>
+    </div>
+
+  </div>
+</nav>
+
+<div class="wrap">
+
+ <header class="hero">
+  <div class="hero__content">
+    <p class="hero__eyebrow">Component &amp; Template Library</p>
+    <h1 class="hero__title">Isolated demos &amp; live pages</h1>
+    <p class="hero__sub">
+      Browse hand-coded components (with copyable source) or explore live external pages.
+    </p>
+  </div>
+
+  <aside class="hero__theme-picker" aria-label="Accent color">
+    <div class="theme-picker">
+      <p class="theme-picker__label">Accent color</p>
+      <div class="theme-swatches" id="theme-swatches"></div>
+      <label class="theme-custom">
+        <span>Custom</span>
+        <input type="color" id="theme-custom" value="#ff3900" aria-label="Custom accent color">
+      </label>
+      <p class="theme-picker__hint">
+        Applies to inline demos &amp; copied code. Multi-color effects and metallic buttons keep their original palette.
+      </p>
+    </div>
+  </aside>
+</header>
+
+  <!-- Filter Tabs -->
+  <nav class="filters" id="filters" aria-label="Filter demos by category">
+    <button class="filter-btn is-active" data-filter="all" aria-pressed="true">All</button>
+    <button class="filter-btn" data-filter="components" aria-pressed="false">Components</button>
+    <button class="filter-btn" data-filter="404" aria-pressed="false">404</button>
+    <button class="filter-btn" data-filter="backgrounds" aria-pressed="false">Backgrounds</button>
+    <button class="filter-btn" data-filter="blocks" aria-pressed="false">Blocks</button>
+    <button class="filter-btn" data-filter="carousel" aria-pressed="false">Carousel</button>
+    <button class="filter-btn" data-filter="hero" aria-pressed="false">Hero</button>
+    <button class="filter-btn" data-filter="landing-page" aria-pressed="false">Landing Page</button>
+    <button class="filter-btn" data-filter="loaders" aria-pressed="false">Loaders</button>
+    <button class="filter-btn" data-filter="payment-page" aria-pressed="false">Payment Page</button>
+    <button class="filter-btn" data-filter="portal-entrance" aria-pressed="false">Portal Entrance</button>
+    <button class="filter-btn" data-filter="reviews" aria-pressed="false">Reviews</button>
+    <button class="filter-btn" data-filter="slider" aria-pressed="false">Slider</button>
+    <button class="filter-btn" data-filter="tailwind-blocks" aria-pressed="false">Tailwind Blocks</button>
+  </nav>
+
+  <main class="gallery" id="gallery"></main>
+</div>
+
+<!-- Full-screen viewer -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal__panel">
+    <div class="modal__bar">
+      <span class="modal__title" id="modal-title">Demo</span>
+      <div class="modal__actions">
+        <button class="btn-copy" id="modal-copy" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copy Code
+        </button>
+        <button class="modal__close" id="modal-close" type="button" aria-label="Close preview">&times;</button>
+      </div>
+    </div>
+    <div class="modal__frame-wrap" id="modal-frame-wrap">
+      <iframe class="modal__iframe" id="modal-frame" sandbox="allow-scripts allow-same-origin allow-popups" title="Demo preview"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   1. Demo catalogue
+   ========================================================================= */
+const DEMOS = [
+  /* --- COMPONENTS --- */
+  {
+    category: 'components', type: 'srcdoc', title: 'Gradient Orb', themeable: false, desc: 'A slowly rotating conic gradient wrapped in a soft radial highlight. Pure CSS, no assets.', tags: ['CSS', 'Animation', 'Gradient'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020;overflow:hidden}.orb{position:relative;width:min(46%,150px);aspect-ratio:1;border-radius:50%;background:conic-gradient(from 0deg,#ff5f6d,#ffc371,#7ef0c4,#60a5fa,#a78bfa,#ff5f6d);box-shadow:0 24px 70px -20px rgba(124,156,255,.9);animation:spin 7s linear infinite}.orb::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.9),transparent 58%);mix-blend-mode:overlay}@keyframes spin{to{transform:rotate(1turn)}}</style></head><body><div class="orb"></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Profile Card', desc: 'An avatar framed by a rotating conic-gradient ring, with a compact stat row below.', tags: ['Card', 'Avatar', 'Profile'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:18px;background:#f7f7fb;color:#16161d;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}.card{width:100%;max-width:230px;padding:22px 18px;text-align:center;background:#fff;border:1px solid #e8e8f0;border-radius:18px;box-shadow:0 16px 36px -22px rgba(20,20,40,.55)}.ring{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,#ff3900,#f15b11,#fb9a60,#ffdeca);animation:spin 6s linear infinite}.avatar{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;background:#111227;color:#fff;font-weight:800;font-size:17px;letter-spacing:.02em;animation:spin 6s linear infinite reverse;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover;display:block}@keyframes spin{to{transform:rotate(1turn)}}h3{margin:0 0 3px;font-size:14.5px;letter-spacing:-.01em}p{margin:0 0 14px;font-size:11.5px;color:#8b8ba3}.stats{display:flex;justify-content:space-around;border-top:1px solid #eeeff5;padding-top:12px}.stats b{display:block;font-size:13px;color:#ff3900}.stats small{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:#9a9ab0}</style></head><body><div class="card"><div class="ring"><div class="avatar"><img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/profile.webp" alt="Ava Ruiz"></div></div><h3>Ava Ruiz</h3><p>Product Designer</p><div class="stats"><div><b>128</b><small>Shots</small></div><div><b>4.2k</b><small>Followers</small></div><div><b>312</b><small>Likes</small></div></div></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Micro-interactions', desc: 'Three button hover treatments: scale, sliding gradient fill and a soft neon lift.', tags: ['Buttons', 'Hover', 'Interaction'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:20px;background:#0f1020;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.btn{padding:10px 16px;border:0;border-radius:10px;cursor:pointer;font:700 12.5px/1 ui-sans-serif,system-ui,sans-serif;transition:transform .3s cubic-bezier(.2,.8,.2,1),background .3s, color .3s, box-shadow .3s}.b1{background:#fff;color:#111}.b1:hover{background:#7c9cff;color:#fff;transform:scale(1.08)}.b2{position:relative;z-index:0;overflow:hidden;background:transparent;color:#fff;border:1px solid #3a3a55}.b2::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#7c9cff,#c084fc);transform:translateX(-101%);transition:transform .35s ease}.b2:hover::before{transform:translateX(0)}.b3{background:#1c1c2b;color:#cfd2e6;box-shadow:0 2px 0 #000}.b3:hover{color:#fff;transform:translateY(-3px);box-shadow:0 12px 22px -10px #7c9cff}</style></head><body><div class="row"><button class="btn b1">Hover me</button><button class="btn b2">Slide</button><button class="btn b3">Lift</button></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Bar Chart', desc: 'Staggered scaleY keyframes create a live, pulsing chart with no charting library.', tags: ['Data Viz', 'Keyframes'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:26px;background:#0f1020}.chart{display:flex;align-items:flex-end;gap:9px;height:120px;width:100%;max-width:230px}.chart span{flex:1;height:var(--h);border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,#fb9a60,#ff3900);transform-origin:bottom;animation:pulse 2.2s ease-in-out infinite alternate;animation-delay:var(--d);box-shadow:0 0 18px -6px rgba(255, 57, 0, 0.6)}@keyframes pulse{from{transform:scaleY(.5)}to{transform:scaleY(1)}}</style></head><body><div class="chart"><span style="--h:48%;--d:0s"></span><span style="--h:74%;--d:.12s"></span><span style="--h:36%;--d:.24s"></span><span style="--h:92%;--d:.36s"></span><span style="--h:58%;--d:.48s"></span><span style="--h:80%;--d:.60s"></span><span style="--h:44%;--d:.72s"></span></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Pricing Card', desc: 'A compact plan card with a gradient badge, feature list and a full-width call to action.', tags: ['UI', 'Layout', 'Marketing'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:18px;background:#f7f7fb;color:#16161d;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}.plan{width:100%;max-width:236px;padding:18px;background:#fff;border:1px solid #e8e8f0;border-radius:16px;box-shadow:0 14px 34px -20px rgba(20,20,40,.55)}.badge{display:inline-block;padding:4px 9px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#ff3900;background:#ffdeca}.price{margin:10px 0 2px;font-size:32px;font-weight:800;letter-spacing:-.04em}.price span{font-size:15px;;font-weight:600;color:#8b8ba3}.note{margin:0 0 12px;font-size:12px;color:#8b8ba3}ul{margin:0 0 14px;padding:0;list-style:none;font-size:12.5px;line-height:2;color:#3d3d52}li::before{content:"✓";margin-right:8px;font-weight:800;color:#22c55e}button{width:100%;padding:11px;border:0;border-radius:10px;cursor:pointer;font:inherit;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,#fb9a60,#ff3900);transition:filter .25s, transform .25s}button:hover{filter:brightness(1.1);transform:translateY(-1px)}</style></head><body><div class="plan"><div class="badge">Pro</div><div class="price">$24 <span>/ mo</span></div><p class="note">For growing teams</p><ul><li>Unlimited projects</li><li>Priority support</li><li>Custom domains</li></ul><button>Choose plan</button></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Toggle Switches', desc: 'Accessible checkbox toggles styled entirely with the :checked sibling selector.', tags: ['Forms', 'CSS Only', 'A11y'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;padding:20px;background:#0f1020;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#e6e8f2}.list{display:flex;flex-direction:column;gap:14px;width:100%;max-width:210px}.tg{display:flex;align-items:center;gap:12px;cursor:pointer;font-size:13px}.tg input{position:absolute;opacity:0;pointer-events:none}.track{position:relative;flex:0 0 auto;width:40px;height:22px;border-radius:999px;background:#2a2a3d;transition:background .3s ease}.track::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .3s cubic-bezier(.2,.8,.2,1);box-shadow:0 2px 6px rgba(0,0,0,.4)}.tg input:checked + .track{background:linear-gradient(135deg,#fb9a60,#ff3900)}.tg input:checked + .track::after{transform:translateX(18px)}.tg input:focus-visible + .track{outline:2px solid #7c9cff;outline-offset:3px}</style></head><body><div class="list"><label class="tg"><input type="checkbox" checked><span class="track"></span>Notifications</label><label class="tg"><input type="checkbox"><span class="track"></span>Dark mode</label><label class="tg"><input type="checkbox" checked><span class="track"></span>Auto-save</label></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Dark 404', desc: 'Glitchy text effect using CSS text-shadows.', tags: ['CSS', 'Animation'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020;font-family:system-ui,sans-serif;text-align:center}h1{margin:0;font-size:80px;font-weight:900;color:#fff;text-shadow:3px 0 #ff5f6d,-3px 0 #5b6cff;animation:glitch 1s infinite alternate}p{color:#fb9a60;font-size:13px;margin-top:10px}@keyframes glitch{0%{text-shadow:3px 0 #ff3900,-3px 0 #5b6cff}100%{text-shadow:-3px 0 #ff5f6d,3px 0 #fb9a60}}</style></head><body><div><h1>404</h1><p>Oops, something went wrong.</p></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Minimal 404', desc: 'Clean typography with a subtle gradient text effect.', tags: ['CSS', 'Typography'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center}h1{margin:0;font-size:72px;font-weight:800;background:linear-gradient(135deg,#fb9a60,#ff3900);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}p{margin:8px 0 0;color:#8b8ba3;font-size:14px}</style></head><body><div><h1>404</h1><p>Page not found</p></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Terminal 404', desc: 'Retro terminal style with monospace font.', tags: ['Retro', 'CSS'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#000;font-family:monospace;color:#0f0;text-align:left;padding:20px}h1{margin:0 0 10px;font-size:32px}p{margin:0;font-size:14px;line-height:1.6}.cursor{display:inline-block;width:10px;height:18px;background:#0f0;animation:blink 1s step-end infinite;vertical-align:bottom}@keyframes blink{50%{opacity:0}}</style></head><body><div><h1>Error 404</h1><p>&gt; Requested file not found.<br>&gt; Check URL and try again.<br>&gt; _<span class="cursor"></span></p></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Dot Grid', themeable: false, desc: 'Clean, scalable dot matrix pattern.', tags: ['Pattern', 'CSS'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{background-color:#0f1020;background-image:radial-gradient(#2a2a45 1px,transparent 1px);background-size:20px 20px}</style></head><body></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Mesh Gradient', themeable: false, desc: 'Animated multi-point gradient background.', tags: ['Gradient', 'Animation'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:linear-gradient(45deg,#ff6b6b,#feca57,#48dbfb,#1dd1a1);background-size:400% 400%;animation:gradient 8s ease infinite}@keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}</style></head><body></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Diagonal Stripes', themeable: false, desc: 'High-contrast repeating linear gradients.', tags: ['Pattern', 'CSS'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:repeating-linear-gradient(45deg,#1a1a2e,#1a1a2e 10px,#16213e 10px,#16213e 20px)}</style></head><body></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Centered Hero', desc: 'Classic centered layout with call-to-action.', tags: ['Layout', 'Marketing'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center;padding:20px}h1{margin:0 0 12px;font-size:36px;letter-spacing:-.03em;color:#111}p{margin:0 0 24px;color:#666;font-size:14px;max-width:300px}.btn{padding:12px 24px;border:0;border-radius:8px;background:#5b6cff;color:#fff;font-weight:700;cursor:pointer;transition:transform .2s}.btn:hover{transform:scale(1.05)}</style></head><body><h1>Build better products</h1><p>The all-in-one platform for modern teams to ship faster.</p><button class="btn">Get Started</button></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Split Hero', desc: 'Text on the left, visual on the right.', tags: ['Layout', 'Split'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:40px;background:#0f1020;font-family:system-ui,sans-serif;color:#fff}.text{flex:1;max-width:250px}h1{margin:0 0 12px;font-size:28px;line-height:1.2}p{margin:0 0 20px;color:#9a9baa;font-size:13px}.btn{padding:10px 20px;border:0;border-radius:6px;background:#fff;color:#000;font-weight:700;cursor:pointer}.visual{flex:1;height:180px;border-radius:16px;background:linear-gradient(135deg,#7c9cff,#c084fc);box-shadow:0 20px 40px -20px rgba(124,156,255,.6)}</style></head><body><div class="text"><h1>Design without limits</h1><p>Create stunning interfaces with our new component library.</p><button class="btn">Explore</button></div><div class="visual"></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Dark Hero', desc: 'Neon accents and a bold headline.', tags: ['Dark', 'Neon'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;font-family:system-ui,sans-serif;text-align:center;padding:20px}h1{margin:0 0 16px;font-size:42px;letter-spacing:-.04em;color:#fff;text-shadow:0 0 20px rgba(124,156,255,.5)}p{margin:0 0 24px;color:#888;font-size:14px}.btn{padding:10px 24px;border:1px solid #7c9cff;border-radius:30px;background:transparent;color:#7c9cff;font-weight:700;cursor:pointer;transition:all .3s}.btn:hover{background:#7c9cff;color:#000;box-shadow:0 0 20px rgba(124,156,255,.4)}</style></head><body><h1>THE FUTURE IS NOW</h1><p>Experience the next generation of web design.</p><button class="btn">ENTER</button></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Bouncing Dots', desc: 'Three dots with staggered bounce animation.', tags: ['Animation', 'Spinner'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020}.dots{display:flex;gap:8px}.dot{width:12px;height:12px;border-radius:50%;background:#7c9cff;animation:bounce 1.4s ease-in-out infinite both}.dot:nth-child(1){animation-delay:-.32s}.dot:nth-child(2){animation-delay:-.16s}@keyframes bounce{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}</style></head><body><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Ring Spinner', desc: 'Classic circular loading ring.', tags: ['CSS', 'Spinner'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#fff}.ring{width:40px;height:40px;border:4px solid #e0e0e0;border-top-color:#5b6cff;border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}</style></head><body><div class="ring"></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Pulse Bar', desc: 'A horizontal progress bar with a pulsing fill.', tags: ['Animation', 'Progress'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb}.bar{width:60%;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden}.fill{width:50%;height:100%;background:#5b6cff;border-radius:4px;animation:pulse 1.5s ease-in-out infinite}@keyframes pulse{0%{opacity:.4;transform:translateX(-100%)}100%{opacity:1;transform:translateX(200%)}}</style></head><body><div class="bar"><div class="fill"></div></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Card Input', desc: 'Credit card form with clean inputs.', tags: ['Form', 'UI'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif}.card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 10px 30px -10px rgba(0,0,0,.1);width:260px}h3{margin:0 0 16px;font-size:14px;color:#666}input{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:6px;font-size:13px;box-sizing:border-box}button{width:100%;padding:12px;border:0;border-radius:6px;background:#5b6cff;color:#fff;font-weight:700;cursor:pointer}</style></head><body><div class="card"><h3>Payment Details</h3><input placeholder="Card Number"><input placeholder="MM / YY"><input placeholder="CVC"><button>Pay $49.00</button></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Apple Pay Style', themeable: false, desc: 'Minimalist alternative payment button.', tags: ['Button', 'UI'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#fff;font-family:system-ui,sans-serif}.btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#000;color:#fff;border:0;padding:14px 28px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:transform .2s}.btn:hover{transform:scale(1.02)}.btn svg{width:20px;height:20px;fill:currentColor}</style></head><body><button class="btn"><svg viewBox="0 0 24 24"><path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"/></svg> Pay</button></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Success State', desc: 'Animated checkmark on successful payment.', tags: ['Animation', 'Success'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center}.circle{width:60px;height:60px;border-radius:50%;background:#22c55e;display:grid;place-items:center;margin:0 auto 16px;animation:pop .5s cubic-bezier(.2,.8,.2,1)}.check{width:24px;height:14px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(-45deg) translate(2px,-2px)}h3{margin:0 0 4px;font-size:18px;color:#111}p{margin:0;font-size:13px;color:#666}@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}</style></head><body><div><div class="circle"><div class="check"></div></div><h3>Payment Successful</h3><p>Your receipt has been sent.</p></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Star Rating', desc: 'Simple 5-star rating display.', tags: ['Stars', 'UI'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020}.stars{display:flex;gap:4px;color:#fbbf24;font-size:24px;letter-spacing:2px}</style></head><body><div class="stars">★★★★★</div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Testimonial Card', desc: 'User avatar, quote, and name.', tags: ['Card', 'Testimonial'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif}.quote{background:#fff;padding:20px;border-radius:12px;box-shadow:0 10px 30px -10px rgba(0,0,0,.1);width:260px}p{margin:0 0 16px;font-size:13px;line-height:1.5;color:#333;font-style:italic}.user{display:flex;align-items:center;gap:10px}.avatar{width:32px;height:32px;border-radius:50%;background:#c084fc;display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px}.name{font-size:12px;font-weight:700;color:#111}.role{font-size:10px;color:#888}</style></head><body><div class="quote"><p>"This library saved me hours of work. Highly recommended!"</p><div class="user"><div class="avatar">JD</div><div><div class="name">Jane Doe</div><div class="role">Developer</div></div></div></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Rating Bars', desc: 'Breakdown of ratings with progress bars.', tags: ['Stats', 'UI'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020;font-family:system-ui,sans-serif;color:#fff}.row{display:flex;align-items:center;gap:10px;font-size:12px;margin-bottom:6px}.bar{flex:1;height:6px;background:#2a2a45;border-radius:3px;overflow:hidden;width:120px}.fill{height:100%;background:#7c9cff;border-radius:3px}</style></head><body><div><div class="row">5 <div class="bar"><div class="fill" style="width:80%"></div></div></div><div class="row">4 <div class="bar"><div class="fill" style="width:15%"></div></div></div><div class="row">3 <div class="bar"><div class="fill" style="width:5%"></div></div></div></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Silver Metallic Upgrade Button', themeable: false, desc: 'A shimmering silver metallic CTA button with animated shine effect.', tags: ['Button', 'UI', 'Animation'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link href='https://fonts.googleapis.com/css?family=Playfair Display SC' rel='stylesheet'><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;background:#0a0a0a;font-family:'Playfair Display SC',serif;font-size:22px}.btn-metallic{position:relative;overflow:hidden;display:block;width:100%;max-width:250px;margin:1rem 0 2rem;padding:0.875rem 1rem;text-align:center;font-family:'Inter',sans-serif;font-size:24px;font-weight:600;border-radius:0.85rem;text-decoration:none;background:linear-gradient(135deg,#e4e4e7 0%,#a1a1aa 40%,#ffffff 60%,#71717a 100%);color:#3d2b00 !important;box-shadow:0 4px 6px -1px rgba(0,0,0,0.5),inset 0 2px 4px rgba(255,255,255,0.8),inset 0 -2px 4px rgba(0,0,0,0.3);text-shadow:0 1px 1px rgba(255,255,255,0.5);border:1px solid #d4d4d8;transition:transform 0.3s ease}.btn-metallic::before{content:"";position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0.75) 50%,rgba(255,255,255,0) 70%,transparent 100%);transform:skewX(-25deg);pointer-events:none;animation:shine 3.5s ease-in-out infinite}@keyframes shine{0%{left:-75%}60%{left:125%}100%{left:125%}}.btn-metallic:hover{background:linear-gradient(135deg,#ffffff 0%,#d4d4d8 40%,#ffffff 60%,#a1a1aa 100%);transform:translateY(-2px)}.btn-metallic:hover::before{animation-duration:1.2s}</style></head><body><a href="https://your-url.com/signup?plan=essentials" target="_blank" rel="noopener noreferrer" class="btn-metallic">Upgrade to Pro</a></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Bronze Metallic Upgrade Button', themeable: false, desc: 'A shimmering bronze metallic CTA button with animated shine effect.', tags: ['Button', 'UI', 'Animation'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link href='https://fonts.googleapis.com/css?family=Playfair Display SC' rel='stylesheet'><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;background:#0a0a0a;font-family:'Playfair Display SC',serif;font-size:22px}.btn-metallic{position:relative;overflow:hidden;display:block;width:100%;max-width:250px;margin:1rem 0 2rem;padding:0.875rem 1rem;text-align:center;font-family:'Inter',sans-serif;font-size:24px;font-weight:600;border-radius:0.85rem;text-decoration:none;background:linear-gradient(135deg,#e8b98a 0%,#cd7f32 40%,#f5d5b0 60%,#8c5522 100%);color:#3d2b00 !important;box-shadow:0 4px 6px -1px rgba(0,0,0,0.5),inset 0 2px 4px rgba(255,255,255,0.8),inset 0 -2px 4px rgba(0,0,0,0.3);text-shadow:0 1px 1px rgba(255,255,255,0.5);border:1px solid #a86a2c;transition:transform 0.3s ease}.btn-metallic::before{content:"";position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0.75) 50%,rgba(255,255,255,0) 70%,transparent 100%);transform:skewX(-25deg);pointer-events:none;animation:shine 3.5s ease-in-out infinite}@keyframes shine{0%{left:-75%}60%{left:125%}100%{left:125%}}.btn-metallic:hover{background:linear-gradient(135deg,#f5d5b0 0%,#e0a05a 40%,#fbe8d3 60%,#cd7f32 100%);transform:translateY(-2px)}.btn-metallic:hover::before{animation-duration:1.2s}</style></head><body><a href="https://your-url.com/signup?plan=essentials" target="_blank" rel="noopener noreferrer" class="btn-metallic">Upgrade to Pro</a></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Gold Metallic Upgrade Button', themeable: false, desc: 'A shimmering gold metallic CTA button with animated shine effect.', tags: ['Button', 'UI', 'Animation'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link href='https://fonts.googleapis.com/css?family=Playfair Display SC' rel='stylesheet'><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;background:#0a0a0a;font-family:'Playfair Display SC',serif;font-size:22px}.btn-metallic{position:relative;overflow:hidden;display:block;width:100%;max-width:250px;margin:1rem 0 2rem;padding:0.875rem 1rem;text-align:center;font-family:'Inter',sans-serif;font-size:24px;font-weight:600;border-radius:0.85rem;text-decoration:none;background:linear-gradient(135deg,#f9e79f 0%,#d4af37 40%,#fff8dc 60%,#b8860b 100%);color:#3d2b00 !important;box-shadow:0 4px 6px -1px rgba(0,0,0,0.5),inset 0 2px 4px rgba(255,255,255,0.8),inset 0 -2px 4px rgba(0,0,0,0.3);text-shadow:0 1px 1px rgba(255,255,255,0.5);border:1px solid #c9a227;transition:transform 0.3s ease}.btn-metallic::before{content:"";position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0.75) 50%,rgba(255,255,255,0) 70%,transparent 100%);transform:skewX(-25deg);pointer-events:none;animation:shine 3.5s ease-in-out infinite}@keyframes shine{0%{left:-75%}60%{left:125%}100%{left:125%}}.btn-metallic:hover{background:linear-gradient(135deg,#fff8dc 0%,#f0d060 40%,#fffbe6 60%,#d4af37 100%);transform:translateY(-2px)}.btn-metallic:hover::before{animation-duration:1.2s}</style></head><body><a href="https://your-url.com/signup?plan=essentials" target="_blank" rel="noopener noreferrer" class="btn-metallic">Upgrade to Pro</a></body></html>`
+  },
+
+  /* =========================================================================
+     URL CARDS
+     ========================================================================= */
+  { category: '404', type: 'url', title: '404 Page - Orange Maze', desc: 'Update description here.', tags: ['404 Page', 'Maze'], src: 'https://bebell-digital-solutions.github.io/templates/p/404/maze/orange-interactive-fast-2' },
+  { category: '404', type: 'url', title: '404 Page - Gold Browers', desc: 'Interactive browsers with question mark.', tags: ['404 Page', 'Browsers','Gold'], src: 'https://bebell-digital-solutions.github.io/templates/p/404/interactive-browsers-2' },
+  { category: '404', type: 'url', title: '404 Page - Orange Matrix', desc: 'Update description here.', tags: ['404 Page', 'Matrix'], src: 'https://bebell-digital-solutions.github.io/templates/p/404/matrix/orange-interactive-2' },
+
+  { category: 'backgrounds', type: 'url', title: 'Background 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/backgrounds/cursor-interactive/1' },
+  { category: 'backgrounds', type: 'url', title: 'Background 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/backgrounds/soft-honeycomb' },
+  { category: 'backgrounds', type: 'url', title: 'Background 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/backgrounds/matrix-2' },
+  { category: 'backgrounds', type: 'url', title: 'Background 4', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/backgrounds/video-grader-green' },
+  { category: 'backgrounds', type: 'url', title: 'Background 5', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/backgrounds/video-grader-purple' },
+
+  { category: 'blocks', type: 'url', title: 'Block 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/blocks/dynamic-car' },
+  { category: 'blocks', type: 'url', title: 'Interactive Content Block', desc: 'Content block with interactive tabs.', tags: ['Blocks', 'Interactive'], src: 'https://bebell-digital-solutions.github.io/templates/p/blocks/dynamic-card/comp-1' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/blocks/interactive-cards/1' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/blocks/interactive-cards/2' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/blocks/sticky-scroll-deck/light' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/blocks/sticky-scroll-deck/dark' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/blocks/testimonials/dark-theme' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/blocks/testimonials/light-theme' },
+  { category: 'blocks', type: 'url', title: 'Block 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/blocks/testimonials/dark-orange-square' },
+
+  { category: 'carousel', type: 'url', title: 'Carousel 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/carousel/animated-cards' },
+  { category: 'carousel', type: 'url', title: 'Carousel 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/carousel/interactive-cards' },
+  { category: 'carousel', type: 'url', title: 'Carousel 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/carousel/model-1' },
+  { category: 'carousel', type: 'url', title: 'Carousel 4', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/carousel/model-2' },
+
+  { category: 'hero', type: 'url', title: 'Hero 1: infinite media carousel', desc: 'Animated Media Carousel with video and image embeds.', tags: ['Hero Section', 'Carousel'], src: 'https://bebell-digital-solutions.github.io/templates/p/hero/infinite-carousel' },
+  { category: 'hero', type: 'url', title: 'Hero 2: circular shape carousel', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/hero/circular-carousel-2' },
+  { category: 'hero', type: 'url', title: 'Hero 3: modern aviation animated background', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/hero/skyelite' },
+  { category: 'hero', type: 'url', title: 'Hero 4: glowy interactive animated background', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/hero/fluid-aurora' },
+  { category: 'hero', type: 'url', title: 'Hero 5: animated purple background', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/hero/video-graded-purple' },
+  { category: 'hero', type: 'url', title: 'Hero 6: animated green background', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/hero/video-graded-green' },
+  { category: 'hero', type: 'url', title: 'Hero 7: interactive image gallery', desc: 'Hover animated hero section with modern image gallery.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/hero/interactive-image-layout' },
+
+  { category: 'landing-page', type: 'url', title: 'Digitalplat', desc: 'Update description here.', tags: ['Landing Page', 'Tailwind CSS'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/digitalplat' },
+  { category: 'landing-page', type: 'url', title: 'Landing 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/brag/version-4' },
+  { category: 'landing-page', type: 'url', title: 'Landing 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/ascend-2' },
+  { category: 'landing-page', type: 'url', title: 'Landing 4', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/baseline' },
+  { category: 'landing-page', type: 'url', title: 'Landing 5', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/tidaltech/' },
+  { category: 'landing-page', type: 'url', title: 'Landing 6', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/saas/asme' },
+  { category: 'landing-page', type: 'url', title: 'Landing 7', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/saas/logopack-2' },
+  { category: 'landing-page', type: 'url', title: 'Landing 8', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/saas/techvora' },
+  { category: 'landing-page', type: 'url', title: 'Landing 9', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/premium/example-1' },
+  { category: 'landing-page', type: 'url', title: 'Landing 10', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/premium/example-2' },
+  { category: 'landing-page', type: 'url', title: 'Landing 11', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/modern-geometric/' },
+  { category: 'landing-page', type: 'url', title: 'Landing 12', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/interactive/autobot' },
+  { category: 'landing-page', type: 'url', title: 'Landing 13', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/interactive/robot' },
+  { category: 'landing-page', type: 'url', title: 'Landing 14', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/dealership/carzero/version-4' },
+  { category: 'landing-page', type: 'url', title: 'Landing 15', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/landing-page/helpdesk' },
+
+  { category: 'payment-page', type: 'url', title: 'Payment 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/payment-page/version-1' },
+
+  { category: 'portal-entrance', type: 'url', title: 'Portal 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/portal-entrance/version-1' },
+  { category: 'portal-entrance', type: 'url', title: 'Portal 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/portal-entrance/version-2' },
+
+  { category: 'pricing', type: 'url', title: 'Pricing 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/pricing/green-style/version-4' },
+  { category: 'pricing', type: 'url', title: 'Pricing 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/pricing/page/version-1' },
+  { category: 'pricing', type: 'url', title: 'Pricing 3', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/pricing/premium/dark-green-combo/responsive' },
+
+  { category: 'reviews', type: 'url', title: 'Reviews 1', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/reviews/google/final' },
+  { category: 'reviews', type: 'url', title: 'Reviews 2', desc: 'Update description here.', tags: ['Update', 'Tags'], src: 'https://bebell-digital-solutions.github.io/templates/p/reviews/google/wall-of-love' }
+];
+
+/* =========================================================================
+   2. Helpers: slugify + thumbnail resolver
+   ========================================================================= */
+const gallery = document.getElementById('gallery');
+
+const ARROW_SVG = `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M7 17 17 7"/>
+    <path d="M8 7h9v9"/>
+  </svg>`;
+
+/* Stable slug from a title — used for auto-derived thumbnail paths */
+function slugify(str) {
+  return String(str)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+/* Resolve the thumbnail URL for a demo. Priority:
+   1. explicit demo.thumb
+   2. derived from title in /thumbs/{slug}.webp
+   3. null (render placeholder)                                          */
+function thumbFor(demo) {
+  if (demo.thumb) return demo.thumb;
+  const slug = slugify(demo.title);
+  if (!slug) return null;
+  return `/thumbs/${slug}.webp`;
+}
+
+/* Helper: is this URL a real, loadable page (not a folder or placeholder)? */
+function isValidDemoUrl(url) {
+  if (!url || typeof url !== 'string') return false;
+  if (url === 'https://example.com' || url === 'https://example.com/') return false;
+  if (url.endsWith('/')) return false;
+  return true;
+}
+
+/* =========================================================================
+   3. Build the gallery — thumbnail only, no iframes
+   ========================================================================= */
+DEMOS.forEach((demo) => {
+  const card = document.createElement('article');
+  card.className = 'card';
+  card.dataset.category = demo.category;
+
+  const frame = document.createElement('div');
+  frame.className = 'card__frame';
+
+  /* ---------- Thumbnail image ---------- */
+  const thumbSrc = thumbFor(demo);
+  if (thumbSrc) {
+    const img = document.createElement('img');
+    img.className = 'card__thumb';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = demo.title + ' preview';
+    img.src = thumbSrc;
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', () => openModal(demo));
+
+    // Graceful fallback if the screenshot is missing
+    img.addEventListener('error', () => {
+      img.remove();
+      const ph = document.createElement('div');
+      ph.className = 'card__thumb card__thumb--missing';
+      ph.textContent = 'Preview unavailable';
+      ph.style.cursor = 'pointer';
+      ph.addEventListener('click', () => openModal(demo));
+      frame.prepend(ph);
+    }, { once: true });
+
+    frame.appendChild(img);
+  } else {
+    const ph = document.createElement('div');
+    ph.className = 'card__thumb card__thumb--missing';
+    ph.textContent = 'Preview unavailable';
+    ph.style.cursor = 'pointer';
+    ph.addEventListener('click', () => openModal(demo));
+    frame.appendChild(ph);
+  }
+
+  /* ---------- Launch button ---------- */
+  const launch = document.createElement('button');
+  launch.type = 'button';
+  launch.className = 'card__launch';
+  launch.setAttribute('aria-label', 'Open ' + demo.title + ' preview');
+  launch.innerHTML = ARROW_SVG;
+  launch.addEventListener('click', () => openModal(demo));
+  frame.appendChild(launch);
+
+  /* ---------- Card body ---------- */
+  const body = document.createElement('div');
+  body.className = 'card__body';
+
+  const title = document.createElement('h2');
+  title.className = 'card__title';
+  title.textContent = demo.title;
+
+  const desc = document.createElement('p');
+  desc.className = 'card__desc';
+  desc.textContent = demo.desc;
+
+  const tags = document.createElement('ul');
+  tags.className = 'card__tags';
+  demo.tags.forEach(tag => {
+    const li = document.createElement('li');
+    li.textContent = tag;
+    tags.appendChild(li);
+  });
+
+  body.append(title, desc, tags);
+  card.append(frame, body);
+  gallery.appendChild(card);
+});
+
+/* =========================================================================
+   4. Filtering
+   ========================================================================= */
+const filterButtons = document.querySelectorAll('.filter-btn');
+const cards = document.querySelectorAll('.card');
+
+filterButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterButtons.forEach(b => {
+      b.classList.remove('is-active');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    btn.classList.add('is-active');
+    btn.setAttribute('aria-pressed', 'true');
+
+    const selected = btn.dataset.filter;
+    cards.forEach(card => {
+      const match = selected === 'all' || card.dataset.category === selected;
+      card.classList.toggle('is-hidden', !match);
+    });
+  });
+});
+
+  /* =========================================================================
+   4b. Accent color theming
+   ========================================================================= */
+const COLOR_PRESETS = [
+  { name: 'Orange', hex: '#ff3900' },  // brand default
+  { name: 'Amber',  hex: '#f59e0b' },
+  { name: 'Red',    hex: '#ef4444' },
+  { name: 'Pink',   hex: '#ec4899' },
+  { name: 'Purple', hex: '#a855f7' },
+  { name: 'Indigo', hex: '#6366f1' },
+  { name: 'Blue',   hex: '#3b82f6' },
+  { name: 'Cyan',   hex: '#06b6d4' },
+  { name: 'Teal',   hex: '#14b8a6' },
+  { name: 'Green',  hex: '#22c55e' },
+  { name: 'Lime',   hex: '#84cc16' },
+  { name: 'Stone',  hex: '#78716c' }
+];
+
+/* --- HSL <-> HEX helpers --- */
+function hexToHsl(hex) {
+  hex = String(hex).replace('#', '');
+  if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+  const r = parseInt(hex.slice(0, 2), 16) / 255;
+  const g = parseInt(hex.slice(2, 4), 16) / 255;
+  const b = parseInt(hex.slice(4, 6), 16) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  return { h: h * 360, s: s * 100, l: l * 100 };
+}
+
+function hslToHex(h, s, l) {
+  h = ((h % 360) + 360) % 360;
+  s = Math.max(0, Math.min(100, s)) / 100;
+  l = Math.max(0, Math.min(100, l)) / 100;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+    return Math.round(255 * color).toString(16).padStart(2, '0');
+  };
+  return '#' + f(0) + f(8) + f(4);
+}
+
+function shadesFor(accentHex) {
+  const { h, s, l } = hexToHsl(accentHex);
+  return {
+    accent: accentHex,
+    light:  hslToHex(h, s, Math.min(85, l + 22)),
+    dark:   hslToHex(h, s, Math.max(15, l - 15)),
+    soft:   hslToHex(h, Math.min(100, s + 5), Math.min(92, l + 55))
+  };
+}
+
+/* --- Which hexes get themed, and to which shade --- */
+const THEME_HEX_MAP = {
+  '#ff3900': 'accent',   // primary orange
+  '#ff5011': 'accent',
+  '#f15b11': 'accent',
+  '#d43a00': 'dark',
+  '#fb9a60': 'light',
+  '#ffdeca': 'soft',
+  '#ffc371': 'light',
+  '#ff5f6d': 'light',    // Dark 404 glitch shadow
+  '#7c9cff': 'accent',   // Micro-interactions / Split Hero / Dark Hero / Bouncing Dots / Rating Bars
+  '#5b6cff': 'accent',   // Centered Hero / Ring Spinner / Pulse Bar / Card Input / Dark 404
+  '#c084fc': 'light',    // Split Hero visual / Testimonial avatar / Micro-interactions gradient
+  '#fbbf24': 'accent',   // Star Rating yellow
+  '#22c55e': 'accent'    // Success checkmark / Pricing ticks
+};
+
+/* Replace known accent hexes in an arbitrary HTML string with the selected theme */
+function themeHtmlText(text, accentHex) {
+  const shades = shadesFor(accentHex);
+  return text.replace(/#[0-9a-f]{6}\b/gi, (hex) => {
+    const shade = THEME_HEX_MAP[hex.toLowerCase()];
+    return shade ? shades[shade] : hex;
+  });
+}
+
+/* Build the final srcdoc HTML for a demo at a given accent.
+   Non-themeable demos pass through untouched.                           */
+function buildThemedHtml(demo, accentHex) {
+  if (!demo || !demo.html) return '';
+  if (demo.themeable === false) return demo.html;
+  return themeHtmlText(demo.html, accentHex);
+}
+
+/* --- State (persisted) --- */
+const ACCENT_STORAGE_KEY = 'gallery-accent';
+const DEFAULT_ACCENT = '#ff3900';
+let currentAccent = (() => {
+  try { return (localStorage.getItem(ACCENT_STORAGE_KEY) || DEFAULT_ACCENT).toLowerCase(); }
+  catch { return DEFAULT_ACCENT; }
+})();
+
+/* --- Render the swatch grid + wire interactions --- */
+const swatchWrap = document.getElementById('theme-swatches');
+const customInput = document.getElementById('theme-custom');
+
+COLOR_PRESETS.forEach(({ name, hex }) => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'swatch';
+  btn.dataset.color = hex.toLowerCase();
+  btn.title = name;
+  btn.setAttribute('aria-label', name + ' accent');
+  btn.style.background = hex;
+  swatchWrap.appendChild(btn);
+  btn.addEventListener('click', () => setAccent(hex));
+});
+
+if (customInput) {
+  customInput.addEventListener('input', (e) => setAccent(e.target.value));
+}
+
+/* Apply a new accent everywhere it matters */
+function setAccent(hex) {
+  currentAccent = hex.toLowerCase();
+  try { localStorage.setItem(ACCENT_STORAGE_KEY, currentAccent); } catch {}
+
+  // Swatch active state
+  swatchWrap.querySelectorAll('.swatch').forEach(sw => {
+    sw.classList.toggle('is-active', sw.dataset.color === currentAccent);
+  });
+  if (customInput && customInput.value.toLowerCase() !== currentAccent) {
+    customInput.value = currentAccent;
+  }
+
+  // Live thumbnails get a hue-rotate hint so the picker has visible feedback
+  applyThumbTheme(currentAccent);
+
+  // If the modal is open on an srcdoc demo, re-render with the new color
+  if (currentDemo && modal && modal.classList.contains('is-open') && currentDemo.type === 'srcdoc') {
+    modalFrame.srcdoc = buildThemedHtml(currentDemo, currentAccent);
+  }
+}
+
+/* Approximate the theme on static thumbnails via hue-rotate (best effort) */
+function applyThumbTheme(accentHex) {
+  const targetHue = hexToHsl(accentHex).h;
+  const baseHue = hexToHsl(DEFAULT_ACCENT).h; // ~13.4deg
+  let rotate = targetHue - baseHue;
+  if (rotate > 180) rotate -= 360;
+  if (rotate < -180) rotate += 360;
+  const filter = Math.abs(rotate) < 2 ? '' : `hue-rotate(${rotate}deg)`;
+  document.querySelectorAll('.card__thumb').forEach(img => {
+    img.style.filter = filter;
+  });
+}
+
+  
+
+/* =========================================================================
+   5. Modal scaling — the ONLY place that touches VIRTUAL_WIDTH
+   ========================================================================= */
+const VIRTUAL_WIDTH = 1440;
+
+function scaleModalIframe() {
+  const frameWrap = document.getElementById('modal-frame-wrap');
+  if (!frameWrap) return;
+
+  const iframe = modalFrame;
+  if (!iframe || !iframe.classList.contains('modal__iframe--scaled')) return;
+
+  const wrapWidth = frameWrap.clientWidth;
+  if (!wrapWidth) return;
+
+  const scale = wrapWidth / VIRTUAL_WIDTH;
+  iframe.style.transform = `scale(${scale})`;
+}
+
+window.addEventListener('resize', scaleModalIframe);
+
+/* =========================================================================
+   6. Submenus
+   ========================================================================= */
+const submenuWraps = document.querySelectorAll('.has-submenu');
+
+function closeAllSubmenus(except = null) {
+  submenuWraps.forEach(wrap => {
+    if (wrap === except) return;
+    const submenu = wrap.querySelector('.submenu');
+    const toggle  = wrap.querySelector('.nav-link');
+    if (submenu) submenu.classList.remove('active');
+    if (toggle)  toggle.setAttribute('aria-expanded', 'false');
+  });
+}
+
+submenuWraps.forEach(wrap => {
+  const submenu = wrap.querySelector('.submenu');
+  const toggle  = wrap.querySelector('.nav-link');
+  if (!submenu || !toggle) return;
+
+  toggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    const willOpen = !submenu.classList.contains('active');
+    closeAllSubmenus(wrap);
+    submenu.classList.toggle('active', willOpen);
+    toggle.setAttribute('aria-expanded', String(willOpen));
+  });
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.has-submenu')) closeAllSubmenus();
+});
+
+/* =========================================================================
+   7. Modal & clipboard
+   ========================================================================= */
+const modal      = document.getElementById('modal');
+const modalFrame = document.getElementById('modal-frame');
+const modalTitle = document.getElementById('modal-title');
+const modalClose = document.getElementById('modal-close');
+const modalCopy  = document.getElementById('modal-copy');
+
+const COPY_ICON = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy Code`;
+const DONE_ICON = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!`;
+
+let lastFocused = null;
+let currentDemo = null;
+let copyTimer = null;
+let copyInFlight = false;
+
+function openModal(demo) {
+  currentDemo = demo;
+  lastFocused = document.activeElement;
+  modalTitle.textContent = demo.title;
+
+  if (demo.type === 'srcdoc') {
+    modalFrame.classList.remove('modal__iframe--scaled');
+    modalFrame.style.transform = '';
+    modalFrame.removeAttribute('src');
+    modalFrame.srcdoc = buildThemedHtml(demo, currentAccent);
+  } else {
+    modalFrame.classList.add('modal__iframe--scaled');
+    modalFrame.removeAttribute('srcdoc');
+    if (isValidDemoUrl(demo.src)) {
+      modalFrame.src = demo.src;
+    } else {
+      modalFrame.removeAttribute('src');
+      modalFrame.srcdoc = `<!DOCTYPE html><html><body style="margin:0;display:grid;place-items:center;height:100%;font-family:system-ui;color:#8b8ba3;background:#f7f7fb">Preview not available</body></html>`;
+    }
+  }
+
+  // Show the copy button for srcdoc AND for valid URLs (fetched source).
+  modalCopy.hidden = !(
+    demo.type === 'srcdoc' ||
+    (demo.type === 'url' && isValidDemoUrl(demo.src))
+  );
+
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+
+  clearTimeout(copyTimer);
+  modalCopy.classList.remove('is-copied');
+  modalCopy.disabled = false;
+  modalCopy.innerHTML = COPY_ICON;
+
+  modalClose.focus();
+
+  requestAnimationFrame(() => {
+    scaleModalIframe();
+  });
+}
+
+function closeModal() {
+  modal.classList.remove('is-open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+
+  window.setTimeout(() => {
+    if (modal.classList.contains('is-open')) return;
+    modalFrame.removeAttribute('srcdoc');
+    modalFrame.src = 'about:blank';
+    modalFrame.classList.remove('modal__iframe--scaled');
+    modalFrame.style.transform = '';
+  }, 320);
+
+  if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+}
+
+/* Clipboard with a fallback for non-secure contexts */
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (err) { /* fall through */ }
+
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:-1000px;left:-1000px;opacity:0';
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+
+/* Fetch the source of a URL demo (works on GitHub Pages / any CORS-enabled host) */
+async function fetchDemoSource(demo, accent) {
+  if (demo.type === 'srcdoc') {
+    return buildThemedHtml(demo, accent);
+  }
+  if (demo.type === 'url' && isValidDemoUrl(demo.src)) {
+    const res = await fetch(demo.src, { credentials: 'omit' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const raw = await res.text();
+    // Best-effort theming: only replaces hexes we know about, leaves the rest alone.
+    return themeHtmlText(raw, accent);
+  }
+  throw new Error('No source available');
+}
+
+modalCopy.addEventListener('click', async () => {
+  if (!currentDemo || copyInFlight) return;
+
+  copyInFlight = true;
+  modalCopy.disabled = true;
+
+  try {
+    const textToCopy = await fetchDemoSource(currentDemo, currentAccent);
+    const ok = await copyText(textToCopy);
+
+    if (!ok) throw new Error('Copy failed');
+
+    modalCopy.classList.add('is-copied');
+    modalCopy.innerHTML = DONE_ICON;
+    clearTimeout(copyTimer);
+    copyTimer = setTimeout(() => {
+      modalCopy.classList.remove('is-copied');
+      modalCopy.innerHTML = COPY_ICON;
+    }, 2000);
+  } catch (err) {
+    modalCopy.innerHTML = 'Copy failed';
+    clearTimeout(copyTimer);
+    copyTimer = setTimeout(() => { modalCopy.innerHTML = COPY_ICON; }, 2000);
+  } finally {
+    copyInFlight = false;
+    modalCopy.disabled = false;
+  }
+});
+
+modalClose.addEventListener('click', closeModal);
+
+modal.addEventListener('click', (event) => {
+  if (event.target === modal) closeModal();
+});
+  
+
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+
+  if (modal.classList.contains('is-open')) {
+    closeModal();
+  } else {
+    closeAllSubmenus();
+  }
+});
+
+    /* Boot the theme on load */
+setAccent(currentAccent);
+
+  
+
+</script>
+
+<script>
+/* =========================================================================
+   8. Back-to-top button
+   ========================================================================= */
+(function () {
+  const btn = document.createElement('button');
+  btn.id = 'backToTopBtn';
+  btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.title = 'Back to top';
+
+  const BASE_COLOR  = '#f15b11';
+  const HOVER_COLOR = '#ff3900';
+
+  Object.assign(btn.style, {
+    position: 'fixed',
+    bottom: '24px',
+    right: '24px',
+    width: '48px',
+    height: '48px',
+    padding: '0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '50%',
+    border: 'none',
+    background: BASE_COLOR,
+    color: '#fff',
+    cursor: 'pointer',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+    opacity: '0',
+    visibility: 'hidden',
+    transform: 'translateY(10px) scale(1)',
+    transition: 'opacity 0.25s ease, transform 0.25s ease, visibility 0.25s, background 0.2s ease, box-shadow 0.25s ease',
+    zIndex: '9999'
+  });
+
+  const svg = btn.querySelector('svg');
+  svg.style.transition = 'transform 0.2s ease';
+
+  btn.addEventListener('mouseenter', () => {
+    btn.style.background = HOVER_COLOR;
+    btn.style.boxShadow = '0 8px 20px rgba(241,91,17,0.45)';
+    svg.style.transform = 'translateY(-2px)';
+  });
+
+  btn.addEventListener('mouseleave', () => {
+    btn.style.background = BASE_COLOR;
+    btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+    svg.style.transform = 'translateY(0)';
+  });
+
+  btn.addEventListener('mousedown', () => {
+    btn.style.transform = btn.dataset.visible === 'true'
+      ? 'translateY(0) scale(0.92)'
+      : 'translateY(10px) scale(0.92)';
+  });
+  btn.addEventListener('mouseup', () => {
+    btn.style.transform = btn.dataset.visible === 'true'
+      ? 'translateY(0) scale(1)'
+      : 'translateY(10px) scale(1)';
+  });
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.body.appendChild(btn);
+
+  const toggleVisibility = () => {
+    if (window.scrollY > 300) {
+      btn.dataset.visible = 'true';
+      btn.style.opacity = '1';
+      btn.style.visibility = 'visible';
+      btn.style.transform = 'translateY(0) scale(1)';
+    } else {
+      btn.dataset.visible = 'false';
+      btn.style.opacity = '0';
+      btn.style.visibility = 'hidden';
+      btn.style.transform = 'translateY(10px) scale(1)';
+    }
+  };
+
+  window.addEventListener('scroll', toggleVisibility, { passive: true });
+  toggleVisibility();
+})();
+
+
+
+  
+</script>
+
+</body>
+</html>
