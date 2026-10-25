@@ -389,6 +389,8 @@
     transition: transform .5s var(--ease), filter .35s ease;
   }
 
+  
+
   @media (max-width: 860px) {
     .hero__theme-picker { width: 210px; }
   }
@@ -480,6 +482,27 @@
     border-bottom: 1px solid var(--accent);
     aspect-ratio: 16 / 11;
   }
+
+    /* Live iframe preview inside grid cards */
+  .card__iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #0f1020;
+  }
+
+  .card__iframe--scaled {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1440px;
+    height: 990px;
+    transform-origin: top left;
+    pointer-events: none; /* clicks reach the .card__frame click handler */
+  }
+
+  .card__frame { cursor: pointer; }
 
   /* Thumbnail image (grid cards) */
   .card__thumb {
@@ -1084,7 +1107,9 @@ const ARROW_SVG = `
     <path d="M8 7h9v9"/>
   </svg>`;
 
-/* Stable slug from a title — used for auto-derived thumbnail paths */
+/* Virtual viewport width for scaled iframes (cards + modal) */
+const VIRTUAL_WIDTH = 1440;
+
 function slugify(str) {
   return String(str)
     .toLowerCase()
@@ -1092,10 +1117,6 @@ function slugify(str) {
     .replace(/(^-|-$)/g, '');
 }
 
-/* Resolve the thumbnail URL for a demo. Priority:
-   1. explicit demo.thumb
-   2. derived from title in /thumbs/{slug}.webp
-   3. null (render placeholder)                                          */
 function thumbFor(demo) {
   if (demo.thumb) return demo.thumb;
   const slug = slugify(demo.title);
@@ -1103,7 +1124,6 @@ function thumbFor(demo) {
   return `/thumbs/${slug}.webp`;
 }
 
-/* Helper: is this URL a real, loadable page (not a folder or placeholder)? */
 function isValidDemoUrl(url) {
   if (!url || typeof url !== 'string') return false;
   if (url === 'https://example.com' || url === 'https://example.com/') return false;
@@ -1112,111 +1132,11 @@ function isValidDemoUrl(url) {
 }
 
 /* =========================================================================
-   3. Build the gallery — thumbnail only, no iframes
-   ========================================================================= */
-DEMOS.forEach((demo) => {
-  const card = document.createElement('article');
-  card.className = 'card';
-  card.dataset.category = demo.category;
-
-  const frame = document.createElement('div');
-  frame.className = 'card__frame';
-
-  /* ---------- Thumbnail image ---------- */
-  const thumbSrc = thumbFor(demo);
-  if (thumbSrc) {
-    const img = document.createElement('img');
-    img.className = 'card__thumb';
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    img.alt = demo.title + ' preview';
-    img.src = thumbSrc;
-    img.style.cursor = 'pointer';
-    img.addEventListener('click', () => openModal(demo));
-
-    // Graceful fallback if the screenshot is missing
-    img.addEventListener('error', () => {
-      img.remove();
-      const ph = document.createElement('div');
-      ph.className = 'card__thumb card__thumb--missing';
-      ph.textContent = 'Preview unavailable';
-      ph.style.cursor = 'pointer';
-      ph.addEventListener('click', () => openModal(demo));
-      frame.prepend(ph);
-    }, { once: true });
-
-    frame.appendChild(img);
-  } else {
-    const ph = document.createElement('div');
-    ph.className = 'card__thumb card__thumb--missing';
-    ph.textContent = 'Preview unavailable';
-    ph.style.cursor = 'pointer';
-    ph.addEventListener('click', () => openModal(demo));
-    frame.appendChild(ph);
-  }
-
-  /* ---------- Launch button ---------- */
-  const launch = document.createElement('button');
-  launch.type = 'button';
-  launch.className = 'card__launch';
-  launch.setAttribute('aria-label', 'Open ' + demo.title + ' preview');
-  launch.innerHTML = ARROW_SVG;
-  launch.addEventListener('click', () => openModal(demo));
-  frame.appendChild(launch);
-
-  /* ---------- Card body ---------- */
-  const body = document.createElement('div');
-  body.className = 'card__body';
-
-  const title = document.createElement('h2');
-  title.className = 'card__title';
-  title.textContent = demo.title;
-
-  const desc = document.createElement('p');
-  desc.className = 'card__desc';
-  desc.textContent = demo.desc;
-
-  const tags = document.createElement('ul');
-  tags.className = 'card__tags';
-  demo.tags.forEach(tag => {
-    const li = document.createElement('li');
-    li.textContent = tag;
-    tags.appendChild(li);
-  });
-
-  body.append(title, desc, tags);
-  card.append(frame, body);
-  gallery.appendChild(card);
-});
-
-/* =========================================================================
-   4. Filtering
-   ========================================================================= */
-const filterButtons = document.querySelectorAll('.filter-btn');
-const cards = document.querySelectorAll('.card');
-
-filterButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    filterButtons.forEach(b => {
-      b.classList.remove('is-active');
-      b.setAttribute('aria-pressed', 'false');
-    });
-    btn.classList.add('is-active');
-    btn.setAttribute('aria-pressed', 'true');
-
-    const selected = btn.dataset.filter;
-    cards.forEach(card => {
-      const match = selected === 'all' || card.dataset.category === selected;
-      card.classList.toggle('is-hidden', !match);
-    });
-  });
-});
-
-  /* =========================================================================
-   4b. Accent color theming
+   2b. Accent color theming  (MUST run before the gallery builder
+       because the builder calls buildThemedHtml(demo, currentAccent))
    ========================================================================= */
 const COLOR_PRESETS = [
-  { name: 'Orange', hex: '#ff3900' },  // brand default
+  { name: 'Orange', hex: '#ff3900' },
   { name: 'Amber',  hex: '#f59e0b' },
   { name: 'Red',    hex: '#ef4444' },
   { name: 'Pink',   hex: '#ec4899' },
@@ -1230,7 +1150,6 @@ const COLOR_PRESETS = [
   { name: 'Stone',  hex: '#78716c' }
 ];
 
-/* --- HSL <-> HEX helpers --- */
 function hexToHsl(hex) {
   hex = String(hex).replace('#', '');
   if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
@@ -1276,24 +1195,22 @@ function shadesFor(accentHex) {
   };
 }
 
-/* --- Which hexes get themed, and to which shade --- */
 const THEME_HEX_MAP = {
-  '#ff3900': 'accent',   // primary orange
+  '#ff3900': 'accent',
   '#ff5011': 'accent',
   '#f15b11': 'accent',
   '#d43a00': 'dark',
   '#fb9a60': 'light',
   '#ffdeca': 'soft',
   '#ffc371': 'light',
-  '#ff5f6d': 'light',    // Dark 404 glitch shadow
-  '#7c9cff': 'accent',   // Micro-interactions / Split Hero / Dark Hero / Bouncing Dots / Rating Bars
-  '#5b6cff': 'accent',   // Centered Hero / Ring Spinner / Pulse Bar / Card Input / Dark 404
-  '#c084fc': 'light',    // Split Hero visual / Testimonial avatar / Micro-interactions gradient
-  '#fbbf24': 'accent',   // Star Rating yellow
-  '#22c55e': 'accent'    // Success checkmark / Pricing ticks
+  '#ff5f6d': 'light',
+  '#7c9cff': 'accent',
+  '#5b6cff': 'accent',
+  '#c084fc': 'light',
+  '#fbbf24': 'accent',
+  '#22c55e': 'accent'
 };
 
-/* Replace known accent hexes in an arbitrary HTML string with the selected theme */
 function themeHtmlText(text, accentHex) {
   const shades = shadesFor(accentHex);
   return text.replace(/#[0-9a-f]{6}\b/gi, (hex) => {
@@ -1302,15 +1219,12 @@ function themeHtmlText(text, accentHex) {
   });
 }
 
-/* Build the final srcdoc HTML for a demo at a given accent.
-   Non-themeable demos pass through untouched.                           */
 function buildThemedHtml(demo, accentHex) {
   if (!demo || !demo.html) return '';
   if (demo.themeable === false) return demo.html;
   return themeHtmlText(demo.html, accentHex);
 }
 
-/* --- State (persisted) --- */
 const ACCENT_STORAGE_KEY = 'gallery-accent';
 const DEFAULT_ACCENT = '#ff3900';
 let currentAccent = (() => {
@@ -1318,7 +1232,6 @@ let currentAccent = (() => {
   catch { return DEFAULT_ACCENT; }
 })();
 
-/* --- Render the swatch grid + wire interactions --- */
 const swatchWrap = document.getElementById('theme-swatches');
 const customInput = document.getElementById('theme-custom');
 
@@ -1338,12 +1251,10 @@ if (customInput) {
   customInput.addEventListener('input', (e) => setAccent(e.target.value));
 }
 
-/* Apply a new accent everywhere it matters */
 function setAccent(hex) {
   currentAccent = hex.toLowerCase();
   try { localStorage.setItem(ACCENT_STORAGE_KEY, currentAccent); } catch {}
 
-  // Swatch active state
   swatchWrap.querySelectorAll('.swatch').forEach(sw => {
     sw.classList.toggle('is-active', sw.dataset.color === currentAccent);
   });
@@ -1351,19 +1262,24 @@ function setAccent(hex) {
     customInput.value = currentAccent;
   }
 
-  // Live thumbnails get a hue-rotate hint so the picker has visible feedback
   applyThumbTheme(currentAccent);
 
-  // If the modal is open on an srcdoc demo, re-render with the new color
-  if (currentDemo && modal && modal.classList.contains('is-open') && currentDemo.type === 'srcdoc') {
+  // Re-render every live srcdoc card iframe in the grid
+  document.querySelectorAll('.card').forEach(card => {
+    if (!card._demo || card._demo.type !== 'srcdoc') return;
+    const iframe = card.querySelector('.card__iframe');
+    if (iframe) iframe.srcdoc = buildThemedHtml(card._demo, currentAccent);
+  });
+
+  // Re-render the modal if it's open on an srcdoc demo
+  if (currentDemo && modal.classList.contains('is-open') && currentDemo.type === 'srcdoc') {
     modalFrame.srcdoc = buildThemedHtml(currentDemo, currentAccent);
   }
 }
 
-/* Approximate the theme on static thumbnails via hue-rotate (best effort) */
 function applyThumbTheme(accentHex) {
   const targetHue = hexToHsl(accentHex).h;
-  const baseHue = hexToHsl(DEFAULT_ACCENT).h; // ~13.4deg
+  const baseHue = hexToHsl(DEFAULT_ACCENT).h;
   let rotate = targetHue - baseHue;
   if (rotate > 180) rotate -= 360;
   if (rotate < -180) rotate += 360;
@@ -1373,13 +1289,149 @@ function applyThumbTheme(accentHex) {
   });
 }
 
-  
+/* =========================================================================
+   2c. Card iframe scaling helpers
+   ========================================================================= */
+function scaleSingleCardIframe(iframe) {
+  const parent = iframe.parentElement;
+  if (!parent) return;
+  const w = parent.clientWidth;
+  if (!w) return;
+  iframe.style.transform = `scale(${w / VIRTUAL_WIDTH})`;
+}
+
+function scaleAllCardIframes() {
+  document.querySelectorAll('.card__iframe--scaled').forEach(scaleSingleCardIframe);
+}
 
 /* =========================================================================
-   5. Modal scaling — the ONLY place that touches VIRTUAL_WIDTH
+   3. Build the gallery
    ========================================================================= */
-const VIRTUAL_WIDTH = 1440;
+DEMOS.forEach((demo) => {
+  const card = document.createElement('article');
+  card.className = 'card';
+  card.dataset.category = demo.category;
+  card._demo = demo;   // used by setAccent() to re-theme
 
+  const frame = document.createElement('div');
+  frame.className = 'card__frame';
+
+  /* ---------- Preview inside the card ---------- */
+  if (demo.type === 'url') {
+    /* External URL demo → static thumbnail image. */
+    const thumbSrc = thumbFor(demo);
+    if (thumbSrc) {
+      const img = document.createElement('img');
+      img.className = 'card__thumb';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.alt = demo.title + ' preview';
+      img.src = thumbSrc;
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openModal(demo);
+      });
+
+      img.addEventListener('error', () => {
+        img.remove();
+        const ph = document.createElement('div');
+        ph.className = 'card__thumb card__thumb--missing';
+        ph.textContent = 'Preview unavailable';
+        frame.prepend(ph);
+      }, { once: true });
+
+      frame.appendChild(img);
+    } else {
+      const ph = document.createElement('div');
+      ph.className = 'card__thumb card__thumb--missing';
+      ph.textContent = 'Preview unavailable';
+      frame.appendChild(ph);
+    }
+  } else {
+    /* Hand-coded srcdoc component → live iframe preview. */
+    const iframe = document.createElement('iframe');
+    iframe.className = 'card__iframe card__iframe--scaled';
+    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups');
+    iframe.setAttribute('loading', 'lazy');
+    iframe.setAttribute('title', demo.title + ' preview');
+    iframe.srcdoc = buildThemedHtml(demo, currentAccent);
+    frame.appendChild(iframe);
+  }
+
+  /* Whole preview tile is clickable */
+  frame.addEventListener('click', () => openModal(demo));
+
+  /* ---------- Launch button ---------- */
+  const launch = document.createElement('button');
+  launch.type = 'button';
+  launch.className = 'card__launch';
+  launch.setAttribute('aria-label', 'Open ' + demo.title + ' preview');
+  launch.innerHTML = ARROW_SVG;
+  launch.addEventListener('click', (e) => {
+    e.stopPropagation();   // avoid double-open via frame click
+    openModal(demo);
+  });
+  frame.appendChild(launch);
+
+  /* ---------- Card body ---------- */
+  const body = document.createElement('div');
+  body.className = 'card__body';
+
+  const title = document.createElement('h2');
+  title.className = 'card__title';
+  title.textContent = demo.title;
+
+  const desc = document.createElement('p');
+  desc.className = 'card__desc';
+  desc.textContent = demo.desc;
+
+  const tags = document.createElement('ul');
+  tags.className = 'card__tags';
+  demo.tags.forEach(tag => {
+    const li = document.createElement('li');
+    li.textContent = tag;
+    tags.appendChild(li);
+  });
+
+  body.append(title, desc, tags);
+  card.append(frame, body);
+  gallery.appendChild(card);
+});
+
+/* Scale every card iframe after the grid has been inserted + laid out */
+requestAnimationFrame(scaleAllCardIframes);
+window.addEventListener('resize', scaleAllCardIframes);
+
+/* =========================================================================
+   4. Filtering
+   ========================================================================= */
+const filterButtons = document.querySelectorAll('.filter-btn');
+const cards = document.querySelectorAll('.card');
+
+filterButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterButtons.forEach(b => {
+      b.classList.remove('is-active');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    btn.classList.add('is-active');
+    btn.setAttribute('aria-pressed', 'true');
+
+    const selected = btn.dataset.filter;
+    cards.forEach(card => {
+      const match = selected === 'all' || card.dataset.category === selected;
+      card.classList.toggle('is-hidden', !match);
+    });
+
+    /* Re-scale visible iframes now that layout changed */
+    requestAnimationFrame(scaleAllCardIframes);
+  });
+});
+
+/* =========================================================================
+   5. Modal scaling
+   ========================================================================= */
 function scaleModalIframe() {
   const frameWrap = document.getElementById('modal-frame-wrap');
   if (!frameWrap) return;
@@ -1390,8 +1442,7 @@ function scaleModalIframe() {
   const wrapWidth = frameWrap.clientWidth;
   if (!wrapWidth) return;
 
-  const scale = wrapWidth / VIRTUAL_WIDTH;
-  iframe.style.transform = `scale(${scale})`;
+  iframe.style.transform = `scale(${wrapWidth / VIRTUAL_WIDTH})`;
 }
 
 window.addEventListener('resize', scaleModalIframe);
@@ -1467,7 +1518,6 @@ function openModal(demo) {
     }
   }
 
-  // Show the copy button for srcdoc AND for valid URLs (fetched source).
   modalCopy.hidden = !(
     demo.type === 'srcdoc' ||
     (demo.type === 'url' && isValidDemoUrl(demo.src))
@@ -1505,14 +1555,13 @@ function closeModal() {
   if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
 }
 
-/* Clipboard with a fallback for non-secure contexts */
 async function copyText(text) {
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
       return true;
     }
-  } catch (err) { /* fall through */ }
+  } catch (err) {}
 
   const ta = document.createElement('textarea');
   ta.value = text;
@@ -1526,7 +1575,6 @@ async function copyText(text) {
   return ok;
 }
 
-/* Fetch the source of a URL demo (works on GitHub Pages / any CORS-enabled host) */
 async function fetchDemoSource(demo, accent) {
   if (demo.type === 'srcdoc') {
     return buildThemedHtml(demo, accent);
@@ -1535,7 +1583,6 @@ async function fetchDemoSource(demo, accent) {
     const res = await fetch(demo.src, { credentials: 'omit' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const raw = await res.text();
-    // Best-effort theming: only replaces hexes we know about, leaves the rest alone.
     return themeHtmlText(raw, accent);
   }
   throw new Error('No source available');
@@ -1550,7 +1597,6 @@ modalCopy.addEventListener('click', async () => {
   try {
     const textToCopy = await fetchDemoSource(currentDemo, currentAccent);
     const ok = await copyText(textToCopy);
-
     if (!ok) throw new Error('Copy failed');
 
     modalCopy.classList.add('is-copied');
@@ -1575,23 +1621,15 @@ modalClose.addEventListener('click', closeModal);
 modal.addEventListener('click', (event) => {
   if (event.target === modal) closeModal();
 });
-  
 
 document.addEventListener('keydown', (event) => {
   if (event.key !== 'Escape') return;
-
-  if (modal.classList.contains('is-open')) {
-    closeModal();
-  } else {
-    closeAllSubmenus();
-  }
+  if (modal.classList.contains('is-open')) closeModal();
+  else closeAllSubmenus();
 });
 
-    /* Boot the theme on load */
+/* Boot the theme */
 setAccent(currentAccent);
-
-  
-
 </script>
 
 <script>
@@ -1680,7 +1718,6 @@ setAccent(currentAccent);
   window.addEventListener('scroll', toggleVisibility, { passive: true });
   toggleVisibility();
 })();
-
 
 
   
