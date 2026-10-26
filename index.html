@@ -12,7 +12,6 @@
 
 <link rel="icon" href="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro-Business-Page-favicon.webp?updatedAt=1792529834777">
 
-<!-- === OPEN GRAPH === -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://your-domain.com/components-gallery">
 <meta property="og:title" content="Components Gallery | Developer's Club">
@@ -26,7 +25,6 @@
 <meta property="og:site_name" content="Developer's Club">
 <meta property="og:locale" content="en_US">
 
-<!-- === TWITTER / X CARD === -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@domainvault">
 <meta name="twitter:creator" content="@domainvault">
@@ -36,7 +34,6 @@
 <meta name="twitter:image" content="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/socialshare-banners/digitalplat.webp">
 <meta name="twitter:image:alt" content="Components Gallery — Developer's Club">
 
-<!-- === STRUCTURED DATA (JSON-LD) === -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -59,44 +56,28 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Edo&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
 <style>
-  /* ---------------------------------------------------------
-     Page shell & variables
-  --------------------------------------------------------- */
   *, *::before, *::after { box-sizing: border-box; }
 
-  html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 110px;
-  }
+  html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 
   :root {
-    --bg:            #0b0b0f;
-    --surface:       #14141b;
-    --surface-2:     #1b1b24;
-    --line:          rgba(255,255,255,.08);
-    --line-strong:   rgba(255,255,255,.16);
-    --text:          #f2f3f7;
-    --muted:         #9a9baa;
-    --accent:        #ff5011;
-    --radius:        18px;
-    --ease:          cubic-bezier(.2,.8,.2,1);
+    --bg: #0b0b0f;
+    --surface: #14141b;
+    --surface-2: #1b1b24;
+    --line: rgba(255,255,255,.08);
+    --line-strong: rgba(255,255,255,.16);
+    --text: #f2f3f7;
+    --muted: #9a9baa;
+    --accent: #ff5011;
+    --ease: cubic-bezier(.2,.8,.2,1);
 
     --skin-color: #ff5011;
     --title-color: hsl(242, 8%, 98%);
     --text-color: hsl(242, 8%, 80%);
-    --body-color: #0d0d0d;
     --box-color: hsl(242, 14%, 12%);
-    --body-font: 'Inter', sans-serif;
-    --shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-    --small-font-size: 0.95rem;
-    --h3-font-size: 1.25rem;
-    --smaller-font-size: 0.75rem;
-    --mb15: 0.75rem;
-    --mb3: 1.5rem;
   }
 
   a { text-decoration: none; cursor: pointer; }
@@ -118,19 +99,14 @@
     padding: 0 2rem;
   }
 
-  .wrap {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 128px 24px 96px;
-  }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 128px 24px 96px; }
 
-  /* ----- Top Navigation Bar ----- */
+  /* ---------------------------------------------------------
+     Top Navigation — desktop + mobile
+  --------------------------------------------------------- */
   #nav-bar {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    width: 100%;
-    z-index: 1000;
-    padding: 0 2rem;
+    position: fixed; top: 0; left: 0; right: 0; width: 100%;
+    z-index: 1000; padding: 0 2rem;
     background: rgba(11, 11, 15, 0.85);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
     backdrop-filter: blur(14px) saturate(160%);
@@ -139,218 +115,307 @@
   }
 
   .nav-inner {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 8px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    max-width: 1240px; margin: 0 auto; padding: 8px 24px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    position: relative;
   }
 
-  #nav-logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 11px;
-    flex: 0 0 auto;
-  }
-
+  #nav-logo { display: inline-flex; align-items: center; gap: 11px; flex: 0 0 auto; }
   #nav-logo img { height: 70px; display: block; }
 
   .nav-brand {
     font-family: 'Edo', ui-sans-serif, system-ui, sans-serif;
-    font-weight: 800;
-    font-size: 1.15rem;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--title-color);
-    white-space: nowrap;
+    font-weight: 800; font-size: 1.15rem; line-height: 1;
+    letter-spacing: -0.02em; color: var(--title-color); white-space: nowrap;
   }
 
+  /* --- Desktop nav menu (default) --- */
   #nav-menu {
-    display: flex;
-    gap: 1.5rem;
-    margin-left: auto;
-    align-items: center;
-    flex-wrap: wrap;
+    display: flex; gap: 1.5rem; margin-left: auto;
+    align-items: center; flex-wrap: wrap;
   }
 
   .nav-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--text-color);
-    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--text-color); font-weight: 500;
     transition: color 0.3s, transform 0.2s;
   }
-
   .nav-link:hover { color: var(--accent); transform: translateY(-1px); }
 
-  .nav-cta {
-    background: linear-gradient(90deg, var(--skin-color), #d43a00);
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 0;
-    box-shadow: 0 2px 4px rgba(255, 80, 17, 0.4);
-    transition: transform 0.3s, box-shadow 0.3s;
-    font-weight: 700;
-  }
 
-  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(255, 80, 17, 0.5); }
+  
+ .nav-cta {
+  background: linear-gradient(90deg, var(--skin-color), #d43a00);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0;
+  box-shadow: 0 2px 4px rgba(255, 80, 17, 0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+  font-weight: 700;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.nav-cta:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 80, 17, 0.5);
+}
+
+.nav-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #d43a00, #8f2400);  /* darker orange → deep red-orange */
+  transform: translateX(-101%);
+  transition: transform .4s cubic-bezier(.2,.8,.2,1);
+  z-index: -1;
+}
+
+.nav-cta:hover::before {
+  transform: translateX(0);
+}
+
 
   .has-submenu { position: relative; }
 
   .submenu {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 50%;
+    position: absolute; top: calc(100% + 6px); left: 50%;
     transform: translateX(-50%);
-    background: var(--box-color);
-    border: 1px solid var(--line);
-    border-radius: 0.5rem;
-    padding: 0.75rem;
+    background: var(--box-color); border: 1px solid var(--line);
+    border-radius: 0.5rem; padding: 0.75rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
+    opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity 0.3s, top 0.3s, visibility 0.3s;
-    width: 220px;
-    z-index: 10;
+    width: 220px; z-index: 10;
   }
-
-  .submenu.active {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    top: 100%;
-  }
+  .submenu.active { opacity: 1; visibility: visible; pointer-events: auto; top: 100%; }
 
   .submenu-link {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: var(--text-color);
-    padding: 0.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    color: var(--text-color); padding: 0.5rem;
     border-radius: 0.25rem;
     transition: background-color 0.3s, color 0.3s;
     font-size: 0.9rem;
   }
-
   .submenu-link:hover { background-color: rgba(255, 80, 17, 0.1); color: var(--skin-color); }
   .submenu-link i { width: 15px; text-align: center; }
 
   /* ---------------------------------------------------------
-     Hero
+     Burger button — square, no radius, centered, contained
   --------------------------------------------------------- */
-  .hero {
-    display: flex;
+  #nav-burger {
+    display: none;
+    width: 40px;
+    height: 40px;
+    margin-left: auto;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    border-radius: 0;                 /* no rounded corners */
+    color: var(--text);
+    cursor: pointer;
     align-items: center;
-    gap: 2rem;
-    margin: 0 0 48px;
+    justify-content: center;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    transition: background .2s var(--ease), border-color .2s var(--ease);
+    z-index: 1002;
+  }
+  #nav-burger:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.28); }
+  #nav-burger:focus-visible { outline: 2px solid #7c9cff; outline-offset: 2px; }
+
+  #nav-burger .burger-lines {
+    position: relative;
+    width: 18px;
+    height: 14px;
+    display: block;
+    pointer-events: none;
+  }
+  #nav-burger .burger-lines::before,
+  #nav-burger .burger-lines::after,
+  #nav-burger .burger-lines span {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    border-radius: 0;                 /* flat line ends */
+    transition: transform .3s var(--ease), opacity .3s var(--ease), top .3s var(--ease);
+  }
+  #nav-burger .burger-lines::before { top: 0; }
+  #nav-burger .burger-lines span      { top: 6px; }
+  #nav-burger .burger-lines::after  { top: 12px; }
+
+  #nav-burger[aria-expanded="true"] .burger-lines::before { top: 6px; transform: rotate(45deg); }
+  #nav-burger[aria-expanded="true"] .burger-lines span    { opacity: 0; }
+  #nav-burger[aria-expanded="true"] .burger-lines::after  { top: 6px; transform: rotate(-45deg); }
+
+  /* =========================================================
+     MOBILE NAV — burger mode at ≤1050px
+  ========================================================= */
+  @media (max-width: 1050px) {
+    #nav-burger { display: inline-flex; }
+
+    #nav-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      margin-left: 0;
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 0;
+      background: var(--box-color);
+      border: 1px solid var(--line-strong);
+      border-radius: 0.5rem;
+      box-shadow: 0 20px 40px -20px rgba(0,0,0,.85);
+      transform-origin: top center;
+      transform: translateY(-6px) scaleY(.96);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity .25s var(--ease), transform .25s var(--ease),
+                  visibility .25s var(--ease), max-height .35s var(--ease);
+      z-index: 1001;
+    }
+
+    #nav-menu.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0) scaleY(1);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    #nav-menu > * {
+      width: 100%;
+      border-bottom: 1px solid var(--line);
+    }
+    #nav-menu > *:last-child { border-bottom: 0; }
+
+    #nav-menu > a.nav-link,
+    #nav-menu > .has-submenu > .nav-link {
+      display: flex;
+      padding: 14px 18px;
+      font-size: 15px;
+      color: var(--text);
+      justify-content: space-between;
+      width: 100%;
+    }
+    #nav-menu > a.nav-link:hover,
+    #nav-menu > .has-submenu > .nav-link:hover {
+      background: rgba(255,255,255,.04);
+      color: var(--accent);
+      transform: none;
+    }
+
+    #nav-menu > .nav-cta {
+      display: block;
+      margin: 12px 14px;
+      padding: 12px 16px;
+      text-align: center;
+      border-radius: 0;               /* keep flat inside the panel too */
+      width: calc(100% - 28px);  /* 100% minus left + right margins */
+      box-sizing: border-box;
+    }
+    
+    
+
+    .has-submenu { position: static; }
+    .submenu {
+      position: static;
+      transform: none;
+      top: auto; left: auto;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: rgba(0,0,0,.28);
+      box-shadow: none;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s var(--ease);
+    }
+    .submenu.active { max-height: 400px; }
+
+    .submenu-link {
+      padding: 12px 32px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .submenu-link:last-child { border-bottom: 0; }
+    .submenu-link i { width: 18px; }
   }
 
+  @media (max-width: 640px) {
+    #nav-menu > a.nav-link,
+    #nav-menu > .has-submenu > .nav-link { padding: 13px 16px; font-size: 14.5px; }
+    .submenu-link { padding: 11px 28px; }
+  }
+
+  /* ---------------------------------------------------------
+     Hero
+  --------------------------------------------------------- */
+  .hero { display: flex; align-items: flex-start; gap: 2rem; margin: 0 0 48px; }
   .hero__content { flex: 1 1 auto; min-width: 0; }
 
   .hero__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0 0 18px;
-    padding: 7px 15px;
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: var(--accent);
+    display: inline-flex; align-items: center; gap: 8px;
+    margin: 0 0 18px; padding: 7px 15px;
+    font-size: 11px; font-weight: 700; line-height: 1; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent);
     background: rgba(255, 80, 17, .09);
     border: 1px solid rgba(255, 80, 17, .34);
-    border-radius: 999px;
+    border-radius: 0px;
   }
 
   .hero__title {
     margin: 0 0 16px;
     font-size: clamp(30px, 4.6vw, 46px);
-    line-height: 1.08;
-    letter-spacing: -.035em;
-    font-weight: 800;
+    line-height: 1.08; letter-spacing: -.035em; font-weight: 800;
   }
 
-  .hero__sub {
-    margin: 0;
-    font-size: 15px;
-    line-height: 1.65;
-    color: var(--muted);
-  }
+  .hero__sub { margin: 0; font-size: 15px; line-height: 1.65; color: var(--muted); }
 
-  .hero__sub code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: .88em;
-    padding: 2px 6px;
-    border-radius: 6px;
-    background: rgba(255,255,255,.07);
-    border: 1px solid var(--line);
-    color: #cdd3e8;
-  }
-
-    /* ---------------------------------------------------------
-     Theme picker (hero right column)
-  --------------------------------------------------------- */
-  .hero {
-    align-items: flex-start; /* was: center — overrides earlier rule */
-  }
-
-    .hero__theme-picker {
-    flex: 0 0 auto;
-    width: 236px;
-  }
-
+  .hero__theme-picker { flex: 0 0 auto; width: 240px; }
 
   .theme-picker {
     background: var(--surface);
     border: 1px solid var(--line-strong);
-    padding: 0px;
+    padding: 0;
   }
 
-/* Header / toggle */
   .theme-picker__toggle {
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 12px 14px;
-    background: transparent;
-    border: 0;
-    color: var(--text);
-    cursor: pointer;
-    font: inherit;
-    text-align: left;
-    transition: background .2s var(--ease);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; padding: 12px 14px;
+    background: transparent; border: 0;
+    color: var(--text); cursor: pointer; font: inherit;
+    text-align: left; transition: background .2s var(--ease);
   }
   .theme-picker__toggle:hover { background: rgba(255,255,255,.03); }
 
-
-
   .theme-picker__label {
-    margin: 0;
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: .14em;
-    text-transform: uppercase;
+    margin: 0; font-size: 10.5px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
     color: var(--muted);
   }
 
-  .theme-picker__current {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .theme-picker__current { display: inline-flex; align-items: center; gap: 8px; }
 
   .theme-picker__dot {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
+    width: 18px; height: 18px; border-radius: 50%;
     background: #ff3900;
     border: 1px solid rgba(255,255,255,.35);
     box-shadow: 0 0 0 1px rgba(0,0,0,.35);
@@ -358,155 +423,82 @@
   }
 
   .theme-picker__chevron {
-    display: inline-grid;
-    place-items: center;
-    width: 20px;
-    height: 20px;
-    color: var(--muted);
+    display: inline-grid; place-items: center;
+    width: 20px; height: 20px; color: var(--muted);
     transition: transform .3s var(--ease);
   }
-  .theme-picker__toggle[aria-expanded="true"] .theme-picker__chevron {
-    transform: rotate(180deg);
-  }
+  .theme-picker__toggle[aria-expanded="true"] .theme-picker__chevron { transform: rotate(180deg); }
 
-  /* Collapsible panel */
-  .theme-panel {
-    overflow: hidden;
-    max-height: 320px;
-    padding: 0 14px 14px;
-    transition: max-height .3s var(--ease), padding .3s var(--ease);
-  }
+  .theme-panel { padding: 0 14px 14px; }
   .theme-panel[hidden] { display: none; }
-  /* Animate collapse via max-height, so keep the div visible when collapsed
-     and toggle a class instead of [hidden] if you want smooth animation. */
 
   .theme-swatches {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 16px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px; margin-bottom: 12px;
   }
-  
 
   .swatch {
-    aspect-ratio: 1;
-    border-radius: 50%;
+    aspect-ratio: 1; border-radius: 50%;
     border: 1.5px solid transparent;
-    cursor: pointer;
-    padding: 0;
-    position: relative;
+    cursor: pointer; padding: 0; position: relative;
     transition: transform .2s var(--ease), box-shadow .2s var(--ease);
   }
-
   .swatch:hover { transform: scale(1.15); }
-
   .swatch.is-active {
     border-color: #fff;
     box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 2.5px rgba(255,255,255,.55);
   }
-
-  .swatch:focus-visible {
-    outline: 2px solid #7c9cff;
-    outline-offset: 2px;
-  }
+  .swatch:focus-visible { outline: 2px solid #7c9cff; outline-offset: 2px; }
 
   .theme-custom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding-top: 10px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; padding-top: 10px;
     border-top: 1px solid var(--line);
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--muted);
+    font-size: 12px; font-weight: 600; color: var(--muted);
   }
 
   .theme-custom input[type="color"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 38px;
-    height: 24px;
+    -webkit-appearance: none; appearance: none;
+    width: 38px; height: 24px;
     border: 1px solid var(--line-strong);
-    background: transparent;
-    padding: 0;
-    cursor: pointer;
+    background: transparent; padding: 0; cursor: pointer;
     border-radius: 4px;
   }
-
   .theme-custom input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
   .theme-custom input[type="color"]::-webkit-color-swatch { border: none; border-radius: 2px; }
   .theme-custom input[type="color"]::-moz-color-swatch { border: none; border-radius: 2px; }
 
-  .theme-picker__hint {
-    margin: 12px 0 0;
-    font-size: 10.5px;
-    line-height: 1.5;
-    color: var(--muted);
-  }
-
-  /* Smooth color transition on thumbnails when theme changes */
-  .card__thumb {
-    transition: transform .5s var(--ease), filter .35s ease;
-  }
-
-
-  @media (max-width: 860px) {
-    .hero__theme-picker { width: 210px; }
-  }
-
+  @media (max-width: 860px) { .hero__theme-picker { width: 210px; } }
   @media (max-width: 640px) {
     .hero { flex-direction: column; align-items: stretch; }
     .hero__theme-picker { width: 100%; }
-    .theme-swatches { grid-template-columns: repeat(6, 1fr); }
   }
 
-  /* ---------------------------------------------------------
-     Filter Bar
-  --------------------------------------------------------- */
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 28px;
-  }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
 
   .filter-btn {
-    flex: 0 0 auto;
-    padding: 9px 16px;
-    border-radius: 0;
+    flex: 0 0 auto; padding: 9px 16px; border-radius: 0;
     border: 1px solid var(--line-strong);
-    background: transparent;
-    color: var(--muted);
+    background: transparent; color: var(--muted);
     font: 600 12px/1 ui-sans-serif, system-ui, sans-serif;
     cursor: pointer;
     transition: background .25s, color .25s, border-color .25s, transform .2s;
   }
-
-  .filter-btn:hover {
-    background: rgba(255,255,255,.07);
-    color: var(--text);
-    transform: translateY(-1px);
-  }
-
+  .filter-btn:hover { background: rgba(255,255,255,.07); color: var(--text); transform: translateY(-1px); }
   .filter-btn.is-active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
+    background: var(--accent); border-color: var(--accent); color: #fff;
     box-shadow: 0 4px 14px -4px rgba(255, 57, 0, 0.6);
   }
 
   .filter-btn:focus-visible,
   .btn-copy:focus-visible,
   .modal__close:focus-visible,
-  .card__launch:focus-visible {
-    outline: 2px solid #7c9cff;
-    outline-offset: 3px;
+  .card__launch:focus-visible,
+  .theme-picker__toggle:focus-visible {
+    outline: 2px solid #7c9cff; outline-offset: 3px;
   }
 
-  /* ---------------------------------------------------------
-     Grid gallery
-  --------------------------------------------------------- */
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -514,18 +506,14 @@
   }
 
   .card {
-    display: flex;
-    flex-direction: column;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: none;
+    display: flex; flex-direction: column;
+    background: var(--surface); border: 1px solid var(--line);
     overflow: hidden;
     transition: transform .4s var(--ease),
                 border-color .4s var(--ease),
                 box-shadow .4s var(--ease),
                 opacity .4s var(--ease);
   }
-
   .card.is-hidden { display: none; }
 
   .card:hover {
@@ -541,75 +529,52 @@
     overflow: hidden;
     border-bottom: 1px solid var(--accent);
     aspect-ratio: 16 / 11;
+    /* Note: no cursor: pointer here anymore — clicks inside the iframe
+       are handled by the component itself. The launch button stays on top. */
   }
 
-    /* Live iframe preview inside grid cards */
+  /* Card iframe — INTERACTIVE. Users can hover buttons, toggle switches,
+     click links directly in the grid. */
   .card__iframe {
     display: block;
     width: 100%;
     height: 100%;
     border: 0;
     background: #0f1020;
+    pointer-events: auto;   /* <-- was `none`; now interactive */
   }
 
-  .card__iframe--scaled {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1440px;
-    height: 990px;
-    transform-origin: top left;
-    pointer-events: none; /* clicks reach the .card__frame click handler */
-  }
-
-  .card__frame { cursor: pointer; }
-
-  /* Thumbnail image (grid cards) */
   .card__thumb {
     display: block;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     object-fit: cover;
     object-position: top center;
-    transition: transform .5s var(--ease);
+    transition: transform .5s var(--ease), filter .35s ease;
     background: #0f1020;
+    cursor: pointer;
   }
+  .card:hover .card__thumb { transform: scale(1.04); }
 
-  .card:hover .card__thumb {
-    transform: scale(1.04);
-  }
-
-  /* Fallback when the screenshot is missing or fails to load */
   .card__thumb--missing {
-    display: grid;
-    place-items: center;
-    color: #8b8ba3;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    background:
-      repeating-linear-gradient(45deg,
-        #14141b, #14141b 10px,
-        #1b1b24 10px, #1b1b24 20px);
+    display: grid; place-items: center;
+    color: #8b8ba3; font-size: 12px; font-weight: 600;
+    letter-spacing: .04em; text-transform: uppercase;
+    background: repeating-linear-gradient(45deg,
+      #14141b, #14141b 10px,
+      #1b1b24 10px, #1b1b24 20px);
+    cursor: pointer;
   }
 
   .card__launch {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    display: grid;
-    place-items: center;
+    position: absolute; top: 12px; right: 12px;
+    width: 42px; height: 42px; padding: 0;
+    display: grid; place-items: center;
     border-radius: 50%;
     border: 1px solid rgba(12,12,20,.10);
     background: rgba(255,255,255,.82);
     -webkit-backdrop-filter: blur(10px) saturate(160%);
     backdrop-filter: blur(10px) saturate(160%);
-    color: #14141b;
-    cursor: pointer;
+    color: #14141b; cursor: pointer;
     box-shadow: 0 6px 18px -8px rgba(10,10,25,.55);
     transition: transform .4s var(--ease),
                 background .4s var(--ease),
@@ -618,133 +583,82 @@
                 border-color .4s var(--ease);
     z-index: 10;
   }
-
-  .card__launch::before {
-    content: "";
-    position: absolute;
-    inset: -5px;
-    border-radius: 50%;
-    border: 1px solid currentColor;
-    opacity: 0;
-    transform: scale(.72);
-    transition: opacity .45s var(--ease), transform .45s var(--ease);
-    pointer-events: none;
-  }
-
   .card__launch:hover,
   .card__launch:focus-visible {
-    background: #14141b;
-    color: #ffffff;
+    background: #14141b; color: #fff;
     border-color: rgba(255,255,255,.2);
     transform: scale(1.12) rotate(-6deg);
     box-shadow: 0 14px 32px -10px rgba(124,156,255,.75);
     outline: none;
   }
-
-  .card__launch:hover::before,
-  .card__launch:focus-visible::before { opacity: .35; transform: scale(1.04); }
-
   .card__launch svg { width: 18px; height: 18px; transition: transform .4s var(--ease); }
   .card__launch:hover svg,
   .card__launch:focus-visible svg { transform: translate(3px, -3px); }
 
   .card__body {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 18px 20px 22px;
-    flex: 1;
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 18px 20px 22px; flex: 1;
+    cursor: pointer;
   }
 
   .card__title { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -.015em; }
 
   .card__desc {
-    margin: 0;
-    font-size: 13.5px;
-    line-height: 1.6;
-    color: var(--muted);
-    flex: 1;
+    margin: 0; font-size: 13.5px; line-height: 1.6;
+    color: var(--muted); flex: 1;
   }
 
   .card__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin: 6px 0 0;
-    padding: 0;
-    list-style: none;
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin: 6px 0 0; padding: 0; list-style: none;
   }
-
   .card__tags li {
-    font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+    font-size: 10.5px; font-weight: 600;
+    letter-spacing: .06em; text-transform: uppercase;
     color: #b7bfe0;
     background: rgba(124,156,255,.10);
     border: 1px solid rgba(124,156,255,.22);
-    border-radius: 0px;
     padding: 4px 9px;
   }
 
-  /* ---------------------------------------------------------
-     Full-screen modal
-  --------------------------------------------------------- */
   .modal {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: grid;
-    place-items: center;
-    padding: 24px;
+    position: fixed; inset: 0; z-index: 100;
+    display: grid; place-items: center; padding: 24px;
     background: rgba(6,6,10,.72);
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
-    opacity: 0;
-    visibility: hidden;
+    opacity: 0; visibility: hidden;
     transition: opacity .3s var(--ease), visibility .3s var(--ease);
   }
-
   .modal.is-open { opacity: 1; visibility: visible; }
 
   .modal__panel {
     width: min(920px, 100%);
     background: var(--surface-2);
     border: 1px solid var(--line-strong);
-    border-radius: 0;
     overflow: hidden;
     transform: translateY(14px) scale(.97);
     transition: transform .35s var(--ease);
     box-shadow: 0 40px 90px -30px rgba(0,0,0,.95);
   }
-
   .modal.is-open .modal__panel { transform: translateY(0) scale(1); }
 
   .modal__bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 12px 12px 12px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; padding: 12px 12px 12px 20px;
     border-bottom: 1px solid var(--line);
   }
 
   .modal__title {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: var(--muted);
+    font-size: 13px; font-weight: 700; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--muted);
   }
 
   .modal__actions { display: flex; align-items: center; gap: 10px; }
 
   .btn-copy {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    display: inline-flex; align-items: center; gap: 6px;
     padding: 8px 14px;
-    border-radius: 0px;
     border: 1px solid var(--line-strong);
     background: rgba(255,255,255,.05);
     color: var(--text);
@@ -752,10 +666,8 @@
     cursor: pointer;
     transition: all .25s var(--ease);
   }
-
   .btn-copy:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.3); }
   .btn-copy:disabled { opacity: .5; cursor: wait; }
-
   .btn-copy.is-copied {
     background: rgba(34, 197, 94, 0.15);
     border-color: rgba(34, 197, 94, 0.4);
@@ -763,55 +675,30 @@
   }
 
   .modal__close {
-    width: 34px;
-    height: 34px;
-    display: grid;
-    place-items: center;
-    border-radius: 0%;
+    width: 34px; height: 34px;
+    display: grid; place-items: center;
     border: 1px solid var(--line-strong);
-    background: transparent;
-    color: var(--text);
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
+    background: transparent; color: var(--text);
+    font-size: 18px; line-height: 1; cursor: pointer;
     transition: background .25s, transform .25s var(--ease);
   }
-
   .modal__close:hover { background: rgba(255,255,255,.1); transform: rotate(90deg); }
 
-  /* Wrapper for the modal iframe — constrains the scaled desktop render */
   .modal__frame-wrap {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 11;
-    max-height: 70vh;
-    overflow: hidden;
-    background: #fff;
+    position: relative; width: 100%;
+    aspect-ratio: 16 / 11; max-height: 70vh;
+    overflow: hidden; background: #fff;
   }
 
   .modal__iframe {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border: 0;
-    background: #fff;
+    display: block; width: 100%; height: 100%;
+    border: 0; background: #fff;
   }
 
-  /* When rendering a URL demo, the iframe uses a virtual desktop size and is scaled down */
   .modal__iframe--scaled {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1440px;
-    height: 990px;
+    position: absolute; top: 0; left: 0;
+    width: 1440px; height: 990px;
     transform-origin: top left;
-  }
-
-  /* ---------------------------------------------------------
-     Responsive
-  --------------------------------------------------------- */
-  @media (max-width: 860px) {
-    #nav-menu { gap: 1rem; font-size: .9rem; }
   }
 
   @media (max-width: 640px) {
@@ -820,8 +707,6 @@
     .nav-inner { padding: 8px 8px; }
     #nav-logo img { height: 52px; }
     .nav-brand { font-size: 1.3rem; letter-spacing: 0.005em; }
-    #nav-menu { width: 100%; margin-left: 0; justify-content: flex-start; gap: .85rem; }
-    .submenu { left: 0; transform: none; }
     .wrap { padding: 150px 8px 64px; }
     .gallery { grid-template-columns: 1fr; }
   }
@@ -838,7 +723,6 @@
 </head>
 <body>
 
-<!-- Navigation Bar -->
 <nav id="nav-bar" aria-label="Main navigation">
   <div class="nav-inner">
 
@@ -846,6 +730,16 @@
       <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/Branding/Pro%20Business%20Page%20Logo%20copy.png" alt="Developer's Club logo">
       <span class="nav-brand">Developer's Club</span>
     </a>
+
+    <button type="button"
+            id="nav-burger"
+            aria-label="Toggle menu"
+            aria-expanded="false"
+            aria-controls="nav-menu">
+      <span class="burger-lines" aria-hidden="true">
+        <span></span>
+      </span>
+    </button>
 
     <div id="nav-menu">
       <a href="/" class="nav-link">Home</a>
@@ -857,8 +751,7 @@
           Resources
           <i class="fa-solid fa-angle-down" aria-hidden="true" style="font-size: 0.8em;"></i>
         </a>
-
-        <div class="submenu" id="submenu-resources" style="margin-top:1rem;">
+        <div class="submenu" id="submenu-resources">
           <a href="/courses#all" class="submenu-link"><i class="fa-solid fa-list-ul" aria-hidden="true"></i> All Resources</a>
           <a href="/courses#foundation" class="submenu-link"><i class="fa-solid fa-brain" aria-hidden="true"></i> AI Foundation</a>
           <a href="/courses#prompting" class="submenu-link"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Prompt Craftsmanship</a>
@@ -874,8 +767,7 @@
           Guides
           <i class="fa-solid fa-angle-down" aria-hidden="true" style="font-size: 0.8em;"></i>
         </a>
-
-        <div class="submenu" id="submenu-guides" style="margin-top:1rem;">
+        <div class="submenu" id="submenu-guides">
           <a href="/courses#all" class="submenu-link"><i class="fa-solid fa-list-ul" aria-hidden="true"></i> All Resources</a>
           <a href="/courses#foundation" class="submenu-link"><i class="fa-solid fa-brain" aria-hidden="true"></i> AI Foundation</a>
           <a href="/courses#prompting" class="submenu-link"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Prompt Craftsmanship</a>
@@ -891,8 +783,7 @@
           Assets
           <i class="fa-solid fa-angle-down" aria-hidden="true" style="font-size: 0.8em;"></i>
         </a>
-
-        <div class="submenu" id="submenu-assets" style="margin-top:1rem;">
+        <div class="submenu" id="submenu-assets">
           <a href="/courses#all" class="submenu-link"><i class="fa-solid fa-list-ul" aria-hidden="true"></i> All Resources</a>
           <a href="/courses#foundation" class="submenu-link"><i class="fa-solid fa-brain" aria-hidden="true"></i> AI Foundation</a>
           <a href="/courses#prompting" class="submenu-link"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Prompt Craftsmanship</a>
@@ -903,55 +794,64 @@
 
       <a href="/pricing" class="nav-link">Pricing</a>
       <a href="/helpcenter" class="nav-link">Help Center</a>
+      
       <a href="/login" class="nav-cta">Get Started</a>
     </div>
 
   </div>
 </nav>
 
+
+
+
+
 <div class="wrap">
 
- <header class="hero">
-  <div class="hero__content">
-    <p class="hero__eyebrow">Component &amp; Template Library</p>
-    <h1 class="hero__title">Isolated demos &amp; live pages</h1>
-    <p class="hero__sub">
-      Browse hand-coded components (with copyable source) or explore live external pages.
-    </p>
-  </div>
-
-  <aside class="hero__theme-picker" aria-label="Accent color">
-  <div class="theme-picker">
-    <button type="button"
-            class="theme-picker__toggle"
-            id="theme-toggle"
-            aria-expanded="true"
-            aria-controls="theme-panel">
-      <span class="theme-picker__label">Accent color</span>
-      <span class="theme-picker__current">
-        <span class="theme-picker__dot" id="theme-current-dot"></span>
-        <span class="theme-picker__chevron" aria-hidden="true">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2.5"
-               stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"/>
-          </svg>
-        </span>
-      </span>
-    </button>
-
-    <div class="theme-panel" id="theme-panel">
-      <div class="theme-swatches" id="theme-swatches"></div>
-      <label class="theme-custom">
-        <span>Custom</span>
-        <input type="color" id="theme-custom" value="#ff3900" aria-label="Custom accent color">
-      </label>
+  <header class="hero">
+    <div class="hero__content">
+      <p class="hero__eyebrow">Component &amp; Template Library</p>
+      <h1 class="hero__title">Isolated demos &amp; live pages</h1>
+      <p class="hero__sub">
+        Browse hand-coded components (with copyable source) or explore live external pages.
+      </p>
     </div>
-  </div>
-</aside>
-</header>
 
-  <!-- Filter Tabs -->
+    <aside class="hero__theme-picker" aria-label="Accent color">
+    
+      <div class="theme-picker">
+      
+        <button type="button"
+                class="theme-picker__toggle"
+                id="theme-toggle"
+                aria-expanded="false"
+                aria-controls="theme-panel">
+          <span class="theme-picker__label">Accent color</span>
+          <span class="theme-picker__current">
+            <span class="theme-picker__dot" id="theme-current-dot"></span>
+            <span class="theme-picker__chevron" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </span>
+          </span>
+        </button>
+        
+
+        <div class="theme-panel" id="theme-panel" hidden>
+          <div class="theme-swatches" id="theme-swatches"></div>
+          <label class="theme-custom">
+            <span>Custom</span>
+            <input type="color" id="theme-custom" value="#ff3900" aria-label="Custom accent color">
+          </label>
+        </div>
+      </div>
+    </aside>
+  </header>
+  
+  
+
   <nav class="filters" id="filters" aria-label="Filter demos by category">
     <button class="filter-btn is-active" data-filter="all" aria-pressed="true">All</button>
     <button class="filter-btn" data-filter="components" aria-pressed="false">Components</button>
@@ -972,24 +872,46 @@
   <main class="gallery" id="gallery"></main>
 </div>
 
-<!-- Full-screen viewer -->
+
+
+
+
+
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+
   <div class="modal__panel">
     <div class="modal__bar">
       <span class="modal__title" id="modal-title">Demo</span>
       <div class="modal__actions">
+        
+        
         <button class="btn-copy" id="modal-copy" type="button">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
           Copy Code
         </button>
+        
         <button class="modal__close" id="modal-close" type="button" aria-label="Close preview">&times;</button>
       </div>
     </div>
+    
+    
     <div class="modal__frame-wrap" id="modal-frame-wrap">
+    
       <iframe class="modal__iframe" id="modal-frame" sandbox="allow-scripts allow-same-origin allow-popups" title="Demo preview"></iframe>
+       
     </div>
+    
   </div>
 </div>
+
+
+
+
+
+
+
+
+
 
 <script>
 /* =========================================================================
@@ -1027,7 +949,7 @@ const DEMOS = [
   },
   {
     category: 'components', type: 'srcdoc', title: 'Minimal 404', desc: 'Clean typography with a subtle gradient text effect.', tags: ['CSS', 'Typography'],
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center}h1{margin:0;font-size:72px;font-weight:800;background:linear-gradient(135deg,#fb9a60,#ff3900);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}p{margin:8px 0 0;color:#8b8ba3;font-size:14px}</style></head><body><div><h1>404</h1><p>Page not found</p></div></body></html>`
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center}h1{margin:0;font-size:72px;font-weight:800;background:linear-gradient(135deg,#fb9a60,#ff3900);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}p{margin:8px 0 0;color:#8b8ba3;font-size:14px}</style></head><body><div><h1>404</h1><p>Oops, Page not found</p></div></body></html>`
   },
   {
     category: 'components', type: 'srcdoc', title: 'Terminal 404', desc: 'Retro terminal style with monospace font.', tags: ['Retro', 'CSS'],
@@ -1046,16 +968,16 @@ const DEMOS = [
     html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:repeating-linear-gradient(45deg,#1a1a2e,#1a1a2e 10px,#16213e 10px,#16213e 20px)}</style></head><body></body></html>`
   },
   {
-    category: 'components', type: 'srcdoc', title: 'Centered Hero', desc: 'Classic centered layout with call-to-action.', tags: ['Layout', 'Marketing'],
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center;padding:20px}h1{margin:0 0 12px;font-size:36px;letter-spacing:-.03em;color:#111}p{margin:0 0 24px;color:#666;font-size:14px;max-width:300px}.btn{padding:12px 24px;border:0;border-radius:8px;background:#5b6cff;color:#fff;font-weight:700;cursor:pointer;transition:transform .2s}.btn:hover{transform:scale(1.05)}</style></head><body><h1>Build better products</h1><p>The all-in-one platform for modern teams to ship faster.</p><button class="btn">Get Started</button></body></html>`
+    category: 'components', type: 'srcdoc', title: 'Split Hero', desc: 'Text on the left, visual on the right.', tags: ['Layout', 'Split'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:40px;background:#0f1020;font-family:system-ui,sans-serif;color:#fff}.text{flex:1;max-width:250px}h1{margin:0 0 12px;font-size:28px;line-height:1.2}p{margin:0 0 20px;color:#9a9baa;font-size:13px}.btn{position:relative;overflow:hidden;padding:10px 20px;border:0;border-radius:6px;background:#fff;color:#000;font-weight:700;cursor:pointer;isolation:isolate;transition:color .3s ease}.btn::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#7c9cff,#c084fc);transform:translateX(-101%);transition:transform .4s cubic-bezier(.2,.8,.2,1);z-index:-1}.btn:hover{color:#fff}.btn:hover::before{transform:translateX(0)}.visual{flex:1;height:180px;border-radius:16px;background:linear-gradient(135deg,#7c9cff,#c084fc);box-shadow:0 20px 40px -20px rgba(124,156,255,.6)}</style></head><body><div class="text"><h1>Design Better Websites</h1><p>Create stunning interfaces with new components library.</p><button class="btn">View Porffolio</button></div><div class="visual"></div></body></html>`
   },
   {
-    category: 'components', type: 'srcdoc', title: 'Split Hero', desc: 'Text on the left, visual on the right.', tags: ['Layout', 'Split'],
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:40px;background:#0f1020;font-family:system-ui,sans-serif;color:#fff}.text{flex:1;max-width:250px}h1{margin:0 0 12px;font-size:28px;line-height:1.2}p{margin:0 0 20px;color:#9a9baa;font-size:13px}.btn{padding:10px 20px;border:0;border-radius:6px;background:#fff;color:#000;font-weight:700;cursor:pointer}.visual{flex:1;height:180px;border-radius:16px;background:linear-gradient(135deg,#7c9cff,#c084fc);box-shadow:0 20px 40px -20px rgba(124,156,255,.6)}</style></head><body><div class="text"><h1>Design without limits</h1><p>Create stunning interfaces with our new component library.</p><button class="btn">Explore</button></div><div class="visual"></div></body></html>`
+    category: 'components', type: 'srcdoc', title: 'Centered Hero', desc: 'Classic centered layout with call-to-action.', tags: ['Layout', 'Marketing'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center;padding:20px}h1{margin:0 0 12px;font-size:36px;letter-spacing:-.03em;color:#111}p{margin:0 0 24px;color:#666;font-size:14px;max-width:300px}.btn{padding:12px 24px;border:0;border-radius:8px;background:#5b6cff;color:#fff;font-weight:700;cursor:pointer;transition:transform .2s}.btn:hover{transform:scale(1.05);background:#ff751f;}.btn-outline{background:transparent;border:2px solid #5b6cff;color:#5b6cff}.btn-outline:hover{background:#5b6cff;color:#fff}</style></head><body><h1>Build better products</h1><p>The all-in-one platform for modern teams to ship faster.</p><div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><button class="btn btn-outline">Learn More</button><button class="btn">Get Started</button></div></body></html>`
   },
   {
     category: 'components', type: 'srcdoc', title: 'Dark Hero', desc: 'Neon accents and a bold headline.', tags: ['Dark', 'Neon'],
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;font-family:system-ui,sans-serif;text-align:center;padding:20px}h1{margin:0 0 16px;font-size:42px;letter-spacing:-.04em;color:#fff;text-shadow:0 0 20px rgba(124,156,255,.5)}p{margin:0 0 24px;color:#888;font-size:14px}.btn{padding:10px 24px;border:1px solid #7c9cff;border-radius:30px;background:transparent;color:#7c9cff;font-weight:700;cursor:pointer;transition:all .3s}.btn:hover{background:#7c9cff;color:#000;box-shadow:0 0 20px rgba(124,156,255,.4)}</style></head><body><h1>THE FUTURE IS NOW</h1><p>Experience the next generation of web design.</p><button class="btn">ENTER</button></body></html>`
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;font-family:system-ui,sans-serif;text-align:center;padding:20px}h1{margin:0 0 16px;font-size:42px;letter-spacing:-.04em;background:linear-gradient(135deg,#7c9cff 0%,#c084fc 50%,#ff751f 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 0 20px rgba(124,156,255,.4))}p{margin:0 0 24px;color:#888;font-size:14px}.btn{padding:10px 24px;border:1px solid #7c9cff;border-radius:30px;background:transparent;color:#fff;font-weight:700;cursor:pointer;transition:all .3s}.btn:hover{background:#7c9cff;color:#000;box-shadow:0 0 20px rgba(124,156,255,.4)}</style></head><body><h1>THE FUTURE IS NOW</h1><p>Experience the next generation of web design.</p><button class="btn">ENTER HERE</button></body></html>`
   },
   {
     category: 'components', type: 'srcdoc', title: 'Bouncing Dots', desc: 'Three dots with staggered bounce animation.', tags: ['Animation', 'Spinner'],
@@ -1067,23 +989,23 @@ const DEMOS = [
   },
   {
     category: 'components', type: 'srcdoc', title: 'Pulse Bar', desc: 'A horizontal progress bar with a pulsing fill.', tags: ['Animation', 'Progress'],
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb}.bar{width:60%;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden}.fill{width:50%;height:100%;background:#5b6cff;border-radius:4px;animation:pulse 1.5s ease-in-out infinite}@keyframes pulse{0%{opacity:.4;transform:translateX(-100%)}100%{opacity:1;transform:translateX(200%)}}</style></head><body><div class="bar"><div class="fill"></div></div></body></html>`
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020}.bar{width:60%;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden}.fill{width:50%;height:100%;background:#5b6cff;border-radius:4px;animation:pulse 1.5s ease-in-out infinite}@keyframes pulse{0%{opacity:.4;transform:translateX(-100%)}100%{opacity:1;transform:translateX(200%)}}</style></head><body><div class="bar"><div class="fill"></div></div></body></html>`
+  },
+  {
+    category: 'components', type: 'srcdoc', title: 'Apple Pay Style', desc: 'Minimalist alternative payment button.', tags: ['Button', 'UI'],
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020;font-family:system-ui,sans-serif}.btn{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#7c9cff,#ff751f);color:#fff;border:0;padding:14px 28px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:transform .2s}.btn:hover{transform:scale(1.02)}.btn svg{width:20px;height:20px;fill:currentColor}</style></head><body><button class="btn"><svg viewBox="0 0 24 24"><path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"/></svg> Pay</button></body></html>`
   },
   {
     category: 'components', type: 'srcdoc', title: 'Card Input', desc: 'Credit card form with clean inputs.', tags: ['Form', 'UI'],
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif}.card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 10px 30px -10px rgba(0,0,0,.1);width:260px}h3{margin:0 0 16px;font-size:14px;color:#666}input{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:6px;font-size:13px;box-sizing:border-box}button{width:100%;padding:12px;border:0;border-radius:6px;background:#5b6cff;color:#fff;font-weight:700;cursor:pointer}</style></head><body><div class="card"><h3>Payment Details</h3><input placeholder="Card Number"><input placeholder="MM / YY"><input placeholder="CVC"><button>Pay $49.00</button></div></body></html>`
-  },
-  {
-    category: 'components', type: 'srcdoc', title: 'Apple Pay Style', themeable: false, desc: 'Minimalist alternative payment button.', tags: ['Button', 'UI'],
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#fff;font-family:system-ui,sans-serif}.btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#000;color:#fff;border:0;padding:14px 28px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:transform .2s}.btn:hover{transform:scale(1.02)}.btn svg{width:20px;height:20px;fill:currentColor}</style></head><body><button class="btn"><svg viewBox="0 0 24 24"><path d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.1,22C7.79,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"/></svg> Pay</button></body></html>`
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7f7;font-family:system-ui,sans-serif}.card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 10px 30px -10px rgba(0,0,0,.1);width:260px}h3{margin:0 0 16px;font-size:14px;color:#666}input{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:6px;font-size:13px;box-sizing:border-box}button{width:100%;padding:12px;border:0;border-radius:6px;background:linear-gradient(135deg,#7c9cff,#ff751f);color:#fff;font-weight:700;cursor:pointer}</style></head><body><div class="card"><h3>Payment Details</h3><input placeholder="Card Number"><input placeholder="MM / YY"><input placeholder="CVC"><button>Pay $49.00</button></div></body></html>`
   },
   {
     category: 'components', type: 'srcdoc', title: 'Success State', desc: 'Animated checkmark on successful payment.', tags: ['Animation', 'Success'],
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#f7f7fb;font-family:system-ui,sans-serif;text-align:center}.circle{width:60px;height:60px;border-radius:50%;background:#22c55e;display:grid;place-items:center;margin:0 auto 16px;animation:pop .5s cubic-bezier(.2,.8,.2,1)}.check{width:24px;height:14px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(-45deg) translate(2px,-2px)}h3{margin:0 0 4px;font-size:18px;color:#111}p{margin:0;font-size:13px;color:#666}@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}</style></head><body><div><div class="circle"><div class="check"></div></div><h3>Payment Successful</h3><p>Your receipt has been sent.</p></div></body></html>`
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020;font-family:system-ui,sans-serif;text-align:center}.circle-wrap{position:relative;width:60px;height:60px;margin:0 auto 16px}.circle{position:relative;width:60px;height:60px;border-radius:50%;background:#22c55e;display:grid;place-items:center;z-index:2;animation:pop .5s cubic-bezier(.2,.8,.2,1)}.circle-wrap::before,.circle-wrap::after{content:"";position:absolute;inset:0;border-radius:50%;background:#22c55e;opacity:.55;z-index:1;animation:wave 2s ease-out infinite}.circle-wrap::after{animation-delay:1s}.check{width:24px;height:14px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(-45deg) translate(2px,-2px)}h3{margin:0 0 4px;font-size:18px;color:#111}p{margin:0;font-size:13px;color:#666}@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}@keyframes wave{0%{transform:scale(1);opacity:.55}80%{opacity:0}100%{transform:scale(2.4);opacity:0}}</style></head><body><div><div class="circle-wrap"><div class="circle"><div class="check"></div></div></div><h3>Payment Successful</h3><p>Your receipt has been sent.</p></div></body></html>`
   },
   {
     category: 'components', type: 'srcdoc', title: 'Star Rating', desc: 'Simple 5-star rating display.', tags: ['Stars', 'UI'],
-    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020}.stars{display:flex;gap:4px;color:#fbbf24;font-size:24px;letter-spacing:2px}</style></head><body><div class="stars">★★★★★</div></body></html>`
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#0f1020}.stars{display:flex;gap:4px;color:#f59e0b;font-size:24px;letter-spacing:2px}</style></head><body><div class="stars">★★★★★</div></body></html>`
   },
   {
     category: 'components', type: 'srcdoc', title: 'Testimonial Card', desc: 'User avatar, quote, and name.', tags: ['Card', 'Testimonial'],
@@ -1172,7 +1094,7 @@ const DEMOS = [
 ];
 
 /* =========================================================================
-   2. Helpers: slugify + thumbnail resolver
+   2. Helpers
    ========================================================================= */
 const gallery = document.getElementById('gallery');
 
@@ -1183,7 +1105,6 @@ const ARROW_SVG = `
     <path d="M8 7h9v9"/>
   </svg>`;
 
-/* Virtual viewport width for scaled iframes (cards + modal) */
 const VIRTUAL_WIDTH = 1440;
 
 function slugify(str) {
@@ -1208,8 +1129,7 @@ function isValidDemoUrl(url) {
 }
 
 /* =========================================================================
-   2b. Accent color theming  (MUST run before the gallery builder
-       because the builder calls buildThemedHtml(demo, currentAccent))
+   2b. Accent color theming
    ========================================================================= */
 const COLOR_PRESETS = [
   { name: 'Orange', hex: '#ff3900' },
@@ -1273,6 +1193,8 @@ function shadesFor(accentHex) {
 
 const THEME_HEX_MAP = {
   '#ff3900': 'accent',
+  '#ff751f': 'light',
+  '#f59e0b': 'accent',
   '#ff5011': 'accent',
   '#f15b11': 'accent',
   '#d43a00': 'dark',
@@ -1308,8 +1230,11 @@ let currentAccent = (() => {
   catch { return DEFAULT_ACCENT; }
 })();
 
-const swatchWrap = document.getElementById('theme-swatches');
+const swatchWrap  = document.getElementById('theme-swatches');
 const customInput = document.getElementById('theme-custom');
+const themeToggle = document.getElementById('theme-toggle');
+const themePanel  = document.getElementById('theme-panel');
+const currentDot  = document.getElementById('theme-current-dot');
 
 COLOR_PRESETS.forEach(({ name, hex }) => {
   const btn = document.createElement('button');
@@ -1327,6 +1252,14 @@ if (customInput) {
   customInput.addEventListener('input', (e) => setAccent(e.target.value));
 }
 
+if (themeToggle && themePanel) {
+  themeToggle.addEventListener('click', () => {
+    const willOpen = themeToggle.getAttribute('aria-expanded') !== 'true';
+    themeToggle.setAttribute('aria-expanded', String(willOpen));
+    themePanel.hidden = !willOpen;
+  });
+}
+
 function setAccent(hex) {
   currentAccent = hex.toLowerCase();
   try { localStorage.setItem(ACCENT_STORAGE_KEY, currentAccent); } catch {}
@@ -1334,20 +1267,21 @@ function setAccent(hex) {
   swatchWrap.querySelectorAll('.swatch').forEach(sw => {
     sw.classList.toggle('is-active', sw.dataset.color === currentAccent);
   });
+
   if (customInput && customInput.value.toLowerCase() !== currentAccent) {
     customInput.value = currentAccent;
   }
 
+  if (currentDot) currentDot.style.background = currentAccent;
+
   applyThumbTheme(currentAccent);
 
-  // Re-render every live srcdoc card iframe in the grid
   document.querySelectorAll('.card').forEach(card => {
     if (!card._demo || card._demo.type !== 'srcdoc') return;
     const iframe = card.querySelector('.card__iframe');
     if (iframe) iframe.srcdoc = buildThemedHtml(card._demo, currentAccent);
   });
 
-  // Re-render the modal if it's open on an srcdoc demo
   if (currentDemo && modal.classList.contains('is-open') && currentDemo.type === 'srcdoc') {
     modalFrame.srcdoc = buildThemedHtml(currentDemo, currentAccent);
   }
@@ -1366,18 +1300,52 @@ function applyThumbTheme(accentHex) {
 }
 
 /* =========================================================================
-   2c. Card iframe scaling helpers
+   2c. Mobile navigation — burger toggle at ≤1050px
    ========================================================================= */
-function scaleSingleCardIframe(iframe) {
-  const parent = iframe.parentElement;
-  if (!parent) return;
-  const w = parent.clientWidth;
-  if (!w) return;
-  iframe.style.transform = `scale(${w / VIRTUAL_WIDTH})`;
+const navBurger = document.getElementById('nav-burger');
+const navMenu   = document.getElementById('nav-menu');
+
+function closeMobileNav() {
+  if (!navBurger || !navMenu) return;
+  navBurger.setAttribute('aria-expanded', 'false');
+  navMenu.classList.remove('is-open');
+}
+function openMobileNav() {
+  if (!navBurger || !navMenu) return;
+  navBurger.setAttribute('aria-expanded', 'true');
+  navMenu.classList.add('is-open');
 }
 
-function scaleAllCardIframes() {
-  document.querySelectorAll('.card__iframe--scaled').forEach(scaleSingleCardIframe);
+if (navBurger && navMenu) {
+  navBurger.addEventListener('click', () => {
+    const isOpen = navBurger.getAttribute('aria-expanded') === 'true';
+    if (isOpen) closeMobileNav(); else openMobileNav();
+  });
+
+  navMenu.querySelectorAll(':scope > a.nav-link, :scope > a.nav-cta').forEach(link => {
+    link.addEventListener('click', () => closeMobileNav());
+  });
+  navMenu.querySelectorAll('.submenu-link').forEach(link => {
+    link.addEventListener('click', () => closeMobileNav());
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!navMenu.classList.contains('is-open')) return;
+    if (navMenu.contains(e.target) || navBurger.contains(e.target)) return;
+    closeMobileNav();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navMenu.classList.contains('is-open')) {
+      closeMobileNav();
+      navBurger.focus();
+    }
+  });
+
+  const mq = window.matchMedia('(min-width: 1051px)');
+  const onMqChange = (ev) => { if (ev.matches) closeMobileNav(); };
+  if (mq.addEventListener) mq.addEventListener('change', onMqChange);
+  else mq.addListener(onMqChange);
 }
 
 /* =========================================================================
@@ -1387,14 +1355,12 @@ DEMOS.forEach((demo) => {
   const card = document.createElement('article');
   card.className = 'card';
   card.dataset.category = demo.category;
-  card._demo = demo;   // used by setAccent() to re-theme
+  card._demo = demo;
 
   const frame = document.createElement('div');
   frame.className = 'card__frame';
 
-  /* ---------- Preview inside the card ---------- */
   if (demo.type === 'url') {
-    /* External URL demo → static thumbnail image. */
     const thumbSrc = thumbFor(demo);
     if (thumbSrc) {
       const img = document.createElement('img');
@@ -1403,12 +1369,6 @@ DEMOS.forEach((demo) => {
       img.decoding = 'async';
       img.alt = demo.title + ' preview';
       img.src = thumbSrc;
-      img.style.cursor = 'pointer';
-      img.addEventListener('click', (e) => {
-        e.stopPropagation();
-        openModal(demo);
-      });
-
       img.addEventListener('error', () => {
         img.remove();
         const ph = document.createElement('div');
@@ -1416,7 +1376,6 @@ DEMOS.forEach((demo) => {
         ph.textContent = 'Preview unavailable';
         frame.prepend(ph);
       }, { once: true });
-
       frame.appendChild(img);
     } else {
       const ph = document.createElement('div');
@@ -1425,9 +1384,9 @@ DEMOS.forEach((demo) => {
       frame.appendChild(ph);
     }
   } else {
-    /* Hand-coded srcdoc component → live iframe preview. */
+    /* srcdoc card: interactive iframe — user can click/hover inside */
     const iframe = document.createElement('iframe');
-    iframe.className = 'card__iframe card__iframe--scaled';
+    iframe.className = 'card__iframe';
     iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups');
     iframe.setAttribute('loading', 'lazy');
     iframe.setAttribute('title', demo.title + ' preview');
@@ -1435,24 +1394,20 @@ DEMOS.forEach((demo) => {
     frame.appendChild(iframe);
   }
 
-  /* Whole preview tile is clickable */
-  frame.addEventListener('click', () => openModal(demo));
-
-  /* ---------- Launch button ---------- */
   const launch = document.createElement('button');
   launch.type = 'button';
   launch.className = 'card__launch';
   launch.setAttribute('aria-label', 'Open ' + demo.title + ' preview');
   launch.innerHTML = ARROW_SVG;
   launch.addEventListener('click', (e) => {
-    e.stopPropagation();   // avoid double-open via frame click
+    e.stopPropagation();
     openModal(demo);
   });
   frame.appendChild(launch);
 
-  /* ---------- Card body ---------- */
   const body = document.createElement('div');
   body.className = 'card__body';
+  body.addEventListener('click', () => openModal(demo));
 
   const title = document.createElement('h2');
   title.className = 'card__title';
@@ -1475,10 +1430,6 @@ DEMOS.forEach((demo) => {
   gallery.appendChild(card);
 });
 
-/* Scale every card iframe after the grid has been inserted + laid out */
-requestAnimationFrame(scaleAllCardIframes);
-window.addEventListener('resize', scaleAllCardIframes);
-
 /* =========================================================================
    4. Filtering
    ========================================================================= */
@@ -1499,9 +1450,6 @@ filterButtons.forEach(btn => {
       const match = selected === 'all' || card.dataset.category === selected;
       card.classList.toggle('is-hidden', !match);
     });
-
-    /* Re-scale visible iframes now that layout changed */
-    requestAnimationFrame(scaleAllCardIframes);
   });
 });
 
@@ -1511,20 +1459,16 @@ filterButtons.forEach(btn => {
 function scaleModalIframe() {
   const frameWrap = document.getElementById('modal-frame-wrap');
   if (!frameWrap) return;
-
   const iframe = modalFrame;
   if (!iframe || !iframe.classList.contains('modal__iframe--scaled')) return;
-
   const wrapWidth = frameWrap.clientWidth;
   if (!wrapWidth) return;
-
   iframe.style.transform = `scale(${wrapWidth / VIRTUAL_WIDTH})`;
 }
-
 window.addEventListener('resize', scaleModalIframe);
 
 /* =========================================================================
-   6. Submenus
+   6. Desktop submenus
    ========================================================================= */
 const submenuWraps = document.querySelectorAll('.has-submenu');
 
@@ -1609,10 +1553,7 @@ function openModal(demo) {
   modalCopy.innerHTML = COPY_ICON;
 
   modalClose.focus();
-
-  requestAnimationFrame(() => {
-    scaleModalIframe();
-  });
+  requestAnimationFrame(scaleModalIframe);
 }
 
 function closeModal() {
@@ -1652,9 +1593,7 @@ async function copyText(text) {
 }
 
 async function fetchDemoSource(demo, accent) {
-  if (demo.type === 'srcdoc') {
-    return buildThemedHtml(demo, accent);
-  }
+  if (demo.type === 'srcdoc') return buildThemedHtml(demo, accent);
   if (demo.type === 'url' && isValidDemoUrl(demo.src)) {
     const res = await fetch(demo.src, { credentials: 'omit' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1666,15 +1605,12 @@ async function fetchDemoSource(demo, accent) {
 
 modalCopy.addEventListener('click', async () => {
   if (!currentDemo || copyInFlight) return;
-
   copyInFlight = true;
   modalCopy.disabled = true;
-
   try {
     const textToCopy = await fetchDemoSource(currentDemo, currentAccent);
     const ok = await copyText(textToCopy);
     if (!ok) throw new Error('Copy failed');
-
     modalCopy.classList.add('is-copied');
     modalCopy.innerHTML = DONE_ICON;
     clearTimeout(copyTimer);
@@ -1693,7 +1629,6 @@ modalCopy.addEventListener('click', async () => {
 });
 
 modalClose.addEventListener('click', closeModal);
-
 modal.addEventListener('click', (event) => {
   if (event.target === modal) closeModal();
 });
@@ -1723,23 +1658,13 @@ setAccent(currentAccent);
   const HOVER_COLOR = '#ff3900';
 
   Object.assign(btn.style, {
-    position: 'fixed',
-    bottom: '24px',
-    right: '24px',
-    width: '48px',
-    height: '48px',
-    padding: '0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '50%',
-    border: 'none',
-    background: BASE_COLOR,
-    color: '#fff',
-    cursor: 'pointer',
+    position: 'fixed', bottom: '24px', right: '24px',
+    width: '48px', height: '48px', padding: '0',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    borderRadius: '50%', border: 'none',
+    background: BASE_COLOR, color: '#fff', cursor: 'pointer',
     boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
-    opacity: '0',
-    visibility: 'hidden',
+    opacity: '0', visibility: 'hidden',
     transform: 'translateY(10px) scale(1)',
     transition: 'opacity 0.25s ease, transform 0.25s ease, visibility 0.25s, background 0.2s ease, box-shadow 0.25s ease',
     zIndex: '9999'
@@ -1753,13 +1678,11 @@ setAccent(currentAccent);
     btn.style.boxShadow = '0 8px 20px rgba(241,91,17,0.45)';
     svg.style.transform = 'translateY(-2px)';
   });
-
   btn.addEventListener('mouseleave', () => {
     btn.style.background = BASE_COLOR;
     btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
     svg.style.transform = 'translateY(0)';
   });
-
   btn.addEventListener('mousedown', () => {
     btn.style.transform = btn.dataset.visible === 'true'
       ? 'translateY(0) scale(0.92)'
@@ -1770,7 +1693,6 @@ setAccent(currentAccent);
       ? 'translateY(0) scale(1)'
       : 'translateY(10px) scale(1)';
   });
-
   btn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
@@ -1794,9 +1716,6 @@ setAccent(currentAccent);
   window.addEventListener('scroll', toggleVisibility, { passive: true });
   toggleVisibility();
 })();
-
-
-  
 </script>
 
 </body>
