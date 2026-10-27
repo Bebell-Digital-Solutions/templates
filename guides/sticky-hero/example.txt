@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sticky stack recede</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #0e0f14; }
+  body { font-family: system-ui, sans-serif; color: #fff; }
+
+  /* the outer wrapper establishes the stacking context */
+  .stack {
+    position: relative;
+    /* each layer is sticky to the top of the viewport */
+  }
+
+  /* every layer after the last is a sticky card */
+  .layer {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    /* z-index increasing so each covers the previous */
+  }
+  .layer:nth-child(1) { z-index: 0; }
+  .layer:nth-child(2) { z-index: 10; }
+  .layer:nth-child(3) { z-index: 20; }
+  /* the last one is a normal block, so page flow resumes under it */
+  .layer:last-child { position: relative; z-index: 30; }
+
+  /* the transform lives HERE, not on .layer — a transformed ancestor
+     would break position:sticky for its children */
+  .layer__inner {
+    position: relative;
+    height: 100vh;
+    transform-origin: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .layer--hero     .layer__inner { background: #f7fafb; color: #090a0b; }
+  .layer--dark     .layer__inner { background: #0e0f14; color: #02d2e3; }
+  .layer--timeline .layer__inner { background: #090a0b; color: #fff; }
+
+  /* the shade that darkens the receding card */
+  .layer__shade {
+    position: absolute;
+    inset: 0;
+    background: #000;
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="stack">
+
+  <section class="layer layer--hero">
+    <div class="layer__inner">Hero</div>
+    <div class="layer__shade"></div>
+  </section>
+
+  <section class="layer layer--dark">
+    <div class="layer__inner">Season</div>
+    <div class="layer__shade"></div>
+  </section>
+
+  <section class="layer layer--timeline">
+    <div class="layer__inner">Timeline</div>
+    <!-- last one has no shade and isn't sticky -->
+  </section>
+
+</div>
+
+<script>
+  // Grab every pinned layer (all but the last) with its inner + shade + next sibling
+  const layers = [...document.querySelectorAll('.stack > .layer')];
+  const pinned = layers.slice(0, -1).map((layer, i) => ({
+    inner: layer.querySelector('.layer__inner'),
+    shade: layer.querySelector('.layer__shade'),
+    next:  layers[i + 1],
+  }));
+
+  const RECEDE_SCALE = 0.9;   // how small the covered card gets
+  const RECEDE_SHADE = 0.55;  // how dark the covered card gets
+
+  // On phones the scale is jarring (the card is full-width), so shade only.
+  const phone = window.matchMedia('(max-width: 639px)');
+
+  let raf = null;
+  function apply() {
+    const vh = window.innerHeight || 1;
+    const shrink = phone.matches ? 0 : 1 - RECEDE_SCALE;
+
+    for (const { inner, shade, next } of pinned) {
+      // p = 0  → the next layer is still a full viewport away (nothing covered yet)
+      // p = 1  → the next layer has taken the whole viewport
+      const p = Math.min(1, Math.max(0, 1 - next.getBoundingClientRect().top / vh));
+
+      // No transform at rest. A persistent scale(1) would make this layer a
+      // containing block for any position:fixed children (like a loader),
+      // pinning them to the card instead of the viewport.
+      inner.style.transform = p > 0 && shrink > 0 ? `scale(${1 - shrink * p})` : '';
+      inner.style.willChange = p > 0 && shrink > 0 ? 'transform' : '';
+
+      shade.style.opacity = String(RECEDE_SHADE * p);
+
+      // Fully covered: stop painting it (saves work for heavy content)
+      inner.style.visibility = p >= 1 ? 'hidden' : 'visible';
+    }
+  }
+
+  // Coalesce scroll into one rAF
+  window.addEventListener('scroll', () => {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(apply);
+  }, { passive: true });
+  window.addEventListener('resize', apply);
+
+  apply();
+</script>
+
+</body>
+</html>
