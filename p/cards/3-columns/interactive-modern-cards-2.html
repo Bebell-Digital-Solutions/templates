@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asymmetric 3-Card Modernist Component</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #bdc5cd;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 2rem 1rem;
+    }
+
+    /* Asymmetric Silhouette using SVG clip path */
+    .card-clipped {
+      clip-path: url(#card-silhouette-clip);
+      -webkit-clip-path: url(#card-silhouette-clip);
+    }
+
+    /* 3D Perspective Card Container */
+    .card-wrap {
+      perspective: 1200px;
+    }
+
+    .card-inner {
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    /* Specular dynamic spotlight overlay */
+    .spotlight-overlay {
+      background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 255, 255, 0.09),
+        transparent 50%
+      );
+    }
+
+    /* Center card crimson ambient glow */
+    .glow-crimson {
+      background: radial-gradient(
+        ellipse at 35% 35%,
+        rgba(220, 38, 38, 0.42) 0%,
+        rgba(153, 27, 27, 0.22) 42%,
+        transparent 72%
+      );
+    }
+
+    /* Subtle pulsing dot animation */
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.85; }
+    }
+    .active-dot {
+      animation: pulse-dot 2.4s ease-in-out infinite;
+    }
+
+    /* Canvas styling */
+    .ribbon-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 1.25rem;
+    }
+  </style>
+</head>
+<body class="selection:bg-neutral-800 selection:text-white">
+
+  <!-- ========================================== -->
+  <!-- SVG DEFINITIONS: Asymmetric Silhouette Clip -->
+  <!-- Normalized coordinates (0 to 1) for fluid responsiveness -->
+  <!-- ========================================== -->
+  <svg class="absolute w-0 h-0 overflow-hidden" aria-hidden="true" focusable="false">
+    <defs>
+      <clipPath id="card-silhouette-clip" clipPathUnits="objectBoundingBox">
+        <!-- 
+          Card silhouette path:
+          - Starts top-left with smooth round corner
+          - Horizontal run to x ~0.45
+          - Smooth S-curve step-up to elevated top-right tab (y=0)
+          - Rounded top-right tab corner and right side
+          - Bottom-right corner rounding to bottom edge
+          - Steps down smoothly on bottom-left to recessed pagination pod
+        -->
+        <path d="
+          M 0.12,0.065
+          H 0.40
+          C 0.47,0.065 0.49,0.00 0.58,0.00
+          H 0.88
+          C 0.95,0.00 1.00,0.04 1.00,0.09
+          V 0.88
+          C 1.00,0.94 0.95,0.985 0.88,0.985
+          H 0.58
+          C 0.48,0.985 0.46,1.00 0.38,1.00
+          H 0.12
+          C 0.05,1.00 0.00,0.96 0.00,0.91
+          V 0.155
+          C 0.00,0.105 0.05,0.065 0.12,0.065
+          Z
+        " />
+      </clipPath>
+    </defs>
+  </svg>
+
+  <!-- ========================================== -->
+  <!-- MAIN DECK: 3 Interactive Cards -->
+  <!-- ========================================== -->
+  <main class="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-7 lg:gap-6 px-4 py-8">
+
+    <!-- ==================== CARD 1: BLUE ==================== -->
+    <div class="card-wrap w-full max-w-[340px] sm:w-[325px] h-[480px]">
+      <div class="card-inner relative w-full h-full rounded-[2.25rem] bg-[#0c0d0f] shadow-2xl shadow-black/40 hover:shadow-cyan-950/20 card-clipped p-4 flex flex-col justify-between cursor-pointer border border-white/[0.07]">
+        
+        <!-- Interactive Spotlight sheen -->
+        <div class="spotlight-overlay pointer-events-none absolute inset-0 z-20"></div>
+
+        <!-- Top Right Brand Badge inside the raised tab -->
+        <div class="w-full flex justify-end pt-1 pr-3 z-10">
+          <span class="text-[12px] font-medium tracking-tight text-neutral-300 flex items-center gap-1.5 opacity-90">
+            <span class="text-neutral-400 font-light">—</span> Archive Studio®
+          </span>
+        </div>
+
+        <!-- Embedded 3D Visual Artwork Media Frame -->
+        <div class="relative w-full h-[225px] mt-1 rounded-[1.25rem] overflow-hidden bg-black/95 shadow-inner border border-white/10 group">
+          <canvas id="canvas-blue" class="ribbon-canvas"></canvas>
+          
+          <!-- Inner Shadow Vignette -->
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+
+          <!-- In-Media Overlay Headline -->
+          <div class="absolute bottom-3.5 left-4 right-4 z-10 pointer-events-none">
+            <p class="text-white text-[17px] sm:text-[18px] font-semibold leading-snug tracking-tight text-white/95 drop-shadow-sm">
+              It’s high time to discuss the details.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Content: Editorial Title & Stepped-Down Status Pod -->
+        <div class="w-full flex flex-col justify-end pb-2 px-1 z-10 mt-auto">
+          <!-- Large Editorial Statement -->
+          <div class="mb-5 pl-1.5">
+            <h2 class="text-[40px] sm:text-[42px] font-normal tracking-[-0.035em] text-[#edf0f2] leading-tight">
+              Let’s Talk.
+            </h2>
+          </div>
+
+          <!-- Bottom Recessed Status Dots (3 dots) -->
+          <div class="flex items-center gap-2 pl-2 pb-0.5">
+            <button aria-label="Status active" class="status-dot active-dot w-2.5 h-2.5 rounded-full bg-[#0088ff] shadow-[0_0_10px_#0099ff] transition-all duration-300"></button>
+            <button aria-label="Status inactive 1" class="status-dot w-2 h-2 rounded-full bg-neutral-700/80 hover:bg-neutral-600 transition-colors duration-200"></button>
+            <button aria-label="Status inactive 2" class="status-dot w-2 h-2 rounded-full bg-neutral-700/80 hover:bg-neutral-600 transition-colors duration-200"></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ==================== CARD 2: CRIMSON / RED ==================== -->
+    <div class="card-wrap w-full max-w-[340px] sm:w-[325px] h-[480px]">
+      <div class="card-inner relative w-full h-full rounded-[2.25rem] bg-[#0c0d0f] shadow-2xl shadow-black/40 hover:shadow-red-950/25 card-clipped p-4 flex flex-col justify-between cursor-pointer border border-white/[0.07] overflow-hidden">
+        
+        <!-- Ambient Red Light Bleed across the card body (as shown in reference screenshot) -->
+        <div class="glow-crimson pointer-events-none absolute inset-0 z-0"></div>
+
+        <!-- Interactive Spotlight sheen -->
+        <div class="spotlight-overlay pointer-events-none absolute inset-0 z-20"></div>
+
+        <!-- Top Right Brand Badge inside the raised tab -->
+        <div class="w-full flex justify-end pt-1 pr-3 z-10">
+          <span class="text-[12px] font-medium tracking-tight text-neutral-300 flex items-center gap-1.5 opacity-90">
+            <span class="text-neutral-400 font-light">—</span> Level Up®
+          </span>
+        </div>
+
+        <!-- Embedded 3D Visual Artwork Media Frame -->
+        <div class="relative w-full h-[225px] mt-1 rounded-[1.25rem] overflow-hidden bg-black/95 shadow-inner border border-red-500/15 group">
+          <canvas id="canvas-red" class="ribbon-canvas"></canvas>
+          
+          <!-- Inner Shadow Vignette -->
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#140202]/90 via-black/25 to-transparent"></div>
+
+          <!-- In-Media Overlay Headline -->
+          <div class="absolute bottom-3.5 left-4 right-4 z-10 pointer-events-none">
+            <p class="text-white text-[17px] sm:text-[18px] font-semibold leading-snug tracking-tight text-white/95 drop-shadow-sm">
+              A new level of quality for your brand.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Content: Editorial Title & Stepped-Down Status Pod -->
+        <div class="w-full flex flex-col justify-end pb-2 px-1 z-10 mt-auto">
+          <!-- Large Editorial Statement -->
+          <div class="mb-5 pl-1.5">
+            <h2 class="text-[40px] sm:text-[42px] font-normal tracking-[-0.035em] text-[#edf0f2] leading-tight">
+              +190%
+            </h2>
+          </div>
+
+          <!-- Bottom Recessed Status Dots (3 dots) -->
+          <div class="flex items-center gap-2 pl-2 pb-0.5">
+            <button aria-label="Status active" class="status-dot active-dot w-2.5 h-2.5 rounded-full bg-[#ff3b30] shadow-[0_0_10px_#ff453a] transition-all duration-300"></button>
+            <button aria-label="Status active 2" class="status-dot active-dot w-2.5 h-2.5 rounded-full bg-[#ff3b30] shadow-[0_0_10px_#ff453a] transition-all duration-300"></button>
+            <button aria-label="Status inactive" class="status-dot w-2 h-2 rounded-full bg-neutral-700/80 hover:bg-neutral-600 transition-colors duration-200"></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ==================== CARD 3: PURPLE / INDIGO ==================== -->
+    <div class="card-wrap w-full max-w-[340px] sm:w-[325px] h-[480px]">
+      <div class="card-inner relative w-full h-full rounded-[2.25rem] bg-[#0c0d0f] shadow-2xl shadow-black/40 hover:shadow-purple-950/20 card-clipped p-4 flex flex-col justify-between cursor-pointer border border-white/[0.07]">
+        
+        <!-- Interactive Spotlight sheen -->
+        <div class="spotlight-overlay pointer-events-none absolute inset-0 z-20"></div>
+
+        <!-- Top Right Brand Badge inside the raised tab -->
+        <div class="w-full flex justify-end pt-1 pr-3 z-10">
+          <span class="text-[12px] font-medium tracking-tight text-neutral-300 flex items-center gap-1.5 opacity-90">
+            <span class="text-neutral-400 font-light">—</span> Spider's Lair®
+          </span>
+        </div>
+
+        <!-- Embedded 3D Visual Artwork Media Frame -->
+        <div class="relative w-full h-[225px] mt-1 rounded-[1.25rem] overflow-hidden bg-black/95 shadow-inner border border-purple-500/15 group">
+          <canvas id="canvas-purple" class="ribbon-canvas"></canvas>
+          
+          <!-- Inner Shadow Vignette -->
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+
+          <!-- In-Media Overlay Headline -->
+          <div class="absolute bottom-3.5 left-4 right-4 z-10 pointer-events-none">
+            <p class="text-white text-[17px] sm:text-[18px] font-semibold leading-snug tracking-tight text-white/95 drop-shadow-sm">
+              The spiders are ready to work.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Content: Editorial Title & Stepped-Down Status Pod -->
+        <div class="w-full flex flex-col justify-end pb-2 px-1 z-10 mt-auto">
+          <!-- Large Editorial Statement -->
+          <div class="mb-5 pl-1.5">
+            <h2 class="text-[40px] sm:text-[42px] font-normal tracking-[-0.035em] text-[#edf0f2] leading-tight">
+              One Call.
+            </h2>
+          </div>
+
+          <!-- Bottom Recessed Status Dots (3 dots) -->
+          <div class="flex items-center gap-2 pl-2 pb-0.5">
+            <button aria-label="Status active 1" class="status-dot active-dot w-2.5 h-2.5 rounded-full bg-[#bf5af2] shadow-[0_0_10px_#c05bf2] transition-all duration-300"></button>
+            <button aria-label="Status active 2" class="status-dot active-dot w-2.5 h-2.5 rounded-full bg-[#bf5af2] shadow-[0_0_10px_#c05bf2] transition-all duration-300"></button>
+            <button aria-label="Status active 3" class="status-dot active-dot w-2.5 h-2.5 rounded-full bg-[#bf5af2] shadow-[0_0_10px_#c05bf2] transition-all duration-300"></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- PROCEDURAL 3D PARAMETRIC FIN RENDERER & JS -->
+  <!-- ========================================== -->
+  <script>
+    /**
+     * High-fidelity 3D Parametric Architectural Fins Generator.
+     * Recreates the undulating parametric spiral fins seen in the screenshot
+     * with high-res rendering, directional lighting, and gradient shading.
+     */
+    class ParametricFinRenderer {
+      constructor(canvasId, theme) {
+        this.canvas = document.getElementById(canvasId);
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.theme = theme; // 'blue', 'red', or 'purple'
+        this.time = Math.random() * 50;
+        this.init();
+      }
+
+      init() {
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+      }
+
+      resize() {
+        const rect = this.canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        this.width = rect.width;
+        this.height = rect.height;
+        this.canvas.width = this.width * dpr;
+        this.canvas.height = this.height * dpr;
+        this.ctx.resetTransform();
+        this.ctx.scale(dpr, dpr);
+      }
+
+      draw() {
+        this.time += 0.008;
+        const ctx = this.ctx;
+        const w = this.width;
+        const h = this.height;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Dark deep base background
+        ctx.fillStyle = '#05070a';
+        ctx.fillRect(0, 0, w, h);
+
+        const finsCount = 38;
+        const cx = w * 0.45;
+        const cy = h * 0.48;
+
+        // Draw parametric ribbon series from back to front
+        for (let i = finsCount - 1; i >= 0; i--) {
+          const t = i / finsCount;
+          const animOffset = Math.sin(this.time * 1.5 + t * Math.PI * 2) * 8;
+
+          // Spatial positioning along an undulating S-curve/spiral
+          const angle = (t * 2.8) - 0.4;
+          const curveX = cx + (t - 0.5) * (w * 1.05) + Math.sin(angle * 1.8) * 25;
+          const curveY = cy + Math.cos(angle * 2.2 + 0.3) * (h * 0.28) + animOffset;
+
+          // Fin height and dimensions
+          const finHeight = (65 + Math.sin(t * Math.PI) * 110);
+          const finWidth = 14 + t * 4;
+          const finTilt = -0.55 + t * 0.85;
+
+          ctx.save();
+          ctx.translate(curveX, curveY);
+          ctx.rotate(finTilt);
+
+          // Build fin blade path with smooth bevels
+          ctx.beginPath();
+          ctx.moveTo(-finWidth / 2, -finHeight / 2);
+          ctx.lineTo(finWidth / 2, -finHeight / 2 + 10);
+          ctx.lineTo(finWidth / 3, finHeight / 2);
+          ctx.lineTo(-finWidth / 2, finHeight / 2 - 8);
+          ctx.closePath();
+
+          // Select theme-based color gradients
+          let grad;
+          if (this.theme === 'blue') {
+            grad = ctx.createLinearGradient(-finWidth, -finHeight / 2, finWidth, finHeight / 2);
+            const lum = 0.5 + Math.sin(t * Math.PI * 1.2) * 0.5;
+            grad.addColorStop(0, `rgba(${Math.floor(60 * lum)}, ${Math.floor(180 * lum + 50)}, 255, 0.95)`);
+            grad.addColorStop(0.35, `rgba(14, 116, 215, ${0.4 + lum * 0.5})`);
+            grad.addColorStop(1, 'rgba(3, 18, 55, 0.9)');
+          } else if (this.theme === 'red') {
+            grad = ctx.createLinearGradient(-finWidth, -finHeight / 2, finWidth, finHeight / 2);
+            const lum = 0.45 + Math.sin(t * Math.PI * 1.2) * 0.55;
+            grad.addColorStop(0, `rgba(255, ${Math.floor(80 * lum)}, ${Math.floor(60 * lum)}, 0.95)`);
+            grad.addColorStop(0.4, `rgba(195, 25, 25, ${0.4 + lum * 0.5})`);
+            grad.addColorStop(1, 'rgba(40, 4, 4, 0.9)');
+          } else { // purple / violet
+            grad = ctx.createLinearGradient(-finWidth, -finHeight / 2, finWidth, finHeight / 2);
+            const lum = 0.45 + Math.sin(t * Math.PI * 1.2) * 0.55;
+            grad.addColorStop(0, `rgba(${Math.floor(190 + lum * 60)}, ${Math.floor(95 * lum)}, 255, 0.95)`);
+            grad.addColorStop(0.35, `rgba(125, 45, 215, ${0.4 + lum * 0.5})`);
+            grad.addColorStop(1, 'rgba(25, 5, 50, 0.92)');
+          }
+
+          ctx.fillStyle = grad;
+          ctx.fill();
+
+          // Crisp highlight stroke on outer rim of each architectural fin
+          ctx.lineWidth = 1.2;
+          if (this.theme === 'blue') {
+            ctx.strokeStyle = `rgba(165, 225, 255, ${0.35 + t * 0.55})`;
+          } else if (this.theme === 'red') {
+            ctx.strokeStyle = `rgba(255, 175, 160, ${0.35 + t * 0.55})`;
+          } else {
+            ctx.strokeStyle = `rgba(235, 190, 255, ${0.35 + t * 0.55})`;
+          }
+          ctx.stroke();
+
+          ctx.restore();
+        }
+      }
+    }
+
+    // Initialize Parametric Renderers
+    const renderers = [
+      new ParametricFinRenderer('canvas-blue', 'blue'),
+      new ParametricFinRenderer('canvas-red', 'red'),
+      new ParametricFinRenderer('canvas-purple', 'purple')
+    ];
+
+    function animate() {
+      renderers.forEach(r => r.draw());
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+
+    // ==========================================
+    // 3D PARALLAX & CURSOR SPOTLIGHT TRACKING
+    // ==========================================
+    const cardWraps = document.querySelectorAll('.card-wrap');
+
+    cardWraps.forEach((wrap) => {
+      const card = wrap.querySelector('.card-inner');
+
+      wrap.addEventListener('mousemove', (e) => {
+        const rect = wrap.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // Normalize between -1 and 1
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -9; // Max 9 deg
+        const rotateY = ((x - centerX) / centerX) * 9;
+
+        // Apply 3D rotation and elevate
+        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+
+        // Update spotlight position
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+
+      wrap.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+        card.style.setProperty('--mouse-x', `50%`);
+        card.style.setProperty('--mouse-y', `50%`);
+      });
+    });
+
+    // ==========================================
+    // INTERACTIVE STATUS DOT SWITCHER
+    // ==========================================
+    document.querySelectorAll('.card-inner').forEach((card) => {
+      const dots = card.querySelectorAll('.status-dot');
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dots.forEach((d, i) => {
+            if (i <= index) {
+              d.classList.add('active-dot');
+              d.style.opacity = '1';
+            } else {
+              d.classList.remove('active-dot');
+              d.style.opacity = '0.4';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
