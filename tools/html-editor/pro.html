@@ -1,0 +1,955 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeCoding Studio [Pro] - 3-Panel Coding Interface</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+	
+		<!-- ICONS CODE -->
+<script> function removeFromLinks(rel) {
+for (link of document.head.getElementsByTagName("link")) {
+if (link.rel == rel) {
+document.head.removeChild(link);
+}
+};
+}
+function createNewFavicon(rel, img) {
+var newFavicon = document.createElement("link");
+newFavicon.type = "image/png";
+newFavicon.rel = rel;
+newFavicon.href = img;
+var firstHeadElement = document.head.firstChild;
+document.head.insertBefore(newFavicon, firstHeadElement);
+}
+removeFromLinks("icon");
+removeFromLinks("shortcut icon");
+removeFromLinks("apple-touch-icon");
+createNewFavicon("icon", "https://bucket.mlcdn.com/a/3336/3336910/images/8693866308ced9e7451285a4fc716d1d589c8bc4.png");
+createNewFavicon("shortcut icon", "https://bucket.mlcdn.com/a/3336/3336910/images/8693866308ced9e7451285a4fc716d1d589c8bc4.png");
+createNewFavicon("apple-touch-icon", "https://bucket.mlcdn.com/a/3336/3336910/images/8693866308ced9e7451285a4fc716d1d589c8bc4.png"); </script>
+<!-- End ICONS Code -->
+    
+	
+	<style>
+
+
+        :root {
+	--title: "VibeCoding Studio Dashboard";
+	--autor: "Bebell Digital Solutions";
+	--contact: "info@bebelldigitalsolutions.com";
+	--description: "";
+	--keywords: "";
+	--last-modified: "2025-06-01";
+	--content-language: "en";
+	--generator: "HTML5, CSS3, JavaScript, Three.js, requestAnimationFrames,";
+            --primary-color: #df1783;
+            --dark-bg: #1a1a1a;
+            --panel-bg: #252526;
+            --text-light: #e0e0e0;
+            --border-color: #444;
+            --input-bg: #3a3a3a;
+        }
+
+
+             
+    
+        .custom-image-widget {
+  position: fixed !important;
+  top: 100px !important; 
+  margin: 0 !important;
+  padding: 0 !important;
+    right: 0px; 
+        z-index: 999;
+}
+  
+    .custom-image {
+        width: 70px;
+        height: auto;
+       transition: transform 0.2s;
+    }
+    
+    
+      .custom-image-widget:hover .custom-image {
+        transform: scale(1.05); 
+    }  
+ 
+ 
+     .custom-image-widget:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
+
+
+
+		
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0;
+    flex-wrap: wrap;
+    padding: 0.25rem;
+}
+
+.social-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+background: #c42578;
+            color: white;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.social-link:hover {
+    color: #000;
+    background: #f1f1f1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+	    
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Fira Code', monospace;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .top-bar {
+            background: var(--primary-color);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            box-sizing: border-box;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            width: 25px;
+            height: 25px;
+            object-fit: contain;
+        }
+
+        .brand-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 50px);
+        }
+        
+        .panel {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+            background: var(--panel-bg);
+        }
+
+	    
+        .panel:last-child {
+            border-right: none;
+        }
+
+	    
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: var(--panel-bg);
+            border-bottom: 1px solid #333;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+	    
+        
+        .panel-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+
+	    
+        .panel-action-btn, #llm-selector, #go-button {
+            background: var(--input-bg);
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 0.9em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            font-family: 'Fira Code', monospace;
+        }
+
+
+	    
+        
+        .panel-action-btn:hover, #llm-selector:hover, #go-button:hover {
+            background-color: #454545;
+            border-color: #555;
+        }
+
+        
+        #go-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            margin-left: 8px;
+        }
+
+        
+         #go-button:hover {
+            background-color: #c81473;
+        }
+
+        
+
+        .panel-content {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+        }
+
+
+
+	    
+        iframe {
+            background: white;
+            border: none;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        
+        
+        .url-bar {
+            display: flex;
+            padding: 10px;
+            background: var(--panel-bg);
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+        }
+
+
+
+	    
+        
+        #url-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--input-bg);
+            color: var(--text-light);
+            font-family: 'Fira Code', monospace;
+        }
+
+        
+        
+        pre[class*="language-"] {
+            margin: 0 !important;
+            height: 100%;
+            border-radius: 0;
+            background: #1e1e1e !important;
+            padding: 15px !important;
+            box-sizing: border-box;
+            overflow: auto !important;
+        }
+
+
+        
+        
+        #editor {
+            outline: none;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: var(--text-light) !important;
+            background: transparent !important;
+            height: 100%;
+            width: 100%;
+            display: block;
+            font-family: 'Fira Code', monospace;
+            resize: none;
+            border: none;
+            padding: 15px;
+            box-sizing: border-box;
+            line-height: 1.5;
+        }
+
+
+        
+
+        .iframe-load-info {
+            padding: 40px;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        
+        
+        .iframe-error {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+
+#auth-widget {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+     
+
+#logout-link {
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+
+     
+
+#logout-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+
+
+#viewer {
+    background: white;
+    border: none;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+
+        
+/* Ensure content in the iframe is visible */
+#viewer body {
+    color: #333 !important;
+    font-family: Arial, sans-serif !important;
+    padding: 20px !important;
+}
+
+
+
+		
+
+        
+    </style>
+	
+<script>(function(d, s, id){
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://api.helpdesk.icu/widget/d74d96f1-6170-3591-abe8-ceeb3010bef4?r=' + encodeURIComponent(window.location);
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'contactus-jssdk'));</script>
+
+	
+</head>
+<body>
+
+ <div class="custom-image-widget" style="position: relative; display: inline-block;">
+    <a href="https://bebell-digital-solutions.github.io/vibecoding-studio-v08-spanish/">
+        <img class="custom-image" 
+             src="https://bucket.mlcdn.com/a/3336/3336910/images/138f14304ea21715dfae64ae5fe1d71b08c2d451.png" 
+             alt="English Translation"
+             style="display: block;">
+    </a>
+</div>
+
+	
+    
+<!-- In the top-bar div (keep this as is) -->
+<div class="top-bar">
+    <div class="brand">
+        <img src="https://bucket.mlcdn.com/a/3336/3336910/images/2a926c37fc929607aeed2f835f3a06e0e9f3cff8.png" alt="VibeCoding Studio Logo" class="brand-logo">
+        <span class="brand-text">VibeCoding Studio [Pro]</span>
+    </div>
+    
+    
+    
+   <div class="social-links">
+        <a href="https://bebell-digital-solutions.github.io/iframe-generator" class="social-link" rel="noopener" target="_blank">
+            <span>🧰</span> iFrame Generator
+        </a>
+        <a href="https://bebell-digital-solutions.github.io/faq-builder-en" class="social-link" rel="noopener" target="_blank">
+            <span>🧰</span> FAQ Generator
+        </a>
+        <a href="https://bebell-digital-solutions.github.io/carousel-generator" class="social-link" rel="noopener" target="_blank">
+            <span>🧰</span> Carousel Generator
+        </a>
+        <a href="https://bebell-digital-solutions.github.io/magic-toolbox-database/en-v03" class="social-link" rel="noopener" target="_blank">
+            <span>🧰</span> Magic Toolbox
+        </a>
+    </div>
+    
+	
+    <div id="auth-widget">
+        <a href="#" id="logout-link" style="color: white; text-decoration: none; font-weight: 500;">Log Out</a>
+    </div>
+</div>
+
+
+    
+    
+    <div class="container">
+        <div class="panel">
+            <div class="panel-header">
+                <span>🤖 Assistant Model:</span>
+                <div class="panel-actions">
+                    <select id="llm-selector" class="panel-action-btn">
+                        <option value="">Select LLM...</option>
+                        <option value="https://example.com/">🚀 Connection (Test)</option> 
+                        <option value="https://example.com/">🚀 START HERE</option> 
+
+ <option value="https://bebell-digital-solutions.github.io/code-buddy/en-v03">🤖 Code Buddy R1</option>						
+                        <option value="https://admin.chatterbot.support/share/1897a236136449eb9e2be847c04b1a5d/">🤖 ChatGPT 4.5</option>
+                        <option value="https://admin.chatterbot.support/share/6229350fc344462cbc8d22a482bcdfaf/">🤖 DeepSeek-R1</option>
+                        <option value="https://admin.chatterbot.support/share/8fcf0b7b2d43406d871b4411bb5426f8/">🤖 Claude 3.7 Sonnet</option>
+			<option value="https://asistente.chatterbot.support/share/b0ccdcc8f239429eaeffdfab2c85984a/">🤖 Claude 4 Sonnet</option>
+
+
+		<option value="https://gpt-oss.com/">🤖 GPT OSS</option>
+			<option value="https://agent.minimax.io/chat/">🤖 MiniMax AI Agent</option>    
+			<option value="https://chat.qwen.ai/">🤖 Qwen3</option>
+								<option value="https://www.kimi.com/">🤖 Kimi</option>
+                        <option value="https://llamacoder.together.ai/">🤖 LlamaCoder</option>
+
+
+						
+			<option value="https://bebell-digital-solutions.github.io/VibeCoding-Studio-V02/icons">🎨 Icons Library</option>
+			<option value="https://bebell-digital-solutions.github.io/VibeCoding-Studio-V02/fonts">🎨 Fonts Library</option> 
+
+                        <option value="https://html-lab.net/coding-tools">🛠️ Coding Tools</option>
+                        <option value="https://webcode.tools/">🛠️ Webcode Tools</option>
+					    <option value="https://bebell-digital-solutions.github.io/iframe-generator/">🛠️ iFrame Generator</option>	
+                        <option value="https://bebell-digital-solutions.github.io/faq-builder-en/">🛠️ FAQ Generator</option>
+                        <option value="https://bebell-digital-solutions.github.io/carousel-generator/">🛠️ Carousel Generator</option>
+			<option value="https://imageslidermaker.com/v2/">🛠️ Image Slider Creator</option>                     	    
+		        <option value="https://imageslidermaker.com/v2/">🛠️ Components Gallery</option>                     
+                        <option value="https://10015.io/tools/css-loader-generator/">♻️ Css Loaders</option>
+
+			<option value="https://bebell-digital-solutions.github.io/VibeCoding-Studio-V02/maps">🗺️ Map & Location Tools</option> 
+                        <option value="https://drive.google.com/">🗃️ Google Drive</option>
+                        <option value="https://www.playbook.com/sign-in/">🗃️ PlayBook Drive</option>
+			    
+                        <option value="https://chatterbot.support/asistentes">💬 AI Assistants</option> 
+                    </select>
+                </div>
+
+
+
+		    
+		    
+            </div>
+            <div class="url-bar">
+                <input type="text" id="url-input" placeholder="Enter URL (e.g., https://example.com)">
+                <button id="go-button">Go</button>
+            </div>
+            <div class="panel-content">
+                <iframe id="browser" onerror="handleFrameError(this)" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+                <div id="browser-info" class="iframe-load-info" style="display: none;">
+                    <p class="iframe-error">Many websites prevent themselves from being loaded in iframes for security reasons.</p>
+                    <p>If a site doesn't load, try opening it in a new tab.</p>
+                    <button id="open-tab-btn" style="margin-top:10px; padding:5px 10px; background:var(--primary-color); color:white; border:none; border-radius:4px;">
+                        Open in New Tab
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+<div class="panel">
+    <div class="panel-header">
+        <span>💬 HTML Editor</span>
+        <div class="panel-actions">
+            <button id="download-btn" class="panel-action-btn" title="Download HTML">
+                <svg viewBox="0 0 24 24" width="14" height="14" style="margin-right: 5px;">
+                    <path fill="currentColor" d="M19,9H15V3H9V9H5L12,16L19,9M5,20V18H19V20H5Z"/>
+                </svg>
+                Export
+            </button>
+        </div>
+    </div>
+
+    
+    <div class="panel-content">
+        <textarea id="editor" spellcheck="false">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+    &lt;style&gt;
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background-color: #f0f0f0;
+            text-align: center; /* Center text content */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+  h1 { 
+color: #df1783; 
+margin-top: 80px;
+margin-bottom: 10px;
+}
+h2 {
+margin: 0px;
+}
+        p { color: #333; }
+        img {
+            border-radius: 10px; /* Rounded corners */
+            max-width: 100%; /* Ensure image doesn't overflow */
+            height: auto;
+            margin: 20px 0; /* Add some margin around the image */
+        }
+		        .cta-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .cta-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .cta-primary {
+            background-color: #df1783;
+            color: white;
+            border: 2px solid #df1783;
+        }
+        .cta-primary:hover {
+            background-color: #c11573;
+            border-color: #c11573;
+        }
+        .cta-secondary {
+            background-color: white;
+            color: #333;
+            border: 2px solid #333;
+        }
+        .cta-secondary:hover {
+            background-color: #f0f0f0;
+        }
+	.stamp {
+            width: 300px;
+            height: 300px;
+            object-fit: contain;
+            filter: grayscale(100%);
+            opacity: 0.1;
+            margin: 20px auto;
+        }	
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome to VibeCoding Studio! 🎉&lt;/h1&gt;
+	&lt;h2&gt;Code, Preview, Ship. All in One Place 🚀&lt;/h2&gt;	
+    &lt;p&gt;This is a sample HTML document. Edit me as you please!&lt;/p&gt;
+    &lt;div class="cta-container"&gt;
+        &lt;a href="https://example.com" class="cta-button cta-primary"&gt;Visit Website&lt;/a&gt;
+        &lt;a href="https://example.com/feedback" class="cta-button cta-secondary"&gt;Leave Feedback&lt;/a&gt;
+    &lt;/div&gt;	
+    &lt;img src="https://cdn.shopify.com/s/files/1/0242/0175/6777/files/GIF_by_simongibson2000.gif?v=1749866561" alt="Description of image"&gt;
+    &lt;img class="stamp" src="https://bucket.mlcdn.com/a/3336/3336910/images/5b5c60c50f7e2cb00d7f10598ab253f4583bd258.png" alt="Decorative stamp"&gt;
+    &lt;script&gt;console.log('Sample script executed!');&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+    </div>
+</div>
+        
+        <div class="panel">
+            <div class="panel-header">🔎 Live Preview</div>
+            <div class="panel-content">
+        
+                <iframe id="viewer" onerror="this.src='about:blank'" title="Live HTML Preview" sandbox="allow-same-origin allow-scripts"></iframe>
+            
+            </div>
+        </div>
+    </div>
+
+
+
+
+ 
+
+<script>
+    (function() {
+        // DOM Elements
+        const elements = {
+            urlInput: document.getElementById('url-input'),
+            goButton: document.getElementById('go-button'),
+            browserFrame: document.getElementById('browser'),
+            browserInfo: document.getElementById('browser-info'),
+            editor: document.getElementById('editor'),
+            viewer: document.getElementById('viewer'),
+            llmSelector: document.getElementById('llm-selector'),
+            downloadBtn: document.getElementById('download-btn'),
+            openTabBtn: document.getElementById('open-tab-btn')
+        };
+
+
+
+	    
+
+        // Constants
+        const BLOCKED_DOMAINS = [
+            'openai.com', 
+            'google.com',
+            'deepseek.com',
+        ];
+
+
+
+	    
+
+        // Initialize
+        function init() {
+            setupEventListeners();
+            initViewer();
+
+
+
+		
+            
+            // Set up editor listener with debouncing for better performance
+            let updateTimeout;
+            elements.editor.addEventListener('input', () => {
+                clearTimeout(updateTimeout);
+                updateTimeout = setTimeout(updateViewer, 300);
+            });
+
+
+
+		
+            
+            // Initial update
+            updateViewer();
+        }
+
+
+
+	    
+
+        // Simplified logout function
+        function handleLogout(e) {
+            e.preventDefault();
+            window.location.href = "https://html-lab.net/";
+        }
+
+
+
+
+
+	    
+
+        // Event Listeners
+        function setupEventListeners() {
+            if (elements.goButton) elements.goButton.addEventListener('click', navigateBrowser);
+            if (elements.urlInput) elements.urlInput.addEventListener('keypress', (e) => e.key === 'Enter' && navigateBrowser());
+            if (elements.llmSelector) elements.llmSelector.addEventListener('change', handleLLMSelect);
+            if (elements.openTabBtn) elements.openTabBtn.addEventListener('click', openInNewTab);
+            if (elements.downloadBtn) elements.downloadBtn.addEventListener('click', downloadHTML);
+
+
+
+		
+            // Add logout listener
+            const logoutLink = document.getElementById('logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', handleLogout);
+            }
+        }
+
+
+	    
+
+        // Browser Functions
+        function navigateBrowser() {
+            const url = elements.urlInput.value.trim();
+            if (!url) return;
+
+            try {
+                const processedUrl = processUrl(url);
+                if (!processedUrl.valid) {
+                    showBrowserError("Invalid URL format");
+                    return;
+                }
+
+                if (isDomainBlocked(processedUrl.hostname)) {
+                    showBrowserError("This domain is restricted for security reasons");
+                    return;
+                }
+
+                loadIframe(processedUrl.fullUrl);
+                
+            } catch (e) {
+                console.error('Navigation error:', e);
+                showBrowserError("Error loading URL");
+            }
+        }
+
+
+
+	    
+
+        function processUrl(url) {
+            let fullUrl = url;
+            if (!/^https?:\/\//i.test(url)) {
+                fullUrl = `https://${url}`;
+            }
+            
+            const urlObj = new URL(fullUrl);
+            const hostname = urlObj.hostname.replace('www.', '');
+            
+            return {
+                fullUrl: fullUrl,
+                hostname: hostname,
+                valid: true
+            };
+        }
+
+
+
+
+	    
+        function isDomainBlocked(hostname) {
+            return BLOCKED_DOMAINS.some(domain => {
+                return hostname === domain || hostname.endsWith(`.${domain}`);
+            });
+        }
+
+
+	    
+
+        function loadIframe(url) {
+            elements.browserFrame.onerror = () => {
+                showBrowserError("Failed to load URL");
+            };
+
+            elements.browserFrame.onload = hideBrowserError;
+            
+            elements.browserFrame.src = url;
+        }
+
+
+
+	    
+
+        // Editor Functions
+        function updateViewer() {
+            try {
+                const content = elements.editor.value;
+                elements.viewer.srcdoc = content.includes('<!DOCTYPE html>') ? content : 
+                    `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>${content}</body></html>`;
+            } catch (e) {
+                console.error('Viewer update error:', e);
+            }
+        }
+  
+        function handleTabIndent(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+                this.selectionStart = this.selectionEnd = start + 4;
+            }
+        }
+
+ 
+        function downloadHTML() {
+            try {
+                const blob = new Blob([elements.editor.value], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'vibecoding-document.html';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+            } catch (e) {
+                console.error('Download error:', e);
+                alert('Error creating download. Please check console for details.');
+            }
+        }
+
+
+
+
+	    
+        // Utility Functions
+        function handleLLMSelect() {
+            const selectedValue = this.value;
+            if (selectedValue) {
+                elements.urlInput.value = selectedValue;
+                navigateBrowser();
+            }
+        }
+
+        function openInNewTab() {
+            const url = elements.urlInput.value.trim();
+            if (url) {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        }
+
+        function showBrowserError(message) {
+            if (elements.browserInfo) {
+                if (message) {
+                    const errorElement = elements.browserInfo.querySelector('.iframe-error');
+                    if (errorElement) errorElement.textContent = message;
+                }
+                elements.browserInfo.style.display = 'block';
+            }
+        }
+
+        function hideBrowserError() {
+            if (elements.browserInfo) elements.browserInfo.style.display = 'none';
+        }
+
+function initViewer() {
+    const htmlContent = `<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Preview</title>
+            <style>
+                body { 
+                    background: white; 
+                    padding: 20px; 
+                    font-family: Arial, sans-serif;
+                    color: #333;
+                    text-align: center; /* Center text content */
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                }
+  h1 { 
+color: #df1783; 
+margin-top: 80px;
+margin-bottom: 10px;
+}
+h2 {
+margin: 0px;
+}
+                p { color: #333; }
+                img {
+                    border-radius: 10px; /* Rounded corners */
+                    max-width: 100%; /* Ensure image doesn't overflow */
+                    height: auto;
+                    margin: 20px 0; /* Add some margin around the image */
+                }
+
+          .cta-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .cta-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .cta-primary {
+            background-color: #df1783;
+            color: white;
+            border: 2px solid #df1783;
+        }
+        .cta-primary:hover {
+            background-color: #c11573;
+            border-color: #c11573;
+        }
+        .cta-secondary {
+            background-color: white;
+            color: #333;
+            border: 2px solid #333;
+        }
+        .cta-secondary:hover {
+            background-color: #f0f0f0;
+        }
+
+ .stamp {
+            width: 300px;
+            height: 300px;
+            object-fit: contain;
+            filter: grayscale(100%);
+            opacity: 0.1;
+            margin: 20px auto;
+        }
+            </style>
+        </head>
+        <body>
+            <h1>Welcome to VibeCoding Studio! 🎉</h1>
+	    <h2>Code, Preview, Ship. All in One Place 🚀</h2>
+            <p>This is a sample HTML document. Edit me as you please!</p>
+	       <div class="cta-container">
+        <a href="https://example.com" class="cta-button cta-primary">Visit Website</a>
+        <a href="https://example.com/feedback" class="cta-button cta-secondary">Leave Feedback</a>
+    </div>
+            <img src="https://cdn.shopify.com/s/files/1/0242/0175/6777/files/GIF_by_simongibson2000.gif?v=1749866561" alt="Description of image">
+    <img class="stamp" src="https://bucket.mlcdn.com/a/3336/3336910/images/5b5c60c50f7e2cb00d7f10598ab253f4583bd258.png" alt="VibeCoding Studio">  
+	    
+        </body>
+        </html>`;
+    
+    elements.viewer.srcdoc = htmlContent;
+    updateViewer();
+}
+
+        // Initialize the application
+        init();
+    })();
+</script>
+
+ 
+</body>
+</html>
