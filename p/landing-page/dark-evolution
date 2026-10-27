@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evolution — a operação de marketing com IA que roda sozinha</title>
+<meta name="description" content="Evolução, sem a pressa. Infraestrutura open source de IA e automação para agências e pequenas e médias empresas.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#07090d">
+
+<style>
+  /* ---------------------------------------------------------
+     Design tokens
+  --------------------------------------------------------- */
+  :root {
+    --bg:            #07090d;
+    --bg-soft:       #0b0f16;
+    --surface:       rgba(255, 255, 255, 0.035);
+    --surface-hover: rgba(255, 255, 255, 0.06);
+    --border:        rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.16);
+
+    --text:          #e9eef6;
+    --text-soft:     #b3c0d1;
+    --muted:         #8b9aae;
+
+    --accent:        #22d3a6;
+    --accent-soft:   rgba(34, 211, 166, 0.14);
+    --accent-2:      #4f9cff;
+
+    --radius-sm: 10px;
+    --radius:    16px;
+    --radius-lg: 24px;
+
+    --max-width: 1140px;
+    --gutter: clamp(1.15rem, 4vw, 2.5rem);
+
+    --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+            "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ---------------------------------------------------------
+     Reset
+  --------------------------------------------------------- */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    margin: 0;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    font-weight: 650;
+  }
+
+  p { margin: 0; }
+
+  a { color: inherit; text-decoration: none; }
+
+  img, svg { display: block; max-width: 100%; }
+
+  ul { margin: 0; padding: 0; list-style: none; }
+
+  button { font: inherit; color: inherit; }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* ---------------------------------------------------------
+     Layout helpers
+  --------------------------------------------------------- */
+  .container {
+    width: 100%;
+    max-width: var(--max-width);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .section {
+    padding-block: clamp(4rem, 9vw, 7.5rem);
+    position: relative;
+  }
+
+  .section--tight { padding-block: clamp(3rem, 6vw, 5rem); }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.7;
+  }
+
+  .section-head {
+    max-width: 640px;
+    margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
+  }
+
+  .section-head h2 {
+    font-size: clamp(1.75rem, 4vw, 2.65rem);
+    margin-top: 0.9rem;
+  }
+
+  .section-head p {
+    margin-top: 1rem;
+    color: var(--text-soft);
+    font-size: clamp(1rem, 1.6vw, 1.075rem);
+  }
+
+  /* ---------------------------------------------------------
+     Buttons
+  --------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s var(--ease), background 0.2s var(--ease),
+                border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+    white-space: nowrap;
+  }
+
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+
+  .btn--primary {
+    background: var(--accent);
+    color: #04231b;
+    box-shadow: 0 10px 30px -12px rgba(34, 211, 166, 0.75);
+  }
+
+  .btn--primary:hover {
+    background: #2ee5b6;
+    box-shadow: 0 16px 38px -14px rgba(34, 211, 166, 0.9);
+  }
+
+  .btn--ghost {
+    background: transparent;
+    border-color: var(--border-strong);
+    color: var(--text);
+  }
+
+  .btn--ghost:hover {
+    background: var(--surface-hover);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  /* ---------------------------------------------------------
+     Header
+  --------------------------------------------------------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: rgba(7, 9, 13, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+  }
+
+  .site-header.is-scrolled {
+    border-bottom-color: var(--border);
+    background: rgba(7, 9, 13, 0.9);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 72px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-size: 1.05rem;
+  }
+
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: grid;
+    place-items: center;
+    color: #04231b;
+    font-size: 0.95rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .nav { display: flex; align-items: center; gap: 2rem; }
+
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+  }
+
+  .nav-list a {
+    font-size: 0.92rem;
+    color: var(--text-soft);
+    transition: color 0.2s var(--ease);
+    position: relative;
+  }
+
+  .nav-list a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.25s var(--ease);
+  }
+
+  .nav-list a:hover { color: var(--text); }
+  .nav-list a:hover::after { width: 100%; }
+
+  .nav-toggle {
+    display: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    padding: 0;
+    place-items: center;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    position: relative;
+    transition: background 0.2s var(--ease);
+  }
+
+  .nav-toggle span::before,
+  .nav-toggle span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 18px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.25s var(--ease), top 0.25s var(--ease);
+  }
+
+  .nav-toggle span::before { top: -6px; }
+  .nav-toggle span::after  { top: 6px; }
+
+  .nav-toggle[aria-expanded="true"] span { background: transparent; }
+  .nav-toggle[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] span::after  { top: 0; transform: rotate(-45deg); }
+
+  /* ---------------------------------------------------------
+     Hero
+  --------------------------------------------------------- */
+  .hero {
+    position: relative;
+    padding-block: clamp(4rem, 10vw, 8rem) clamp(4rem, 9vw, 7rem);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: -20% -10% auto -10%;
+    height: 720px;
+    z-index: -1;
+    background:
+      radial-gradient(46% 52% at 22% 28%, rgba(34, 211, 166, 0.16), transparent 68%),
+      radial-gradient(42% 48% at 78% 12%, rgba(79, 156, 255, 0.16), transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2.5rem, 6vw, 4.5rem);
+    align-items: center;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.15rem, 5.4vw, 3.9rem);
+    margin-top: 1.25rem;
+    letter-spacing: -0.035em;
+  }
+
+  .hero h1 .accent {
+    background: linear-gradient(100deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-lead {
+    margin-top: 1.5rem;
+    font-size: clamp(1rem, 1.9vw, 1.16rem);
+    color: var(--text-soft);
+    max-width: 34rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 2.25rem;
+  }
+
+  .hero-note {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .hero-note svg { flex-shrink: 0; color: var(--accent); }
+
+  /* Painel decorativo do hero */
+  .hero-panel {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015));
+    box-shadow: 0 40px 90px -50px rgba(0, 0, 0, 0.95);
+    overflow: hidden;
+  }
+
+  .panel-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #2b3444; }
+  .dot--live { background: var(--accent); box-shadow: 0 0 0 3px rgba(34, 211, 166, 0.16); }
+
+  .panel-bar-title {
+    margin-left: auto;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .panel-body { padding: 1.35rem 1.1rem 1.6rem; }
+
+  .flow {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.8rem 0.95rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .flow-step .idx {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--accent-soft);
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .flow-step .label {
+    font-size: 0.9rem;
+    color: var(--text-soft);
+  }
+
+  .flow-step .status {
+    margin-left: auto;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .flow-step .status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2.4s var(--ease) infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.35; transform: scale(0.8); }
+  }
+
+  /* ---------------------------------------------------------
+     Faixa de métricas
+  --------------------------------------------------------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--border);
+  }
+
+  .stat {
+    background: var(--bg-soft);
+    padding: clamp(1.35rem, 3vw, 2rem) clamp(1.1rem, 2.5vw, 1.75rem);
+  }
+
+  .stat-value {
+    font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+
+  .stat-value span { color: var(--accent); }
+
+  .stat-label {
+    margin-top: 0.4rem;
+    font-size: 0.855rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ---------------------------------------------------------
+     Cards de recursos
+  --------------------------------------------------------- */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(276px, 1fr));
+    gap: clamp(1rem, 2.2vw, 1.5rem);
+  }
+
+  .card {
+    position: relative;
+    padding: clamp(1.5rem, 3vw, 2rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: transform 0.3s var(--ease), border-color 0.3s var(--ease),
+                background 0.3s var(--ease);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
+  }
+
+  .card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+    margin-bottom: 1.15rem;
+  }
+
+  .card h3 {
+    font-size: 1.075rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .card p {
+    font-size: 0.925rem;
+    color: var(--text-soft);
+  }
+
+  /* ---------------------------------------------------------
+     Como funciona
+  --------------------------------------------------------- */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: clamp(1rem, 2.2vw, 1.5rem);
+    counter-reset: step;
+  }
+
+  .step {
+    position: relative;
+    padding-top: 1.9rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .step::before {
+    counter-increment: step;
+    content: "0" counter(step);
+    position: absolute;
+    top: -0.85rem;
+    left: 0;
+    padding-right: 0.75rem;
+    background: var(--bg);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+
+  .step h3 {
+    font-size: 1.075rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .step p {
+    font-size: 0.925rem;
+    color: var(--text-soft);
+  }
+
+  /* ---------------------------------------------------------
+     Bloco CTA
+  --------------------------------------------------------- */
+  .cta {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(2.25rem, 6vw, 4rem);
+    overflow: hidden;
+    background:
+      radial-gradient(70% 130% at 12% 0%, rgba(34, 211, 166, 0.14), transparent 62%),
+      radial-gradient(70% 130% at 88% 100%, rgba(79, 156, 255, 0.14), transparent 62%),
+      var(--bg-soft);
+    text-align: center;
+  }
+
+  .cta h2 {
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    max-width: 20ch;
+    margin-inline: auto;
+  }
+
+  .cta p {
+    margin: 1rem auto 0;
+    max-width: 46ch;
+    color: var(--text-soft);
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+    margin-top: 2rem;
+  }
+
+  /* ---------------------------------------------------------
+     Footer
+  --------------------------------------------------------- */
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .footer-note {
+    font-size: 0.84rem;
+    color: var(--muted);
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--text-soft);
+  }
+
+  .footer-links a { transition: color 0.2s var(--ease); }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ---------------------------------------------------------
+     Animações de entrada
+  --------------------------------------------------------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---------------------------------------------------------
+     Responsivo
+  --------------------------------------------------------- */
+  @media (max-width: 960px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .hero-panel { order: 2; }
+
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 820px) {
+    .nav-toggle { display: grid; }
+
+    .nav {
+      position: absolute;
+      top: 72px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 0.75rem var(--gutter) 1.35rem;
+      background: rgba(9, 12, 18, 0.98);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: none;
+    }
+
+    .nav.is-open { display: flex; }
+
+    .nav-list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .nav-list a {
+      display: block;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 1rem;
+    }
+
+    .nav-list a::after { display: none; }
+
+    .nav .btn {
+      margin-top: 1.1rem;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .stats { grid-template-columns: 1fr; }
+
+    .hero-actions .btn,
+    .cta-actions .btn { width: 100%; }
+  }
+
+  /* ---------------------------------------------------------
+     Acessibilidade — movimento reduzido
+  --------------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#top" aria-label="Evolution — página inicial">
+      <span class="brand-mark" aria-hidden="true">E</span>
+      <span>Dark Evolution</span>
+    </a>
+
+    <button
+      class="nav-toggle"
+      id="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+      aria-label="Abrir menu de navegação">
+      <span aria-hidden="true"></span>
+    </button>
+
+    <nav class="nav" id="primary-nav" aria-label="Navegação principal">
+      <ul class="nav-list">
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#resultados">Resultados</a></li>
+      </ul>
+      <a class="btn btn--primary" href="#contato">Falar com especialista</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Infraestrutura open source de IA</span>
+
+        <h1>
+          A operação de marketing com IA que
+          <span class="accent">roda sozinha</span>.
+        </h1>
+
+        <p class="hero-lead">
+          Evolução, sem a pressa. Implantamos uma infraestrutura open source de
+          IA e automação que cuida da operação de marketing de ponta a ponta —
+          feita para agências e pequenas e médias empresas.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn--primary" href="#contato">
+            Falar com especialista
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </a>
+          <a class="btn btn--ghost" href="#como-funciona">Ver como funciona</a>
+        </div>
+
+        <p class="hero-note">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+          Sem dependência de plataformas fechadas. Sem contrato de fidelidade.
+        </p>
+      </div>
+
+      <aside class="hero-panel" aria-label="Exemplo de fluxo automatizado">
+        <div class="panel-bar">
+          <span class="dot dot--live" aria-hidden="true"></span>
+          <span class="dot" aria-hidden="true"></span>
+          <span class="dot" aria-hidden="true"></span>
+          <span class="panel-bar-title">Pipeline em execução</span>
+        </div>
+
+        <div class="panel-body">
+          <div class="flow">
+            <div class="flow-step">
+              <span class="idx" aria-hidden="true">01</span>
+              <span class="label">Coleta e unificação de dados</span>
+              <span class="status">Ativo</span>
+            </div>
+            <div class="flow-step">
+              <span class="idx" aria-hidden="true">02</span>
+              <span class="label">Segmentação e enriquecimento por IA</span>
+              <span class="status">Ativo</span>
+            </div>
+            <div class="flow-step">
+              <span class="idx" aria-hidden="true">03</span>
+              <span class="label">Geração de criativos e copy</span>
+              <span class="status">Ativo</span>
+            </div>
+            <div class="flow-step">
+              <span class="idx" aria-hidden="true">04</span>
+              <span class="label">Distribuição multicanal</span>
+              <span class="status">Ativo</span>
+            </div>
+            <div class="flow-step">
+              <span class="idx" aria-hidden="true">05</span>
+              <span class="label">Otimização contínua por resultados</span>
+              <span class="status">Ativo</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ================= MÉTRICAS ================= -->
+  <section class="section section--tight" aria-label="Resultados em números">
+    <div class="container">
+      <div class="stats reveal">
+        <div class="stat">
+          <div class="stat-value">24<span>/7</span></div>
+          <div class="stat-label">Operação rodando sem intervenção manual</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">−60<span>%</span></div>
+          <div class="stat-label">Redução média de custo operacional</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">3<span>x</span></div>
+          <div class="stat-label">Mais velocidade na execução de campanhas</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">100<span>%</span></div>
+          <div class="stat-label">Infraestrutura open source e auditável</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RECURSOS ================= -->
+  <section class="section" id="recursos">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Recursos</span>
+        <h2>Uma operação inteira, não mais uma ferramenta isolada</h2>
+        <p>
+          Cada peça da sua operação de marketing conversa com as outras. O
+          resultado é um sistema que aprende e se ajusta sozinho.
+        </p>
+      </div>
+
+      <div class="cards">
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                 stroke-linejoin="round">
+              <path d="M4 6h16M4 12h10M4 18h7"/>
+            </svg>
+          </div>
+          <h3>Automação de ponta a ponta</h3>
+          <p>
+            Da captação ao acompanhamento de resultados: fluxos que executam,
+            medem e se corrigem sem depender de tarefas manuais.
+          </p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                 stroke-linejoin="round">
+              <path d="M12 3v4M12 17v4M3 12h4M17 12h4"/>
+              <circle cx="12" cy="12" r="3.5"/>
+            </svg>
+          </div>
+          <h3>Agentes de IA especializados</h3>
+          <p>
+            Agentes dedicados a análise, criação e otimização que trabalham em
+            conjunto sob as regras do seu negócio.
+          </p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                 stroke-linejoin="round">
+              <ellipse cx="12" cy="6" rx="7" ry="3"/>
+              <path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/>
+              <path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/>
+            </svg>
+          </div>
+          <h3>Dados unificados</h3>
+          <p>
+            Todas as fontes em um único lugar, com métricas consistentes e sem
+            depender de planilhas paralelas.
+          </p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                 stroke-linejoin="round">
+              <path d="M12 3l2.6 5.5 6 .9-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.4l6-.9L12 3z"/>
+            </svg>
+          </div>
+          <h3>Criativos e copy com IA</h3>
+          <p>
+            Variações de anúncios, textos e páginas geradas e testadas
+            continuamente a partir do que performa melhor.
+          </p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                 stroke-linejoin="round">
+              <path d="M3 20V10M9 20V4M15 20v-7M21 20V8"/>
+            </svg>
+          </div>
+          <h3>Relatórios que explicam</h3>
+          <p>
+            Nada de dashboards vazios: cada número vem acompanhado do contexto e
+            da recomendação de próximo passo.
+          </p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                 stroke-linejoin="round">
+              <rect x="4" y="10" width="16" height="10" rx="2"/>
+              <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+            </svg>
+          </div>
+          <h3>Controle e privacidade</h3>
+          <p>
+            Todo o código é aberto e roda no seu ambiente. Seus dados não viram
+            produto de ninguém.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COMO FUNCIONA ================= -->
+  <section class="section" id="como-funciona">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Como funciona</span>
+        <h2>Implantação em três movimentos</h2>
+        <p>
+          Começamos enxuto e ampliamos conforme a operação ganha tração. Sem
+          reestruturação traumática.
+        </p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal">
+          <h3>Diagnóstico</h3>
+          <p>
+            Mapeamos seus canais, dados e processos atuais para identificar onde
+            a automação gera resultado mais rápido.
+          </p>
+        </div>
+        <div class="step reveal">
+          <h3>Implantação</h3>
+          <p>
+            Montamos a infraestrutura open source no seu ambiente, conectamos as
+            fontes e configuramos os agentes de IA.
+          </p>
+        </div>
+        <div class="step reveal">
+          <h3>Operação contínua</h3>
+          <p>
+            O sistema passa a rodar, medir e otimizar sozinho — com
+            acompanhamento humano nos pontos de decisão.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESULTADOS / CTA ================= -->
+  <section class="section" id="resultados">
+    <div class="container">
+      <div class="cta reveal" id="contato">
+        <h2>Pronto para deixar a operação rodar sozinha?</h2>
+        <p>
+          Conte como é o seu cenário hoje. Em uma conversa rápida mostramos o que
+          faz sentido automatizar primeiro.
+        </p>
+        <div class="cta-actions">
+          <a class="btn btn--primary" href="mailto:contato@evolution.example">
+            Falar com especialista
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </a>
+          <a class="btn btn--ghost" href="#recursos">Rever os recursos</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">E</span>
+        <span>Evolution</span>
+      </a>
+      <p class="footer-note">
+        &copy; <span id="year">2026</span> Evolution. Infraestrutura open source
+        de IA e automação.
+      </p>
+    </div>
+
+    <nav class="footer-links" aria-label="Links do rodapé">
+      <a href="#recursos">Recursos</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Ano dinâmico no rodapé ---------- */
+  var yearEl = document.getElementById('year');
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
+  }
+
+  /* ---------- Estado do header ao rolar ---------- */
+  var header = document.getElementById('site-header');
+
+  function onScroll() {
+    if (!header) return;
+    header.classList.toggle('is-scrolled', window.scrollY > 8);
+  }
+
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* ---------- Menu mobile ---------- */
+  var toggle = document.getElementById('nav-toggle');
+  var nav = document.getElementById('primary-nav');
+
+  function closeNav() {
+    if (!toggle || !nav) return;
+    nav.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Abrir menu de navegação');
+  }
+
+  function openNav() {
+    if (!toggle || !nav) return;
+    nav.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Fechar menu de navegação');
+  }
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', function () {
+      var isOpen = nav.classList.contains('is-open');
+      if (isOpen) {
+        closeNav();
+      } else {
+        openNav();
+      }
+    });
+
+    /* Fecha ao clicar em qualquer link do menu */
+    nav.addEventListener('click', function (event) {
+      if (event.target.closest('a')) {
+        closeNav();
+      }
+    });
+
+    /* Fecha com a tecla Esc */
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closeNav();
+      }
+    });
+
+    /* Fecha ao clicar fora */
+    document.addEventListener('click', function (event) {
+      if (!nav.classList.contains('is-open')) return;
+      if (nav.contains(event.target) || toggle.contains(event.target)) return;
+      closeNav();
+    });
+
+    /* Reseta o menu ao voltar para o layout desktop */
+    var mq = window.matchMedia('(min-width: 821px)');
+    var handleViewport = function (event) {
+      if (event.matches) closeNav();
+    };
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', handleViewport);
+    } else if (typeof mq.addListener === 'function') {
+      mq.addListener(handleViewport);
+    }
+  }
+
+  /* ---------- Animações de entrada ---------- */
+  var revealItems = document.querySelectorAll('.reveal');
+
+  var prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+
+  if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+    revealItems.forEach(function (el) {
+      el.classList.add('is-visible');
+    });
+  } else {
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.12 }
+    );
+
+    revealItems.forEach(function (el, index) {
+      el.style.transitionDelay = (index % 4) * 70 + 'ms';
+      observer.observe(el);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
