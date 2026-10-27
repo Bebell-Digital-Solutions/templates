@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Horizon Kinetic Knitwear — Velvetica Studio</title>
+  
+  <!-- Google Fonts & Tailwind CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+          },
+          colors: {
+            studio: {
+              50: '#FBFBFB',
+              100: '#F4F4F6',
+              200: '#E6E7EB',
+              300: '#D2D4DC',
+              500: '#737785',
+              800: '#222329',
+              900: '#111215',
+              accent: '#35433B'
+            }
+          },
+          letterSpacing: {
+            editorial: '0.08em',
+            mega: '0.15em'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom luxury scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f3;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c5c7ce;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8e909a;
+    }
+    .backdrop-blur-luxury {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+
+<body class="bg-studio-50 text-studio-900 font-sans antialiased selection:bg-studio-900 selection:text-white min-h-screen flex flex-col">
+
+  <!-- ================= ANNOUNCEMENT BAR ================= -->
+  <aside class="bg-studio-900 text-studio-100 text-[11px] uppercase tracking-mega py-2.5 px-4 text-center font-medium border-b border-studio-800 flex items-center justify-center gap-3">
+    <span>Complimentary worldwide express shipping on orders over $250</span>
+    <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+    <span class="hidden md:inline text-studio-300">Sustainable Zero-Carbon Delivery</span>
+  </aside>
+
+  <!-- ================= MAIN NAVIGATION ================= -->
+  <header class="sticky top-0 z-40 bg-studio-50/90 backdrop-blur-luxury border-b border-studio-200 transition-all duration-300" id="mainHeader">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-8 h-18 sm:h-20 flex items-center justify-between">
+      
+      <!-- Left: Mobile Menu Trigger & Main Links -->
+      <div class="flex items-center gap-8">
+        <button id="mobileMenuBtn" aria-label="Toggle navigation menu" class="md:hidden p-2 text-studio-900 hover:text-studio-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+          </svg>
+        </button>
+        <nav class="hidden md:flex items-center gap-7 text-[12px] font-medium uppercase tracking-editorial text-studio-900/80">
+          <a href="#lookbook" class="hover:text-studio-900 transition-colors">Collection</a>
+          <a href="#gallery" class="hover:text-studio-900 transition-colors">Silhouettes</a>
+          <a href="#details" class="hover:text-studio-900 transition-colors">Craftsmanship</a>
+          <a href="#reviews" class="hover:text-studio-900 transition-colors">Journal</a>
+        </nav>
+      </div>
+
+      <!-- Center: Brand Wordmark -->
+      <a href="#" class="flex flex-col items-center group">
+        <span class="text-xl sm:text-2xl font-bold tracking-[0.22em] uppercase transition-transform duration-300 group-hover:scale-[1.02]">
+          Velvetica
+        </span>
+        <span class="text-[9px] uppercase tracking-[0.4em] text-studio-500 -mt-1 font-medium">Studio</span>
+      </a>
+
+      <!-- Right: Utility Actions -->
+      <div class="flex items-center gap-4 sm:gap-6 text-studio-900">
+        <button id="searchTrigger" class="p-2 hover:text-studio-500 transition-colors text-xs uppercase tracking-wider hidden sm:flex items-center gap-1.5" title="Search catalog">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+          <span class="text-[11px] font-medium tracking-editorial">Search</span>
+        </button>
+
+        <div class="hidden sm:flex items-center text-[11px] font-medium border-l border-studio-200 pl-4 tracking-wider text-studio-500">
+          <span class="hover:text-studio-900 cursor-pointer">USD ($)</span>
+        </div>
+
+        <!-- Bag Button with Badge -->
+        <button id="openCartBtn" class="relative flex items-center gap-2 p-2 group hover:text-studio-500 transition-colors" aria-label="Open Shopping Bag">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25c-.67 0-1.19-.578-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+          </svg>
+          <span id="cartCountBadge" class="w-4 h-4 rounded-full bg-studio-900 text-white text-[10px] font-semibold flex items-center justify-center -ml-1">1</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= BREADCRUMBS & COLLECTION BANNER ================= -->
+  <div class="max-w-[1600px] w-full mx-auto px-4 sm:px-8 pt-5 pb-2 text-[11px] tracking-editorial uppercase text-studio-500 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <a href="#" class="hover:text-studio-900">Collections</a>
+      <span>/</span>
+      <a href="#" class="hover:text-studio-900">Living Light Series</a>
+      <span>/</span>
+      <span class="text-studio-900 font-medium">Kinetic Horizon Knit</span>
+    </div>
+    <span class="hidden sm:inline-block text-[10px] bg-studio-200/80 text-studio-800 px-2.5 py-0.5 rounded-full font-medium tracking-widest">
+      Look Nº 04 / Autumn-Winter
+    </span>
+  </div>
+
+  <!-- ================= MAIN PRODUCT DETAIL SECTION ================= -->
+  <main class="max-w-[1600px] w-full mx-auto px-4 sm:px-8 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-14">
+      
+      <!-- LEFT COLUMN: INTERACTIVE VISUAL DISPLAY & GALLERY (Col 1-7) -->
+      <section class="lg:col-span-7 flex flex-col gap-4" id="gallery" aria-label="Product Image Showcase">
+        
+        <!-- Viewport Mode Switcher (Simulating the design studio layouts shown in screenshot) -->
+        <div class="flex items-center justify-between bg-white border border-studio-200 rounded-xl px-4 py-2.5 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-studio-500 font-medium text-[11px] uppercase tracking-wider">Perspective:</span>
+            <div class="inline-flex p-1 bg-studio-100 rounded-lg text-xs" role="tablist">
+              <button onclick="switchView('ethereal')" id="tab-ethereal" class="px-3 py-1 rounded-md font-medium text-studio-900 bg-white shadow-sm transition-all text-[11px]">Editorial Vista</button>
+              <button onclick="switchView('minimal')" id="tab-minimal" class="px-3 py-1 rounded-md font-medium text-studio-500 hover:text-studio-900 transition-all text-[11px]">Studio Wire</button>
+              <button onclick="switchView('drape')" id="tab-drape" class="px-3 py-1 rounded-md font-medium text-studio-500 hover:text-studio-900 transition-all text-[11px]">Silhouette Fold</button>
+            </div>
+          </div>
+          <div class="hidden sm:flex items-center gap-2 text-studio-500 text-[11px]">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Artisanal Batch In Stock</span>
+          </div>
+        </div>
+
+        <!-- Interactive Main Canvas Preview Card -->
+        <div class="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-studio-200 rounded-2xl overflow-hidden border border-studio-200 shadow-sm group">
+          
+          <!-- View 1: Editorial Vista Landscape (Signature Velvetica Clothesline Landscape) -->
+          <div id="view-ethereal" class="view-panel absolute inset-0 transition-opacity duration-500 opacity-100 pointer-events-auto">
+            <!-- Simulated High-End Atmospheric Landscape with clothesline silhouettes -->
+            <div class="relative w-full h-full bg-gradient-to-b from-[#b8c7db] via-[#cbd8e6] to-[#475b48] overflow-hidden flex flex-col justify-between p-6 sm:p-10 select-none">
+              
+              <!-- Clouds & Mountains SVG Backdrop -->
+              <svg class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-overlay" preserveAspectRatio="none" viewBox="0 0 1000 600">
+                <defs>
+                  <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+                    <stop offset="60%" stop-color="#ffffff" stop-opacity="0.2"/>
+                    <stop offset="100%" stop-color="#2d3f31" stop-opacity="0.9"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,320 Q200,240 400,290 T800,260 L1000,310 L1000,600 L0,600 Z" fill="url(#mist)"/>
+                <path d="M0,390 Q300,340 600,380 T1000,360 L1000,600 L0,600 Z" fill="#2d3d2c" opacity="0.6"/>
+              </svg>
+
+              <!-- Editorial Slogan Overlay -->
+              <div class="relative z-10 text-center pt-2 sm:pt-4">
+                <h2 class="font-serif italic text-white/95 text-2xl sm:text-4xl md:text-5xl font-light tracking-wide drop-shadow-md">
+                  Layers of the living light.
+                </h2>
+                <p class="text-white/80 text-[11px] sm:text-xs tracking-mega uppercase mt-1 font-light">
+                  Aura Knit Series — Handspun Alpaca & Fine Merino
+                </p>
+              </div>
+
+              <!-- Suspended Clothesline with dynamic garment collection -->
+              <div class="relative z-10 w-full my-auto py-8">
+                <!-- String/Line -->
+                <div class="w-full h-0.5 bg-black/40 border-b border-white/20 transform -rotate-1 relative">
+                  <!-- Pegs & Hanging clothes illustration -->
+                  <div class="flex items-start justify-between px-4 sm:px-12 -mt-1.5" id="garmentLine">
+                    <!-- Garment 1 -->
+                    <div class="group/garment cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+                      <div class="w-1.5 h-3 bg-stone-800 mx-auto rounded-sm mb-0.5"></div>
+                      <div class="w-8 sm:w-12 h-20 sm:h-28 bg-[#525252] rounded-b-md shadow-lg transform -rotate-2 origin-top"></div>
+                    </div>
+                    <!-- Garment 2 -->
+                    <div class="group/garment cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+                      <div class="w-1.5 h-3 bg-stone-800 mx-auto rounded-sm mb-0.5"></div>
+                      <div class="w-9 sm:w-14 h-24 sm:h-32 bg-[#8c9284] rounded-b-lg shadow-lg transform rotate-1 origin-top"></div>
+                    </div>
+                    <!-- Garment 3 (Selected Main Item) -->
+                    <div class="group/garment cursor-pointer transition-transform duration-300 scale-110 -translate-y-1">
+                      <div class="w-2 h-3.5 bg-amber-900 mx-auto rounded-sm mb-0.5"></div>
+                      <div id="activeGarmentDrape" class="w-12 sm:w-18 h-28 sm:h-36 bg-[#26282b] rounded-b-xl shadow-2xl transform -rotate-1 origin-top relative border-t-2 border-white/30">
+                        <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[9px] bg-studio-900 text-white font-mono px-1.5 py-0.5 rounded uppercase tracking-widest whitespace-nowrap">Active Silhouette</span>
+                      </div>
+                    </div>
+                    <!-- Garment 4 -->
+                    <div class="group/garment cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+                      <div class="w-1.5 h-3 bg-stone-800 mx-auto rounded-sm mb-0.5"></div>
+                      <div class="w-10 sm:w-14 h-22 sm:h-30 bg-[#c0b9a8] rounded-b-md shadow-lg transform rotate-2 origin-top"></div>
+                    </div>
+                    <!-- Garment 5 -->
+                    <div class="group/garment cursor-pointer transition-transform duration-300 hover:-translate-y-1 hidden sm:block">
+                      <div class="w-1.5 h-3 bg-stone-800 mx-auto rounded-sm mb-0.5"></div>
+                      <div class="w-9 sm:w-12 h-20 sm:h-28 bg-[#3d4239] rounded-b-md shadow-lg transform -rotate-3 origin-top"></div>
+                    </div>
+                    <!-- Garment 6 -->
+                    <div class="group/garment cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+                      <div class="w-1.5 h-3 bg-stone-800 mx-auto rounded-sm mb-0.5"></div>
+                      <div class="w-11 sm:w-16 h-26 sm:h-34 bg-[#dedede] rounded-b-xl shadow-lg transform rotate-1 origin-top"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom Bar with Landscape Details -->
+              <div class="relative z-10 flex items-center justify-between text-white/90 text-xs">
+                <span class="font-serif italic tracking-wider">Series No. 2026-A</span>
+                <span class="text-[10px] tracking-mega uppercase bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">Autumn Highlands Archive</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- View 2: Minimal Studio Wire Layout (White Studio Backdrop) -->
+          <div id="view-minimal" class="view-panel absolute inset-0 bg-[#f8f7f5] p-8 flex flex-col justify-between transition-opacity duration-500 opacity-0 pointer-events-none">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[10px] font-mono tracking-widest uppercase text-studio-500">Pattern Spec #408</span>
+                <h3 class="font-serif italic text-2xl text-studio-900 mt-1">Loomed Silhouette Draft</h3>
+              </div>
+              <span class="text-xs font-mono border border-studio-300 px-2 py-1 rounded">100% UNBLEACHED FIBER</span>
+            </div>
+
+            <!-- Minimalist Linear Graphic -->
+            <div class="flex items-center justify-center my-auto">
+              <svg class="w-64 sm:w-80 h-64 text-studio-900 stroke-current" viewBox="0 0 200 200" fill="none">
+                <!-- Outer Garment Form -->
+                <path d="M70,30 L100,45 L130,30 L160,55 L145,85 L135,75 L138,175 L62,175 L65,75 L55,85 L40,55 Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Neck Ribbing -->
+                <path d="M85,38 C95,44 105,44 115,38" stroke-width="1.2"/>
+                <!-- Seam lines -->
+                <line x1="100" y1="45" x2="100" y2="175" stroke-width="0.8" stroke-dasharray="3 3"/>
+                <!-- Dimensional drape curves -->
+                <path d="M80,95 Q100,110 120,95" stroke-width="0.8" opacity="0.6"/>
+                <path d="M78,135 Q100,150 122,135" stroke-width="0.8" opacity="0.6"/>
+              </svg>
+            </div>
+
+            <div class="grid grid-cols-3 text-[11px] font-mono border-t border-studio-200 pt-3 text-studio-500">
+              <div>WARP: 64 ENDS/INCH</div>
+              <div class="text-center">TENSION: 4.8 NM</div>
+              <div class="text-right">WEIGHT: 380 GSM</div>
+            </div>
+          </div>
+
+          <!-- View 3: Close-up Drape & Texture View -->
+          <div id="view-drape" class="view-panel absolute inset-0 bg-[#1f2024] p-8 flex flex-col justify-between transition-opacity duration-500 opacity-0 pointer-events-none text-white">
+            <div class="flex justify-between items-center z-10">
+              <span class="text-xs uppercase tracking-widest text-emerald-400 font-mono">Micro-Weave Structure</span>
+              <span class="text-xs text-white/60">Macro View 40x</span>
+            </div>
+
+            <!-- Organic Mesh Pattern Simulation -->
+            <div class="absolute inset-0 opacity-25 flex items-center justify-center overflow-hidden">
+              <div class="w-full h-full bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:12px_12px]"></div>
+            </div>
+
+            <div class="relative z-10 my-auto text-center max-w-md mx-auto">
+              <span class="text-3xl sm:text-4xl font-serif italic text-white/90 block mb-2">Tactile Density</span>
+              <p class="text-xs text-white/70 leading-relaxed font-light">
+                Crafted from sustainably harvested Australian Merino wool spun alongside brushed baby alpaca yarn. The bespoke waffle rib knit traps micro-pockets of air for effortless thermoregulation.
+              </p>
+            </div>
+
+            <div class="relative z-10 flex justify-between text-[11px] font-mono text-white/50 border-t border-white/10 pt-3">
+              <span>ZERO SYNTHETIC MICROFIBERS</span>
+              <span>BIODEGRADABLE</span>
+            </div>
+          </div>
+
+          <!-- Quick Zoom Badge -->
+          <button class="absolute bottom-4 right-4 z-20 bg-white/90 backdrop-blur-md p-2 rounded-lg text-studio-900 shadow-md hover:bg-white transition-colors" title="Zoom texture" onclick="cyclePerspective()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+          </button>
+        </div>
+
+        <!-- Thumbnail Strip & Colorway previews -->
+        <div class="grid grid-cols-4 gap-3 pt-1">
+          <button onclick="switchView('ethereal')" class="group relative rounded-xl overflow-hidden border-2 border-studio-900 p-1 bg-white focus:outline-none thumb-btn" data-thumb="ethereal">
+            <div class="aspect-[4/3] rounded-lg bg-gradient-to-tr from-emerald-900 to-sky-700 flex items-center justify-center text-white text-[10px] font-medium">
+              Editorial
+            </div>
+          </button>
+
+          <button onclick="switchView('minimal')" class="group relative rounded-xl overflow-hidden border border-studio-200 p-1 bg-white hover:border-studio-400 focus:outline-none thumb-btn" data-thumb="minimal">
+            <div class="aspect-[4/3] rounded-lg bg-stone-100 flex items-center justify-center text-studio-800 text-[10px] font-medium font-mono">
+              Draft
+            </div>
+          </button>
+
+          <button onclick="switchView('drape')" class="group relative rounded-xl overflow-hidden border border-studio-200 p-1 bg-white hover:border-studio-400 focus:outline-none thumb-btn" data-thumb="drape">
+            <div class="aspect-[4/3] rounded-lg bg-zinc-900 flex items-center justify-center text-zinc-300 text-[10px] font-medium">
+              Weave
+            </div>
+          </button>
+
+          <button onclick="openLookbookModal()" class="group relative rounded-xl overflow-hidden border border-studio-200 p-1 bg-white hover:border-studio-400 focus:outline-none">
+            <div class="aspect-[4/3] rounded-lg bg-studio-100 flex flex-col items-center justify-center text-studio-600 text-[10px] font-medium">
+              <svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+              <span>Lookbook (6)</span>
+            </div>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: PRODUCT SPECIFICATIONS & ACTIONS (Col 8-12 Sticky) -->
+      <section class="lg:col-span-5 flex flex-col justify-start lg:sticky lg:top-24 h-fit" aria-label="Purchase Configuration">
+        
+        <div class="bg-white border border-studio-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+          
+          <!-- Editorial Collection Tag & Status -->
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <span class="text-[10px] font-bold tracking-mega uppercase text-studio-500 bg-studio-100 px-2.5 py-1 rounded">
+              Aura 2026 • Capsule 01
+            </span>
+            <span class="text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Limited Run: 150 Pieces
+            </span>
+          </div>
+
+          <!-- Product Title & Editorial Sub-header -->
+          <h1 class="text-2xl sm:text-3xl font-serif text-studio-900 tracking-tight leading-snug">
+            The Horizon Kinetic Knitwear
+          </h1>
+          <p class="text-xs text-studio-500 font-light mt-1.5 leading-relaxed">
+            Architectural drop-shoulder silhouette rendered in double-spun brushed alpaca & extra-fine virgin merino wool.
+          </p>
+
+          <!-- Price & Installments -->
+          <div class="mt-4 pb-5 border-b border-studio-200 flex flex-col gap-1">
+            <div class="flex items-baseline gap-3">
+              <span class="text-2xl font-bold tracking-tight text-studio-900" id="currentPrice">$380.00</span>
+              <span class="text-xs text-studio-500 line-through font-light">$440.00</span>
+              <span class="text-[10px] uppercase font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded ml-auto">
+                Save $60
+              </span>
+            </div>
+            <p class="text-[11px] text-studio-500 flex items-center gap-1">
+              <span>or 4 interest-free payments of <strong class="text-studio-800 font-semibold">$95.00</strong> with</span>
+              <span class="underline cursor-pointer font-medium hover:text-studio-900">Klarna</span>
+              <span>or</span>
+              <span class="underline cursor-pointer font-medium hover:text-studio-900">Afterpay</span>
+            </p>
+          </div>
+
+          <!-- Color Swatch Selector -->
+          <div class="mt-5">
+            <div class="flex justify-between items-center text-xs mb-2.5">
+              <span class="font-medium uppercase tracking-wider text-studio-600 text-[11px]">Color Tone:</span>
+              <span class="font-semibold text-studio-900 text-xs" id="selectedColorLabel">Obsidian Onyx</span>
+            </div>
+            
+            <div class="flex items-center gap-3" id="colorSwatches">
+              <!-- Swatch 1 (Obsidian) -->
+              <button onclick="selectColor('Obsidian Onyx', '#1e2024', this)" class="swatch-btn w-9 h-9 rounded-full ring-2 ring-studio-900 ring-offset-2 flex items-center justify-center transition-all" data-color="obsidian" aria-label="Select Obsidian Onyx">
+                <span class="w-7 h-7 rounded-full bg-[#1e2024] block shadow-inner"></span>
+              </button>
+
+              <!-- Swatch 2 (Moss Pine) -->
+              <button onclick="selectColor('Moss Pine', '#3a4739', this)" class="swatch-btn w-9 h-9 rounded-full ring-1 ring-studio-300 hover:ring-studio-500 ring-offset-2 flex items-center justify-center transition-all" data-color="pine" aria-label="Select Moss Pine">
+                <span class="w-7 h-7 rounded-full bg-[#3a4739] block shadow-inner"></span>
+              </button>
+
+              <!-- Swatch 3 (Mist Grey) -->
+              <button onclick="selectColor('Mist Grey Heather', '#7b8089', this)" class="swatch-btn w-9 h-9 rounded-full ring-1 ring-studio-300 hover:ring-studio-500 ring-offset-2 flex items-center justify-center transition-all" data-color="mist" aria-label="Select Mist Grey Heather">
+                <span class="w-7 h-7 rounded-full bg-[#7b8089] block shadow-inner"></span>
+              </button>
+
+              <!-- Swatch 4 (Sand Alabaster) -->
+              <button onclick="selectColor('Sand Alabaster', '#dfdacd', this)" class="swatch-btn w-9 h-9 rounded-full ring-1 ring-studio-300 hover:ring-studio-500 ring-offset-2 flex items-center justify-center transition-all" data-color="sand" aria-label="Select Sand Alabaster">
+                <span class="w-7 h-7 rounded-full bg-[#dfdacd] block shadow-inner"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Size Selector -->
+          <div class="mt-6">
+            <div class="flex justify-between items-center text-xs mb-2.5">
+              <span class="font-medium uppercase tracking-wider text-studio-600 text-[11px]">Select Size:</span>
+              <button onclick="openSizeModal()" class="text-studio-500 hover:text-studio-900 underline text-[11px] font-medium flex items-center gap-1 transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                Size & Fit Guide
+              </button>
+            </div>
+
+            <div class="grid grid-cols-5 gap-2" id="sizeOptions">
+              <button onclick="selectSize('XS', this)" class="size-pill py-2.5 text-xs font-semibold rounded-lg border border-studio-200 hover:border-studio-900 text-studio-800 transition-all">XS</button>
+              <button onclick="selectSize('S', this)" class="size-pill py-2.5 text-xs font-semibold rounded-lg border border-studio-200 hover:border-studio-900 text-studio-800 transition-all">S</button>
+              <button onclick="selectSize('M', this)" class="size-pill py-2.5 text-xs font-semibold rounded-lg bg-studio-900 text-white border border-studio-900 shadow-sm transition-all">M</button>
+              <button onclick="selectSize('L', this)" class="size-pill py-2.5 text-xs font-semibold rounded-lg border border-studio-200 hover:border-studio-900 text-studio-800 transition-all">L</button>
+              <button onclick="selectSize('XL', this)" class="size-pill py-2.5 text-xs font-semibold rounded-lg border border-studio-200 hover:border-studio-900 text-studio-800 transition-all">XL</button>
+            </div>
+            <p class="text-[11px] text-studio-500 mt-2 font-light">Fit: Model is 5'11" wearing Size M for relaxed drape.</p>
+          </div>
+
+          <!-- Quantity & Purchase Action Buttons -->
+          <div class="mt-6 flex flex-col gap-3">
+            <div class="flex items-center gap-3">
+              <!-- Quantity Counter -->
+              <div class="flex items-center border border-studio-200 rounded-xl bg-studio-50 px-3 py-2 w-32 justify-between">
+                <button onclick="adjustQty(-1)" class="text-studio-500 hover:text-studio-900 p-1 text-sm font-bold select-none">−</button>
+                <span id="qtyDisplay" class="font-semibold text-xs text-studio-900">1</span>
+                <button onclick="adjustQty(1)" class="text-studio-500 hover:text-studio-900 p-1 text-sm font-bold select-none">+</button>
+              </div>
+
+              <!-- Primary Add to Bag Button -->
+              <button id="addToBagBtn" onclick="addToBagAction()" class="flex-1 bg-studio-900 hover:bg-black text-white py-3.5 px-6 rounded-xl text-xs font-medium uppercase tracking-editorial shadow-lg shadow-studio-900/10 hover:shadow-studio-900/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                <span>Add to Bag — $380</span>
+              </button>
+            </div>
+
+            <!-- Accelerated Checkout Button (Shop Pay Style) -->
+            <button onclick="simulateFastCheckout()" class="w-full bg-[#5a31f4] hover:bg-[#4d28d6] text-white py-3 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 tracking-wide transition-all shadow-sm">
+              <span>Buy with</span>
+              <span class="font-bold tracking-tight italic text-sm">Shop Pay</span>
+            </button>
+          </div>
+
+          <!-- Reassurance Badges -->
+          <div class="mt-5 grid grid-cols-2 gap-2 text-[11px] text-studio-500 border-t border-studio-100 pt-4">
+            <div class="flex items-center gap-2">
+              <svg class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              <span>Complimentary Returns</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              <span>Carbon-Neutral Sourcing</span>
+            </div>
+          </div>
+
+          <!-- Editorial Accordion Modules -->
+          <div class="mt-6 border-t border-studio-200 divide-y divide-studio-200" id="accordionGroup">
+            
+            <!-- Accordion Item 1 -->
+            <div class="py-3">
+              <button onclick="toggleAccordion('acc-1')" class="w-full flex justify-between items-center text-left py-1 text-xs font-semibold uppercase tracking-wider text-studio-900 group">
+                <span>Materiality & Craft</span>
+                <span id="acc-1-icon" class="text-studio-400 group-hover:text-studio-900 transition-transform duration-200 text-lg">−</span>
+              </button>
+              <div id="acc-1" class="pt-2 text-xs text-studio-600 font-light leading-relaxed">
+                Spun in Biella, Italy using 60% virgin extra-fine merino wool (19.5 micron) and 40% certified cruelty-free baby alpaca. Loosely looped on a 7-gauge Japanese flat knitting loom to preserve yarn loft and breathability.
+              </div>
+            </div>
+
+            <!-- Accordion Item 2 -->
+            <div class="py-3">
+              <button onclick="toggleAccordion('acc-2')" class="w-full flex justify-between items-center text-left py-1 text-xs font-semibold uppercase tracking-wider text-studio-900 group">
+                <span>Sizing & Fit Specifications</span>
+                <span id="acc-2-icon" class="text-studio-400 group-hover:text-studio-900 transition-transform duration-200 text-lg">+</span>
+              </button>
+              <div id="acc-2" class="hidden pt-2 text-xs text-studio-600 font-light leading-relaxed">
+                Designed for an architectural relaxed drape with dropped armholes and ribbed elongated cuffs. If you prefer a tailored silhouette, we recommend sizing down one full size.
+              </div>
+            </div>
+
+            <!-- Accordion Item 3 -->
+            <div class="py-3">
+              <button onclick="toggleAccordion('acc-3')" class="w-full flex justify-between items-center text-left py-1 text-xs font-semibold uppercase tracking-wider text-studio-900 group">
+                <span>Artisanal Care Guide</span>
+                <span id="acc-3-icon" class="text-studio-400 group-hover:text-studio-900 transition-transform duration-200 text-lg">+</span>
+              </button>
+              <div id="acc-3" class="hidden pt-2 text-xs text-studio-600 font-light leading-relaxed">
+                Hand wash in cold water with pH-neutral wool detergent. Lay flat on a clean towel to dry. Do not tumble dry. Store folded with natural cedar blocks to prevent stretching.
+              </div>
+            </div>
+
+            <!-- Accordion Item 4 -->
+            <div class="py-3">
+              <button onclick="toggleAccordion('acc-4')" class="w-full flex justify-between items-center text-left py-1 text-xs font-semibold uppercase tracking-wider text-studio-900 group">
+                <span>Complimentary Delivery & Returns</span>
+                <span id="acc-4-icon" class="text-studio-400 group-hover:text-studio-900 transition-transform duration-200 text-lg">+</span>
+              </button>
+              <div id="acc-4" class="hidden pt-2 text-xs text-studio-600 font-light leading-relaxed">
+                Orders dispatch in plastic-free recycled linen cartons within 24 hours. We offer complimentary 30-day global returns and exchanges. Pre-paid label included in box.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================= VALUE PROPOSITION TRIPLETS ================= -->
+  <section class="max-w-[1600px] w-full mx-auto px-4 sm:px-8 py-12 my-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white border border-studio-200 rounded-2xl p-8">
+      
+      <div class="flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-studio-100 flex items-center justify-center text-studio-900 flex-shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
+        </div>
+        <div>
+          <h4 class="text-xs font-semibold uppercase tracking-wider text-studio-900">Zero-Waste Batching</h4>
+          <p class="text-xs text-studio-500 font-light mt-1">Each edition is strictly limited to prevent surplus inventory and excessive textile runoff.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-studio-100 flex items-center justify-center text-studio-900 flex-shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
+        </div>
+        <div>
+          <h4 class="text-xs font-semibold uppercase tracking-wider text-studio-900">Lifetime Mending Oath</h4>
+          <p class="text-xs text-studio-500 font-light mt-1">We supply complimentary reinforcement yarn and repair kits with every piece created.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-studio-100 flex items-center justify-center text-studio-900 flex-shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+        </div>
+        <div>
+          <h4 class="text-xs font-semibold uppercase tracking-wider text-studio-900">Carbon Neutral Transit</h4>
+          <p class="text-xs text-studio-500 font-light mt-1">100% of transport emissions are automatically offset through verified forestry initiatives.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= EDITORIAL LOOKBOOK SECTION ("Complete the Silhouette") ================= -->
+  <section class="max-w-[1600px] w-full mx-auto px-4 sm:px-8 py-10" id="lookbook">
+    <div class="border-t border-studio-200 pt-10">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <span class="text-[10px] font-bold tracking-mega uppercase text-studio-500">Styling Editorial</span>
+          <h2 class="text-2xl sm:text-3xl font-serif text-studio-900 mt-1">Complete The Silhouette</h2>
+        </div>
+        <p class="text-xs text-studio-500 max-w-md font-light leading-relaxed">
+          Curated pairings from the Autumn Capsule designed to complement the soft sculptural volume of the Kinetic Horizon Knit.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Companion Item 1 -->
+        <article class="bg-white border border-studio-200 rounded-2xl p-4 flex flex-col justify-between group">
+          <div class="aspect-[3/4] bg-[#eae7e1] rounded-xl overflow-hidden relative flex items-center justify-center">
+            <!-- SVG Graphic Silhouette for Garment -->
+            <svg class="w-32 h-44 text-stone-700 stroke-current opacity-80 group-hover:scale-105 transition-transform duration-500" viewBox="0 0 100 150" fill="none">
+              <path d="M30,20 L70,20 L80,140 L20,140 Z" stroke-width="1.8"/>
+              <line x1="50" y1="20" x2="50" y2="140" stroke-width="0.8" stroke-dasharray="2 2"/>
+            </svg>
+            <span class="absolute top-3 left-3 bg-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Tailored</span>
+          </div>
+          <div class="pt-4">
+            <h3 class="text-xs font-semibold text-studio-900 group-hover:underline">Pleated Wide-Leg Trousers</h3>
+            <p class="text-[11px] text-studio-500 mt-0.5">Heavyweight Organic Linen</p>
+            <div class="flex items-center justify-between mt-3">
+              <span class="text-xs font-bold text-studio-900">$260.00</span>
+              <button onclick="quickAdd('Pleated Wide-Leg Trousers', 260)" class="text-[11px] font-medium uppercase tracking-wider px-3 py-1.5 rounded-lg border border-studio-300 hover:border-studio-900 transition-colors">
+                + Quick Add
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Companion Item 2 -->
+        <article class="bg-white border border-studio-200 rounded-2xl p-4 flex flex-col justify-between group">
+          <div class="aspect-[3/4] bg-[#202224] rounded-xl overflow-hidden relative flex items-center justify-center">
+            <!-- Scarf Graphic -->
+            <svg class="w-28 h-44 text-zinc-400 stroke-current opacity-85 group-hover:scale-105 transition-transform duration-500" viewBox="0 0 100 150" fill="none">
+              <path d="M40,15 C60,15 65,30 60,60 C55,90 60,135 60,135 L40,135 C40,135 35,90 40,60 Z" stroke-width="1.8"/>
+              <line x1="40" y1="135" x2="60" y2="135" stroke-width="2"/>
+            </svg>
+            <span class="absolute top-3 left-3 bg-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Accessory</span>
+          </div>
+          <div class="pt-4">
+            <h3 class="text-xs font-semibold text-studio-900 group-hover:underline">Oversized Cashmere Scarf</h3>
+            <p class="text-[11px] text-studio-500 mt-0.5">Raw Edge Mongolian Yarn</p>
+            <div class="flex items-center justify-between mt-3">
+              <span class="text-xs font-bold text-studio-900">$185.00</span>
+              <button onclick="quickAdd('Oversized Cashmere Scarf', 185)" class="text-[11px] font-medium uppercase tracking-wider px-3 py-1.5 rounded-lg border border-studio-300 hover:border-studio-900 transition-colors">
+                + Quick Add
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Companion Item 3 -->
+        <article class="bg-white border border-studio-200 rounded-2xl p-4 flex flex-col justify-between group">
+          <div class="aspect-[3/4] bg-[#ded8ce] rounded-xl overflow-hidden relative flex items-center justify-center">
+            <!-- Minimal Bag Outline -->
+            <svg class="w-32 h-44 text-stone-800 stroke-current opacity-80 group-hover:scale-105 transition-transform duration-500" viewBox="0 0 100 150" fill="none">
+              <path d="M25,55 L75,55 L70,125 L30,125 Z" stroke-width="1.8"/>
+              <path d="M40,55 C40,30 60,30 60,55" stroke-width="1.6"/>
+            </svg>
+            <span class="absolute top-3 left-3 bg-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Leather Goods</span>
+          </div>
+          <div class="pt-4">
+            <h3 class="text-xs font-semibold text-studio-900 group-hover:underline">Sculptural Leather Tote</h3>
+            <p class="text-[11px] text-studio-500 mt-0.5">Vegetable-Tanned Vachetta</p>
+            <div class="flex items-center justify-between mt-3">
+              <span class="text-xs font-bold text-studio-900">$420.00</span>
+              <button onclick="quickAdd('Sculptural Leather Tote', 420)" class="text-[11px] font-medium uppercase tracking-wider px-3 py-1.5 rounded-lg border border-studio-300 hover:border-studio-900 transition-colors">
+                + Quick Add
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Companion Item 4 -->
+        <article class="bg-white border border-studio-200 rounded-2xl p-4 flex flex-col justify-between group">
+          <div class="aspect-[3/4] bg-[#343a37] rounded-xl overflow-hidden relative flex items-center justify-center text-white">
+            <div class="p-6 text-center">
+              <span class="font-serif italic text-xl block mb-2">Living Light Anthology</span>
+              <p class="text-[10px] text-white/70 font-light leading-relaxed">Hardcover linen publication exploring tactile architecture and slow fashion.</p>
+            </div>
+            <span class="absolute top-3 left-3 bg-white text-studio-900 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Print</span>
+          </div>
+          <div class="pt-4">
+            <h3 class="text-xs font-semibold text-studio-900 group-hover:underline">Studio Monograph Vol. II</h3>
+            <p class="text-[11px] text-studio-500 mt-0.5">Numbered Edition (500 copies)</p>
+            <div class="flex items-center justify-between mt-3">
+              <span class="text-xs font-bold text-studio-900">$65.00</span>
+              <button onclick="quickAdd('Studio Monograph Vol. II', 65)" class="text-[11px] font-medium uppercase tracking-wider px-3 py-1.5 rounded-lg border border-studio-300 hover:border-studio-900 transition-colors">
+                + Quick Add
+              </button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= CUSTOMER REVIEWS & SPECIFICATIONS ================= -->
+  <section class="max-w-[1600px] w-full mx-auto px-4 sm:px-8 py-10" id="reviews">
+    <div class="bg-white border border-studio-200 rounded-2xl p-6 sm:p-10">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Rating Overview (Col 1-4) -->
+        <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-studio-200 pb-6 lg:pb-0 lg:pr-8">
+          <span class="text-[10px] font-bold tracking-mega uppercase text-studio-500">Verified Client Notes</span>
+          <div class="flex items-baseline gap-3 mt-2">
+            <span class="text-4xl font-serif font-bold text-studio-900">4.9</span>
+            <div class="flex text-amber-500 text-sm">★★★★★</div>
+            <span class="text-xs text-studio-500">(48 Reviews)</span>
+          </div>
+          <p class="text-xs text-studio-500 font-light mt-2 leading-relaxed">
+            98% of reviewers recommend this piece. Rated true-to-size with exceptional softness on sensitive skin.
+          </p>
+
+          <!-- Star Breakdown -->
+          <div class="mt-6 space-y-2 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="w-12 text-studio-500 text-[11px]">5 Stars</span>
+              <div class="flex-1 h-2 bg-studio-100 rounded-full overflow-hidden">
+                <div class="w-[92%] h-full bg-studio-900"></div>
+              </div>
+              <span class="w-6 text-right text-studio-500 text-[11px]">44</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-12 text-studio-500 text-[11px]">4 Stars</span>
+              <div class="flex-1 h-2 bg-studio-100 rounded-full overflow-hidden">
+                <div class="w-[8%] h-full bg-studio-900"></div>
+              </div>
+              <span class="w-6 text-right text-studio-500 text-[11px]">4</span>
+            </div>
+            <div class="flex items-center gap-2 text-studio-300">
+              <span class="w-12 text-[11px]">3 Stars</span>
+              <div class="flex-1 h-2 bg-studio-100 rounded-full"></div>
+              <span class="w-6 text-right text-[11px]">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Curated Testimonials (Col 5-12) -->
+        <div class="lg:col-span-8 space-y-6">
+          <div class="border-b border-studio-100 pb-5">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-semibold text-studio-900">Camille V. — Paris, France</span>
+              <span class="text-[10px] text-studio-400">Verified Purchase • 2 weeks ago</span>
+            </div>
+            <div class="flex text-amber-500 text-xs mb-2">★★★★★</div>
+            <p class="text-xs text-studio-600 font-light leading-relaxed">
+              "The weight is extraordinary—it retains an ethereal drape without losing its structural collar. Worn throughout late October in Normandy and it provides remarkable warmth without weight."
+            </p>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-semibold text-studio-900">Julian K. — Kyoto, Japan</span>
+              <span class="text-[10px] text-studio-400">Verified Purchase • 1 month ago</span>
+            </div>
+            <div class="flex text-amber-500 text-xs mb-2">★★★★★</div>
+            <p class="text-xs text-studio-600 font-light leading-relaxed">
+              "Minimalism at its highest form. The Obsidian Onyx color is complex, holding deep ink undertones that shift subtly under gallery lighting. Exquisite finishing."
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="mt-auto bg-studio-900 text-studio-100 pt-16 pb-12 border-t border-studio-800">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-8">
+      
+      <!-- Top Columns -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16 border-b border-studio-800">
+        
+        <!-- Newsletter Box -->
+        <div class="lg:col-span-2 pr-0 lg:pr-8">
+          <span class="text-[10px] uppercase tracking-mega text-studio-400 font-medium">The Studio Gazette</span>
+          <h3 class="font-serif italic text-xl text-white mt-1.5 mb-2">Private Previews & Editions</h3>
+          <p class="text-xs text-studio-400 font-light leading-relaxed mb-4">
+            Receive invitations to limited seasonal capsules and artisanal textile archives before public dispatch.
+          </p>
+          <form onsubmit="handleSubscribe(event)" class="flex gap-2">
+            <input type="email" required placeholder="Enter your email address" class="bg-studio-800/80 border border-studio-700 rounded-xl px-4 py-2.5 text-xs text-white placeholder-studio-500 focus:outline-none focus:border-white flex-1">
+            <button type="submit" class="bg-white text-studio-900 hover:bg-studio-200 px-5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors">
+              Join
+            </button>
+          </form>
+          <div id="subSuccessMsg" class="hidden text-emerald-400 text-xs mt-2">Welcome to the private roll. Confirmation sent.</div>
+        </div>
+
+        <!-- Links 1 -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4">Collections</h4>
+          <ul class="space-y-2.5 text-xs text-studio-400 font-light">
+            <li><a href="#" class="hover:text-white transition-colors">Living Light Autumn</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Raw Cashmere Series</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Kinetic Linen Tailoring</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Artisanal Accessories</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Archive Re-Editions</a></li>
+          </ul>
+        </div>
+
+        <!-- Links 2 -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4">Client Care</h4>
+          <ul class="space-y-2.5 text-xs text-studio-400 font-light">
+            <li><button onclick="openSizeModal()" class="hover:text-white transition-colors">Garment Sizing Matrix</button></li>
+            <li><a href="#" class="hover:text-white transition-colors">Global Shipping Logistics</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Complimentary Returns Portal</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Garment Care Concierge</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Contact The Atelier</a></li>
+          </ul>
+        </div>
+
+        <!-- Links 3 -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4">Maison</h4>
+          <ul class="space-y-2.5 text-xs text-studio-400 font-light">
+            <li><a href="#" class="hover:text-white transition-colors">Ecological Transparency</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Biella Mill Partners</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Carbon Offset Ledger</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Press & Media Gallery</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Stockists Worldwide</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Giant Brand Monolith as in the design showcase -->
+      <div class="py-12 text-center select-none overflow-hidden">
+        <h2 class="text-5xl sm:text-7xl md:text-9xl font-bold tracking-tight text-studio-800/80 hover:text-studio-700 transition-colors uppercase">
+          Velvetica Studio
+        </h2>
+      </div>
+
+      <!-- Bottom Credits -->
+      <div class="flex flex-col sm:flex-row items-center justify-between text-studio-500 text-[11px] gap-4 pt-6 border-t border-studio-800/60 font-light">
+        <p>© 2026 Velvetica Studio Ltd. All rights reserved. Designed for slow living.</p>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-studio-300">Privacy Policy</a>
+          <a href="#" class="hover:text-studio-300">Terms of Service</a>
+          <a href="#" class="hover:text-studio-300">Accessibility</a>
+          <a href="#" class="hover:text-studio-300">Sustainability Audit</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ================= SLIDE-OVER CART DRAWER ================= -->
+  <div id="cartDrawerBackdrop" onclick="closeCart()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+
+  <aside id="cartDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out" aria-label="Shopping Cart">
+    
+    <!-- Drawer Header -->
+    <div class="p-6 border-b border-studio-200 flex items-center justify-between bg-studio-50">
+      <div class="flex items-center gap-2">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-studio-900">Your Bag</h3>
+        <span id="drawerCount" class="text-xs text-studio-500">(1 Item)</span>
+      </div>
+      <button onclick="closeCart()" class="p-2 text-studio-500 hover:text-studio-900 rounded-lg hover:bg-studio-200 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Free Shipping Progress Indicator -->
+    <div class="bg-studio-100 px-6 py-3 border-b border-studio-200 text-xs">
+      <div class="flex justify-between text-[11px] font-medium text-studio-800 mb-1.5">
+        <span id="shippingText">You've unlocked complimentary express shipping!</span>
+        <span class="text-emerald-700 font-bold">100%</span>
+      </div>
+      <div class="w-full h-1.5 bg-studio-200 rounded-full overflow-hidden">
+        <div id="shippingBar" class="h-full bg-emerald-600 transition-all duration-300 w-full"></div>
+      </div>
+    </div>
+
+    <!-- Cart Item List -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-4" id="cartItemsList">
+      <!-- Item Template -->
+      <div class="flex gap-4 p-3 bg-studio-50 rounded-xl border border-studio-200 relative group" id="mainCartItem">
+        <div class="w-20 h-24 bg-studio-900 rounded-lg flex-shrink-0 flex items-center justify-center text-white text-[10px] font-serif italic">
+          Onyx Knit
+        </div>
+        <div class="flex-1 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start">
+              <h4 class="text-xs font-bold text-studio-900">The Horizon Kinetic Knit</h4>
+              <button onclick="removeMainItem()" class="text-studio-400 hover:text-red-500 text-xs">✕</button>
+            </div>
+            <p class="text-[11px] text-studio-500 mt-0.5" id="cartItemVariant">Obsidian Onyx / Size M</p>
+          </div>
+          <div class="flex justify-between items-center mt-2">
+            <div class="flex items-center border border-studio-300 rounded-md bg-white text-xs px-2 py-0.5">
+              <button onclick="updateCartQty(-1)" class="px-1.5 text-studio-500 hover:text-studio-900">−</button>
+              <span id="cartDrawerQty" class="px-2 font-semibold">1</span>
+              <button onclick="updateCartQty(1)" class="px-1.5 text-studio-500 hover:text-studio-900">+</button>
+            </div>
+            <span class="text-xs font-bold text-studio-900" id="cartItemSubtotal">$380.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawer Footer / Checkout -->
+    <div class="p-6 border-t border-studio-200 bg-studio-50 space-y-3">
+      <div class="space-y-1.5 text-xs text-studio-600 font-light">
+        <div class="flex justify-between">
+          <span>Subtotal</span>
+          <span class="font-bold text-studio-900" id="cartSubtotalAmount">$380.00</span>
+        </div>
+        <div class="flex justify-between text-emerald-700">
+          <span>Express Worldwide Transit</span>
+          <span class="font-medium">Free</span>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button onclick="proceedToCheckout()" class="w-full bg-studio-900 hover:bg-black text-white py-3.5 rounded-xl text-xs font-semibold uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all">
+          <span>Secure Checkout</span>
+          <span>•</span>
+          <span id="checkoutBtnTotal">$380.00</span>
+        </button>
+      </div>
+      <p class="text-[10px] text-center text-studio-400 tracking-wider uppercase font-medium">Taxes and customs calculated at checkout</p>
+    </div>
+
+  </aside>
+
+  <!-- ================= SIZE & FIT GUIDE MODAL ================= -->
+  <div id="sizeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-in fade-in zoom-in duration-200">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-studio-200">
+        <div>
+          <h3 class="text-base font-bold uppercase tracking-wider text-studio-900">Size & Drape Specifications</h3>
+          <p class="text-xs text-studio-500">Measurements in inches (garment lying flat)</p>
+        </div>
+        <button onclick="closeSizeModal()" class="text-studio-400 hover:text-studio-900 text-lg p-1">✕</button>
+      </div>
+
+      <!-- Size Table -->
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-xs text-left">
+          <thead>
+            <tr class="border-b border-studio-200 text-studio-500 uppercase text-[10px] tracking-wider">
+              <th class="py-2.5">Size</th>
+              <th class="py-2.5">Chest</th>
+              <th class="py-2.5">Body Length</th>
+              <th class="py-2.5">Sleeve</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-studio-100 text-studio-800">
+            <tr>
+              <td class="py-2.5 font-bold">XS</td>
+              <td class="py-2.5">42"</td>
+              <td class="py-2.5">26.5"</td>
+              <td class="py-2.5">32.5"</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 font-bold">S</td>
+              <td class="py-2.5">44"</td>
+              <td class="py-2.5">27.0"</td>
+              <td class="py-2.5">33.5"</td>
+            </tr>
+            <tr class="bg-studio-100 font-semibold">
+              <td class="py-2.5 font-bold text-studio-900 pl-2">M (Sample)</td>
+              <td class="py-2.5">46"</td>
+              <td class="py-2.5">28.0"</td>
+              <td class="py-2.5">34.5"</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 font-bold">L</td>
+              <td class="py-2.5">48"</td>
+              <td class="py-2.5">29.0"</td>
+              <td class="py-2.5">35.5"</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 font-bold">XL</td>
+              <td class="py-2.5">51"</td>
+              <td class="py-2.5">30.0"</td>
+              <td class="py-2.5">36.5"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-5 p-3.5 bg-studio-50 rounded-xl text-xs text-studio-600 font-light leading-relaxed border border-studio-200">
+        <strong class="font-semibold text-studio-900">Stylist recommendation:</strong> The Horizon Silhouette has an intentional 3-inch relaxed boxy ease. For a classic tailored fit, select one size smaller.
+      </div>
+
+      <div class="mt-6 text-right">
+        <button onclick="closeSizeModal()" class="bg-studio-900 text-white px-5 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider">Close Guide</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= INLINE TOAST NOTIFICATION ================= -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-studio-900 text-white px-5 py-3.5 rounded-xl shadow-2xl text-xs flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300">
+    <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+    <span id="toastMessage">Item added to your bag.</span>
+  </div>
+
+  <!-- ================= CLIENT JAVASCRIPT LOGIC ================= -->
+  <script>
+    // State management
+    const productState = {
+      title: "The Horizon Kinetic Knitwear",
+      basePrice: 380,
+      selectedColor: "Obsidian Onyx",
+      selectedHex: "#1e2024",
+      selectedSize: "M",
+      qty: 1,
+      cartCount: 1,
+      currentView: 'ethereal'
+    };
+
+    const views = ['ethereal', 'minimal', 'drape'];
+
+    // 1. Perspective / View Switcher
+    function switchView(viewName) {
+      productState.currentView = viewName;
+      views.forEach(v => {
+        const el = document.getElementById('view-' + v);
+        const tab = document.getElementById('tab-' + v);
+        if (v === viewName) {
+          el.classList.remove('opacity-0', 'pointer-events-none');
+          el.classList.add('opacity-100', 'pointer-events-auto');
+          if (tab) {
+            tab.classList.add('bg-white', 'text-studio-900', 'shadow-sm');
+            tab.classList.remove('text-studio-500');
+          }
+        } else {
+          el.classList.add('opacity-0', 'pointer-events-none');
+          el.classList.remove('opacity-100', 'pointer-events-auto');
+          if (tab) {
+            tab.classList.remove('bg-white', 'text-studio-900', 'shadow-sm');
+            tab.classList.add('text-studio-500');
+          }
+        }
+      });
+
+      // Update thumbnail borders
+      document.querySelectorAll('.thumb-btn').forEach(btn => {
+        if (btn.dataset.thumb === viewName) {
+          btn.classList.add('border-studio-900');
+          btn.classList.remove('border-studio-200');
+        } else {
+          btn.classList.remove('border-studio-900');
+          btn.classList.add('border-studio-200');
+        }
+      });
+    }
+
+    function cyclePerspective() {
+      const currentIndex = views.indexOf(productState.currentView);
+      const nextIndex = (currentIndex + 1) % views.length;
+      switchView(views[nextIndex]);
+    }
+
+    // 2. Color Swatch Selector
+    function selectColor(colorName, hex, buttonElement) {
+      productState.selectedColor = colorName;
+      productState.selectedHex = hex;
+      
+      document.getElementById('selectedColorLabel').textContent = colorName;
+
+      // Update Swatch ring indicators
+      document.querySelectorAll('.swatch-btn').forEach(btn => {
+        btn.classList.remove('ring-2', 'ring-studio-900');
+        btn.classList.add('ring-1', 'ring-studio-300');
+      });
+      buttonElement.classList.add('ring-2', 'ring-studio-900');
+      buttonElement.classList.remove('ring-1', 'ring-studio-300');
+
+      // Update active garment visual representation in the clothesline
+      const activeGarment = document.getElementById('activeGarmentDrape');
+      if (activeGarment) {
+        activeGarment.style.backgroundColor = hex;
+      }
+
+      // Update cart variant preview string
+      document.getElementById('cartItemVariant').textContent = `${colorName} / Size ${productState.selectedSize}`;
+    }
+
+    // 3. Size Selector
+    function selectSize(sizeCode, buttonElement) {
+      productState.selectedSize = sizeCode;
+      
+      document.querySelectorAll('.size-pill').forEach(btn => {
+        btn.classList.remove('bg-studio-900', 'text-white', 'border-studio-900', 'shadow-sm');
+        btn.classList.add('border-studio-200', 'text-studio-800');
+      });
+
+      buttonElement.classList.add('bg-studio-900', 'text-white', 'border-studio-900', 'shadow-sm');
+      buttonElement.classList.remove('border-studio-200', 'text-studio-800');
+
+      document.getElementById('cartItemVariant').textContent = `${productState.selectedColor} / Size ${sizeCode}`;
+    }
+
+    // 4. Quantity Adjustments
+    function adjustQty(delta) {
+      let newQty = productState.qty + delta;
+      if (newQty < 1) newQty = 1;
+      if (newQty > 10) newQty = 10;
+      productState.qty = newQty;
+      document.getElementById('qtyDisplay').textContent = newQty;
+
+      // Update Add to Bag button price label
+      const total = newQty * productState.basePrice;
+      document.getElementById('addToBagBtn').querySelector('span').textContent = `Add to Bag — $${total}`;
+    }
+
+    // 5. Accordion Mechanism
+    function toggleAccordion(id) {
+      const content = document.getElementById(id);
+      const icon = document.getElementById(id + '-icon');
+      
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        icon.textContent = '−';
+      } else {
+        content.classList.add('hidden');
+        icon.textContent = '+';
+      }
+    }
+
+    // 6. Slide-Over Cart Drawer Operations
+    function openCart() {
+      const drawer = document.getElementById('cartDrawer');
+      const backdrop = document.getElementById('cartDrawerBackdrop');
+      
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+      backdrop.classList.add('opacity-100', 'pointer-events-auto');
+      
+      drawer.classList.remove('translate-x-full');
+      drawer.classList.add('translate-x-0');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+      const drawer = document.getElementById('cartDrawer');
+      const backdrop = document.getElementById('cartDrawerBackdrop');
+      
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
+      backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+      
+      drawer.classList.add('translate-x-full');
+      drawer.classList.remove('translate-x-0');
+      document.body.style.overflow = '';
+    }
+
+    function addToBagAction() {
+      showToast(`Added ${productState.qty} × Horizon Knit (${productState.selectedColor})`);
+      updateCartDisplay();
+      openCart();
+    }
+
+    function quickAdd(itemTitle, itemPrice) {
+      showToast(`Added "${itemTitle}" to your bag`);
+      openCart();
+    }
+
+    function updateCartDisplay() {
+      const subtotal = productState.qty * productState.basePrice;
+      document.getElementById('cartCountBadge').textContent = productState.qty;
+      document.getElementById('drawerCount').textContent = `(${productState.qty} ${productState.qty === 1 ? 'Item' : 'Items'})`;
+      document.getElementById('cartDrawerQty').textContent = productState.qty;
+      document.getElementById('cartItemSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('cartSubtotalAmount').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('checkoutBtnTotal').textContent = `$${subtotal.toFixed(2)}`;
+    }
+
+    function updateCartQty(delta) {
+      adjustQty(delta);
+      updateCartDisplay();
+    }
+
+    function removeMainItem() {
+      const itemEl = document.getElementById('mainCartItem');
+      if (itemEl) {
+        itemEl.style.opacity = '0.3';
+        setTimeout(() => {
+          itemEl.innerHTML = `<div class="p-4 text-xs text-studio-500 italic text-center w-full">Your bag is currently empty.</div>`;
+          document.getElementById('cartSubtotalAmount').textContent = '$0.00';
+          document.getElementById('checkoutBtnTotal').textContent = '$0.00';
+          document.getElementById('cartCountBadge').textContent = '0';
+        }, 200);
+      }
+    }
+
+    // 7. Modals & Notifications
+    function openSizeModal() {
+      const modal = document.getElementById('sizeModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeSizeModal() {
+      const modal = document.getElementById('sizeModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function openLookbookModal() {
+      switchView('ethereal');
+      showToast("Displaying Editorial Autumn Highlands perspective");
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      const msg = document.getElementById('toastMessage');
+      msg.textContent = message;
+      
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3500);
+    }
+
+    function simulateFastCheckout() {
+      showToast("Redirecting to Shop Pay accelerated portal...");
+    }
+
+    function proceedToCheckout() {
+      showToast("Routing to 256-bit encrypted checkout gateway...");
+    }
+
+    function handleSubscribe(e) {
+      e.preventDefault();
+      document.getElementById('subSuccessMsg').classList.remove('hidden');
+    }
+
+    // Bind bag open button
+    document.getElementById('openCartBtn').addEventListener('click', openCart);
+  </script>
+</body>
+</html>
