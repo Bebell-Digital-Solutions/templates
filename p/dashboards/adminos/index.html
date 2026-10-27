@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>AdminOS | SaaS Analytics Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Tailwind Theme Config -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#003fa4",
+            "error-container": "#ffdad6",
+            "tertiary-fixed": "#d3e4fe",
+            "on-error-container": "#93000a",
+            "surface-tint": "#0054d6",
+            "secondary": "#565e74",
+            "on-primary-fixed": "#001849",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed": "#131b2e",
+            "surface-container": "#eceef0",
+            "outline": "#727687",
+            "on-tertiary-fixed": "#0b1c30",
+            "on-secondary-fixed-variant": "#3f465c",
+            "surface-variant": "#e0e3e5",
+            "secondary-fixed-dim": "#bec6e0",
+            "secondary-fixed": "#dae2fd",
+            "primary-container": "#0066ff",
+            "secondary-container": "#dae2fd",
+            "surface-container-highest": "#e0e3e5",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed-variant": "#38485d",
+            "on-error": "#ffffff",
+            "tertiary-container": "#63738a",
+            "tertiary-fixed-dim": "#b7c8e1",
+            "on-primary-container": "#f8f7ff",
+            "on-surface-variant": "#424656",
+            "surface": "#f7f9fb",
+            "tertiary": "#4b5a70",
+            "outline-variant": "#c2c6d8",
+            "on-surface": "#191c1e",
+            "primary-fixed": "#dae1ff",
+            "on-secondary": "#ffffff",
+            "background": "#f7f9fb",
+            "inverse-primary": "#b3c5ff",
+            "surface-bright": "#f7f9fb",
+            "primary-fixed-dim": "#b3c5ff",
+            "inverse-surface": "#2d3133",
+            "surface-container-high": "#e6e8ea",
+            "on-secondary-container": "#5c647a",
+            "primary": "#0050cb",
+            "surface-container-low": "#f2f4f6",
+            "surface-dim": "#d8dadc",
+            "on-background": "#191c1e",
+            "on-tertiary-container": "#f6f8ff",
+            "error": "#ba1a1a",
+            "inverse-on-surface": "#eff1f3",
+            "on-tertiary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "xl": "32px",
+            "sm": "8px",
+            "lg": "24px",
+            "md": "16px",
+            "gutter": "24px",
+            "xs": "4px",
+            "sidebar-width": "280px",
+            "top-nav-height": "64px",
+            "base": "8px"
+          },
+          "fontFamily": {
+            "body-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "display-lg": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "title-lg": ["Inter"]
+          },
+          "fontSize": {
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+
+</head>
+
+<body
+  class="font-body-md text-on-surface bg-background dark:bg-inverse-surface dark:text-inverse-on-surface transition-colors duration-200">
+  <!-- Top Navigation Bar -->
+  <header
+    class="flex justify-between items-center h-top-nav-height px-gutter w-full sticky top-0 z-40 bg-surface dark:bg-inverse-surface border-b border-outline-variant transition-colors duration-200">
+    <div class="flex items-center gap-md"><button
+        class="md:hidden p-xs hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-full transition-colors"
+        id="mobile-menu-toggle">
+        <span class="material-symbols-outlined text-on-surface-variant dark:text-inverse-on-surface">menu</span>
+      </button>
+      <span class="font-title-lg text-title-lg font-bold text-primary dark:text-primary-fixed">AdminOS</span>
+      <div class="hidden md:flex items-center ml-lg gap-lg">
+        <nav class="flex gap-md">
+          <a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed py-xs font-body-md text-body-md"
+            href="#">Overview</a>
+          <a class="text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-on-surface-variant transition-colors px-sm py-xs rounded font-body-md text-body-md"
+            href="#">Insights</a>
+          <a class="text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-on-surface-variant transition-colors px-sm py-xs rounded font-body-md text-body-md"
+            href="#">Teams</a>
+        </nav>
+      </div>
+    </div>
+    <div class="flex items-center gap-md">
+      <div class="relative hidden sm:block">
+        <span
+          class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+        <input
+          class="pl-xl pr-md py-xs bg-surface-container dark:bg-on-surface-variant/20 rounded-lg border-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-fixed text-body-sm w-64 dark:text-inverse-on-surface placeholder:dark:text-outline"
+          placeholder="Global search..." type="text" />
+      </div>
+      <div class="flex items-center gap-sm">
+        <button aria-label="Toggle dark mode"
+          class="p-xs hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-full transition-colors cursor-pointer active:opacity-80"
+          id="theme-toggle">
+          <span class="material-symbols-outlined text-on-surface-variant dark:text-inverse-on-surface"
+            id="theme-icon">dark_mode</span>
+        </button>
+        <button
+          class="p-xs hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-full transition-colors cursor-pointer active:opacity-80">
+          <span
+            class="material-symbols-outlined text-on-surface-variant dark:text-inverse-on-surface">monitor_heart</span>
+        </button>
+        <div class="relative">
+          <button
+            class="material-symbols-outlined p-xs hover:bg-surface-container-high rounded-full cursor-pointer transition-colors text-on-surface-variant"
+            id="notification-bell">
+            notifications
+          </button>
+          <div
+            class="hidden absolute right-0 mt-2 w-80 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg z-[60] overflow-hidden"
+            id="notification-dropdown">
+            <div class="px-md py-sm border-b border-outline-variant flex justify-between items-center">
+              <h4 class="font-title-lg text-body-md font-bold text-on-surface">Notifications</h4>
+              <span class="text-primary font-label-md cursor-pointer hover:underline">Mark all as read</span>
+            </div>
+            <div class="max-h-96 overflow-y-auto custom-scrollbar">
+              <!-- Notification 1 -->
+              <div
+                class="px-md py-sm hover:bg-surface-container-low transition-colors cursor-pointer border-b border-outline-variant">
+                <div class="flex gap-sm">
+                  <div
+                    class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center text-primary flex-shrink-0">
+                    <span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
+                  </div>
+                  <div>
+                    <p class="text-body-sm font-semibold text-on-surface">New ticket assigned</p>
+                    <p class="text-label-sm text-on-surface-variant">Ticket #TK-8912 needs your attention.</p>
+                    <p class="text-[10px] text-outline mt-1">2 mins ago</p>
+                  </div>
+                </div>
+              </div>
+              <!-- Notification 2 -->
+              <div
+                class="px-md py-sm hover:bg-surface-container-low transition-colors cursor-pointer border-b border-outline-variant">
+                <div class="flex gap-sm">
+                  <div
+                    class="w-8 h-8 rounded-full bg-error-container/20 flex items-center justify-center text-error flex-shrink-0">
+                    <span class="material-symbols-outlined text-[18px]">warning</span>
+                  </div>
+                  <div>
+                    <p class="text-body-sm font-semibold text-on-surface">SLA breach warning</p>
+                    <p class="text-label-sm text-on-surface-variant">Acme Corp ticket is 15m from breach.</p>
+                    <p class="text-[10px] text-outline mt-1">10 mins ago</p>
+                  </div>
+                </div>
+              </div>
+              <!-- Notification 3 -->
+              <div class="px-md py-sm hover:bg-surface-container-low transition-colors cursor-pointer">
+                <div class="flex gap-sm">
+                  <div
+                    class="w-8 h-8 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary flex-shrink-0">
+                    <span class="material-symbols-outlined text-[18px]">trending_down</span>
+                  </div>
+                  <div>
+                    <p class="text-body-sm font-semibold text-on-surface">CSAT score drop alert</p>
+                    <p class="text-label-sm text-on-surface-variant">Overall satisfaction dipped to 4.2/5.</p>
+                    <p class="text-[10px] text-outline mt-1">1 hour ago</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="px-md py-sm bg-surface-container-low text-center">
+              <button class="text-primary font-label-md hover:underline">View all activity</button>
+            </div>
+          </div>
+        </div>
+        <div class="relative">
+          <button
+            class="w-8 h-8 rounded-full overflow-hidden border-2 border-transparent hover:border-primary transition-all active:opacity-80 focus:outline-none"
+            id="user-menu-button">
+            <img alt="User Avatar" class="w-full h-full object-cover" src="images/user.png" />
+          </button>
+          <div
+            class="hidden absolute right-0 mt-2 w-48 bg-surface-container-lowest dark:bg-inverse-surface border border-outline-variant rounded-xl shadow-xl z-50 overflow-hidden"
+            id="user-dropdown">
+            <div class="p-md border-b border-outline-variant">
+              <p class="text-label-md text-on-surface dark:text-inverse-on-surface font-bold">James Dalton</p>
+              <p class="text-[11px] text-on-surface-variant dark:text-outline-variant">j.dalton@enterprise.com</p>
+            </div>
+            <nav class="p-sm">
+              <a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-inverse-on-surface hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-lg text-body-sm"
+                href="#">
+                <span class="material-symbols-outlined text-[18px]">person</span>
+                <span class="">Profile</span>
+              </a>
+              <a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-inverse-on-surface hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-lg text-body-sm"
+                href="#">
+                <span class="material-symbols-outlined text-[18px]">settings</span>
+                <span class="">Settings</span>
+              </a>
+              <div class="my-sm border-t border-outline-variant"></div>
+              <a class="flex items-center gap-md px-md py-sm text-error hover:bg-error-container/20 rounded-lg text-body-sm"
+                href="#">
+                <span class="material-symbols-outlined text-[18px]">logout</span>
+                <span class="">Logout</span>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="min-h-screen">
+    <!-- Sidebar Navigation -->
+    <aside
+      class="w-sidebar-width h-screen fixed left-0 top-0 pt-top-nav-height bg-surface-container-lowest dark:bg-inverse-surface flex flex-col py-md px-sm border-r border-outline-variant z-30 md:flex -translate-x-full md:translate-x-0 transition-transform duration-200"
+      id="sidebar">
+      <div class="mb-lg px-md pt-md">
+        <div class="flex items-center gap-md mb-sm">
+          <div
+            class="w-10 h-10 rounded-xl bg-secondary-container dark:bg-secondary flex items-center justify-center text-primary dark:text-on-primary">
+            <span class="material-symbols-outlined">public</span>
+          </div>
+          <div>
+            <p class="font-label-md text-label-md font-black text-on-surface dark:text-inverse-on-surface">Global Admin
+            </p>
+            <p class="text-[10px] text-on-surface-variant dark:text-outline-variant uppercase tracking-wider">Enterprise
+              Suite</p>
+          </div>
+        </div>
+        <button
+          class="w-full flex items-center justify-between px-md py-sm bg-surface-container-low dark:bg-on-surface-variant/20 border border-outline-variant rounded-lg text-label-md font-label-md text-on-surface-variant dark:text-inverse-on-surface hover:translate-x-1 transition-transform cursor-pointer">
+          <span class="">Switch Workspace</span>
+          <span class="material-symbols-outlined text-[16px]">swap_horiz</span>
+        </button>
+      </div>
+      <nav class="flex-1 space-y-1">
+        <a class="flex items-center gap-md px-md py-sm bg-secondary-container dark:bg-primary-container text-on-secondary-container dark:text-on-primary-container rounded-lg font-label-md text-label-md cursor-pointer select-none"
+          href="#">
+          <span class="material-symbols-outlined">analytics</span>
+          <span class="">Analytics</span>
+        </a>
+        <a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-inverse-on-surface hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-lg font-label-md text-label-md transition-transform duration-200 hover:translate-x-1 cursor-pointer select-none"
+          href="#">
+          <span class="material-symbols-outlined">assignment</span>
+          <span class="">Projects</span>
+        </a>
+        <a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-inverse-on-surface hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-lg font-label-md text-label-md transition-transform duration-200 hover:translate-x-1 cursor-pointer select-none"
+          href="#">
+          <span class="material-symbols-outlined">description</span>
+          <span class="">CMS</span>
+        </a>
+        <a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-inverse-on-surface hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-lg font-label-md text-label-md transition-transform duration-200 hover:translate-x-1 cursor-pointer select-none"
+          href="#">
+          <span class="material-symbols-outlined">support_agent</span>
+          <span class="">Support</span>
+        </a>
+        <a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-inverse-on-surface hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-lg font-label-md text-label-md transition-transform duration-200 hover:translate-x-1 cursor-pointer select-none"
+          href="#">
+          <span class="material-symbols-outlined">local_shipping</span>
+          <span class="">Logistics</span>
+        </a>
+      </nav>
+      <div class="mt-auto border-t border-outline-variant pt-md">
+        <a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-inverse-on-surface hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-lg font-label-md text-label-md cursor-pointer select-none"
+          href="#">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="">Settings</span>
+        </a>
+        <a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-inverse-on-surface hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-lg font-label-md text-label-md cursor-pointer select-none"
+          href="#">
+          <span class="material-symbols-outlined">help</span>
+          <span class="">Help</span>
+        </a>
+        <p class="px-md py-sm text-[10px] text-on-surface-variant dark:text-outline-variant uppercase tracking-wider">© Developped by <a href="https://templatesjungle.com/" target="_blank">LaunchQuest</a>.</p>
+      </div>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="flex-1 md:ml-sidebar-width p-lg transition-all duration-300 dark:bg-background/5">
+      <!-- Breadcrumbs -->
+      <div
+        class="flex items-center gap-sm mb-lg text-label-md font-label-md text-on-surface-variant dark:text-outline-variant">
+        <span class="">Dashboard</span>
+        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span class="text-primary dark:text-primary-fixed">Analytics Overview</span>
+      </div>
+      <!-- Header Section -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-xl">
+        <div>
+          <h1 class="font-display-lg text-display-lg text-on-surface dark:text-inverse-on-surface">Company Overview</h1>
+          <p class="text-body-md text-on-surface-variant dark:text-outline-variant">Growth performance and revenue
+            metrics for Q3 2024</p>
+        </div>
+        <div class="flex items-center gap-md">
+          <button
+            class="bg-surface-container-lowest dark:bg-inverse-surface border border-outline-variant px-md py-sm rounded-lg font-label-md text-label-md text-on-surface dark:text-inverse-on-surface flex items-center gap-sm hover:bg-surface-container-high dark:hover:bg-on-surface-variant transition-colors">
+            <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+            <span class="">Last 12 Months</span>
+          </button>
+          <button
+            class="bg-primary dark:bg-primary-fixed text-on-primary dark:text-on-primary-fixed px-lg py-sm rounded-lg font-label-md text-label-md flex items-center gap-sm hover:opacity-90 transition-opacity">
+            <span class="material-symbols-outlined text-[18px]">download</span>
+            <span class="">Export Report</span>
+          </button>
+        </div>
+      </div>
+      <!-- Key SaaS Sections Row -->
+      <div class="grid grid-cols-1 xl:grid-cols-4 gap-lg mb-xl">
+        <!-- Subscription & Billing Overview -->
+        <div
+          class="xl:col-span-1 bg-surface-container-lowest dark:bg-inverse-surface p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-md">
+              <h4 class="font-title-lg text-title-lg text-on-surface dark:text-inverse-on-surface">Subscription</h4>
+              <span
+                class="px-sm py-xs bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-fixed text-[11px] font-bold rounded-full uppercase tracking-tight">Enterprise</span>
+            </div>
+            <div class="space-y-sm mb-lg">
+              <div class="flex justify-between items-center text-body-sm">
+                <span class="text-on-surface-variant dark:text-outline-variant">Monthly Cost</span>
+                <span class="font-bold text-on-surface dark:text-inverse-on-surface">$2,400.00</span>
+              </div>
+              <div class="flex justify-between items-center text-body-sm">
+                <span class="text-on-surface-variant dark:text-outline-variant">Next Renewal</span>
+                <span class="font-bold text-on-surface dark:text-inverse-on-surface">Nov 12, 2024</span>
+              </div>
+              <div class="flex justify-between items-center text-body-sm">
+                <span class="text-on-surface-variant dark:text-outline-variant">Payment Method</span>
+                <div class="flex items-center gap-xs">
+                  <span class="material-symbols-outlined text-[16px] dark:text-inverse-on-surface">credit_card</span>
+                  <span class="font-bold text-on-surface dark:text-inverse-on-surface">•••• 4242</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button
+            class="w-full py-sm bg-surface-container dark:bg-on-surface-variant/20 border border-outline-variant rounded-lg font-label-md text-label-md text-primary dark:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-on-surface-variant transition-colors flex items-center justify-center gap-xs">
+            <span class="material-symbols-outlined text-[18px]">manage_accounts</span>
+            Manage Subscription
+          </button>
+        </div>
+        <!-- Feature Usage Metrics -->
+        <div
+          class="xl:col-span-2 bg-surface-container-lowest dark:bg-inverse-surface p-lg rounded-xl border border-outline-variant shadow-sm">
+          <div class="flex items-center justify-between mb-lg">
+            <h4 class="font-title-lg text-title-lg text-on-surface dark:text-inverse-on-surface">Feature Usage</h4>
+            <span class="text-body-sm text-on-surface-variant dark:text-outline-variant">Reset in 14 days</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+            <div class="space-y-md">
+              <div>
+                <div class="flex justify-between text-body-sm mb-xs">
+                  <span class="text-on-surface dark:text-inverse-on-surface font-medium">API Calls</span>
+                  <span class="text-on-surface-variant dark:text-outline-variant">85% <span class="text-[11px]">(850k /
+                      1M)</span></span>
+                </div>
+                <div class="w-full h-2 bg-surface-container dark:bg-on-surface-variant/20 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary dark:bg-primary-fixed rounded-full" style="width: 85%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-body-sm mb-xs">
+                  <span class="text-on-surface dark:text-inverse-on-surface font-medium">Storage</span>
+                  <span class="text-on-surface-variant dark:text-outline-variant">40% <span class="text-[11px]">(20GB /
+                      50GB)</span></span>
+                </div>
+                <div class="w-full h-2 bg-surface-container dark:bg-on-surface-variant/20 rounded-full overflow-hidden">
+                  <div class="h-full bg-secondary dark:bg-secondary-fixed rounded-full" style="width: 40%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="space-y-md">
+              <div>
+                <div class="flex justify-between text-body-sm mb-xs">
+                  <span class="text-on-surface dark:text-inverse-on-surface font-medium">Team Seats</span>
+                  <span class="text-on-surface-variant dark:text-outline-variant">60% <span class="text-[11px]">(12 /
+                      20)</span></span>
+                </div>
+                <div class="w-full h-2 bg-surface-container dark:bg-on-surface-variant/20 rounded-full overflow-hidden">
+                  <div class="h-full bg-tertiary dark:bg-tertiary-fixed rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-body-sm mb-xs">
+                  <span class="text-on-surface dark:text-inverse-on-surface font-medium">Compute Hours</span>
+                  <span class="text-on-surface-variant dark:text-outline-variant">12% <span class="text-[11px]">(12 /
+                      100)</span></span>
+                </div>
+                <div class="w-full h-2 bg-surface-container dark:bg-on-surface-variant/20 rounded-full overflow-hidden">
+                  <div class="h-full bg-emerald-500 rounded-full" style="width: 12%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Project Health Score -->
+        <div
+          class="xl:col-span-1 bg-surface-container-lowest dark:bg-inverse-surface p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col items-center justify-center">
+          <h4 class="font-title-lg text-title-lg text-on-surface dark:text-inverse-on-surface mb-lg w-full">Project
+            Health</h4>
+          <div class="relative w-32 h-32 flex items-center justify-center mb-md">
+            <!-- Circular Gauge Background -->
+            <svg class="w-full h-full -rotate-90">
+              <circle class="text-surface-container dark:text-on-surface-variant/20" cx="64" cy="64" fill="transparent"
+                r="56" stroke="currentColor" stroke-width="8"></circle>
+              <circle class="text-emerald-500 transition-all duration-1000" cx="64" cy="64" fill="transparent" r="56"
+                stroke="currentColor" stroke-dasharray="351.85" stroke-dashoffset="3.51" stroke-width="8"></circle>
+            </svg>
+            <div class="absolute flex flex-col items-center">
+              <span class="font-display-lg text-display-lg text-on-surface dark:text-inverse-on-surface">99</span>
+              <span
+                class="text-label-sm text-on-surface-variant dark:text-outline-variant uppercase tracking-tighter">Excellent</span>
+            </div>
+          </div>
+          <div class="flex gap-md text-body-sm">
+            <div class="flex items-center gap-xs">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span class="text-on-surface-variant dark:text-outline-variant">Uptime 100%</span>
+            </div>
+            <div class="flex items-center gap-xs">
+              <span class="w-2 h-2 rounded-full bg-primary dark:bg-primary-fixed"></span>
+              <span class="text-on-surface-variant dark:text-outline-variant">Latency 45ms</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Top Metrics Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg mb-xl">
+        <!-- MRR Card -->
+        <div
+          class="bg-surface-container-lowest dark:bg-inverse-surface p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col gap-sm">
+          <div class="flex justify-between items-start">
+            <p
+              class="text-label-md font-label-md text-on-surface-variant dark:text-outline-variant uppercase tracking-wide">
+              MRR</p>
+            <div class="p-xs bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-fixed rounded-lg">
+              <span class="material-symbols-outlined text-[20px]">payments</span>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <h3 class="font-headline-md text-headline-md text-on-surface dark:text-inverse-on-surface">$1.2M</h3>
+            <div
+              class="flex items-center gap-xs text-success text-[12px] font-bold text-emerald-600 dark:text-emerald-400">
+              <span class="material-symbols-outlined text-[16px]">trending_up</span>
+              <span class="">+12%</span>
+              <span class="text-on-surface-variant dark:text-outline-variant font-normal ml-xs">vs last month</span>
+            </div>
+          </div>
+        </div>
+        <!-- Churn Rate Card -->
+        <div
+          class="bg-surface-container-lowest dark:bg-inverse-surface p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col gap-sm">
+          <div class="flex justify-between items-start">
+            <p
+              class="text-label-md font-label-md text-on-surface-variant dark:text-outline-variant uppercase tracking-wide">
+              Churn Rate</p>
+            <div class="p-xs bg-error/10 dark:bg-error/20 text-error dark:text-error-container rounded-lg">
+              <span class="material-symbols-outlined text-[20px]">group_remove</span>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <h3 class="font-headline-md text-headline-md text-on-surface dark:text-inverse-on-surface">2.4%</h3>
+            <div class="flex items-center gap-xs text-error dark:text-error-container text-[12px] font-bold">
+              <span class="material-symbols-outlined text-[16px]">trending_down</span>
+              <span class="">-0.5%</span>
+              <span class="text-on-surface-variant dark:text-outline-variant font-normal ml-xs">vs last month</span>
+            </div>
+          </div>
+        </div>
+        <!-- New Customers Card -->
+        <div
+          class="bg-surface-container-lowest dark:bg-inverse-surface p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col gap-sm">
+          <div class="flex justify-between items-start">
+            <p
+              class="text-label-md font-label-md text-on-surface-variant dark:text-outline-variant uppercase tracking-wide">
+              New Customers</p>
+            <div
+              class="p-xs bg-secondary/10 dark:bg-secondary/20 text-secondary dark:text-secondary-fixed-dim rounded-lg">
+              <span class="material-symbols-outlined text-[20px]">person_add</span>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <h3 class="font-headline-md text-headline-md text-on-surface dark:text-inverse-on-surface">450</h3>
+            <div class="flex items-center gap-xs text-emerald-600 dark:text-emerald-400 text-[12px] font-bold">
+              <span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+              <span class="">82</span>
+              <span class="text-on-surface-variant dark:text-outline-variant font-normal ml-xs">this week</span>
+            </div>
+          </div>
+        </div>
+        <!-- ARPU Card -->
+        <div
+          class="bg-surface-container-lowest dark:bg-inverse-surface p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col gap-sm">
+          <div class="flex justify-between items-start">
+            <p
+              class="text-label-md font-label-md text-on-surface-variant dark:text-outline-variant uppercase tracking-wide">
+              ARPU</p>
+            <div class="p-xs bg-tertiary/10 dark:bg-tertiary/20 text-tertiary dark:text-tertiary-fixed-dim rounded-lg">
+              <span class="material-symbols-outlined text-[20px]">insights</span>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <h3 class="font-headline-md text-headline-md text-on-surface dark:text-inverse-on-surface">$85</h3>
+            <div
+              class="flex items-center gap-xs text-on-surface-variant dark:text-outline-variant text-[12px] font-medium">
+              <span class="material-symbols-outlined text-[16px]">remove</span>
+              <span class="">Stable</span>
+              <span class="text-on-surface-variant dark:text-outline-variant font-normal ml-xs">per user</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Charts Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-lg mb-xl">
+        <!-- MRR Growth Line Chart -->
+        <div
+          class="lg:col-span-2 bg-surface-container-lowest dark:bg-inverse-surface p-lg rounded-xl border border-outline-variant shadow-sm">
+          <div class="flex items-center justify-between mb-lg">
+            <h4 class="font-title-lg text-title-lg text-on-surface dark:text-inverse-on-surface">MRR Growth</h4>
+            <select
+              class="bg-transparent border-none text-label-md font-label-md text-on-surface-variant dark:text-inverse-on-surface cursor-pointer focus:ring-0">
+              <option class="dark:bg-inverse-surface">Monthly</option>
+              <option class="dark:bg-inverse-surface">Quarterly</option>
+            </select>
+          </div>
+          <div class="h-[300px] w-full relative flex items-end justify-between px-md">
+            <div class="absolute inset-0 flex items-center justify-center opacity-50">
+              <div class="w-full h-full p-lg overflow-hidden">
+                <div
+                  class="w-full h-full bg-gradient-to-t from-primary/10 dark:from-primary-fixed/10 to-transparent rounded-t-lg">
+                </div>
+                <div class="absolute bottom-16 left-0 w-full h-[2px] bg-primary/20 dark:bg-primary-fixed/20"></div>
+              </div>
+            </div>
+            <div class="relative flex flex-col items-center gap-sm group">
+              <div
+                class="w-8 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-300 group-hover:opacity-80"
+                style="height: 120px;"></div>
+              <span class="text-label-sm text-on-surface-variant dark:text-outline-variant">Jan</span>
+            </div>
+            <div class="relative flex flex-col items-center gap-sm group">
+              <div
+                class="w-8 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-300 group-hover:opacity-80"
+                style="height: 140px;"></div>
+              <span class="text-label-sm text-on-surface-variant dark:text-outline-variant">Feb</span>
+            </div>
+            <div class="relative flex flex-col items-center gap-sm group">
+              <div
+                class="w-8 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-300 group-hover:opacity-80"
+                style="height: 165px;"></div>
+              <span class="text-label-sm text-on-surface-variant dark:text-outline-variant">Mar</span>
+            </div>
+            <div class="relative flex flex-col items-center gap-sm group">
+              <div
+                class="w-8 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-300 group-hover:opacity-80"
+                style="height: 155px;"></div>
+              <span class="text-label-sm text-on-surface-variant dark:text-outline-variant">Apr</span>
+            </div>
+            <div class="relative flex flex-col items-center gap-sm group">
+              <div
+                class="w-8 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-300 group-hover:opacity-80"
+                style="height: 180px;"></div>
+              <span class="text-label-sm text-on-surface-variant dark:text-outline-variant">May</span>
+            </div>
+            <div class="relative flex flex-col items-center gap-sm group">
+              <div
+                class="w-8 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-300 group-hover:opacity-80"
+                style="height: 210px;"></div>
+              <span class="text-label-sm text-on-surface-variant dark:text-outline-variant">Jun</span>
+            </div>
+            <div class="relative flex flex-col items-center gap-sm group">
+              <div
+                class="w-8 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-300 group-hover:opacity-80"
+                style="height: 195px;"></div>
+              <span class="text-label-sm text-on-surface-variant dark:text-outline-variant">Jul</span>
+            </div>
+            <div class="relative flex flex-col items-center gap-sm group">
+              <div
+                class="w-8 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-300 group-hover:opacity-80"
+                style="height: 230px;"></div>
+              <span class="text-label-sm text-on-surface-variant dark:text-outline-variant">Aug</span>
+            </div>
+            <div class="relative flex flex-col items-center gap-sm group">
+              <div
+                class="w-8 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-300 group-hover:opacity-80"
+                style="height: 250px;"></div>
+              <span class="text-label-sm text-on-surface-variant dark:text-outline-variant">Sep</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sentiment Gauge -->
+        <div
+          class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm p-lg flex flex-col items-center justify-center text-center">
+          <h3 class="font-title-lg text-title-lg mb-lg self-start">Sentiment Analysis</h3>
+          <div class="relative w-48 h-48 mb-lg flex items-center justify-center">
+            <div class="sentiment-gauge absolute inset-0 rotate-[225deg]"></div>
+            <div class="relative z-10">
+              <span class="font-display-lg text-display-lg text-primary">84%</span>
+              <p class="text-label-sm font-label-sm uppercase text-on-surface-variant">Positive</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 w-full gap-sm">
+            <div class="p-sm bg-surface-container-low rounded-lg">
+              <p class="text-label-sm text-error">12%</p>
+              <p class="text-label-sm text-on-surface-variant font-bold">Neg</p>
+            </div>
+            <div class="p-sm bg-surface-container-low rounded-lg">
+              <p class="text-label-sm text-on-surface-variant">4%</p>
+              <p class="text-label-sm text-on-surface-variant font-bold">Neut</p>
+            </div>
+            <div class="p-sm bg-surface-container-low rounded-lg border-2 border-primary/20">
+              <p class="text-label-sm text-primary">84%</p>
+              <p class="text-label-sm text-on-surface-variant font-bold">Pos</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Lists: Top Posts and Calendar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-lg mb-xl">
+        <!-- Top Posts -->
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+          <div class="p-lg border-b border-outline-variant flex justify-between items-center">
+            <h3 class="font-title-lg text-title-lg">Top Posts by Reach</h3>
+            <button class="text-primary font-label-md">View All</button>
+          </div>
+          <div class="p-0">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-surface-container-low border-b border-outline-variant">
+                  <th class="px-lg py-md text-label-md uppercase font-label-md text-on-surface-variant">Content</th>
+                  <th class="px-lg py-md text-label-md uppercase font-label-md text-on-surface-variant">Channel</th>
+                  <th class="px-lg py-md text-label-md uppercase font-label-md text-on-surface-variant text-right">Reach
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant">
+                <tr class="hover:bg-surface-container-low transition-colors cursor-pointer">
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-md">
+                      <div class="w-10 h-10 rounded overflow-hidden flex-shrink-0">
+                        <img class="w-full h-full object-cover"
+                          data-alt="A close-up of a high-resolution smartphone screen displaying vibrant social media icons against a backdrop of soft bokeh city lights at twilight. The composition is sleek and professional, with high contrast and deep blues, reflecting an advanced tech aesthetic for a social management dashboard. The mood is energetic and modern."
+                          src="images/image-01.png" />
+                      </div>
+                      <span class="font-body-sm line-clamp-1">New Product Launch 2024 Campaign</span>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md"><span
+                      class="px-sm py-xs bg-[#E1306C]/10 text-[#E1306C] rounded-full text-label-sm font-bold">Instagram</span>
+                  </td>
+                  <td class="px-lg py-md text-right font-bold">124k</td>
+                </tr>
+                <tr class="hover:bg-surface-container-low transition-colors cursor-pointer">
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-md">
+                      <div class="w-10 h-10 rounded overflow-hidden flex-shrink-0">
+                        <img class="w-full h-full object-cover"
+                          data-alt="A professional team collaborating around a minimalist wooden table in a bright, sunlit glass office. The scene is airy and high-key, with soft shadows and a clean palette of whites and grays, representing professional success. The visual style is focused and corporate, perfect for a LinkedIn-related dashboard element."
+                          src="images/image-02.png" />
+                      </div>
+                      <span class="font-body-sm line-clamp-1">Expert Tips for Enterprise Growth</span>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md"><span
+                      class="px-sm py-xs bg-[#0077B5]/10 text-[#0077B5] rounded-full text-label-sm font-bold">LinkedIn</span>
+                  </td>
+                  <td class="px-lg py-md text-right font-bold">89k</td>
+                </tr>
+                <tr class="hover:bg-surface-container-low transition-colors cursor-pointer">
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-md">
+                      <div class="w-10 h-10 rounded overflow-hidden flex-shrink-0">
+                        <img class="w-full h-full object-cover"
+                          data-alt="Abstract digital graphic of a trending bar chart rendered in neon blue and deep indigo. The lighting is dark and cinematic with glowing elements that emphasize data growth. This artwork fits a high-performance analytics dashboard, representing real-time Twitter trends with a focus on speed and accuracy."
+                          src="images/image-03.png" />
+                      </div>
+                      <span class="font-body-sm line-clamp-1">#TechSummit Live Coverage</span>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md"><span
+                      class="px-sm py-xs bg-[#1DA1F2]/10 text-[#1DA1F2] rounded-full text-label-sm font-bold">Twitter</span>
+                  </td>
+                  <td class="px-lg py-md text-right font-bold">56k</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Scheduled Posts Calendar -->
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm p-lg">
+          <div class="flex justify-between items-center mb-lg">
+            <h3 class="font-title-lg text-title-lg">Upcoming Schedule</h3>
+            <button class="bg-primary text-on-primary px-md py-xs rounded-lg font-label-md flex items-center gap-sm">
+              <span class="material-symbols-outlined text-sm" data-icon="add">add</span> Post
+            </button>
+          </div>
+          <div class="space-y-md">
+            <div class="flex gap-md group">
+              <div class="flex flex-col items-center justify-start pt-xs">
+                <span class="font-bold text-on-surface leading-none">14</span>
+                <span class="text-label-sm text-on-surface-variant">OCT</span>
+                <div class="w-px h-full bg-outline-variant mt-sm group-last:hidden"></div>
+              </div>
+              <div class="flex-1 pb-lg">
+                <div
+                  class="p-md bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary transition-colors cursor-pointer">
+                  <div class="flex justify-between mb-xs">
+                    <span class="text-label-sm font-bold text-on-surface-variant">09:30 AM</span>
+                    <span class="material-symbols-outlined text-md text-[#E1306C]"
+                      data-icon="photo_camera">photo_camera</span>
+                  </div>
+                  <p class="font-label-md text-on-surface">Weekly Recap: Community Stories</p>
+                  <p class="text-label-sm text-on-surface-variant mt-xs italic">Awaiting Approval</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-md group">
+              <div class="flex flex-col items-center justify-start pt-xs">
+                <span class="font-bold text-on-surface leading-none">15</span>
+                <span class="text-label-sm text-on-surface-variant">OCT</span>
+                <div class="w-px h-full bg-outline-variant mt-sm group-last:hidden"></div>
+              </div>
+              <div class="flex-1 pb-lg">
+                <div
+                  class="p-md bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary transition-colors cursor-pointer">
+                  <div class="flex justify-between mb-xs">
+                    <span class="text-label-sm font-bold text-on-surface-variant">02:00 PM</span>
+                    <span class="material-symbols-outlined text-md text-[#0077B5]" data-icon="work">work</span>
+                  </div>
+                  <p class="font-label-md text-on-surface">New Webinar: Enterprise Social Scaling</p>
+                  <p class="text-label-sm text-primary mt-xs">Scheduled</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-md group">
+              <div class="flex flex-col items-center justify-start pt-xs">
+                <span class="font-bold text-on-surface leading-none">17</span>
+                <span class="text-label-sm text-on-surface-variant">OCT</span>
+                <div class="w-px h-full bg-outline-variant mt-sm group-last:hidden"></div>
+              </div>
+              <div class="flex-1">
+                <div
+                  class="p-md bg-surface-container-low border border-outline-variant rounded-lg hover:border-primary transition-colors cursor-pointer">
+                  <div class="flex justify-between mb-xs">
+                    <span class="text-label-sm font-bold text-on-surface-variant">11:45 AM</span>
+                    <span class="material-symbols-outlined text-md text-[#1DA1F2]" data-icon="chat">chat</span>
+                  </div>
+                  <p class="font-label-md text-on-surface">Industry News Rundown</p>
+                  <p class="text-label-sm text-primary mt-xs">Scheduled</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-lg mb-xl">
+        <!-- Recent Signups Table -->
+        <div
+          class="lg:col-span-2 bg-surface-container-lowest dark:bg-inverse-surface rounded-xl border border-outline-variant shadow-sm overflow-hidden h-fit">
+          <div
+            class="px-lg py-md border-b border-outline-variant flex items-center justify-between bg-surface-container-low dark:bg-on-surface-variant/10">
+            <h4 class="font-title-lg text-title-lg text-on-surface dark:text-inverse-on-surface">Recent Signups</h4>
+            <div class="flex items-center gap-md">
+              <button
+                class="p-xs hover:bg-surface-container-high dark:hover:bg-on-surface-variant rounded-lg transition-colors">
+                <span
+                  class="material-symbols-outlined text-on-surface-variant dark:text-inverse-on-surface">filter_list</span>
+              </button>
+            </div>
+          </div>
+          <div class="overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-surface-container-low/50 dark:bg-on-surface-variant/5">
+                  <th
+                    class="px-lg py-md font-label-md text-label-md text-on-surface-variant dark:text-outline-variant uppercase tracking-wider">
+                    User</th>
+                  <th
+                    class="px-lg py-md font-label-md text-label-md text-on-surface-variant dark:text-outline-variant uppercase tracking-wider">
+                    Plan</th>
+                  <th
+                    class="px-lg py-md font-label-md text-label-md text-on-surface-variant dark:text-outline-variant uppercase tracking-wider">
+                    Status</th>
+                  <th
+                    class="px-lg py-md font-label-md text-label-md text-on-surface-variant dark:text-outline-variant uppercase tracking-wider text-right">
+                    Join Date</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant">
+                <tr class="hover:bg-surface dark:hover:bg-on-surface-variant/10 transition-colors cursor-pointer group">
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-md">
+                      <div
+                        class="w-10 h-10 rounded-full bg-primary-container/20 dark:bg-primary-fixed/20 flex items-center justify-center text-primary dark:text-primary-fixed font-bold">
+                        JD</div>
+                      <div>
+                        <p class="font-label-md text-label-md text-on-surface dark:text-inverse-on-surface">James Dalton
+                        </p>
+                        <p class="text-[11px] text-on-surface-variant dark:text-outline-variant">j.dalton@enterprise.com
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md">
+                    <span
+                      class="px-sm py-xs bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-fixed text-[11px] font-bold rounded-full uppercase tracking-tight">Enterprise</span>
+                  </td>
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-xs text-emerald-600 dark:text-emerald-400">
+                      <span class="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400"></span>
+                      <span class="text-label-md font-label-md">Active</span>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md text-right text-body-sm text-on-surface-variant dark:text-outline-variant">Oct
+                    12, 2024</td>
+                </tr>
+                <tr class="hover:bg-surface dark:hover:bg-on-surface-variant/10 transition-colors cursor-pointer group">
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-md">
+                      <div
+                        class="w-10 h-10 rounded-full bg-secondary-container/20 dark:bg-secondary-fixed/20 flex items-center justify-center text-secondary dark:text-secondary-fixed-dim font-bold">
+                        SL</div>
+                      <div>
+                        <p class="font-label-md text-label-md text-on-surface dark:text-inverse-on-surface">Sarah Lee
+                        </p>
+                        <p class="text-[11px] text-on-surface-variant dark:text-outline-variant">sarah@creative.io</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md">
+                    <span
+                      class="px-sm py-xs bg-secondary/10 dark:bg-secondary/20 text-secondary dark:text-secondary-fixed-dim text-[11px] font-bold rounded-full uppercase tracking-tight">Pro</span>
+                  </td>
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-xs text-emerald-600 dark:text-emerald-400">
+                      <span class="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400"></span>
+                      <span class="text-label-md font-label-md">Active</span>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md text-right text-body-sm text-on-surface-variant dark:text-outline-variant">Oct
+                    11, 2024</td>
+                </tr>
+                <tr class="hover:bg-surface dark:hover:bg-on-surface-variant/10 transition-colors cursor-pointer group">
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-md">
+                      <div
+                        class="w-10 h-10 rounded-full bg-tertiary-container/20 dark:bg-tertiary-fixed/20 flex items-center justify-center text-tertiary dark:text-tertiary-fixed-dim font-bold">
+                        MK</div>
+                      <div>
+                        <p class="font-label-md text-label-md text-on-surface dark:text-inverse-on-surface">Mark Kloss
+                        </p>
+                        <p class="text-[11px] text-on-surface-variant dark:text-outline-variant">mark@kloss.de</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md">
+                    <span
+                      class="px-sm py-xs bg-surface-container-high dark:bg-on-surface-variant/30 text-on-surface-variant dark:text-inverse-on-surface text-[11px] font-bold rounded-full uppercase tracking-tight">Basic</span>
+                  </td>
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-xs text-amber-500">
+                      <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                      <span class="text-label-md font-label-md">Pending</span>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md text-right text-body-sm text-on-surface-variant dark:text-outline-variant">Oct
+                    10, 2024</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            class="px-lg py-md border-t border-outline-variant flex items-center justify-between bg-surface-container-low dark:bg-on-surface-variant/10">
+            <p class="text-label-md text-on-surface-variant dark:text-outline-variant">Showing 3 of 1,240</p>
+            <div class="flex items-center gap-sm">
+              <button
+                class="px-md py-xs border border-outline-variant rounded-lg text-label-md hover:bg-surface dark:hover:bg-on-surface-variant/20 dark:text-inverse-on-surface transition-colors">View
+                All</button>
+            </div>
+          </div>
+        </div>
+        <!-- Team Activity Feed -->
+        <div
+          class="lg:col-span-1 bg-surface-container-lowest dark:bg-inverse-surface rounded-xl border border-outline-variant shadow-sm flex flex-col">
+          <div
+            class="px-lg py-md border-b border-outline-variant bg-surface-container-low dark:bg-on-surface-variant/10 flex items-center justify-between">
+            <h4 class="font-title-lg text-title-lg text-on-surface dark:text-inverse-on-surface">Team Activity</h4>
+            <span
+              class="material-symbols-outlined text-on-surface-variant dark:text-inverse-on-surface text-[20px]">history</span>
+          </div>
+          <div class="p-lg flex-1 overflow-y-auto custom-scrollbar space-y-lg">
+            <div class="flex gap-md">
+              <div class="relative">
+                <img class="w-8 h-8 rounded-full object-cover" src="images/user.png" />
+                <span
+                  class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary dark:bg-primary-fixed text-white dark:text-on-primary-fixed rounded-full flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[10px]">key</span>
+                </span>
+              </div>
+              <div>
+                <p class="text-body-sm text-on-surface dark:text-inverse-on-surface"><span class="font-bold">Sarah
+                    Lee</span> updated the API keys</p>
+                <p class="text-label-sm text-on-surface-variant dark:text-outline-variant">2 mins ago</p>
+              </div>
+            </div>
+            <div class="flex gap-md">
+              <div class="relative">
+                <div
+                  class="w-8 h-8 rounded-full bg-secondary-container dark:bg-secondary-fixed flex items-center justify-center text-primary dark:text-on-secondary-fixed font-bold text-[12px]">
+                  ML</div>
+                <span
+                  class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 text-white rounded-full flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[10px]">person_add</span>
+                </span>
+              </div>
+              <div>
+                <p class="text-body-sm text-on-surface dark:text-inverse-on-surface"><span class="font-bold">Mike</span>
+                  invited 2 new users</p>
+                <p class="text-label-sm text-on-surface-variant dark:text-outline-variant">45 mins ago</p>
+              </div>
+            </div>
+            <div class="flex gap-md">
+              <div class="relative">
+                <div
+                  class="w-8 h-8 rounded-full bg-tertiary-container dark:bg-tertiary-fixed flex items-center justify-center text-on-tertiary dark:text-on-tertiary-fixed font-bold text-[12px]">
+                  JD</div>
+                <span
+                  class="absolute -bottom-1 -right-1 w-4 h-4 bg-amber-500 text-white rounded-full flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[10px]">settings</span>
+                </span>
+              </div>
+              <div>
+                <p class="text-body-sm text-on-surface dark:text-inverse-on-surface"><span
+                    class="font-bold">James</span> modified workspace permissions</p>
+                <p class="text-label-sm text-on-surface-variant dark:text-outline-variant">2 hours ago</p>
+              </div>
+            </div>
+            <div class="flex gap-md">
+              <div class="relative">
+                <div
+                  class="w-8 h-8 rounded-full bg-surface-container-highest dark:bg-on-surface-variant flex items-center justify-center text-on-surface-variant dark:text-inverse-on-surface font-bold text-[12px]">
+                  AV</div>
+                <span
+                  class="absolute -bottom-1 -right-1 w-4 h-4 bg-error text-white rounded-full flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[10px]">delete</span>
+                </span>
+              </div>
+              <div>
+                <p class="text-body-sm text-on-surface dark:text-inverse-on-surface"><span class="font-bold">Alex</span>
+                  deleted 4 stale projects</p>
+                <p class="text-label-sm text-on-surface-variant dark:text-outline-variant">5 hours ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visuals Section: Multi-line Chart and Sentiment -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-lg mb-xl">
+        <!-- Multi-line Chart -->
+        <div
+          class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden flex flex-col">
+          <div class="p-lg border-b border-outline-variant flex justify-between items-center">
+            <h3 class="font-title-lg text-title-lg">Channel Performance Comparison</h3>
+            <div class="flex gap-md">
+              <div class="flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-[#1DA1F2]"></span><span
+                  class="text-label-sm">Twitter</span></div>
+              <div class="flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-[#E1306C]"></span><span
+                  class="text-label-sm">Instagram</span></div>
+              <div class="flex items-center gap-xs"><span class="w-3 h-3 rounded-full bg-[#0077B5]"></span><span
+                  class="text-label-sm">LinkedIn</span></div>
+            </div>
+          </div>
+          <div class="p-lg flex-1 min-h-[300px] flex items-end justify-between relative">
+            <!-- Simulated Chart Grid -->
+            <div
+              class="absolute inset-x-lg inset-y-lg border-l border-b border-outline-variant pointer-events-none opacity-30">
+            </div>
+            <!-- Simulated Line Drawing with SVG -->
+            <svg class="absolute inset-x-lg inset-y-lg w-[calc(100%-48px)] h-[calc(100%-48px)]"
+              preserveaspectratio="none" viewbox="0 0 100 100">
+              <!-- Twitter Line -->
+              <polyline fill="none" points="0,80 20,40 40,60 60,20 80,45 100,30" stroke="#1DA1F2" stroke-width="2">
+              </polyline>
+              <!-- Instagram Line -->
+              <polyline fill="none" points="0,90 20,70 40,30 60,50 80,20 100,10" stroke="#E1306C" stroke-width="2">
+              </polyline>
+              <!-- LinkedIn Line -->
+              <polyline fill="none" points="0,60 20,55 40,65 60,58 80,62 100,55" stroke="#0077B5" stroke-width="2">
+              </polyline>
+            </svg>
+            <!-- X Axis Labels -->
+            <div class="absolute bottom-4 left-lg right-lg flex justify-between text-label-sm text-on-surface-variant">
+              <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+            </div>
+          </div>
+        </div>
+        <!-- Sentiment Gauge -->
+        <div
+          class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm p-lg flex flex-col items-center justify-center text-center">
+          <h3 class="font-title-lg text-title-lg mb-lg self-start">Sentiment Analysis</h3>
+          <div class="relative w-48 h-48 mb-lg flex items-center justify-center">
+            <div class="sentiment-gauge absolute inset-0 rotate-[225deg]"></div>
+            <div class="relative z-10">
+              <span class="font-display-lg text-display-lg text-primary">84%</span>
+              <p class="text-label-sm font-label-sm uppercase text-on-surface-variant">Positive</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 w-full gap-sm">
+            <div class="p-sm bg-surface-container-low rounded-lg">
+              <p class="text-label-sm text-error">12%</p>
+              <p class="text-label-sm text-on-surface-variant font-bold">Neg</p>
+            </div>
+            <div class="p-sm bg-surface-container-low rounded-lg">
+              <p class="text-label-sm text-on-surface-variant">4%</p>
+              <p class="text-label-sm text-on-surface-variant font-bold">Neut</p>
+            </div>
+            <div class="p-sm bg-surface-container-low rounded-lg border-2 border-primary/20">
+              <p class="text-label-sm text-primary">84%</p>
+              <p class="text-label-sm text-on-surface-variant font-bold">Pos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-lg mb-xl">
+
+        <!-- Main Chart: Ticket Volume -->
+        <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm">
+          <div class="flex justify-between items-center mb-lg">
+            <h3 class="font-title-lg text-title-lg text-on-surface">Ticket Volume Throughout Day</h3>
+            <div class="flex items-center gap-md">
+              <div class="flex items-center gap-xs">
+                <span class="w-3 h-3 rounded-full bg-primary"></span>
+                <span class="text-label-md font-label-md text-on-surface-variant">Today</span>
+              </div>
+              <div class="flex items-center gap-xs">
+                <span class="w-3 h-3 rounded-full bg-outline-variant"></span>
+                <span class="text-label-md font-label-md text-on-surface-variant">Average</span>
+              </div>
+            </div>
+          </div>
+          <div class="h-64 flex items-end justify-between gap-sm relative pt-xl">
+            <!-- Chart Mockup (CSS Lines/Bars) -->
+            <div class="absolute inset-0 flex flex-col justify-between opacity-10 pointer-events-none">
+              <div class="border-b border-on-surface w-full"></div>
+              <div class="border-b border-on-surface w-full"></div>
+              <div class="border-b border-on-surface w-full"></div>
+              <div class="border-b border-on-surface w-full"></div>
+            </div>
+            <!-- Simple visual line chart simulation -->
+            <div class="relative w-full h-full flex items-end">
+              <svg class="w-full h-full preserve-3d" viewbox="0 0 1000 200">
+                <path d="M0,180 Q100,140 200,160 T400,80 T600,120 T800,40 T1000,60" fill="none" stroke="#0050cb"
+                  stroke-linecap="round" stroke-width="4"></path>
+                <path d="M0,180 Q100,140 200,160 T400,80 T600,120 T800,40 T1000,60 L1000,200 L0,200 Z"
+                  fill="url(#grad1)" opacity="0.1"></path>
+                <defs>
+                  <lineargradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgb(0,80,203);stop-opacity:1"></stop>
+                    <stop offset="100%" style="stop-color:rgb(0,80,203);stop-opacity:0"></stop>
+                  </lineargradient>
+                </defs>
+              </svg>
+            </div>
+          </div>
+          <div class="flex justify-between mt-md px-xs text-label-sm font-label-sm text-outline uppercase">
+            <span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span><span>18:00</span><span>20:00</span>
+          </div>
+        </div>
+
+        <!-- Order Status Funnel -->
+        <div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant flex flex-col">
+          <h4 class="font-title-lg text-title-lg mb-lg">Order Funnel</h4>
+          <div class="flex-1 flex flex-col gap-md">
+            <!-- Received -->
+            <div class="relative flex flex-col gap-1">
+              <div class="flex justify-between items-center px-md">
+                <span class="font-label-md text-label-md">Received</span>
+                <span class="font-label-md text-label-md font-bold">1,420</span>
+              </div>
+              <div
+                class="h-10 bg-surface-container-high rounded-lg overflow-hidden flex items-center justify-center relative">
+                <div class="absolute inset-y-0 left-0 bg-primary/80 w-[100%]"></div>
+                <span class="relative z-10 text-on-primary font-bold text-label-md">100%</span>
+              </div>
+            </div>
+            <!-- Processing -->
+            <div class="relative flex flex-col gap-1">
+              <div class="flex justify-between items-center px-md">
+                <span class="font-label-md text-label-md">Processing</span>
+                <span class="font-label-md text-label-md font-bold">1,120</span>
+              </div>
+              <div
+                class="h-10 bg-surface-container-high rounded-lg overflow-hidden flex items-center justify-center relative">
+                <div class="absolute inset-y-0 left-0 bg-primary/70 w-[82%]"></div>
+                <span class="relative z-10 text-on-primary font-bold text-label-md">82%</span>
+              </div>
+            </div>
+            <!-- Shipped -->
+            <div class="relative flex flex-col gap-1">
+              <div class="flex justify-between items-center px-md">
+                <span class="font-label-md text-label-md">Shipped</span>
+                <span class="font-label-md text-label-md font-bold">840</span>
+              </div>
+              <div
+                class="h-10 bg-surface-container-high rounded-lg overflow-hidden flex items-center justify-center relative">
+                <div class="absolute inset-y-0 left-0 bg-primary/60 w-[64%]"></div>
+                <span class="relative z-10 text-on-primary font-bold text-label-md">64%</span>
+              </div>
+            </div>
+            <!-- Delivered -->
+            <div class="relative flex flex-col gap-1">
+              <div class="flex justify-between items-center px-md">
+                <span class="font-label-md text-label-md">Delivered</span>
+                <span class="font-label-md text-label-md font-bold">612</span>
+              </div>
+              <div
+                class="h-10 bg-surface-container-high rounded-lg overflow-hidden flex items-center justify-center relative">
+                <div class="absolute inset-y-0 left-0 bg-primary/50 w-[48%]"></div>
+                <span class="relative z-10 text-on-primary font-bold text-label-md">48%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mb-xl">
+        <!-- Recent Orders Table -->
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+          <div class="px-lg py-md border-b border-outline-variant flex justify-between items-center">
+            <h4 class="font-title-lg text-title-lg">Recent Orders</h4>
+            <button class="text-primary font-label-md text-label-md hover:underline">View All Orders</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead
+                class="bg-surface-container-low text-on-surface-variant font-label-md text-label-md uppercase tracking-wider">
+                <tr>
+                  <th class="px-lg py-md">Product</th>
+                  <th class="px-lg py-md">Customer</th>
+                  <th class="px-lg py-md">Date</th>
+                  <th class="px-lg py-md">Amount</th>
+                  <th class="px-lg py-md">Status</th>
+                  <th class="px-lg py-md">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="font-body-sm text-body-sm divide-y divide-outline-variant">
+                <!-- Table Row 1 -->
+                <tr class="hover:bg-surface-container-low/50 transition-colors">
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-md">
+                      <div
+                        class="w-10 h-10 rounded bg-surface-container border border-outline-variant overflow-hidden flex-shrink-0">
+                        <img alt="Product Thumbnail" class="w-full h-full object-cover"
+                          data-alt="A studio shot of sleek, high-performance athletic footwear in vibrant colors. The lighting is crisp and commercial-grade, emphasizing texture and design detail against a clean, neutral background. This image represents premium consumer goods in a modern e-commerce catalog."
+                          src="images/image-04.png" />
+                      </div>
+                      <div class="flex flex-col">
+                        <span class="font-bold">Air Max Glide 2024</span>
+                        <span class="text-on-surface-variant text-[11px]">SKU: SHO-8921-X</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md">
+                    <div class="flex flex-col">
+                      <span class="font-bold">Alex Thompson</span>
+                      <span class="text-on-surface-variant text-[11px]">alex.t@example.com</span>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md text-on-surface-variant">Oct 24, 2023</td>
+                  <td class="px-lg py-md font-bold">$189.00</td>
+                  <td class="px-lg py-md">
+                    <span
+                      class="px-sm py-xs bg-green-100 text-green-700 rounded-full font-label-sm text-label-sm font-bold uppercase tracking-wide">Delivered</span>
+                  </td>
+                  <td class="px-lg py-md">
+                    <button class="p-xs hover:bg-surface-container-high rounded transition-colors">
+                      <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                    </button>
+                  </td>
+                </tr>
+                <!-- Table Row 2 -->
+                <tr class="hover:bg-surface-container-low/50 transition-colors">
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-md">
+                      <div
+                        class="w-10 h-10 rounded bg-surface-container border border-outline-variant overflow-hidden flex-shrink-0">
+                        <img alt="Product Thumbnail" class="w-full h-full object-cover"
+                          data-alt="A minimalist photograph of a high-end luxury watch featuring a leather strap and complex dial. The composition is clean and focused, utilizing soft directional lighting to highlight the metallic surfaces and craftsmanship. This represents sophisticated electronic or accessory products in a curated online store."
+                          src="images/image-05.png" />
+                      </div>
+                      <div class="flex flex-col">
+                        <span class="font-bold">Chrono Master Pro</span>
+                        <span class="text-on-surface-variant text-[11px]">SKU: WCH-1123-M</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md">
+                    <div class="flex flex-col">
+                      <span class="font-bold">Sarah Jenkins</span>
+                      <span class="text-on-surface-variant text-[11px]">sarah.j@example.com</span>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md text-on-surface-variant">Oct 24, 2023</td>
+                  <td class="px-lg py-md font-bold">$425.50</td>
+                  <td class="px-lg py-md">
+                    <span
+                      class="px-sm py-xs bg-blue-100 text-blue-700 rounded-full font-label-sm text-label-sm font-bold uppercase tracking-wide">Processing</span>
+                  </td>
+                  <td class="px-lg py-md">
+                    <button class="p-xs hover:bg-surface-container-high rounded transition-colors">
+                      <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                    </button>
+                  </td>
+                </tr>
+                <!-- Table Row 3 -->
+                <tr class="hover:bg-surface-container-low/50 transition-colors">
+                  <td class="px-lg py-md">
+                    <div class="flex items-center gap-md">
+                      <div
+                        class="w-10 h-10 rounded bg-surface-container border border-outline-variant overflow-hidden flex-shrink-0">
+                        <img alt="Product Thumbnail" class="w-full h-full object-cover"
+                          data-alt="A modern, high-tech pair of wireless headphones shown in a clean, minimalist setting. The design is sleek with matte finishes, captured in high-key lighting that emphasizes the premium build quality and ergonomic curves. This image represents high-demand consumer electronics."
+                          src="images/image-06.png" />
+                      </div>
+                      <div class="flex flex-col">
+                        <span class="font-bold">SoundCloud Noise Gen 4</span>
+                        <span class="text-on-surface-variant text-[11px]">SKU: AUD-4421-Z</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md">
+                    <div class="flex flex-col">
+                      <span class="font-bold">Michael Wu</span>
+                      <span class="text-on-surface-variant text-[11px]">m.wu@example.com</span>
+                    </div>
+                  </td>
+                  <td class="px-lg py-md text-on-surface-variant">Oct 24, 2023</td>
+                  <td class="px-lg py-md font-bold">$299.00</td>
+                  <td class="px-lg py-md">
+                    <span
+                      class="px-sm py-xs bg-orange-100 text-orange-700 rounded-full font-label-sm text-label-sm font-bold uppercase tracking-wide">Pending</span>
+                  </td>
+                  <td class="px-lg py-md">
+                    <button class="p-xs hover:bg-surface-container-high rounded transition-colors">
+                      <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-xl">
+        <h1 class="font-display-lg text-display-lg text-on-surface">API &amp; Integrations</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mt-xs">Manage your secret keys, webhooks, and
+          third-party application connections.</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+        <!-- API Keys Section -->
+        <section class="lg:col-span-8 space-y-lg">
+          <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm">
+            <div class="px-lg py-md border-b border-outline-variant flex justify-between items-center">
+              <div class="flex items-center gap-sm">
+                <span class="material-symbols-outlined text-primary" data-icon="vpn_key">vpn_key</span>
+                <h3 class="font-title-lg text-title-lg">API Keys</h3>
+              </div>
+              <button
+                class="bg-primary text-on-primary px-md py-xs rounded-lg font-label-md text-label-md hover:opacity-90 transition-all flex items-center gap-xs">
+                <span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+                Generate New Key
+              </button>
+            </div>
+            <div class="p-lg space-y-md">
+              <!-- Key Item 1 -->
+              <div
+                class="flex flex-col md:flex-row md:items-center justify-between p-md bg-surface-container-low rounded-lg border border-outline-variant gap-md">
+                <div class="space-y-xs">
+                  <p class="font-label-md text-label-md text-on-surface">Production Main Key</p>
+                  <div class="flex items-center gap-sm">
+                    <code
+                      class="font-mono text-body-sm bg-surface-container px-sm py-xs rounded">pk_live_••••••••••••••••4f2a</code>
+                    <span
+                      class="px-xs py-0.5 bg-secondary-container text-on-secondary-container rounded font-label-sm text-label-sm uppercase">Active</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-sm">
+                  <button class="flex items-center gap-xs text-primary font-label-md text-label-md hover:underline">
+                    <span class="material-symbols-outlined text-[18px]" data-icon="content_copy">content_copy</span>
+                    Copy
+                  </button>
+                  <button class="flex items-center gap-xs text-error font-label-md text-label-md hover:underline">
+                    <span class="material-symbols-outlined text-[18px]" data-icon="block">block</span> Revoke
+                  </button>
+                </div>
+              </div>
+              <!-- Key Item 2 -->
+              <div
+                class="flex flex-col md:flex-row md:items-center justify-between p-md bg-surface-container-low rounded-lg border border-outline-variant gap-md">
+                <div class="space-y-xs">
+                  <p class="font-label-md text-label-md text-on-surface">Development Sandbox</p>
+                  <div class="flex items-center gap-sm">
+                    <code
+                      class="font-mono text-body-sm bg-surface-container px-sm py-xs rounded">pk_test_••••••••••••••••9e81</code>
+                    <span
+                      class="px-xs py-0.5 bg-surface-container-highest text-on-surface-variant rounded font-label-sm text-label-sm uppercase">Rotated</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-sm">
+                  <button class="flex items-center gap-xs text-primary font-label-md text-label-md hover:underline">
+                    <span class="material-symbols-outlined text-[18px]" data-icon="content_copy">content_copy</span>
+                    Copy
+                  </button>
+                  <button class="flex items-center gap-xs text-error font-label-md text-label-md hover:underline">
+                    <span class="material-symbols-outlined text-[18px]" data-icon="block">block</span> Revoke
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Webhooks Section -->
+          <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+            <div class="px-lg py-md border-b border-outline-variant bg-surface-container-low flex items-center gap-sm">
+              <span class="material-symbols-outlined text-primary" data-icon="webhook">webhook</span>
+              <h3 class="font-title-lg text-title-lg">Webhooks</h3>
+            </div>
+            <div class="p-lg">
+              <div class="space-y-md">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                  <div class="space-y-xs">
+                    <label class="font-label-md text-label-md text-on-surface">Endpoint URL</label>
+                    <input
+                      class="w-full h-10 px-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary text-body-md outline-none"
+                      type="text" value="https://api.acmecorp.com/webhooks/v1" />
+                  </div>
+                  <div class="space-y-xs">
+                    <label class="font-label-md text-label-md text-on-surface">Secret Token</label>
+                    <div class="relative">
+                      <input
+                        class="w-full h-10 px-md border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary text-body-md outline-none"
+                        type="password" value="sh_394029304923" />
+                      <span
+                        class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant cursor-pointer"
+                        data-icon="visibility">visibility</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-wrap gap-sm pt-sm">
+                  <div
+                    class="flex items-center gap-xs bg-surface-container px-sm py-1 rounded-full border border-outline-variant">
+                    <span class="material-symbols-outlined text-[16px] text-primary"
+                      data-icon="check_circle">check_circle</span>
+                    <span class="font-label-sm text-label-sm text-on-surface">user.created</span>
+                  </div>
+                  <div
+                    class="flex items-center gap-xs bg-surface-container px-sm py-1 rounded-full border border-outline-variant">
+                    <span class="material-symbols-outlined text-[16px] text-primary"
+                      data-icon="check_circle">check_circle</span>
+                    <span class="font-label-sm text-label-sm text-on-surface">payment.succeeded</span>
+                  </div>
+                  <div
+                    class="flex items-center gap-xs bg-surface-container px-sm py-1 rounded-full border border-outline-variant">
+                    <span class="material-symbols-outlined text-[16px] text-outline"
+                      data-icon="radio_button_unchecked">radio_button_unchecked</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant">invoice.failed</span>
+                  </div>
+                  <button class="text-primary font-label-sm text-label-sm hover:underline">+ 4 more events</button>
+                </div>
+                <div class="pt-md border-t border-outline-variant flex justify-end">
+                  <button
+                    class="bg-secondary text-on-secondary px-lg py-xs rounded-lg font-label-md text-label-md hover:opacity-90">Update
+                    Configuration</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Right Column: Sidebar Stats/Info -->
+        <aside class="lg:col-span-4 space-y-lg">
+          <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-lg">
+            <h4 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-md">API Usage
+              (Last 24h)</h4>
+            <div class="space-y-md">
+              <div class="flex justify-between items-end">
+                <span class="font-display-lg text-display-lg text-primary">1.2M</span>
+                <span class="font-label-sm text-label-sm text-on-surface-variant mb-1">Requests</span>
+              </div>
+              <div class="w-full bg-surface-container rounded-full h-2 overflow-hidden">
+                <div class="bg-primary h-full rounded-full" style="width: 65%;"></div>
+              </div>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">You've reached 65% of your daily rate limit.
+                Consider upgrading for higher throughput.</p>
+            </div>
+          </div>
+          <div
+            class="bg-gradient-to-br from-primary to-primary-container rounded-xl p-lg text-on-primary shadow-lg relative overflow-hidden">
+            <div class="relative z-10">
+              <h4 class="font-title-lg text-title-lg mb-xs">Developer Portal</h4>
+              <p class="font-body-sm text-body-sm opacity-90 mb-md">Full documentation, SDKs, and endpoint reference for
+                your workspace.</p>
+              <a class="inline-flex items-center gap-xs bg-white/20 hover:bg-white/30 px-md py-xs rounded-lg font-label-md text-label-md backdrop-blur-sm transition-all"
+                href="#">
+                View Docs <span class="material-symbols-outlined text-[18px]"
+                  data-icon="arrow_forward">arrow_forward</span>
+              </a>
+            </div>
+            <div class="absolute -right-4 -bottom-4 opacity-10">
+              <span class="material-symbols-outlined text-[120px]" data-icon="code_blocks">code_blocks</span>
+            </div>
+          </div>
+        </aside>
+        <!-- Connected Apps Section -->
+        <section class="lg:col-span-12">
+          <div class="mb-md flex items-center justify-between">
+            <h3 class="font-headline-sm text-headline-sm text-on-surface">Connected Apps</h3>
+            <button class="text-primary font-label-md text-label-md hover:underline">Browse Marketplace</button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+            <!-- Slack -->
+            <div
+              class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-shadow group">
+              <div class="flex items-start justify-between mb-md">
+                <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center p-sm">
+                  <img class="w-full h-full object-contain"
+                    data-alt="A colorful, vibrant corporate logo for a communication software, set against a clean white background with soft studio lighting. The aesthetic is modern, playful yet professional, utilizing primary colors like yellow, red, blue and green in a symmetrical, geometric pattern that represents connectivity and teamwork."
+                    src="images/image-07.png" />
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input checked="" class="sr-only peer" type="checkbox" />
+                  <div
+                    class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all">
+                  </div>
+                </label>
+              </div>
+              <h4 class="font-title-lg text-title-lg">Slack</h4>
+              <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs mb-md">Send real-time alerts and
+                dashboard snapshots to your channels.</p>
+              <div class="pt-md border-t border-outline-variant flex items-center justify-between">
+                <span class="text-label-sm font-label-sm text-on-surface-variant">v2.4.1</span>
+                <button
+                  class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors"
+                  data-icon="settings">settings</button>
+              </div>
+            </div>
+            <!-- GitHub -->
+            <div
+              class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-shadow group">
+              <div class="flex items-start justify-between mb-md">
+                <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center p-sm">
+                  <img class="w-full h-full object-contain"
+                    data-alt="A sleek, minimalist monochromatic logo of a tech brand, featuring a stylized icon that represents version control and collaboration. The visual style is high-contrast black and white, clean, and modern. The background is a crisp white with very subtle depth through soft ambient occlusion shadows, embodying a sophisticated enterprise software feel."
+                    src="images/image-08.png" />
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input checked="" class="sr-only peer" type="checkbox" />
+                  <div
+                    class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all">
+                  </div>
+                </label>
+              </div>
+              <h4 class="font-title-lg text-title-lg">GitHub</h4>
+              <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs mb-md">Sync repository data and automate
+                CI/CD pipeline triggers.</p>
+              <div class="pt-md border-t border-outline-variant flex items-center justify-between">
+                <span class="text-label-sm font-label-sm text-on-surface-variant">v3.0.0</span>
+                <button
+                  class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors"
+                  data-icon="settings">settings</button>
+              </div>
+            </div>
+            <!-- Salesforce -->
+            <div
+              class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-shadow group">
+              <div class="flex items-start justify-between mb-md">
+                <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center p-sm">
+                  <img class="w-full h-full object-contain"
+                    data-alt="A professional cloud-based service logo featuring soft blue tones and a friendly, rounded cloud shape. The lighting is diffused and even, giving it an airy and reliable feel. The aesthetic is clean and corporate-focused, emphasizing scalability and data management in a bright, modern software ecosystem."
+                    src="images/image-09.png" />
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input class="sr-only peer" type="checkbox" />
+                  <div
+                    class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all">
+                  </div>
+                </label>
+              </div>
+              <h4 class="font-title-lg text-title-lg">Salesforce</h4>
+              <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs mb-md">Import CRM records and keep
+                customer data in sync across platforms.</p>
+              <div class="pt-md border-t border-outline-variant flex items-center justify-between">
+                <span class="text-label-sm font-label-sm text-error">Disconnected</span>
+                <button
+                  class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors"
+                  data-icon="settings">settings</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Floating Action Button & Chat Widget -->
+  <div class="fixed bottom-lg right-lg z-50 flex flex-col items-end gap-md" id="chat-widget">
+    <!-- Chat Card -->
+    <div
+      class="chat-card w-80 h-96 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-2xl overflow-hidden flex flex-col mb-2"
+      id="chat-window">
+      <!-- Header -->
+      <div class="bg-primary p-md flex items-center justify-between">
+        <div class="flex items-center gap-sm">
+          <div class="relative">
+            <img alt="Support" class="w-8 h-8 rounded-full border border-white/20" src="images/image-10.png" />
+            <span
+              class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-primary rounded-full"></span>
+          </div>
+          <div>
+            <h4 class="text-on-primary font-title-lg text-sm leading-tight">Support Chat</h4>
+            <p class="text-on-primary/70 text-label-sm">We're online</p>
+          </div>
+        </div>
+        <span
+          class="material-symbols-outlined text-on-primary cursor-pointer hover:bg-white/10 p-1 rounded-full text-lg"
+          data-icon="close" id="close-chat">close</span>
+      </div>
+      <!-- Messages Area -->
+      <div class="flex-1 overflow-y-auto p-md space-y-md bg-surface-container-low">
+        <div class="flex flex-col gap-xs">
+          <div
+            class="bg-surface-container-highest text-on-surface p-sm rounded-lg rounded-tl-none max-w-[85%] text-body-sm">
+            Hi there! How can we help you with your dashboard today?
+          </div>
+          <span class="text-label-sm text-on-surface-variant ml-1">10:45 AM</span>
+        </div>
+        <div class="flex flex-col items-end gap-xs">
+          <div class="bg-primary text-on-primary p-sm rounded-lg rounded-tr-none max-w-[85%] text-body-sm">
+            I'm looking for the historical engagement reports for Q3.
+          </div>
+          <span class="text-label-sm text-on-surface-variant mr-1">10:46 AM</span>
+        </div>
+        <div class="flex flex-col gap-xs">
+          <div
+            class="bg-surface-container-highest text-on-surface p-sm rounded-lg rounded-tl-none max-w-[85%] text-body-sm">
+            Sure! You can find those under Analytics &gt; Reports &gt; Archive. Would you like a direct link?
+          </div>
+          <span class="text-label-sm text-on-surface-variant ml-1">10:46 AM</span>
+        </div>
+      </div>
+      <!-- Input Area -->
+      <div class="p-sm bg-surface-container-lowest border-t border-outline-variant flex gap-sm items-center">
+        <input
+          class="flex-1 bg-surface-container-low border-none rounded-full px-md py-xs text-body-sm focus:ring-1 focus:ring-primary"
+          placeholder="Type a message..." type="text" />
+        <button
+          class="bg-primary text-on-primary p-2 rounded-full hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg" data-icon="send">send</span>
+        </button>
+      </div>
+    </div>
+    <!-- FAB Button -->
+    <button
+      class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:bg-on-primary-fixed-variant transition-all duration-300 transform hover:scale-110 active:scale-95 group"
+      id="chat-fab">
+      <span class="material-symbols-outlined fab-icon text-3xl" data-icon="forum">forum</span>
+    </button>
+  </div>
+  <!-- Mobile Bottom NavBar (Visible on small screens) -->
+  <nav
+    class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container-highest flex items-center justify-around border-t border-outline-variant z-50">
+    <div class="flex flex-col items-center gap-xs text-on-surface-variant">
+      <span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+      <span class="text-label-sm">Home</span>
+    </div>
+    <div class="flex flex-col items-center gap-xs text-primary font-bold">
+      <span class="material-symbols-outlined" data-icon="public">public</span>
+      <span class="text-label-sm">Social</span>
+    </div>
+    <div class="flex flex-col items-center gap-xs text-on-surface-variant">
+      <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+      <span class="text-label-sm">Alerts</span>
+    </div>
+    <div class="flex flex-col items-center gap-xs text-on-surface-variant">
+      <span class="material-symbols-outlined" data-icon="settings">settings</span>
+      <span class="text-label-sm">Settings</span>
+    </div>
+  </nav>
+
+  <script src="main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+body {
+  background-color: #F8FAFC;
+}
+
+/* Custom scrollbar for data tables */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.sentiment-gauge {
+  background: conic-gradient(#ba1a1a 0% 25%, #f2f4f6 25% 45%, #0050cb 45% 100%);
+  border-radius: 50%;
+  mask: radial-gradient(transparent 55%, black 56%);
+}
+
+/* Chat Widget Styles */
+.chat-card {
+  opacity: 0;
+  transform: scale(0.9) translateY(20px);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.chat-card.is-open {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+.fab-icon {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fab-icon.is-active {
+  transform: rotate(90deg);
+}
