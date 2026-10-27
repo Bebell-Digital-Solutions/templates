@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>icon.json — color editor</title>
+<style>
+  :root{
+    --ink:#0b0b0b;
+    --paper:#ffffff;
+    --muted:#7a7a7a;
+    --line:#0b0b0b;
+    --danger:#b00020;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  
+  *{ box-sizing:border-box; }
+  
+  
+  html,body{ margin:0; }
+  
+  
+  body{
+  	padding-top: 6rem; 
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.45;
+    color:var(--ink);
+    background-color:#fff;
+    background-image:radial-gradient(#ededed 1px, transparent 1px);
+    background-size:16px 16px;
+    background-position:-1px -1px;
+    -webkit-font-smoothing:antialiased;
+  }
+  
+
+  .shell{
+    max-width:920px;
+    margin:0 auto;
+    padding:28px 22px 64px;
+  }
+
+  /* ---------- header ---------- */
+  .bar{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+    border-bottom:2px solid var(--line);
+    padding-bottom:12px;
+    margin-bottom:26px;
+  }
+  .bar h1{
+    margin:0;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.16em;
+  }
+  .bar .tag{
+    font-size:10px;
+    letter-spacing:.18em;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+
+  /* ---------- sections ---------- */
+  .block{ margin-bottom:26px; }
+
+  .label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .label b{
+    display:inline-block;
+    background:var(--ink);
+    color:var(--paper);
+    padding:2px 6px;
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:.1em;
+  }
+
+  /* ---------- textareas ---------- */
+  textarea{
+    display:block;
+    width:100%;
+    min-height:180px;
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--mono);
+    font-size:12px;
+    line-height:1.55;
+    resize:vertical;
+    outline:none;
+    tab-size:2;
+  }
+  textarea::placeholder{ color:#b3b3b3; }
+  textarea:focus{ outline:2px solid var(--ink); outline-offset:-2px; }
+
+  /* ---------- colors ---------- */
+  .swatches{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .swatch{
+    width:32px;
+    height:32px;
+    padding:0;
+    border:1px solid var(--line);
+    border-radius:0;
+    cursor:pointer;
+    background-clip:padding-box;
+    transition:transform .06s linear;
+  }
+  .swatch:hover{ transform:translateY(-1px); }
+  .swatch[aria-pressed="true"]{
+    box-shadow:0 0 0 2px #fff, 0 0 0 3px var(--ink);
+  }
+  .swatch:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
+
+  .custom{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  input[type="color"]{
+    -webkit-appearance:none;
+    appearance:none;
+    width:46px;
+    height:32px;
+    padding:0;
+    border:1px solid var(--line);
+    border-radius:0;
+    background:transparent;
+    cursor:pointer;
+  }
+  input[type="color"]::-webkit-color-swatch-wrapper{ padding:0; }
+  input[type="color"]::-webkit-color-swatch{ border:none; border-radius:0; }
+  input[type="color"]::-moz-color-swatch{ border:none; border-radius:0; }
+
+  #hex{
+    width:120px;
+    height:32px;
+    padding:0 10px;
+    border:1px solid var(--line);
+    border-radius:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.1em;
+    outline:none;
+  }
+  #hex:focus{ outline:2px solid var(--ink); outline-offset:-2px; }
+
+  /* ---------- actions ---------- */
+  .actions{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px;
+    border-top:1px solid #e4e4e4;
+    padding-top:20px;
+  }
+  button{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    padding:10px 16px;
+    border:1px solid var(--line);
+    border-radius:0;
+    background:var(--paper);
+    color:var(--ink);
+    cursor:pointer;
+    transition:background .08s linear, color .08s linear, transform .06s linear;
+  }
+  button:hover{ background:var(--ink); color:var(--paper); }
+  button:active{ transform:translateY(1px); }
+  button:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
+  button.primary{ background:var(--ink); color:var(--paper); }
+  button.primary:hover{ background:var(--paper); color:var(--ink); }
+
+  .check{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin-left:auto;
+    font-size:10px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    cursor:pointer;
+    user-select:none;
+  }
+  .check input{
+    width:14px;
+    height:14px;
+    margin:0;
+    accent-color:#000;
+    cursor:pointer;
+  }
+
+  /* ---------- status ---------- */
+  .status{
+    margin-top:10px;
+    font-size:10px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    min-height:14px;
+  }
+  .status.err{ color:var(--danger); }
+</style>
+</head>
+<body>
+<main class="shell">
+
+  <header class="bar">
+    <h1>LOTTIE / ICON COLORIZER</h1>
+    <span class="tag">JSON → JSON</span>
+  </header>
+
+  <section class="block">
+    <div class="label"><b>01</b> SOURCE JSON</div>
+    <textarea id="input" wrap="off" spellcheck="false" autocomplete="off"
+      placeholder='Paste your Lottie / icon JSON here…'></textarea>
+  </section>
+
+  <section class="block">
+    <div class="label"><b>02</b> COLOR</div>
+    <div class="swatches" id="swatches"></div>
+    <div class="custom">
+      <input type="color" id="picker" value="#ffffff" aria-label="Custom color">
+      <input type="text" id="hex" value="#FFFFFF" spellcheck="false" autocomplete="off"
+             maxlength="7" aria-label="Hex color">
+    </div>
+  </section>
+
+  <section class="block actions">
+    <button id="generate" class="primary">Generate →</button>
+    <button id="copy">Copy</button>
+    <button id="download">Download .json</button>
+    <label class="check"><input type="checkbox" id="minify" checked> Minify output</label>
+  </section>
+
+  <section class="block">
+    <div class="label"><b>03</b> OUTPUT JSON</div>
+    <textarea id="output" wrap="off" spellcheck="false" readonly
+      placeholder='Output appears here…'></textarea>
+    <div class="status" id="status">Ready.</div>
+  </section>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ------------------------------------------------------------------ */
+  /*  Preset colors                                                      */
+  /* ------------------------------------------------------------------ */
+  var PRESETS = [
+    ['#000000', 'black'],
+    ['#FFFFFF', 'white'],
+    ['#7A7A7A', 'gray'],
+    ['#E5484D', 'red'],
+    ['#F76B15', 'orange'],
+    ['#F5D90A', 'yellow'],
+    ['#30A46C', 'green'],
+    ['#12A594', 'teal'],
+    ['#3E63DD', 'blue'],
+    ['#8E4EC6', 'purple'],
+    ['#D6409F', 'pink']
+  ];
+
+  /* ------------------------------------------------------------------ */
+  /*  DOM refs                                                           */
+  /* ------------------------------------------------------------------ */
+  var $ = function (id) { return document.getElementById(id); };
+
+  var inputEl  = $('input');
+  var outputEl = $('output');
+  var statusEl = $('status');
+  var swatchEl = $('swatches');
+  var pickerEl = $('picker');
+  var hexEl    = $('hex');
+  var minifyEl = $('minify');
+  var genBtn   = $('generate');
+  var copyBtn  = $('copy');
+  var dlBtn    = $('download');
+
+  var currentHex = '#FFFFFF';
+
+  /* ------------------------------------------------------------------ */
+  /*  Color helpers                                                      */
+  /* ------------------------------------------------------------------ */
+  function round4(n) { return Math.round(n * 10000) / 10000; }
+
+  function normalizeHex(str) {
+    if (typeof str !== 'string') return null;
+    var s = str.trim().replace(/^#/, '');
+    if (s.length === 3) s = s[0] + s[0] + s[1] + s[1] + s[2] + s[2];
+    if (!/^[0-9a-fA-F]{6}$/.test(s)) return null;
+    return '#' + s.toUpperCase();
+  }
+
+  function hexToRgb01(hex) {
+    var h = hex.slice(1);
+    return [
+      round4(parseInt(h.slice(0, 2), 16) / 255),
+      round4(parseInt(h.slice(2, 4), 16) / 255),
+      round4(parseInt(h.slice(4, 6), 16) / 255)
+    ];
+  }
+
+  function isColorArray(a) {
+    return Array.isArray(a) &&
+           (a.length === 3 || a.length === 4) &&
+           a.every(function (v) { return typeof v === 'number' && isFinite(v); });
+  }
+
+  function makeColor(orig, rgb) {
+    /* keep the original alpha channel if the file had one */
+    return orig.length === 4 ? [rgb[0], rgb[1], rgb[2], orig[3]]
+                             : [rgb[0], rgb[1], rgb[2]];
+  }
+
+  /* {a:0, k:[r,g,b,a]}  or  animated keyframes */
+  function applyColorHolder(holder, rgb) {
+    if (!holder || typeof holder !== 'object' || Array.isArray(holder)) return false;
+    var k = holder.k;
+    if (!Array.isArray(k)) return false;
+
+    if (isColorArray(k)) {
+      holder.k = makeColor(k, rgb);
+      return true;
+    }
+
+    var touched = false;
+    for (var i = 0; i < k.length; i++) {
+      var frame = k[i];
+      if (!frame || typeof frame !== 'object' || Array.isArray(frame)) continue;
+      if (isColorArray(frame.s)) { frame.s = makeColor(frame.s, rgb); touched = true; }
+      if (isColorArray(frame.e)) { frame.e = makeColor(frame.e, rgb); touched = true; }
+    }
+    return touched;
+  }
+
+  /* gradient: g = { p:<stops>, k:{ a:0, k:[pos,r,g,b, pos,r,g,b, ...] } } */
+  function applyGradient(g, rgb) {
+    if (!g || typeof g !== 'object') return false;
+    var p = g.p;
+    var holder = g.k;
+    if (!holder || typeof holder !== 'object') return false;
+    var data = holder.k;
+    if (!Array.isArray(data) || !data.length) return false;
+
+    function paint(arr) {
+      if (!Array.isArray(arr) || typeof p !== 'number' || p < 1) return false;
+      if (arr.length % p !== 0) return false;
+      var stride = arr.length / p;
+      if (stride < 4) return false;
+      for (var i = 0; i < p; i++) {
+        var b = i * stride;
+        arr[b + 1] = rgb[0];
+        arr[b + 2] = rgb[1];
+        arr[b + 3] = rgb[2];
+      }
+      return true;
+    }
+
+    var touched = false;
+    if (typeof data[0] === 'number') {
+      touched = paint(data);
+    } else {
+      for (var i = 0; i < data.length; i++) {
+        var frame = data[i];
+        if (!frame || typeof frame !== 'object') continue;
+        if (paint(frame.s)) touched = true;
+        if (paint(frame.e)) touched = true;
+      }
+    }
+    return touched;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Core walker                                                        */
+  /* ------------------------------------------------------------------ */
+  function colorize(data, hex) {
+    var rgb = hexToRgb01(hex);
+    var stats = { stroke: 0, fill: 0, gradient: 0, solid: 0, text: 0 };
+
+    (function walk(node) {
+      if (Array.isArray(node)) {
+        for (var i = 0; i < node.length; i++) walk(node[i]);
+        return;
+      }
+      if (!node || typeof node !== 'object') return;
+
+      var ty = node.ty;
+
+      /* stroke / fill */
+      if (ty === 'st' || ty === 'fl') {
+        if (applyColorHolder(node.c, rgb)) {
+          if (ty === 'st') stats.stroke++; else stats.fill++;
+        }
+      }
+      /* gradient fill / stroke */
+      else if (ty === 'gf' || ty === 'gs') {
+        if (applyGradient(node.g, rgb)) stats.gradient++;
+      }
+      /* solid layer  { ty:1, sc:"#rrggbb" } */
+      else if (ty === 1 && typeof node.sc === 'string') {
+        node.sc = hex.toLowerCase();
+        stats.solid++;
+      }
+
+      /* text document fill / stroke colors */
+      if (node.t && node.t.d && Array.isArray(node.t.d.k)) {
+        for (var j = 0; j < node.t.d.k.length; j++) {
+          var doc = node.t.d.k[j];
+          var s = doc && doc.s;
+          if (!s) continue;
+          if (applyColorHolder(s.fc, rgb)) stats.text++;
+          if (applyColorHolder(s.sc, rgb)) stats.text++;
+        }
+      }
+
+      /* recurse */
+      for (var key in node) {
+        if (!Object.prototype.hasOwnProperty.call(node, key)) continue;
+        var child = node[key];
+        if (child && typeof child === 'object') walk(child);
+      }
+    })(data);
+
+    return stats;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  UI                                                                 */
+  /* ------------------------------------------------------------------ */
+  function setStatus(msg, isErr) {
+    statusEl.textContent = msg;
+    statusEl.className = 'status' + (isErr ? ' err' : '');
+  }
+
+  function syncSwatches() {
+    var list = swatchEl.querySelectorAll('.swatch');
+    for (var i = 0; i < list.length; i++) {
+      var el = list[i];
+      el.setAttribute('aria-pressed',
+        el.dataset.hex.toUpperCase() === currentHex ? 'true' : 'false');
+    }
+  }
+
+  function setColor(hex, opts) {
+    opts = opts || {};
+    var n = normalizeHex(hex);
+    if (!n) return false;
+    currentHex = n;
+    if (!opts.skipPicker) pickerEl.value = n.toLowerCase();
+    if (!opts.skipHex)    hexEl.value = n;
+    if (!opts.skipSwatches) syncSwatches();
+    return true;
+  }
+
+  function buildSwatches() {
+    PRESETS.forEach(function (p) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'swatch';
+      b.style.background = p[0];
+      b.dataset.hex = p[0];
+      b.title = p[1] + '  ' + p[0];
+      b.setAttribute('aria-label', p[1]);
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () { setColor(p[0]); });
+      swatchEl.appendChild(b);
+    });
+  }
+
+  function generate() {
+    var raw = inputEl.value.trim();
+    if (!raw) {
+      setStatus('No input — paste a JSON icon first', true);
+      return;
+    }
+
+    var parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (err) {
+      outputEl.value = '';
+      setStatus('Invalid JSON — ' + err.message, true);
+      return;
+    }
+
+    var stats = colorize(parsed, currentHex);
+    var total = stats.stroke + stats.fill + stats.gradient + stats.solid + stats.text;
+
+    outputEl.value = minifyEl.checked
+      ? JSON.stringify(parsed)
+      : JSON.stringify(parsed, null, 2);
+
+    var parts = [];
+    if (stats.stroke)   parts.push(stats.stroke + '× stroke');
+    if (stats.fill)     parts.push(stats.fill + '× fill');
+    if (stats.gradient) parts.push(stats.gradient + '× gradient');
+    if (stats.solid)    parts.push(stats.solid + '× solid');
+    if (stats.text)     parts.push(stats.text + '× text');
+
+    if (!total) {
+      setStatus('⚠ No color properties found in this file', true);
+    } else {
+      setStatus('OK — ' + total + ' color properties → ' + currentHex +
+                '  (' + parts.join(', ') + ')', false);
+    }
+  }
+
+  function copyOut() {
+    var text = outputEl.value;
+    if (!text) { setStatus('Nothing to copy', true); return; }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        setStatus('Copied to clipboard', false);
+      }, function () {
+        legacyCopy(text);
+      });
+    } else {
+      legacyCopy(text);
+    }
+  }
+
+  function legacyCopy(text) {
+    outputEl.removeAttribute('readonly');
+    outputEl.select();
+    try { document.execCommand('copy'); setStatus('Copied to clipboard', false); }
+    catch (e) { setStatus('Copy failed — select manually', true); }
+    outputEl.setAttribute('readonly', 'readonly');
+    outputEl.setSelectionRange(0, 0);
+  }
+
+  function download() {
+    var text = outputEl.value;
+    if (!text) { setStatus('Nothing to download', true); return; }
+
+    var name = 'icon-colored.json';
+    try {
+      var obj = JSON.parse(inputEl.value);
+      if (obj && typeof obj.nm === 'string' && obj.nm.trim()) {
+        name = obj.nm.trim().replace(/[^\w.-]+/g, '_') + '-colored.json';
+      }
+    } catch (e) { /* ignore */ }
+
+    var blob = new Blob([text], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    setStatus('Downloaded ' + name, false);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Wiring                                                             */
+  /* ------------------------------------------------------------------ */
+  buildSwatches();
+  setColor('#FFFFFF');
+  setStatus('Ready.');
+
+  genBtn.addEventListener('click', generate);
+  copyBtn.addEventListener('click', copyOut);
+  dlBtn.addEventListener('click', download);
+
+  pickerEl.addEventListener('input', function () {
+    setColor(pickerEl.value);
+  });
+
+  hexEl.addEventListener('input', function () {
+    setColor(hexEl.value, { skipHex: true });
+  });
+  hexEl.addEventListener('blur', function () {
+    hexEl.value = currentHex;
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      e.preventDefault();
+      generate();
+    }
+  });
+})();
+</script>
+</body>
+</html>
