@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Horizon Kinetic Knitwear — Velvetica Studio</title>
+  
+  <!-- Fonts: Plus Jakarta Sans & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Helvetica Neue', 'Arial', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+          },
+          colors: {
+            studio: {
+              0: '#ffffff',
+              50: '#f9f9fa',
+              100: '#f3f4f6',
+              200: '#e5e7eb',
+              300: '#d1d5db',
+              400: '#9ca3af',
+              500: '#6b7280',
+              700: '#374151',
+              800: '#1f2937',
+              900: '#111111',
+              pure: '#000000',
+              accent: '#2f3b33'
+            }
+          },
+          letterSpacing: {
+            editorial: '0.08em',
+            mega: '0.18em',
+            brutal: '0.25em'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Strict Geometric Constraint: Absolutely zero border radii */
+    * {
+      border-radius: 0 !important;
+      -webkit-border-radius: 0 !important;
+      -moz-border-radius: 0 !important;
+    }
+
+    /* Razor-thin architectural scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f3f4f6;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #111111;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #000000;
+    }
+  </style>
+</head>
+
+<body class="bg-studio-50 text-studio-900 font-sans antialiased selection:bg-studio-pure selection:text-white min-h-screen flex flex-col">
+
+  <!-- ================= ANNOUNCEMENT BAR ================= -->
+  <aside class="bg-studio-pure text-studio-100 text-[10px] uppercase tracking-mega py-2.5 px-4 text-center font-medium border-b border-studio-800 flex items-center justify-center gap-4">
+    <span class="inline-block w-1.5 h-1.5 bg-emerald-400"></span>
+    <span>Complimentary Worldwide Express Transit Over $250</span>
+    <span class="hidden md:inline text-studio-400">/</span>
+    <span class="hidden md:inline text-studio-400">Autumn-Winter Archive Capsule 01</span>
+  </aside>
+
+  <!-- ================= MAIN NAVIGATION ================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-studio-900/10 transition-all duration-200" id="mainHeader">
+    <div class="max-w-[1700px] mx-auto px-4 sm:px-8 h-18 sm:h-20 flex items-center justify-between">
+      
+      <!-- Left: Navigation Links -->
+      <div class="flex items-center gap-8">
+        <button id="mobileMenuBtn" aria-label="Toggle navigation menu" class="md:hidden p-2 text-studio-900 hover:text-studio-500 border border-transparent hover:border-studio-900">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <nav class="hidden md:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-editorial text-studio-900/80">
+          <a href="#lookbook" class="hover:text-studio-pure hover:underline underline-offset-4 decoration-1 transition-all">Collections</a>
+          <a href="#gallery" class="hover:text-studio-pure hover:underline underline-offset-4 decoration-1 transition-all">Silhouettes</a>
+          <a href="#reviews" class="hover:text-studio-pure hover:underline underline-offset-4 decoration-1 transition-all">Audit & Journal</a>
+        </nav>
+      </div>
+
+      <!-- Center: Brand Wordmark -->
+      <a href="#" class="flex flex-col items-center group py-2">
+        <span class="text-xl sm:text-2xl font-bold tracking-[0.24em] uppercase transition-transform duration-200 group-hover:scale-[1.01]">
+          VELVETICA
+        </span>
+        <span class="text-[8px] uppercase tracking-[0.45em] text-studio-500 font-medium -mt-1">STUDIO</span>
+      </a>
+
+      <!-- Right: Functional Controls -->
+      <div class="flex items-center gap-4 sm:gap-6 text-studio-900">
+        <button class="p-2 text-xs uppercase tracking-wider hidden sm:flex items-center gap-2 border border-transparent hover:border-studio-900 transition-colors" title="Search catalog">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <span class="text-[10px] font-semibold tracking-editorial">Search</span>
+        </button>
+
+        <div class="hidden sm:flex items-center text-[10px] font-semibold border-l border-studio-200 pl-4 tracking-wider text-studio-500">
+          <span class="hover:text-studio-900 cursor-pointer">USD ($)</span>
+        </div>
+
+        <!-- Bag Button -->
+        <button id="openCartBtn" class="relative flex items-center gap-2.5 p-2.5 border border-studio-900 bg-studio-900 text-white hover:bg-studio-pure transition-colors" aria-label="Open Shopping Bag">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span class="text-[10px] uppercase font-bold tracking-wider hidden sm:inline">Bag</span>
+          <span id="cartCountBadge" class="w-4 h-4 bg-white text-studio-900 text-[10px] font-bold flex items-center justify-center">1</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= BREADCRUMBS BAR ================= -->
+  <div class="max-w-[1700px] w-full mx-auto px-4 sm:px-8 pt-6 pb-2 text-[10px] tracking-editorial uppercase text-studio-500 flex items-center justify-between border-b border-studio-200">
+    <div class="flex items-center gap-2">
+      <a href="#" class="hover:text-studio-900">Archive 2026</a>
+      <span>/</span>
+      <a href="#" class="hover:text-studio-900">Living Light Series</a>
+      <span>/</span>
+      <span class="text-studio-900 font-bold">Look Nº 04 — Kinetic Knit</span>
+    </div>
+    <span class="text-[9px] font-mono border border-studio-900 text-studio-900 px-2 py-0.5 uppercase tracking-widest">
+      SPEC 04-HIGH
+    </span>
+  </div>
+
+  <!-- ================= MAIN PRODUCT DETAIL SECTION ================= -->
+  <main class="max-w-[1700px] w-full mx-auto px-4 sm:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12">
+      
+      <!-- LEFT COLUMN: IMAGE GALLERY (Col 1-7) -->
+      <section class="lg:col-span-7 flex flex-col gap-4" id="gallery" aria-label="Product Image Showcase">
+        
+        <!-- Viewport Switcher Header -->
+        <div class="flex items-center justify-between bg-white border border-studio-900 p-2 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-studio-500 font-semibold text-[10px] uppercase tracking-wider pl-2">Angle:</span>
+            <div class="inline-flex border border-studio-300 bg-studio-100 p-0.5" role="tablist">
+              <button onclick="switchImage('editorial')" id="tab-editorial" class="px-3 py-1 font-semibold text-white bg-studio-900 transition-all text-[10px] uppercase tracking-wider">Editorial Look</button>
+              <button onclick="switchImage('detail')" id="tab-detail" class="px-3 py-1 font-semibold text-studio-600 hover:text-studio-900 transition-all text-[10px] uppercase tracking-wider">Macro Weave</button>
+              <button onclick="switchImage('back')" id="tab-back" class="px-3 py-1 font-semibold text-studio-600 hover:text-studio-900 transition-all text-[10px] uppercase tracking-wider">Silhouette & Fit</button>
+              <button onclick="switchImage('flat')" id="tab-flat" class="px-3 py-1 font-semibold text-studio-600 hover:text-studio-900 transition-all text-[10px] uppercase tracking-wider">Studio Flat</button>
+            </div>
+          </div>
+          <div class="hidden sm:flex items-center gap-2 text-studio-900 font-mono text-[10px] pr-2 uppercase">
+            <span class="w-2 h-2 bg-emerald-600"></span>
+            <span>Batch 01/150</span>
+          </div>
+        </div>
+
+        <!-- Main Product Image Frame -->
+        <div class="relative w-full aspect-[4/3] sm:aspect-[16/11] bg-studio-100 border border-studio-900 overflow-hidden shadow-[4px_4px_0px_0px_rgba(17,17,17,1)] group">
+          <img 
+            id="mainProductImage"
+            src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=1600&q=85" 
+            alt="The Horizon Kinetic Knitwear - Editorial Look" 
+            class="w-full h-full object-cover object-center transition-all duration-300 cursor-zoom-in"
+            onclick="openImageModal()"
+          />
+
+          <!-- Image Overlay Tag -->
+          <div class="absolute top-4 left-4 z-10 pointer-events-none">
+            <span id="imageCaptionBadge" class="bg-studio-pure text-white text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 border border-white/20">
+              FRAME 01 // EDITORIAL LOOK
+            </span>
+          </div>
+
+          <!-- Zoom In Trigger Button -->
+          <button 
+            type="button"
+            class="absolute bottom-4 right-4 z-20 bg-white border border-studio-900 p-2.5 text-studio-900 hover:bg-studio-900 hover:text-white transition-colors shadow-md" 
+            title="Expand image in high resolution" 
+            onclick="openImageModal()">
+            <i data-lucide="maximize-2" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- 4 Image Thumbnails -->
+        <div class="grid grid-cols-4 gap-3 pt-1">
+          <button onclick="switchImage('editorial')" class="thumb-btn border-2 border-studio-900 p-1 bg-white focus:outline-none transition-all" data-thumb="editorial">
+            <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=400&q=80" alt="Editorial Look Preview" class="w-full aspect-[4/3] object-cover" />
+          </button>
+
+          <button onclick="switchImage('detail')" class="thumb-btn border border-studio-300 hover:border-studio-900 p-1 bg-white focus:outline-none transition-all" data-thumb="detail">
+            <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=400&q=80" alt="Knit Detail Preview" class="w-full aspect-[4/3] object-cover" />
+          </button>
+
+          <button onclick="switchImage('back')" class="thumb-btn border border-studio-300 hover:border-studio-900 p-1 bg-white focus:outline-none transition-all" data-thumb="back">
+            <img src="https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=400&q=80" alt="Silhouette Preview" class="w-full aspect-[4/3] object-cover" />
+          </button>
+
+          <button onclick="switchImage('flat')" class="thumb-btn border border-studio-300 hover:border-studio-900 p-1 bg-white focus:outline-none transition-all" data-thumb="flat">
+            <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=400&q=80" alt="Studio Flat Lay Preview" class="w-full aspect-[4/3] object-cover" />
+          </button>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: PRODUCT SPECIFICATIONS & ACTIONS (Col 8-12 Sticky) -->
+      <section class="lg:col-span-5 flex flex-col justify-start lg:sticky lg:top-24 h-fit" aria-label="Purchase Configuration">
+        
+        <div class="bg-white border border-studio-900 p-6 sm:p-8 shadow-[4px_4px_0px_0px_rgba(17,17,17,1)]">
+          
+          <!-- Editorial Capsule Tags -->
+          <div class="flex items-center justify-between gap-2 pb-4 border-b border-studio-200">
+            <span class="text-[9px] font-bold tracking-mega uppercase bg-studio-900 text-white px-2.5 py-1">
+              AURA 2026 // CAPSULE 01
+            </span>
+            <span class="text-[10px] font-mono text-studio-900 uppercase flex items-center gap-1.5">
+              <span class="w-2 h-2 bg-emerald-600 inline-block"></span> Limited Run: 150 Units
+            </span>
+          </div>
+
+          <!-- Product Title & Narrative -->
+          <div class="mt-4">
+            <h1 class="text-2xl sm:text-3xl font-serif text-studio-900 tracking-tight leading-snug">
+              The Horizon Kinetic Knitwear
+            </h1>
+            <p class="text-xs text-studio-500 font-light mt-1.5 leading-relaxed">
+              Geometric box-cut silhouette tailored in double-twisted virgin merino wool and brushed cruelty-free baby alpaca yarn.
+            </p>
+          </div>
+
+          <!-- Price & Financing -->
+          <div class="mt-5 pb-5 border-b border-studio-200">
+            <div class="flex items-baseline gap-3">
+              <span class="text-3xl font-bold font-mono tracking-tight text-studio-900" id="currentPrice">$380.00</span>
+              <span class="text-xs text-studio-400 line-through font-mono">$440.00</span>
+              <span class="text-[10px] uppercase font-bold text-white bg-studio-pure px-2 py-0.5 font-mono ml-auto">
+                ARCHIVE -14%
+              </span>
+            </div>
+            <p class="text-[11px] text-studio-500 mt-2 flex items-center gap-1">
+              <span>Split into 4 interest-free installments of <strong class="text-studio-900 font-semibold font-mono">$95.00</strong> with</span>
+              <span class="underline cursor-pointer font-medium hover:text-studio-pure">Klarna</span>
+              <span>or</span>
+              <span class="underline cursor-pointer font-medium hover:text-studio-pure">Afterpay</span>
+            </p>
+          </div>
+
+          <!-- Color Swatch Selector -->
+          <div class="mt-5">
+            <div class="flex justify-between items-center text-xs mb-3">
+              <span class="font-bold uppercase tracking-wider text-studio-900 text-[10px]">Tonal Palette:</span>
+              <span class="font-mono text-studio-900 text-[11px] uppercase" id="selectedColorLabel">Obsidian Onyx</span>
+            </div>
+            
+            <div class="grid grid-cols-4 gap-2" id="colorSwatches">
+              <button onclick="selectColor('Obsidian Onyx', '#161719', this)" class="swatch-btn border-2 border-studio-900 p-1 bg-white flex items-center gap-2 group transition-all" data-color="obsidian" aria-label="Select Obsidian Onyx">
+                <span class="w-6 h-6 bg-[#161719] block border border-studio-300"></span>
+                <span class="text-[9px] font-mono uppercase text-studio-900 hidden sm:inline">Onyx</span>
+              </button>
+
+              <button onclick="selectColor('Moss Pine', '#373c33', this)" class="swatch-btn border border-studio-200 hover:border-studio-900 p-1 bg-white flex items-center gap-2 group transition-all" data-color="pine" aria-label="Select Moss Pine">
+                <span class="w-6 h-6 bg-[#373c33] block border border-studio-300"></span>
+                <span class="text-[9px] font-mono uppercase text-studio-500 group-hover:text-studio-900 hidden sm:inline">Pine</span>
+              </button>
+
+              <button onclick="selectColor('Mist Grey Heather', '#787e87', this)" class="swatch-btn border border-studio-200 hover:border-studio-900 p-1 bg-white flex items-center gap-2 group transition-all" data-color="mist" aria-label="Select Mist Grey Heather">
+                <span class="w-6 h-6 bg-[#787e87] block border border-studio-300"></span>
+                <span class="text-[9px] font-mono uppercase text-studio-500 group-hover:text-studio-900 hidden sm:inline">Mist</span>
+              </button>
+
+              <button onclick="selectColor('Sand Alabaster', '#dfdacd', this)" class="swatch-btn border border-studio-200 hover:border-studio-900 p-1 bg-white flex items-center gap-2 group transition-all" data-color="sand" aria-label="Select Sand Alabaster">
+                <span class="w-6 h-6 bg-[#dfdacd] block border border-studio-300"></span>
+                <span class="text-[9px] font-mono uppercase text-studio-500 group-hover:text-studio-900 hidden sm:inline">Sand</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Size Selector -->
+          <div class="mt-6">
+            <div class="flex justify-between items-center text-xs mb-2.5">
+              <span class="font-bold uppercase tracking-wider text-studio-900 text-[10px]">Select Size:</span>
+              <button onclick="openSizeModal()" class="text-studio-500 hover:text-studio-pure underline text-[10px] font-mono uppercase flex items-center gap-1 transition-colors">
+                <i data-lucide="ruler" class="w-3.5 h-3.5"></i>
+                Size Matrix
+              </button>
+            </div>
+
+            <div class="grid grid-cols-5 gap-2" id="sizeOptions">
+              <button onclick="selectSize('XS', this)" class="size-pill py-3 text-xs font-mono font-bold border border-studio-200 hover:border-studio-900 text-studio-800 transition-all">XS</button>
+              <button onclick="selectSize('S', this)" class="size-pill py-3 text-xs font-mono font-bold border border-studio-200 hover:border-studio-900 text-studio-800 transition-all">S</button>
+              <button onclick="selectSize('M', this)" class="size-pill py-3 text-xs font-mono font-bold bg-studio-900 text-white border border-studio-900 transition-all">M</button>
+              <button onclick="selectSize('L', this)" class="size-pill py-3 text-xs font-mono font-bold border border-studio-200 hover:border-studio-900 text-studio-800 transition-all">L</button>
+              <button onclick="selectSize('XL', this)" class="size-pill py-3 text-xs font-mono font-bold border border-studio-200 hover:border-studio-900 text-studio-800 transition-all">XL</button>
+            </div>
+            <p class="text-[10px] text-studio-500 mt-2 font-mono uppercase tracking-wider">Fit note: Architectural boxy profile. Order true to size.</p>
+          </div>
+
+          <!-- Quantity Stepper & Actions -->
+          <div class="mt-6 flex flex-col gap-3">
+            <div class="flex items-stretch gap-3">
+              <div class="flex items-center border border-studio-900 bg-white w-32 justify-between">
+                <button onclick="adjustQty(-1)" class="w-10 h-full text-studio-900 hover:bg-studio-100 font-mono font-bold flex items-center justify-center select-none text-base border-r border-studio-200">−</button>
+                <span id="qtyDisplay" class="font-mono font-bold text-xs text-studio-900">1</span>
+                <button onclick="adjustQty(1)" class="w-10 h-full text-studio-900 hover:bg-studio-100 font-mono font-bold flex items-center justify-center select-none text-base border-l border-studio-200">+</button>
+              </div>
+
+              <button id="addToBagBtn" onclick="addToBagAction()" class="flex-1 bg-studio-900 hover:bg-studio-pure text-white py-4 px-6 text-xs font-bold uppercase tracking-editorial border border-studio-pure transition-all flex items-center justify-center gap-2">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>Add to Bag — $380</span>
+              </button>
+            </div>
+
+            <button onclick="simulateFastCheckout()" class="w-full bg-[#5a31f4] hover:bg-[#4922e3] text-white py-3.5 px-4 text-xs font-bold flex items-center justify-center gap-2 tracking-wide uppercase transition-all border border-[#5a31f4]">
+              <span>Checkout instantly with</span>
+              <span class="font-extrabold tracking-tight italic text-sm">Shop Pay</span>
+            </button>
+          </div>
+
+          <!-- Badges -->
+          <div class="mt-6 grid grid-cols-2 gap-2 text-[10px] font-mono uppercase tracking-wider text-studio-600 border-t border-studio-200 pt-4">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 bg-studio-900"></span>
+              <span>Complimentary Returns</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 bg-studio-900"></span>
+              <span>Carbon-Zero Logistics</span>
+            </div>
+          </div>
+
+          <!-- Accordion Specifications -->
+          <div class="mt-6 border-t border-studio-900 divide-y divide-studio-200" id="accordionGroup">
+            <div class="py-3">
+              <button onclick="toggleAccordion('acc-1')" class="w-full flex justify-between items-center text-left py-1 text-xs font-bold uppercase tracking-wider text-studio-900">
+                <span>Materiality & Gauge Architecture</span>
+                <span id="acc-1-icon" class="font-mono text-base font-bold">−</span>
+              </button>
+              <div id="acc-1" class="pt-2 text-xs text-studio-600 font-light leading-relaxed">
+                Spun in Biella, Italy using 60% virgin extra-fine merino wool (19.5 micron) and 40% certified cruelty-free baby alpaca. Loosely looped on a 7-gauge Japanese flat knitting loom to preserve yarn loft and breathability.
+              </div>
+            </div>
+
+            <div class="py-3">
+              <button onclick="toggleAccordion('acc-2')" class="w-full flex justify-between items-center text-left py-1 text-xs font-bold uppercase tracking-wider text-studio-900">
+                <span>Geometric Fit & Sizing Specs</span>
+                <span id="acc-2-icon" class="font-mono text-base font-bold">+</span>
+              </button>
+              <div id="acc-2" class="hidden pt-2 text-xs text-studio-600 font-light leading-relaxed">
+                Engineered with an intentional 3-inch architectural box drape, dropped shoulder seams, and reinforced rib cuffs. Size down for a traditional closer fit.
+              </div>
+            </div>
+
+            <div class="py-3">
+              <button onclick="toggleAccordion('acc-3')" class="w-full flex justify-between items-center text-left py-1 text-xs font-bold uppercase tracking-wider text-studio-900">
+                <span>Garment Longevity & Preservation</span>
+                <span id="acc-3-icon" class="font-mono text-base font-bold">+</span>
+              </button>
+              <div id="acc-3" class="hidden pt-2 text-xs text-studio-600 font-light leading-relaxed">
+                Hand wash in cold water using pH-neutral wool detergent. Lay completely flat on a fresh linen towel. Store folded in dry cedar; never hang on traditional hangers.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================= EDITORIAL LOOKBOOK: COMPLETE THE SILHOUETTE ================= -->
+  <section class="max-w-[1700px] w-full mx-auto px-4 sm:px-8 py-10" id="lookbook">
+    <div class="border-t border-studio-900 pt-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <span class="text-[10px] font-bold tracking-brutal uppercase text-studio-500 font-mono">CURATED FORM // VOL. 04</span>
+          <h2 class="text-2xl sm:text-3xl font-serif text-studio-900 mt-1">Complete The Silhouette</h2>
+        </div>
+        <p class="text-xs text-studio-500 max-w-md font-light leading-relaxed">
+          Architectural wardrobe companions designed to match the structural volume of the Horizon Kinetic Knitwear.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Companion Item 1 -->
+        <article class="bg-white border border-studio-900 p-4 flex flex-col justify-between group hover:shadow-[4px_4px_0px_0px_rgba(17,17,17,1)] transition-all">
+          <div class="aspect-[3/4] bg-studio-100 border border-studio-200 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=800&q=80" alt="Pleated Wide-Leg Trousers" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <span class="absolute top-2 left-2 bg-studio-pure text-white text-[8px] font-mono uppercase tracking-widest px-2 py-0.5">FORM 01</span>
+          </div>
+          <div class="pt-4">
+            <h3 class="text-xs font-bold text-studio-900 uppercase">Pleated Wide-Leg Trousers</h3>
+            <p class="text-[11px] text-studio-500 font-light mt-0.5">Heavyweight Organic Linen</p>
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-studio-200">
+              <span class="text-xs font-bold font-mono text-studio-900">$260.00</span>
+              <button onclick="quickAdd('Pleated Wide-Leg Trousers', 260)" class="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 border border-studio-900 hover:bg-studio-900 hover:text-white transition-colors">
+                + Quick Add
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Companion Item 2 -->
+        <article class="bg-white border border-studio-900 p-4 flex flex-col justify-between group hover:shadow-[4px_4px_0px_0px_rgba(17,17,17,1)] transition-all">
+          <div class="aspect-[3/4] bg-studio-100 border border-studio-200 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=800&q=80" alt="Oversized Cashmere Scarf" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <span class="absolute top-2 left-2 bg-studio-pure text-white text-[8px] font-mono uppercase tracking-widest px-2 py-0.5">FORM 02</span>
+          </div>
+          <div class="pt-4">
+            <h3 class="text-xs font-bold text-studio-900 uppercase">Oversized Cashmere Scarf</h3>
+            <p class="text-[11px] text-studio-500 font-light mt-0.5">Raw Edge Mongolian Yarn</p>
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-studio-200">
+              <span class="text-xs font-bold font-mono text-studio-900">$185.00</span>
+              <button onclick="quickAdd('Oversized Cashmere Scarf', 185)" class="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 border border-studio-900 hover:bg-studio-900 hover:text-white transition-colors">
+                + Quick Add
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Companion Item 3 -->
+        <article class="bg-white border border-studio-900 p-4 flex flex-col justify-between group hover:shadow-[4px_4px_0px_0px_rgba(17,17,17,1)] transition-all">
+          <div class="aspect-[3/4] bg-studio-100 border border-studio-200 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80" alt="Sculptural Leather Tote" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <span class="absolute top-2 left-2 bg-studio-pure text-white text-[8px] font-mono uppercase tracking-widest px-2 py-0.5">FORM 03</span>
+          </div>
+          <div class="pt-4">
+            <h3 class="text-xs font-bold text-studio-900 uppercase">Sculptural Leather Tote</h3>
+            <p class="text-[11px] text-studio-500 font-light mt-0.5">Vegetable-Tanned Vachetta</p>
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-studio-200">
+              <span class="text-xs font-bold font-mono text-studio-900">$420.00</span>
+              <button onclick="quickAdd('Sculptural Leather Tote', 420)" class="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 border border-studio-900 hover:bg-studio-900 hover:text-white transition-colors">
+                + Quick Add
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Companion Item 4 -->
+        <article class="bg-white border border-studio-900 p-4 flex flex-col justify-between group hover:shadow-[4px_4px_0px_0px_rgba(17,17,17,1)] transition-all">
+          <div class="aspect-[3/4] bg-studio-100 border border-studio-200 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80" alt="Studio Monograph Vol. II" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <span class="absolute top-2 left-2 bg-studio-pure text-white text-[8px] font-mono uppercase tracking-widest px-2 py-0.5">FORM 04</span>
+          </div>
+          <div class="pt-4">
+            <h3 class="text-xs font-bold text-studio-900 uppercase">Studio Monograph Vol. II</h3>
+            <p class="text-[11px] text-studio-500 font-light mt-0.5">Special Release</p>
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-studio-200">
+              <span class="text-xs font-bold font-mono text-studio-900">$65.00</span>
+              <button onclick="quickAdd('Studio Monograph Vol. II', 65)" class="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 border border-studio-900 hover:bg-studio-900 hover:text-white transition-colors">
+                + Quick Add
+              </button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= REVIEWS & TECHNICAL AUDIT ================= -->
+  <section class="max-w-[1700px] w-full mx-auto px-4 sm:px-8 py-8" id="reviews">
+    <div class="bg-white border border-studio-900 p-6 sm:p-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-studio-900 pb-6 lg:pb-0 lg:pr-8">
+          <span class="text-[10px] font-bold tracking-brutal uppercase text-studio-500 font-mono">AUDIT RATING // VERIFIED CLIENTS</span>
+          <div class="flex items-baseline gap-3 mt-3">
+            <span class="text-5xl font-mono font-bold text-studio-900">4.92</span>
+            <div class="text-studio-900 text-xs font-mono tracking-widest">[ ★★★★★ ]</div>
+          </div>
+          <p class="text-xs text-studio-600 font-light mt-2 leading-relaxed">
+            48 Verified Purchases. 98% recommend for cold highland weather and metropolitan daily wear.
+          </p>
+        </div>
+
+        <div class="lg:col-span-8 space-y-6">
+          <div class="border-b border-studio-200 pb-5">
+            <div class="flex items-center justify-between mb-1.5 font-mono">
+              <span class="text-xs font-bold text-studio-900 uppercase">Camille V. — Paris, France</span>
+              <span class="text-[10px] text-studio-500">Verified Client // 14 Oct 2026</span>
+            </div>
+            <div class="text-studio-900 text-[10px] font-mono mb-2">★★★★★ — SIZE M / OBSIDIAN ONYX</div>
+            <p class="text-xs text-studio-600 font-light leading-relaxed">
+              "The geometric cut maintains its square shoulder line effortlessly. It provides tremendous warmth in coastal Normandy winds without the stifling bulk of traditional knitwear."
+            </p>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1.5 font-mono">
+              <span class="text-xs font-bold text-studio-900 uppercase">Julian K. — Kyoto, Japan</span>
+              <span class="text-[10px] text-studio-500">Verified Client // 28 Sep 2026</span>
+            </div>
+            <div class="text-studio-900 text-[10px] font-mono mb-2">★★★★★ — SIZE L / MOSS PINE</div>
+            <p class="text-xs text-studio-600 font-light leading-relaxed">
+              "Minimalism at its highest level. The finish of the hem and cuffs is strictly straight and sharp. The alpaca yarn is remarkably soft against bare skin."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+   <!-- ================= FOOTER: BRUTALIST VELVETICA MONOLITH ================= -->
+  <footer class="mt-auto bg-studio-pure text-white pt-16 pb-12 border-t-2 border-studio-pure">
+    <div class="max-w-[1700px] mx-auto px-4 sm:px-8">
+      
+      <!-- Top Columns -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16 border-b border-studio-800">
+        
+        <!-- Gazette Signup -->
+        <div class="lg:col-span-2 pr-0 lg:pr-8">
+          <span class="text-[9px] uppercase tracking-brutal text-studio-400 font-mono">THE GAZETTE ROLL</span>
+          <h3 class="font-serif italic text-2xl text-white mt-1 mb-2">Private Archive Access</h3>
+          <p class="text-xs text-studio-400 font-light leading-relaxed mb-4">
+            Receive private allocations for seasonal textile runs prior to public catalog dispatch.
+          </p>
+          <form onsubmit="handleSubscribe(event)" class="flex gap-2">
+            <input type="email" required placeholder="ENTER EMAIL ADDRESS" class="bg-studio-900 border border-studio-700 px-4 py-3 text-xs text-white placeholder-studio-500 focus:outline-none focus:border-white flex-1 font-mono uppercase">
+            <button type="submit" class="bg-white text-studio-pure hover:bg-studio-200 px-6 py-3 text-xs font-bold uppercase tracking-wider transition-colors border border-white">
+              Enroll
+            </button>
+          </form>
+          <div id="subSuccessMsg" class="hidden text-emerald-400 text-xs mt-2 font-mono">Access granted. Confirmation dispatched to inbox.</div>
+        </div>
+
+        <!-- Links 1 -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4 font-mono">Collections</h4>
+          <ul class="space-y-2.5 text-xs text-studio-400 font-light">
+            <li><a href="#" class="hover:text-white transition-colors">Living Light Autumn</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Raw Cashmere Series</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Kinetic Linen Tailoring</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Artisanal Accessories</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Archive Re-Editions</a></li>
+          </ul>
+        </div>
+
+        <!-- Links 2 -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4 font-mono">Client Care</h4>
+          <ul class="space-y-2.5 text-xs text-studio-400 font-light">
+            <li><button onclick="openSizeModal()" class="hover:text-white transition-colors">Garment Sizing Matrix</button></li>
+            <li><a href="#" class="hover:text-white transition-colors">Global Express Transit</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Complimentary Returns Portal</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Garment Care Concierge</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Contact The Atelier</a></li>
+          </ul>
+        </div>
+
+        <!-- Links 3 -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-4 font-mono">Maison</h4>
+          <ul class="space-y-2.5 text-xs text-studio-400 font-light">
+            <li><a href="#" class="hover:text-white transition-colors">Ecological Transparency</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Biella Mill Partners</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Carbon Ledger 2026</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Stockists Directory</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Giant Monolithic Headline -->
+      <div class="py-12 text-center select-none overflow-hidden border-b border-studio-800">
+        <h2 class="text-5xl sm:text-7xl md:text-[130px] font-bold tracking-tight text-white/90 hover:text-white transition-colors uppercase leading-none">
+          VELVETICA STUDIO
+        </h2>
+      </div>
+
+      <!-- Bottom Credits -->
+      <div class="flex flex-col sm:flex-row items-center justify-between text-studio-500 text-[10px] font-mono uppercase gap-4 pt-6">
+        <p>© 2026 VELVETICA STUDIO LTD. ALL RIGHTS RESERVED. ZERO ROUNDED CORNERS PROTOCOL.</p>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-white">Privacy Policy</a>
+          <a href="#" class="hover:text-white">Terms of Sale</a>
+          <a href="#" class="hover:text-white">Accessibility</a>
+          <a href="#" class="hover:text-white">Sustainability Audit</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+
+  <!-- ================= LIGHTBOX ZOOM MODAL ================= -->
+  <div id="imageZoomModal" class="fixed inset-0 z-50 bg-black/95 hidden items-center justify-center p-4 sm:p-8 backdrop-blur-md" onclick="closeImageModal()">
+    <div class="relative max-w-6xl w-full h-full max-h-[90vh] flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+      <!-- Close Button -->
+      <button onclick="closeImageModal()" class="absolute top-0 right-0 p-3 bg-white text-studio-900 hover:bg-studio-200 transition-colors z-20 border border-studio-900" title="Close preview">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+      
+      <!-- Fullscreen Zoomed Image -->
+      <div class="w-full h-full flex items-center justify-center overflow-hidden border border-studio-800 bg-studio-950 p-2">
+        <img id="zoomedProductImage" src="" alt="High Resolution Product Preview" class="max-h-full max-w-full object-contain select-none" />
+      </div>
+
+      <!-- Modal Footer Info -->
+      <div class="w-full flex justify-between items-center text-white font-mono text-[11px] uppercase tracking-wider pt-3">
+        <span id="zoomedImageTitle">The Horizon Kinetic Knitwear</span>
+        <span class="text-stone-400">Press ESC or click outside to dismiss</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SLIDE-OVER CART DRAWER ================= -->
+  <div id="cartDrawerBackdrop" onclick="closeCart()" class="fixed inset-0 bg-black/60 z-50 transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+
+  <aside id="cartDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white border-l-2 border-studio-900 z-50 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out" aria-label="Shopping Cart">
+    <div class="p-6 border-b border-studio-900 flex items-center justify-between bg-studio-100">
+      <div class="flex items-center gap-2">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-studio-900 font-mono">Your Bag</h3>
+        <span id="drawerCount" class="text-xs font-mono text-studio-500">(1 ITEM)</span>
+      </div>
+      <button onclick="closeCart()" class="p-2 text-studio-900 hover:bg-studio-200 transition-colors border border-transparent hover:border-studio-900">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-6 space-y-4" id="cartItemsList">
+      <div class="flex gap-4 p-3 bg-white border border-studio-900 relative group" id="mainCartItem">
+        <img id="cartItemThumbnail" src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=200&q=80" alt="Horizon Knit Cart Thumbnail" class="w-20 h-24 object-cover border border-studio-300 flex-shrink-0" />
+        <div class="flex-1 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start">
+              <h4 class="text-xs font-bold text-studio-900 uppercase">The Horizon Kinetic Knit</h4>
+              <button onclick="removeMainItem()" class="text-studio-400 hover:text-studio-pure text-xs font-mono p-1">✕</button>
+            </div>
+            <p class="text-[11px] text-studio-500 font-mono mt-0.5" id="cartItemVariant">Obsidian Onyx / Size M</p>
+          </div>
+          <div class="flex justify-between items-center mt-3 pt-2 border-t border-studio-100">
+            <div class="flex items-center border border-studio-900 bg-white text-xs">
+              <button onclick="updateCartQty(-1)" class="px-2 py-0.5 text-studio-900 hover:bg-studio-100 font-mono font-bold">−</button>
+              <span id="cartDrawerQty" class="px-2 font-mono font-bold">1</span>
+              <button onclick="updateCartQty(1)" class="px-2 py-0.5 text-studio-900 hover:bg-studio-100 font-mono font-bold">+</button>
+            </div>
+            <span class="text-xs font-mono font-bold text-studio-900" id="cartItemSubtotal">$380.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-6 border-t border-studio-900 bg-studio-50 space-y-3">
+      <div class="flex justify-between text-xs font-mono">
+        <span>SUBTOTAL</span>
+        <span class="font-bold text-studio-900" id="cartSubtotalAmount">$380.00</span>
+      </div>
+      <button onclick="proceedToCheckout()" class="w-full bg-studio-900 hover:bg-studio-pure text-white py-4 text-xs font-bold uppercase tracking-editorial border border-studio-pure transition-all">
+        Secure Checkout // <span id="checkoutBtnTotal">$380.00</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= SIZE & FIT GUIDE MODAL ================= -->
+  <div id="sizeModal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4">
+    <div class="bg-white border-2 border-studio-900 max-w-lg w-full p-6 sm:p-8 shadow-[8px_8px_0px_0px_rgba(17,17,17,1)] relative">
+      <div class="flex items-center justify-between pb-4 border-b border-studio-900">
+        <h3 class="text-base font-bold uppercase tracking-wider text-studio-900">Garment Dimensional Matrix</h3>
+        <button onclick="closeSizeModal()" class="text-studio-900 hover:bg-studio-100 p-2">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-xs text-left border border-studio-900">
+          <thead>
+            <tr class="bg-studio-900 text-white font-mono uppercase text-[9px] tracking-wider">
+              <th class="py-2.5 px-3">Size Spec</th>
+              <th class="py-2.5 px-3">Chest Circumference</th>
+              <th class="py-2.5 px-3">Center Back</th>
+              <th class="py-2.5 px-3">Sleeve Length</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-studio-200 font-mono text-[11px]">
+            <tr><td class="p-2.5 font-bold">XS</td><td class="p-2.5">42.0"</td><td class="p-2.5">26.5"</td><td class="p-2.5">32.5"</td></tr>
+            <tr><td class="p-2.5 font-bold">S</td><td class="p-2.5">44.0"</td><td class="p-2.5">27.0"</td><td class="p-2.5">33.5"</td></tr>
+            <tr class="bg-studio-100 font-bold"><td class="p-2.5">M [Sample]</td><td class="p-2.5">46.0"</td><td class="p-2.5">28.0"</td><td class="p-2.5">34.5"</td></tr>
+            <tr><td class="p-2.5 font-bold">L</td><td class="p-2.5">48.0"</td><td class="p-2.5">29.0"</td><td class="p-2.5">35.5"</td></tr>
+            <tr><td class="p-2.5 font-bold">XL</td><td class="p-2.5">51.0"</td><td class="p-2.5">30.0"</td><td class="p-2.5">36.5"</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-6 flex justify-end">
+        <button onclick="closeSizeModal()" class="bg-studio-900 text-white px-6 py-2.5 text-xs font-bold uppercase tracking-wider">Close Matrix</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= INLINE TOAST NOTIFICATION ================= -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-studio-pure text-white px-5 py-3.5 border border-white text-xs flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-200 font-mono">
+    <span class="w-2 h-2 bg-emerald-400"></span>
+    <span id="toastMessage">Item registered in bag.</span>
+  </div>
+
+  <!-- ================= CLIENT JAVASCRIPT ================= -->
+  <script>
+    lucide.createIcons();
+
+    // Image catalog mapping
+    const productImages = {
+      editorial: {
+        src: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=1600&q=85",
+        badge: "FRAME 01 // EDITORIAL LOOK",
+        alt: "The Horizon Kinetic Knitwear - Highland Vista Editorial"
+      },
+      detail: {
+        src: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1600&q=85",
+        badge: "FRAME 02 // MACRO WEAVE & GAUGE",
+        alt: "The Horizon Kinetic Knitwear - Microstructure Macro Weave"
+      },
+      back: {
+        src: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=1600&q=85",
+        badge: "FRAME 03 // SILHOUETTE & FIT",
+        alt: "The Horizon Kinetic Knitwear - Square Shoulder Drop Fit"
+      },
+      flat: {
+        src: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=1600&q=85",
+        badge: "FRAME 04 // STUDIO FLAT LAY",
+        alt: "The Horizon Kinetic Knitwear - Studio Archive Flat"
+      }
+    };
+
+    const productState = {
+      basePrice: 380,
+      selectedColor: "Obsidian Onyx",
+      selectedSize: "M",
+      qty: 1,
+      currentImageKey: 'editorial'
+    };
+
+    // 1. Image Switcher
+    function switchImage(key) {
+      if (!productImages[key]) return;
+      productState.currentImageKey = key;
+      const data = productImages[key];
+
+      const img = document.getElementById('mainProductImage');
+      img.src = data.src;
+      img.alt = data.alt;
+      document.getElementById('imageCaptionBadge').textContent = data.badge;
+
+      // Update tabs
+      ['editorial', 'detail', 'back', 'flat'].forEach(k => {
+        const tab = document.getElementById('tab-' + k);
+        if (k === key) {
+          tab.classList.add('bg-studio-900', 'text-white');
+          tab.classList.remove('text-studio-600');
+        } else {
+          tab.classList.remove('bg-studio-900', 'text-white');
+          tab.classList.add('text-studio-600');
+        }
+      });
+
+      // Update thumbnails
+      document.querySelectorAll('.thumb-btn').forEach(btn => {
+        if (btn.dataset.thumb === key) {
+          btn.classList.add('border-2', 'border-studio-900');
+          btn.classList.remove('border-studio-300');
+        } else {
+          btn.classList.remove('border-2', 'border-studio-900');
+          btn.classList.add('border', 'border-studio-300');
+        }
+      });
+    }
+
+    // 2. Lightbox Modal View
+    function openImageModal() {
+      const modal = document.getElementById('imageZoomModal');
+      const zoomedImg = document.getElementById('zoomedProductImage');
+      const zoomedTitle = document.getElementById('zoomedImageTitle');
+      const current = productImages[productState.currentImageKey];
+
+      zoomedImg.src = current.src;
+      zoomedTitle.textContent = `${current.badge} — The Horizon Kinetic Knitwear`;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById('imageZoomModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    // Close lightbox on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeImageModal();
+        closeSizeModal();
+        closeCart();
+      }
+    });
+
+    // 3. Color & Size Selectors
+    function selectColor(colorName, hex, btn) {
+      productState.selectedColor = colorName;
+      document.getElementById('selectedColorLabel').textContent = colorName;
+      document.querySelectorAll('.swatch-btn').forEach(b => {
+        b.classList.remove('border-2', 'border-studio-900');
+        b.classList.add('border', 'border-studio-200');
+      });
+      btn.classList.add('border-2', 'border-studio-900');
+      btn.classList.remove('border-studio-200');
+      document.getElementById('cartItemVariant').textContent = `${colorName} / Size ${productState.selectedSize}`;
+    }
+
+    function selectSize(sizeCode, btn) {
+      productState.selectedSize = sizeCode;
+      document.querySelectorAll('.size-pill').forEach(b => {
+        b.classList.remove('bg-studio-900', 'text-white', 'border-studio-900');
+        b.classList.add('border-studio-200', 'text-studio-800');
+      });
+      btn.classList.add('bg-studio-900', 'text-white', 'border-studio-900');
+      btn.classList.remove('border-studio-200', 'text-studio-800');
+      document.getElementById('cartItemVariant').textContent = `${productState.selectedColor} / Size ${sizeCode}`;
+    }
+
+    // 4. Quantity Adjustments
+    function adjustQty(delta) {
+      let q = productState.qty + delta;
+      if (q < 1) q = 1;
+      if (q > 10) q = 10;
+      productState.qty = q;
+      document.getElementById('qtyDisplay').textContent = q;
+      document.getElementById('addToBagBtn').querySelector('span').textContent = `Add to Bag — $${q * productState.basePrice}`;
+    }
+
+    // 5. Accordion Controller
+    function toggleAccordion(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById(id + '-icon');
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        icon.textContent = '−';
+      } else {
+        el.classList.add('hidden');
+        icon.textContent = '+';
+      }
+    }
+
+    // 6. Cart Drawer Operations
+    function openCart() {
+      document.getElementById('cartDrawerBackdrop').classList.remove('opacity-0', 'pointer-events-none');
+      document.getElementById('cartDrawerBackdrop').classList.add('opacity-100', 'pointer-events-auto');
+      document.getElementById('cartDrawer').classList.remove('translate-x-full');
+      document.getElementById('cartDrawer').classList.add('translate-x-0');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+      document.getElementById('cartDrawerBackdrop').classList.add('opacity-0', 'pointer-events-none');
+      document.getElementById('cartDrawerBackdrop').classList.remove('opacity-100', 'pointer-events-auto');
+      document.getElementById('cartDrawer').classList.add('translate-x-full');
+      document.getElementById('cartDrawer').classList.remove('translate-x-0');
+      document.body.style.overflow = '';
+    }
+
+    function addToBagAction() {
+      showToast(`Added ${productState.qty} × Horizon Knit (${productState.selectedColor})`);
+      updateCartDisplay();
+      openCart();
+    }
+
+    function quickAdd(itemTitle, itemPrice) {
+      showToast(`Added "${itemTitle}" to bag`);
+      openCart();
+    }
+
+    function updateCartDisplay() {
+      const subtotal = productState.qty * productState.basePrice;
+      document.getElementById('cartCountBadge').textContent = productState.qty;
+      document.getElementById('drawerCount').textContent = `(${productState.qty} ${productState.qty === 1 ? 'ITEM' : 'ITEMS'})`;
+      document.getElementById('cartDrawerQty').textContent = productState.qty;
+      document.getElementById('cartItemSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('cartSubtotalAmount').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('checkoutBtnTotal').textContent = `$${subtotal.toFixed(2)}`;
+    }
+
+    function updateCartQty(delta) {
+      adjustQty(delta);
+      updateCartDisplay();
+    }
+
+    function removeMainItem() {
+      const itemEl = document.getElementById('mainCartItem');
+      if (itemEl) {
+        itemEl.innerHTML = `<div class="p-6 text-xs text-studio-500 font-mono uppercase text-center w-full">Your bag is currently vacant.</div>`;
+        document.getElementById('cartSubtotalAmount').textContent = '$0.00';
+        document.getElementById('checkoutBtnTotal').textContent = '$0.00';
+        document.getElementById('cartCountBadge').textContent = '0';
+      }
+    }
+
+    // 7. Modals & Notifications
+    function openSizeModal() {
+      const m = document.getElementById('sizeModal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function closeSizeModal() {
+      const m = document.getElementById('sizeModal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastMessage').textContent = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3000);
+    }
+
+    function simulateFastCheckout() {
+      showToast("Redirecting to Shop Pay accelerated portal...");
+    }
+
+    function proceedToCheckout() {
+      showToast("Directing to 256-bit encrypted checkout gateway...");
+    }
+
+    document.getElementById('openCartBtn').addEventListener('click', openCart);
+  </script>
+</body>
+</html>
