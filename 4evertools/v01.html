@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Toolbox Landing Page</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://bucket.mlcdn.com/a/3336/3336910/images/b81ca864affb6311afa662ccb36a290aa2a0c9e3.png">
+
+
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.7) 0%, #df1783 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Default cursor for the page */
+            cursor: auto;
+        }
+
+        #toolbox-container {
+            position: relative;
+            width: 650px;
+            height: 650px;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+        
+        /* CHANGE: Custom cursor is now applied directly to the toolbox when it's closed */
+        #toolbox-container:not(.is-open) {
+            cursor: url('https://bucket.mlcdn.com/a/3336/3336910/images/b17fbe579f22833a28dfd5fc42ab273b293abc13.png'), auto;
+        }
+
+        #toolbox-images {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        #toolbox-images:hover {
+             transform: translate(-50%, -50%) scale(1.05);
+        }
+        
+        .toolbox-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        #toolbox-img-hover,
+        #toolbox-img-active {
+            opacity: 0;
+        }
+
+        #toolbox-container:hover #toolbox-img-default {
+            opacity: 0;
+        }
+
+        #toolbox-container:hover #toolbox-img-hover {
+            opacity: 1;
+        }
+
+        #toolbox-container.is-open #toolbox-img-default,
+        #toolbox-container.is-open #toolbox-img-hover {
+            opacity: 0;
+        }
+
+        #toolbox-container.is-open #toolbox-img-active {
+            opacity: 1;
+        }
+        
+        .tech-link {
+            display: block;
+            position: absolute;
+            width: 15%;
+            height: 15%;
+            /* CHANGE: Set initial opacity to 0 for fade-in animation */
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            visibility: hidden;
+        }
+
+        .tech-link:hover {
+            transform: translate(-50%, -50%) scale(1.15) !important;
+        }
+
+        .tech-icon {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        /* Arc positions for the icons around the toolbox */
+        #css3-link { top: 67%; left: 0%; }
+        #html5-link { top: 37%; left: 10%; }
+        #sass-link { top: 20%; left: 50%; }
+        #js-link { top: 37%; left: 90%; }
+        #php-link { top: 67%; left: 100%; }
+
+        .tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.75); 
+            color: black;
+            padding: 4px 15px;
+            border-radius: 50px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .tech-link:hover .tooltip {
+            opacity: 1;
+        }
+        
+        .loading-text {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        #toolbox-container.loading .loading-text {
+            opacity: 1;
+        }
+        
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            font-size: 16px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+
+
+
+
+
+        
+    </style>
+</head>
+<body>
+
+    <div id="toolbox-container">
+        <!-- The toolbox images are now layered for a smooth fade transition -->
+        <div id="toolbox-images">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/ed8f8b6a6666a72475f309d02f7cfaac5d094ef2.png" alt="Toolbox" id="toolbox-img-default" class="toolbox-img">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/b559592f75646e526041aaafb39640c5d3536b0a.png" alt="Toolbox Hover" id="toolbox-img-hover" class="toolbox-img">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/8c2bf586e99c613597569f726f11d4f665815df1.png" alt="Toolbox Active" id="toolbox-img-active" class="toolbox-img">
+        </div>
+        
+        <div class="loading-text">Loading awesome tools...</div>
+
+
+
+
+        <!-- Technology links with PNG icons -->
+        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" id="css3-link" class="tech-link" target="_blank">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/a8001df38225318a48a2732bdffd907b65ad69c9.png" alt="Bookmarks Manager" class="tech-icon">
+            <div class="tooltip">Your Bookmarks Manager</div>
+        </a>
+        
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" id="html5-link" class="tech-link" target="_blank">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/dec666c4bc2ac137ee26abec65c50df25aeb1867.png" alt="Finance Hub Pro" class="tech-icon">
+            <div class="tooltip">Your Finance Hub Pro</div>
+        </a>
+        
+        <a href="https://sass-lang.com/" id="sass-link" class="tech-link" target="_blank">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/3d57c8e447ecc3c4b130edfbe32d64b37b556371.png" alt="DashLite" class="tech-icon">
+            <div class="tooltip">Your Private Desktop Dashboard</div>
+        </a>
+        
+        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" id="js-link" class="tech-link" target="_blank">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/20b9de7f326dedf80fb4b5a26e56f7a4ffe824f4.png" alt="Productivity Hub" class="tech-icon">
+            <div class="tooltip">Your Productivity Hub</div>
+        </a>
+        
+        <a href="https://www.php.net/" id="php-link" class="tech-link" target="_blank">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/d7589a2b7ec7033c2395042f615b8c5d96cc06af.png" alt="AI Assistant" class="tech-icon">
+            <div class="tooltip">Your Profesional AI Assistant</div>
+        </a>
+    </div>
+    
+    <div class="instructions">Click on the toolbox to reveal the tools.<p>Developed with 💖 by Bebell Digital Solutions.</p></div>
+
+    <!-- GSAP for animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <!-- Confetti for fun! -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        const toolboxContainer = document.getElementById('toolbox-container');
+        const techLinks = document.querySelectorAll('.tech-link');
+        const loadingText = document.querySelector('.loading-text');
+
+        let isOpen = false;
+        let imagesLoaded = 0;
+        const totalImages = document.querySelectorAll('img').length;
+
+        // Preload images for better performance
+        function preloadImages() {
+            toolboxContainer.classList.add('loading');
+            
+            const allImages = document.querySelectorAll('img');
+            allImages.forEach(img => {
+                if (img.complete) {
+                    imageLoaded();
+                } else {
+                    img.addEventListener('load', imageLoaded);
+                    img.addEventListener('error', imageLoaded); // Even if error, continue
+                }
+            });
+        }
+        
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded === totalImages) {
+                toolboxContainer.classList.remove('loading');
+            }
+        }
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', preloadImages);
+
+        // Handle click to open toolbox and show icons
+        toolboxContainer.addEventListener('click', () => {
+            if (isOpen) return; // Prevent re-triggering animation
+            isOpen = true;
+
+            // Add 'is-open' class to trigger the active image fade-in via CSS
+            toolboxContainer.classList.add('is-open');
+
+            // Trigger confetti effect!
+            confetti({
+                particleCount: 150,
+                spread: 90,
+                origin: { y: 0.6 }
+            });
+
+            // Make links visible before animating
+            techLinks.forEach(link => {
+                link.style.visibility = 'visible';
+            });
+
+            // CHANGE: Animate icons with both scale and opacity for a fading zoom-in effect.
+            // The stagger property was removed to make them all appear at once.
+            gsap.to(".tech-link", {
+                duration: 0.8,
+                scale: 1,
+                opacity: 1,
+                ease: "back.out(1.7)",
+            });
+        });
+        
+        // CHANGE: Removed the mouseenter and mouseleave event listeners.
+        // The cursor logic is now handled more cleanly in CSS.
+    </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Toolbox Landing Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.7) 0%, #df1783 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Using your custom cursor image */
+            cursor: url('https://bucket.mlcdn.com/a/3336/3336910/images/b17fbe579f22833a28dfd5fc42ab273b293abc13.png'), auto;
+        }
+
+        #toolbox-container {
+            position: relative;
+            width: 650px;
+            height: 650px;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        #toolbox-images {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        #toolbox-images:hover {
+             transform: translate(-50%, -50%) scale(1.05);
+        }
+        
+        .toolbox-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        #toolbox-img-hover,
+        #toolbox-img-active {
+            opacity: 0;
+        }
+
+        #toolbox-container:hover #toolbox-img-default {
+            opacity: 0;
+        }
+
+        #toolbox-container:hover #toolbox-img-hover {
+            opacity: 1;
+        }
+
+        #toolbox-container.is-open #toolbox-img-default,
+        #toolbox-container.is-open #toolbox-img-hover {
+            opacity: 0;
+        }
+
+        #toolbox-container.is-open #toolbox-img-active {
+            opacity: 1;
+        }
+        
+        .tech-link {
+            display: block;
+            position: absolute;
+            width: 15%;
+            height: 15%;
+            transform: translate(-50%, -50%) scale(0);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            /* Initially hidden */
+            visibility: hidden; 
+        }
+
+        .tech-link:hover {
+            transform: translate(-50%, -50%) scale(1.15) !important;
+        }
+
+        .tech-icon {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Arc positions for the icons around the toolbox */
+        #css3-link { top: 67%; left: 10%; }
+        #html5-link { top: 37%; left: 20%; }
+        #sass-link { top: 20%; left: 50%; }
+        #js-link { top: 37%; left: 80%; }
+        #php-link { top: 67%; left: 90%; }
+
+        .tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(223, 23, 131, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .tech-link:hover .tooltip {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toolbox-container">
+        <!-- The toolbox images are now layered for a smooth fade transition -->
+        <div id="toolbox-images">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/ed8f8b6a6666a72475f309d02f7cfaac5d094ef2.png" alt="Toolbox" id="toolbox-img-default" class="toolbox-img">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/b559592f75646e526041aaafb39640c5d3536b0a.png" alt="Toolbox Hover" id="toolbox-img-hover" class="toolbox-img">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/54a5c170f8658a5f8b20ff152d1f10a5df01595b.png" alt="Toolbox Active" id="toolbox-img-active" class="toolbox-img">
+        </div>
+
+        <!-- Technology links with PNG icons -->
+        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" id="css3-link" class="tech-link" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/732/732190.png" alt="CSS3" class="tech-icon">
+            <div class="tooltip">Learn CSS3</div>
+        </a>
+        
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" id="html5-link" class="tech-link" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/732/732212.png" alt="HTML5" class="tech-icon">
+            <div class="tooltip">Learn HTML5</div>
+        </a>
+        
+        <a href="https://sass-lang.com/" id="sass-link" class="tech-link" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968358.png" alt="Sass" class="tech-icon">
+            <div class="tooltip">Learn Sass</div>
+        </a>
+        
+        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" id="js-link" class="tech-link" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968292.png" alt="JavaScript" class="tech-icon">
+            <div class="tooltip">Learn JavaScript</div>
+        </a>
+        
+        <a href="https://www.php.net/" id="php-link" class="tech-link" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968332.png" alt="PHP" class="tech-icon">
+            <div class="tooltip">Learn PHP</div>
+        </a>
+    </div>
+
+    <!-- GSAP for animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <!-- Confetti for fun! -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        const toolboxContainer = document.getElementById('toolbox-container');
+        const techLinks = document.querySelectorAll('.tech-link');
+
+        let isOpen = false;
+
+        // Handle click to open toolbox and show icons in an arc
+        toolboxContainer.addEventListener('click', () => {
+            if (isOpen) return; // Prevent re-triggering animation
+            isOpen = true;
+
+            // Add 'is-open' class to trigger the active image fade-in via CSS
+            toolboxContainer.classList.add('is-open');
+
+            // Trigger confetti effect!
+            confetti({
+                particleCount: 150,
+                spread: 90,
+                origin: { y: 0.6 }
+            });
+
+            // Make links visible
+            techLinks.forEach(link => {
+                link.style.visibility = 'visible';
+            });
+
+            // Animate the icons flying out in an arc
+            gsap.to("#css3-link", {
+                duration: 1.2,
+                scale: 1,
+                ease: "back.out(1.7)",
+                delay: 0.2
+            });
+            
+            gsap.to("#html5-link", {
+                duration: 1.2,
+                scale: 1,
+                ease: "back.out(1.7)",
+                delay: 0.3
+            });
+            
+            gsap.to("#sass-link", {
+                duration: 1.2,
+                scale: 1,
+                ease: "back.out(1.7)",
+                delay: 0.4
+            });
+            
+            gsap.to("#js-link", {
+                duration: 1.2,
+                scale: 1,
+                ease: "back.out(1.7)",
+                delay: 0.5
+            });
+            
+            gsap.to("#php-link", {
+                duration: 1.2,
+                scale: 1,
+                ease: "back.out(1.7)",
+                delay: 0.6
+            });
+        });
+    </script>
+</body>
+</html>
