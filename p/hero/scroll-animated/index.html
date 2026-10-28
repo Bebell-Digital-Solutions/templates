@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scroll Animation Hero</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <style>
+    /* Ensure hardware acceleration for smooth 3D transforms */
+    #scroll-card, #scroll-header {
+      will-change: transform;
+      transform-style: preserve-3d;
+      /* Add transform origin to match Framer Motion defaults */
+      transform-origin: center center; 
+    }
+
+    /* LED Boot Sequence Animation: 2 blinks per color, 1.5s per blink cycle, 12s total */
+    /* Ending on Solid Green (#22c55e) */
+    @keyframes ledBootSequence {
+      /* RED BLINKS (0% - 24%) */
+      0%      { background-color: #ef4444; box-shadow: 0 0 8px #ef4444; }
+      6.25%   { background-color: #334155; box-shadow: none; }
+      12.5%   { background-color: #ef4444; box-shadow: 0 0 8px #ef4444; }
+      18.75%  { background-color: #334155; box-shadow: none; }
+
+      /* ORANGE BLINKS (25% - 49%) */
+      25%     { background-color: #f97316; box-shadow: 0 0 8px #f97316; }
+      31.25%  { background-color: #334155; box-shadow: none; }
+      37.5%   { background-color: #f97316; box-shadow: 0 0 8px #f97316; }
+      43.75%  { background-color: #334155; box-shadow: none; }
+
+      /* YELLOW BLINKS (50% - 74%) */
+      50%     { background-color: #eab308; box-shadow: 0 0 8px #eab308; }
+      56.25%  { background-color: #334155; box-shadow: none; }
+      62.5%   { background-color: #eab308; box-shadow: 0 0 8px #eab308; }
+      68.75%  { background-color: #334155; box-shadow: none; }
+
+      /* GREEN SOLID (75%+) */
+      75%     { background-color: #22c55e; box-shadow: 0 0 10px #22c55e; }
+      100%    { background-color: #22c55e; box-shadow: 0 0 10px #22c55e; }
+    }
+
+    .led-boot {
+      /* Uses step-end to snap between colors exactly rather than fading */
+      animation: ledBootSequence 12s step-end forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-white font-sans selection:bg-[#fc5800]/30 relative overflow-x-hidden">
+
+  <!-- Background Decorative Elements -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <!-- Thin line grid with a fade-out mask so it seamlessly blends into the edges -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_40%,transparent_100%)]"></div>
+    
+    <!-- Top Left Soft Glow -->
+    <div class="absolute top-0 left-0 w-[30rem] md:w-[40rem] h-[30rem] md:h-[40rem] bg-[#fc5800]/20 rounded-full blur-[100px] md:blur-[150px] -translate-x-1/2 -translate-y-1/2"></div>
+    
+    <!-- Bottom Right Soft Glow -->
+    <div class="absolute bottom-0 right-0 w-[40rem] md:w-[50rem] h-[40rem] md:h-[50rem] bg-[#fc5800]/10 rounded-full blur-[100px] md:blur-[150px] translate-x-1/3 translate-y-1/3"></div>
+  </div>
+
+  <div class="relative z-10 flex flex-col items-center justify-center pt-[10vh] pb-[20vh]">
+    
+    <!-- 3D Scroll Container -->
+    <div id="scroll-container" class="h-[60rem] md:h-[80rem] w-full flex items-center justify-center relative p-2 md:p-20">
+      <div class="py-10 md:py-40 w-full relative" style="perspective: 1000px;">
+        
+        <!-- Header Content -->
+        <div id="scroll-header" class="max-w-5xl mx-auto text-center">
+          <div class="flex flex-col items-center mb-12">
+            
+            <!-- Status Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800/50 border border-slate-700/50 mb-6 backdrop-blur-sm shadow-sm transition-all duration-300 hover:scale-105 hover:bg-slate-800 hover:border-[#fc5800]/30 hover:shadow-[0_0_20px_rgba(252,88,0,0.2)] cursor-default group">
+              <div class="w-2 h-2 rounded-full led-boot"></div>
+              <span class="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Systems Operational</span>
+            </div>
+
+            <h1 class="text-2xl md:text-3xl font-semibold text-white mb-6">
+              Unleash the power of <br />
+              <span class="text-5xl md:text-[6rem] font-bold mt-1 leading-none bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-400">
+                Scroll Animations
+              </span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-8 text-center">
+              Transform your user experience with cinematic 3D scrolls, engaging visuals, and a modern aesthetic that converts visitors into customers.
+            </p>
+
+            <!-- Benefits -->
+            <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-10">
+              <div class="flex items-center gap-2 text-slate-300 font-medium transition-all duration-300 hover:scale-110 hover:text-white cursor-default group">
+                <i class="fa-solid fa-bolt text-[#fc5800] text-lg w-5 flex justify-center transition-all duration-300 group-hover:drop-shadow-[0_0_8px_#fc5800]"></i>
+                <span>Lightning Fast</span>
+              </div>
+              <div class="flex items-center gap-2 text-slate-300 font-medium transition-all duration-300 hover:scale-110 hover:text-white cursor-default group">
+                <i class="fa-solid fa-shield-halved text-[#fc5800] text-lg w-5 flex justify-center transition-all duration-300 group-hover:drop-shadow-[0_0_8px_#fc5800]"></i>
+                <span>Secure Platform</span>
+              </div>
+              <div class="flex items-center gap-2 text-slate-300 font-medium transition-all duration-300 hover:scale-110 hover:text-white cursor-default group">
+                <i class="fa-solid fa-chart-line text-[#fc5800] text-lg w-5 flex justify-center transition-all duration-300 group-hover:drop-shadow-[0_0_8px_#fc5800]"></i>
+                <span>Advanced Analytics</span>
+              </div>
+            </div>
+
+            <!-- CTAs -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md sm:max-w-none">
+              <button class="px-8 py-3 rounded-[7px] bg-[#fc5800] hover:bg-[#e04e00] text-white font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-[#fc5800]/25 hover:shadow-[#fc5800]/50">
+                Book for Demo
+              </button>
+              <button class="px-8 py-3 rounded-[7px] bg-transparent border border-slate-600 hover:border-slate-400 text-white font-semibold transition-all duration-300 hover:scale-105 hover:bg-white/5 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+                Choose Plan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Card -->
+        <div id="scroll-card" class="relative max-w-5xl -mt-12 mx-auto w-full border-4 border-[#6C6C6C] p-2 md:p-6 bg-[#222222] rounded-[30px] shadow-2xl" style="box-shadow: 0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003;">
+          
+          <!-- Hardware Buttons (Top Edge, Right Side) -->
+          <div class="absolute -top-[9px] right-[10%] h-[6px] w-[20px] md:w-[30px] bg-[#6C6C6C] rounded-t-md"></div>
+          <div class="absolute -top-[9px] right-[14%] md:right-[13%] h-[6px] w-[15px] md:w-[22px] bg-[#6C6C6C] rounded-t-md"></div>
+
+          <!-- Aspect ratio moved here so the image fits 100% perfectly without cropping -->
+          <div class="w-full aspect-[2450/1530] overflow-hidden rounded-xl md:rounded-2xl">
+            <img
+              src="https://bucket.mlcdn.com/a/3336/3336910/images/35974b9dc6705d08247ebbeb4dd18a59744cb156.png"
+              alt="Dashboard interface preview"
+              class="mx-auto rounded-xl md:rounded-2xl object-cover h-full w-full object-center"
+              draggable="false"
+            />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Logo cloud -->
+    <div id="logo-cloud" class="w-full bg-slate-900 border-y border-slate-800/50 py-16 relative z-10 text-center px-4 shadow-xl transition-all duration-700 ease-out delay-200 opacity-0 translate-y-5">
+      <h3 class="text-sm font-medium text-slate-400 mb-8 uppercase tracking-wider">Trusted by +172 businesses & entrepreneurs</h3>
+      <div class="flex flex-wrap justify-center gap-x-12 gap-y-8 max-w-6xl mx-auto">
+        <div class="text-2xl font-semibold text-slate-500 hover:bg-clip-text hover:text-transparent hover:bg-gradient-to-b hover:from-white hover:to-slate-400 hover:drop-shadow-[0_0_15px_rgba(252,88,0,0.6)] transition-all duration-300 cursor-default">Google</div>
+        <div class="text-2xl font-semibold text-slate-500 hover:bg-clip-text hover:text-transparent hover:bg-gradient-to-b hover:from-white hover:to-slate-400 hover:drop-shadow-[0_0_15px_rgba(252,88,0,0.6)] transition-all duration-300 cursor-default">Microsoft</div>
+        <div class="text-2xl font-semibold text-slate-500 hover:bg-clip-text hover:text-transparent hover:bg-gradient-to-b hover:from-white hover:to-slate-400 hover:drop-shadow-[0_0_15px_rgba(252,88,0,0.6)] transition-all duration-300 cursor-default">Airbnb</div>
+        <div class="text-2xl font-semibold text-slate-500 hover:bg-clip-text hover:text-transparent hover:bg-gradient-to-b hover:from-white hover:to-slate-400 hover:drop-shadow-[0_0_15px_rgba(252,88,0,0.6)] transition-all duration-300 cursor-default">Spotify</div>
+        <div class="text-2xl font-semibold text-slate-500 hover:bg-clip-text hover:text-transparent hover:bg-gradient-to-b hover:from-white hover:to-slate-400 hover:drop-shadow-[0_0_15px_rgba(252,88,0,0.6)] transition-all duration-300 cursor-default">Netflix</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // --- 1. 3D Scroll Animation Logic (Framer Motion Replica) ---
+      const container = document.getElementById("scroll-container");
+      const header = document.getElementById("scroll-header");
+      const card = document.getElementById("scroll-card");
+
+      // State variables for smooth interpolation (Lerp)
+      let targetProgress = 0;
+      let currentProgress = 0;
+
+      function updateTargetProgress() {
+        // Map scroll position directly to progress so it starts fully tilted at load
+        const scrollY = window.scrollY || window.pageYOffset;
+        
+        // Increased from 0.6 to 1.5 to slow down the animation (requires more scrolling)
+        const distanceToFlatten = window.innerHeight * 1.5; 
+        
+        let progress = scrollY / distanceToFlatten;
+        
+        // Clamp between 0 and 1
+        targetProgress = Math.max(0, Math.min(1, progress));
+      }
+
+      // The render loop simulates Framer Motion's smooth spring physics
+      function renderLoop() {
+        // Linear Interpolation: Move current progress 8% closer to target progress every frame
+        currentProgress += (targetProgress - currentProgress) * 0.08;
+
+        const isMobile = window.innerWidth <= 768;
+        const scaleStart = isMobile ? 0.7 : 1.05;
+        const scaleEnd = isMobile ? 0.9 : 1;
+
+        // Map the smoothed progress to our animation values
+        const currentScale = scaleStart + (scaleEnd - scaleStart) * currentProgress;
+        const currentRotate = 20 - (20 * currentProgress);
+        const currentTranslate = 0 - (100 * currentProgress); // Header moves up
+
+        // Apply hardware-accelerated transforms
+        if (header) {
+          header.style.transform = `translateY(${currentTranslate}px)`;
+        }
+        if (card) {
+          // Added inline perspective to guarantee the 3D angle renders perfectly
+          card.style.transform = `perspective(1000px) rotateX(${currentRotate}deg) scale(${currentScale})`;
+        }
+
+        // Keep loop running seamlessly
+        requestAnimationFrame(renderLoop);
+      }
+
+      // Listeners
+      window.addEventListener("scroll", updateTargetProgress, { passive: true });
+      window.addEventListener("resize", updateTargetProgress, { passive: true });
+      
+      // Initialize states and start loop
+      updateTargetProgress();
+      renderLoop();
+
+      // --- 2. Logo Cloud Reveal Animation Logic ---
+      const logoCloud = document.getElementById("logo-cloud");
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove('opacity-0', 'translate-y-5');
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 }); 
+
+      if (logoCloud) {
+        observer.observe(logoCloud);
+      }
+    });
+  </script>
+</body>
+</html>
