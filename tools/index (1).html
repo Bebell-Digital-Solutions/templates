@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purple 3D Icon Generator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
+
+    <!-- ICONS CODE -->
+    <script> 
+        function removeFromLinks(rel) {
+            for (link of document.head.getElementsByTagName("link")) {
+                if (link.rel == rel) {
+                    document.head.removeChild(link);
+                }
+            };
+        }
+        function createNewFavicon(rel, img) {
+            var newFavicon = document.createElement("link");
+            newFavicon.type = "image/png";
+            newFavicon.rel = rel;
+            newFavicon.href = img;
+            var firstHeadElement = document.head.firstChild;
+            document.head.insertBefore(newFavicon, firstHeadElement);
+        }
+        removeFromLinks("icon");
+        removeFromLinks("shortcut icon");
+        removeFromLinks("apple-touch-icon");
+        createNewFavicon("icon", "https://bucket.mlcdn.com/a/3336/3336910/images/ba48dc6c14746407eea5796b6d07e1b22022eaf4.png");
+        createNewFavicon("shortcut icon", "https://bucket.mlcdn.com/a/3336/3336910/images/ba48dc6c14746407eea5796b6d07e1b22022eaf4.png");
+        createNewFavicon("apple-touch-icon", "https://bucket.mlcdn.com/a/3336/3336910/images/ba48dc6c14746407eea5796b6d07e1b22022eaf4.png"); 
+    </script>
+
+
+
+    
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://cdn.shopify.com/s/files/1/0242/0175/6777/files/logo-animation-bebell-1.gif?v=1777437988">
+
+
+
+
+
+
+
+
+    
+    <style>
+        /* Custom Scrollbar for Modals */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Auto-resizing textarea base styles */
+        textarea {
+            resize: none;
+            overflow: hidden;
+            min-height: 52px;
+            max-height: 200px;
+        }
+        
+        /* Coin Deduction Animation */
+        @keyframes flashRed {
+            0% { color: #f87171; transform: scale(1.1); }
+            100% { color: #ffffff; transform: scale(1); }
+        }
+        .deduct-anim {
+            animation: flashRed 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen w-full bg-neutral-950 text-neutral-100 font-sans selection:bg-purple-500/30">
+
+    <!-- Dynamic Background -->
+    <div class="fixed inset-0 z-0 opacity-40 pointer-events-none" style="background-image: radial-gradient(circle at 50% 0%, #4c1d95 0%, transparent 50%), radial-gradient(circle at 100% 100%, #1e1b4b 0%, transparent 50%);"></div>
+
+    <div class="relative z-10 flex flex-col items-center w-full max-w-5xl mx-auto px-6 py-12 min-h-screen">
+        
+        <!-- Top Right Credit Display -->
+        <div class="absolute top-6 right-6 flex items-center gap-2 bg-neutral-900/80 backdrop-blur-md border border-neutral-800 rounded-full pl-3 pr-4 py-2 cursor-pointer hover:bg-neutral-800 hover:border-purple-500/50 transition-all shadow-lg" onclick="openTopUpModal()">
+            <div class="bg-yellow-500/20 p-1.5 rounded-full">
+                <i data-lucide="coins" class="w-4 h-4 text-yellow-500"></i>
+            </div>
+            <span id="creditBalance" class="text-white font-semibold text-sm transition-colors">0</span>
+            <span class="text-neutral-500 text-xs font-medium ml-1">Tokens</span>
+            <div class="ml-2 pl-2 border-l border-neutral-700 flex items-center">
+                <img src="https://ik.imagekit.io/bebell/SaaSLab/3D-PURPLE-ICON-BUTTON-COLLECTION%20(1).png" alt="Magic" class="w-5 h-5 object-contain" />
+            </div>
+        </div>
+
+        <!-- Header Section -->
+        <div class="w-full flex flex-col items-center justify-center pt-10 pb-8 text-center mt-8">
+            <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-medium tracking-wide">
+                <span id="referenceStatusIndicator" class="w-2 h-2 rounded-full bg-purple-400 animate-pulse transition-colors"></span>
+                <span id="referenceStatusText">Purple Master System Active</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight drop-shadow-sm mb-4">
+                Purple 3D Icon Generator
+            </h1>
+            <p class="text-neutral-400 max-w-lg text-sm md:text-base leading-relaxed">
+                Generate premium 3D neumorphic-style square app buttons. 
+                Describe your icon symbol and preferred color to begin. (10 Tokens)
+            </p>
+        </div>
+
+        <!-- Error Message Box -->
+        <div id="errorBox" class="hidden w-full max-w-2xl mb-4 bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl flex items-center justify-between">
+            <span id="errorMessage" class="text-sm">An error occurred.</span>
+            <button onclick="document.getElementById('errorBox').classList.add('hidden')">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- Input Box Section -->
+        <div class="w-full max-w-2xl mb-8">
+            <div class="relative bg-neutral-900/80 backdrop-blur-xl rounded-2xl border border-neutral-800 shadow-2xl transition-all duration-300 focus-within:border-purple-500/50 focus-within:shadow-[0_0_30px_-5px_rgba(168,85,247,0.15)]">
+                
+                <textarea
+                    id="messageInput"
+                    placeholder="e.g. shopping cart, mail envelope, user profile..."
+                    class="w-full px-5 py-4 resize-none border-none outline-none bg-transparent text-white text-base md:text-lg placeholder:text-neutral-600 disabled:opacity-50"
+                ></textarea>
+
+                <!-- Reference Image Preview -->
+                <div id="referencePreviewContainer" class="hidden px-5 pb-2">
+                    <div class="relative inline-block">
+                        <img id="referencePreviewImg" src="" alt="Reference" class="h-16 w-16 object-cover rounded-xl border border-neutral-700/50" />
+                        <button onclick="removeReferenceImage()" class="absolute -top-2 -right-2 bg-neutral-800 text-white rounded-full p-1 hover:bg-neutral-700 border border-neutral-600 transition-colors">
+                            <i data-lucide="x" class="w-3 h-3"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Footer Buttons inside input -->
+                <div class="flex items-center justify-between px-3 pb-3 pt-1">
+                    <div class="flex items-center gap-1">
+                        <input type="file" id="fileInput" accept="image/*" class="hidden" />
+                        
+                        <button onclick="openColorModal()" class="p-2 hover:bg-neutral-800 rounded-lg transition-colors flex items-center justify-center" title="Design Color">
+                            <span id="colorIconTrigger" style="color: #7B5CD6;" class="transition-colors"><i data-lucide="palette" class="w-5 h-5"></i></span>
+                        </button>
+                        
+                        <button onclick="openLibraryModal()" class="p-2 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg transition-colors" title="Icon Library">
+                            <i data-lucide="library" class="w-4 h-4"></i>
+                        </button>
+                        
+                        <button id="attachBtn" onclick="document.getElementById('fileInput').click()" class="p-2 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg transition-colors" title="Attach Image">
+                            <i data-lucide="paperclip" class="w-4 h-4"></i>
+                        </button>
+
+                        <!-- Settings Button -->
+                        <button onclick="openSettingsModal()" class="p-2 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg transition-colors" title="API Settings">
+                            <i data-lucide="settings" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs text-neutral-500 hidden sm:inline-block">Costs 10 Tokens</span>
+                        <button id="generateBtn" onclick="generateIcon()" class="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200 bg-neutral-800 text-neutral-500 cursor-not-allowed" disabled>
+                            <span id="generateIconUI"><i data-lucide="arrow-up" class="w-5 h-5"></i></span>
+                            <span id="loadingIconUI" class="hidden"><i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="flex items-center justify-center flex-wrap gap-2 mt-6">
+                <button onclick="handleQuickAction('cloud sync')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/50 text-neutral-400 hover:text-white hover:bg-neutral-800 hover:border-neutral-700 transition-all text-xs font-medium">
+                    <i data-lucide="image" class="w-3.5 h-3.5"></i> Cloud Sync
+                </button>
+                <button onclick="handleQuickAction('flame')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/50 text-neutral-400 hover:text-white hover:bg-neutral-800 hover:border-neutral-700 transition-all text-xs font-medium">
+                    <i data-lucide="palette" class="w-3.5 h-3.5"></i> Flame
+                </button>
+                <button onclick="handleQuickAction('camera')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/50 text-neutral-400 hover:text-white hover:bg-neutral-800 hover:border-neutral-700 transition-all text-xs font-medium">
+                    <i data-lucide="image-icon" class="w-3.5 h-3.5"></i> Camera
+                </button>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="w-full flex flex-col mb-10" id="galleryWrapper">
+            <!-- Empty State (Default) -->
+            <div id="emptyGalleryState" class="w-full flex flex-col items-center justify-center py-24 border border-neutral-800/80 border-dashed rounded-3xl bg-transparent transition-colors hover:border-neutral-700/80">
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-purple-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <img src="https://ik.imagekit.io/bebell/SaaSLab/dark-purple-cloud-icon.png" alt="Empty Gallery" class="w-32 h-32 object-contain relative z-10 transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_25px_rgba(168,85,247,0.7)]" />
+                </div>
+                <p class="mt-8 text-neutral-400 text-sm font-medium tracking-wide">
+                    No icons generated yet. Start typing above to create magic.
+                </p>
+            </div>
+
+            <!-- Filled Gallery State (Hidden by default) -->
+            <div id="filledGalleryState" class="hidden w-full flex flex-col">
+                <!-- Gallery Header -->
+                <div class="flex items-center justify-between mb-6 px-2">
+                    <h2 class="text-xl font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="layout-grid" class="w-5 h-5 text-purple-400"></i>
+                        Generated Library
+                        <span id="galleryCount" class="bg-neutral-800 text-neutral-300 text-xs py-0.5 px-2 rounded-full ml-2">0</span>
+                    </h2>
+                    
+                    <div class="flex items-center gap-1 bg-neutral-900 rounded-lg p-1 border border-neutral-800">
+                        <button id="viewGridBtn" onclick="setViewMode('grid')" class="p-1.5 rounded-md transition-colors bg-neutral-800 text-white">
+                            <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                        </button>
+                        <button id="viewListBtn" onclick="setViewMode('list')" class="p-1.5 rounded-md transition-colors text-neutral-500 hover:text-neutral-300">
+                            <i data-lucide="list" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Gallery Container -->
+                <div id="galleryContainer" class="w-full transition-all grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
+                    <!-- Images dynamically injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="w-full text-center pb-6 mt-auto">
+            <p class="text-sm text-neutral-700">
+                Developed with 💜 by 
+                <a href="https://bebelldigitalsolutions.com" target="_blank" rel="noopener noreferrer" class="font-medium transition-colors hover:text-neutral-500">
+                    Bebell Digital Solutions
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Store/Top-Up Modal -->
+    <div id="topUpModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onclick="closeTopUpModal(event)">
+        <div class="bg-neutral-900 p-6 rounded-2xl border border-neutral-800 shadow-2xl w-full max-w-lg" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-white font-semibold text-xl flex items-center gap-2">
+                    <i data-lucide="shopping-cart" class="w-5 h-5 text-purple-400"></i> Token Store
+                </h3>
+                <div class="flex items-center gap-2 bg-neutral-800 px-3 py-1.5 rounded-full border border-neutral-700">
+                    <i data-lucide="coins" class="w-4 h-4 text-yellow-500"></i>
+                    <span id="modalCreditBalance" class="text-white font-medium text-sm">0</span>
+                </div>
+            </div>
+            
+            <p class="text-neutral-400 text-sm mb-6">Generate premium 3D assets instantly. Each generation costs 10 tokens.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <!-- Package 1 -->
+                <div class="bg-neutral-800/50 border border-neutral-700 rounded-xl p-4 flex flex-col relative overflow-hidden group hover:border-purple-500/50 transition-colors">
+                    <div class="text-yellow-500 mb-2"><i data-lucide="coins" class="w-8 h-8"></i></div>
+                    <h4 class="text-white font-semibold text-lg">Starter Pack</h4>
+                    <p class="text-purple-300 text-sm font-medium mb-4">100 Tokens</p>
+                    <div class="mt-auto flex items-center justify-between">
+                        <span class="text-white font-bold">$4.99</span>
+                        <button onclick="purchaseCredits(100)" class="bg-white text-black px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-neutral-200 transition-colors">Buy</button>
+                    </div>
+                </div>
+                <!-- Package 2 -->
+                <div class="bg-purple-900/20 border border-purple-500/30 rounded-xl p-4 flex flex-col relative overflow-hidden group hover:border-purple-500 transition-colors">
+                    <div class="absolute top-0 right-0 bg-purple-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">POPULAR</div>
+                    <div class="text-yellow-500 mb-2 flex -space-x-2">
+                        <i data-lucide="coins" class="w-8 h-8"></i>
+                        <i data-lucide="coins" class="w-8 h-8 opacity-80"></i>
+                    </div>
+                    <h4 class="text-white font-semibold text-lg">Pro Pack</h4>
+                    <p class="text-purple-300 text-sm font-medium mb-4">500 Tokens</p>
+                    <div class="mt-auto flex items-center justify-between">
+                        <span class="text-white font-bold">$19.99</span>
+                        <button onclick="purchaseCredits(500)" class="bg-purple-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-purple-500 transition-colors shadow-lg shadow-purple-500/20">Buy</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end mt-4">
+                <button onclick="closeTopUpModal()" class="px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white text-sm font-medium rounded-xl transition-all">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Settings Modal -->
+    <div id="settingsModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onclick="closeSettingsModal(event)">
+        <div class="bg-neutral-900 p-6 rounded-2xl border border-neutral-800 shadow-2xl w-full max-w-md" onclick="event.stopPropagation()">
+            <h3 class="text-white font-semibold text-lg mb-4 flex items-center gap-2">
+                <i data-lucide="settings" class="w-5 h-5 text-purple-400"></i> API Settings
+            </h3>
+            
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-xs text-neutral-500 mb-1">API Provider</label>
+                    <select id="apiProviderSelect" onchange="updateProviderUI()" class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-lg px-3 py-2 text-sm outline-none focus:border-purple-500">
+                        <option value="google">Google Native (Default)</option>
+                        <option value="openrouter">OpenRouter</option>
+                    </select>
+                </div>
+                
+                <div id="openRouterConfig" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-xs text-neutral-500 mb-1">OpenRouter API Key</label>
+                        <input type="password" id="orApiKeyInput" placeholder="sk-or-v1-..." class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-lg px-3 py-2 text-sm outline-none focus:border-purple-500" />
+                    </div>
+                    <div>
+                        <label class="block text-xs text-neutral-500 mb-1">Image Model ID</label>
+                        <input type="text" id="orModelInput" placeholder="e.g. openai/dall-e-3" class="w-full bg-neutral-800 border border-neutral-700 text-white rounded-lg px-3 py-2 text-sm outline-none focus:border-purple-500" />
+                        <p class="text-xs text-neutral-500 mt-1">Provide an OpenRouter model ID that supports image generation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <button onclick="closeSettingsModal()" class="px-4 py-2 text-sm text-neutral-400 hover:text-white transition-colors">
+                    Cancel
+                </button>
+                <button onclick="saveSettings()" class="px-5 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-xl transition-all">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Color Picker Modal -->
+    <div id="colorModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onclick="closeColorModal(event)">
+        <div class="bg-neutral-900 p-6 rounded-2xl border border-neutral-800 shadow-2xl w-full max-w-sm" onclick="event.stopPropagation()">
+            <h3 class="text-white font-semibold text-lg mb-4 flex items-center gap-2">
+                <i data-lucide="palette" class="w-5 h-5 text-purple-400"></i> Button Color
+            </h3>
+            <div class="flex items-center gap-4 mb-6">
+                <input type="color" id="colorPickerInput" value="#7B5CD6" oninput="updateColorPreview()" class="w-16 h-16 rounded-xl cursor-pointer bg-neutral-800 border-none p-1" />
+                <div class="flex-1 bg-neutral-800/50 p-3 rounded-xl border border-neutral-800">
+                    <span class="text-xs text-neutral-500 block mb-1">HEX CODE</span>
+                    <span id="hexCodeDisplay" class="text-white font-mono uppercase">#7B5CD6</span>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button onclick="resetColor()" class="px-4 py-2 text-sm text-neutral-400 hover:text-white transition-colors">
+                    Reset to Purple
+                </button>
+                <button onclick="closeColorModal()" class="px-5 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-xl transition-all">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Icon Library Modal -->
+    <div id="libraryModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onclick="closeLibraryModal(event)">
+        <div class="bg-neutral-900 p-6 rounded-2xl border border-neutral-800 shadow-2xl w-full max-w-2xl" onclick="event.stopPropagation()">
+            <h3 class="text-white font-semibold text-lg mb-1 flex items-center gap-2">
+                <i data-lucide="library" class="w-5 h-5 text-purple-400"></i> Icon Library
+            </h3>
+            <p class="text-neutral-400 text-sm mb-6">Select a symbol to use as reference for your generation.</p>
+            
+            <div id="libraryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[60vh] overflow-y-auto pr-2 pb-2 custom-scrollbar">
+                <!-- Library buttons injected via JS -->
+            </div>
+            
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeLibraryModal()" class="px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white text-sm font-medium rounded-xl transition-all">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // --- State Variables & Monetization ---
+        let buttonColor = "#7B5CD6";
+        let referenceImage = null;
+        let defaultReference = null;
+        let isGenerating = false;
+        let gallery = [];
+        let viewMode = "grid"; // 'grid' or 'list'
+        
+        const COST_PER_GENERATION = 10;
+        let userCredits = parseInt(localStorage.getItem('purple_user_credits'));
+        if (isNaN(userCredits)) {
+            userCredits = 50; // Give 50 free starter tokens to new users
+            localStorage.setItem('purple_user_credits', userCredits);
+        }
+
+        // Load saved API settings
+        let apiProvider = localStorage.getItem('apiProvider') || 'google';
+        let openRouterKey = localStorage.getItem('openRouterKey') || '';
+        let openRouterModel = localStorage.getItem('openRouterModel') || 'openai/dall-e-3';
+
+        // --- DOM Elements ---
+        const messageInput = document.getElementById("messageInput");
+        const generateBtn = document.getElementById("generateBtn");
+        const generateIconUI = document.getElementById("generateIconUI");
+        const loadingIconUI = document.getElementById("loadingIconUI");
+        const fileInput = document.getElementById("fileInput");
+        const referencePreviewContainer = document.getElementById("referencePreviewContainer");
+        const referencePreviewImg = document.getElementById("referencePreviewImg");
+        const attachBtn = document.getElementById("attachBtn");
+        const colorIconTrigger = document.getElementById("colorIconTrigger");
+        const referenceStatusIndicator = document.getElementById("referenceStatusIndicator");
+        const referenceStatusText = document.getElementById("referenceStatusText");
+        
+        const creditBalanceDisplays = [document.getElementById("creditBalance"), document.getElementById("modalCreditBalance")];
+        
+        const emptyGalleryState = document.getElementById("emptyGalleryState");
+        const filledGalleryState = document.getElementById("filledGalleryState");
+        const galleryContainer = document.getElementById("galleryContainer");
+        const galleryCount = document.getElementById("galleryCount");
+        const viewGridBtn = document.getElementById("viewGridBtn");
+        const viewListBtn = document.getElementById("viewListBtn");
+
+        const errorBox = document.getElementById("errorBox");
+        const errorMessage = document.getElementById("errorMessage");
+
+        // --- Credit Logic ---
+        function updateCreditDisplays() {
+            creditBalanceDisplays.forEach(el => {
+                if(el) el.textContent = userCredits;
+            });
+            localStorage.setItem('purple_user_credits', userCredits);
+        }
+        
+        function animateDeduction() {
+            const display = document.getElementById("creditBalance");
+            display.classList.remove("deduct-anim");
+            void display.offsetWidth; // trigger reflow
+            display.classList.add("deduct-anim");
+        }
+        
+        // Initialize display
+        updateCreditDisplays();
+
+        // --- Fetch Default Reference on Load (Bulletproof Canvas Method) ---
+        function loadDefaultReference() {
+            const img = new Image();
+            img.crossOrigin = "Anonymous"; // Crucial for bypassing basic CORS restrictions
+            img.onload = function() {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    defaultReference = canvas.toDataURL('image/png');
+                    
+                    // Visual confirmation that the base template loaded
+                    referenceStatusIndicator.classList.remove('bg-purple-400', 'animate-pulse');
+                    referenceStatusIndicator.classList.add('bg-green-500');
+                    referenceStatusText.textContent = "Template Loaded Successfully";
+                } catch (e) {
+                    console.error("Canvas export failed (strict CORS):", e);
+                    referenceStatusIndicator.classList.remove('bg-purple-400');
+                    referenceStatusIndicator.classList.add('bg-yellow-500');
+                    referenceStatusText.textContent = "Template Load Blocked (CORS)";
+                }
+            };
+            img.onerror = function() {
+                console.error("Failed to load reference image URL");
+                referenceStatusIndicator.classList.remove('bg-purple-400');
+                referenceStatusIndicator.classList.add('bg-red-500');
+                referenceStatusText.textContent = "Template Load Failed";
+            };
+            img.src = "https://ik.imagekit.io/bebell/SaaSLab/Purple-3D-Icon-Generator/purple-3dbutton%20(2).png";
+        }
+        
+        // Execute load
+        loadDefaultReference();
+
+        // --- Input & Textarea Auto-resize Logic ---
+        messageInput.addEventListener("input", function() {
+            this.style.height = '52px';
+            const newHeight = Math.max(52, Math.min(this.scrollHeight, 200));
+            this.style.height = newHeight + 'px';
+            validateInput();
+        });
+
+        messageInput.addEventListener("keydown", function(e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                generateIcon();
+            }
+        });
+
+        function validateInput() {
+            const val = messageInput.value.trim();
+            if (val && !isGenerating) {
+                generateBtn.disabled = false;
+                generateBtn.className = "flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200 bg-purple-600 text-white shadow-lg shadow-purple-500/25 hover:bg-purple-500 hover:scale-105 active:scale-95";
+            } else {
+                generateBtn.disabled = true;
+                generateBtn.className = "flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200 bg-neutral-800 text-neutral-500 cursor-not-allowed";
+            }
+        }
+
+        function handleQuickAction(text) {
+            messageInput.value = text;
+            messageInput.dispatchEvent(new Event('input')); // trigger resize and validation
+            messageInput.focus();
+        }
+
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorBox.classList.remove('hidden');
+            setTimeout(() => errorBox.classList.add('hidden'), 5000);
+        }
+
+        // --- Image Upload Logic ---
+        fileInput.addEventListener("change", function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    referenceImage = reader.result;
+                    referencePreviewImg.src = referenceImage;
+                    referencePreviewContainer.classList.remove('hidden');
+                    attachBtn.classList.add('text-purple-400', 'bg-purple-500/10');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function removeReferenceImage() {
+            referenceImage = null;
+            referencePreviewContainer.classList.add('hidden');
+            fileInput.value = "";
+            attachBtn.classList.remove('text-purple-400', 'bg-purple-500/10');
+        }
+
+        // --- Store Modal Logic ---
+        const topUpModal = document.getElementById("topUpModal");
+        
+        function openTopUpModal() {
+            topUpModal.classList.remove('hidden');
+        }
+        
+        function closeTopUpModal(e) {
+            if(e && e.target !== topUpModal) return;
+            topUpModal.classList.add('hidden');
+        }
+        
+        function purchaseCredits(amount) {
+            // In a real app, this would trigger Stripe checkout.
+            // For now, we simulate a successful transaction:
+            userCredits += amount;
+            updateCreditDisplays();
+            
+            // Visual feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = "Purchased!";
+            btn.classList.add("bg-green-500", "text-white");
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.classList.remove("bg-green-500", "text-white");
+                closeTopUpModal();
+            }, 1000);
+        }
+
+        // --- Settings Modal Logic ---
+        const settingsModal = document.getElementById("settingsModal");
+        
+        function openSettingsModal() {
+            document.getElementById('apiProviderSelect').value = apiProvider;
+            document.getElementById('orApiKeyInput').value = openRouterKey;
+            document.getElementById('orModelInput').value = openRouterModel;
+            updateProviderUI();
+            settingsModal.classList.remove('hidden');
+        }
+        
+        function closeSettingsModal(e) {
+            if(e && e.target !== settingsModal) return;
+            settingsModal.classList.add('hidden');
+        }
+        
+        function updateProviderUI() {
+            const provider = document.getElementById('apiProviderSelect').value;
+            const configDiv = document.getElementById('openRouterConfig');
+            if (provider === 'openrouter') {
+                configDiv.classList.remove('hidden');
+            } else {
+                configDiv.classList.add('hidden');
+            }
+        }
+        
+        function saveSettings() {
+            apiProvider = document.getElementById('apiProviderSelect').value;
+            openRouterKey = document.getElementById('orApiKeyInput').value;
+            openRouterModel = document.getElementById('orModelInput').value;
+            
+            localStorage.setItem('apiProvider', apiProvider);
+            localStorage.setItem('openRouterKey', openRouterKey);
+            localStorage.setItem('openRouterModel', openRouterModel);
+            
+            closeSettingsModal();
+        }
+
+        // --- Color Modal Logic ---
+        const colorModal = document.getElementById("colorModal");
+        const colorPickerInput = document.getElementById("colorPickerInput");
+        const hexCodeDisplay = document.getElementById("hexCodeDisplay");
+
+        function openColorModal() { colorModal.classList.remove('hidden'); }
+        function closeColorModal(e) { 
+            if(e && e.target !== colorModal) return; 
+            colorModal.classList.add('hidden'); 
+        }
+        function updateColorPreview() {
+            buttonColor = colorPickerInput.value;
+            hexCodeDisplay.textContent = buttonColor.toUpperCase();
+            colorIconTrigger.style.color = buttonColor;
+        }
+        function resetColor() {
+            colorPickerInput.value = "#7B5CD6";
+            updateColorPreview();
+        }
+
+        // --- Library Modal Logic ---
+        const libraryModal = document.getElementById("libraryModal");
+        const libraryGrid = document.getElementById("libraryGrid");
+        const iconsList = [
+            'Mail Envelope', 'Shopping Cart', 'User Profile', 'Settings Gear', 
+            'Home House', 'Camera', 'Chat Bubble', 'Play Button', 
+            'Heart', 'Cloud Sync', 'Flame', 'Lock Security',
+            'Calendar', 'Bell Notification', 'Magnifying Glass', 'Checkmark'
+        ];
+
+        // Populate library grid
+        iconsList.forEach(icon => {
+            const btn = document.createElement("button");
+            btn.className = "p-4 bg-neutral-800/50 border border-neutral-800 rounded-xl hover:bg-neutral-800 hover:border-purple-500/50 text-white text-sm text-center transition-all flex flex-col items-center justify-center gap-2 group";
+            btn.innerHTML = `<span class="text-xs font-medium group-hover:text-purple-300">${icon}</span>`;
+            btn.onclick = () => {
+                handleQuickAction(icon);
+                closeLibraryModal();
+            };
+            libraryGrid.appendChild(btn);
+        });
+
+        function openLibraryModal() { libraryModal.classList.remove('hidden'); }
+        function closeLibraryModal(e) { 
+            if(e && e.target !== libraryModal) return;
+            libraryModal.classList.add('hidden'); 
+        }
+
+        // --- Color Utils ---
+        function hexToColorName(hex) {
+            let r = parseInt(hex.slice(1, 3), 16) / 255;
+            let g = parseInt(hex.slice(3, 5), 16) / 255;
+            let b = parseInt(hex.slice(5, 7), 16) / 255;
+
+            let max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) h = s = 0;
+            else {
+                let d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            h = Math.round(h * 360);
+            s = Math.round(s * 100);
+            l = Math.round(l * 100);
+
+            if (l < 15) return "dark, almost black";
+            if (l > 85) return "light, almost white";
+            if (s < 15) return "gray";
+
+            if (h < 15 || h >= 345) return "Red";
+            if (h >= 15 && h < 45) return "Orange";
+            if (h >= 45 && h < 75) return "Yellow";
+            if (h >= 75 && h < 160) return "Green";
+            if (h >= 160 && h < 200) return "Teal";
+            if (h >= 200 && h < 260) return "Blue";
+            if (h >= 260 && h < 315) return "Purple";
+            if (h >= 315 && h < 345) return "Pink";
+            
+            return "vivid";
+        }
+
+        // --- Generation Logic ---
+        async function generateIcon() {
+            const promptText = messageInput.value.trim();
+            if (!promptText || isGenerating) return;
+
+            // Monetization Check
+            if (userCredits < COST_PER_GENERATION) {
+                showError(`Insufficient tokens. You need ${COST_PER_GENERATION} tokens to generate an icon.`);
+                openTopUpModal();
+                return;
+            }
+
+            isGenerating = true;
+            validateInput(); // Updates button state to disabled
+            generateIconUI.classList.add('hidden');
+            loadingIconUI.classList.remove('hidden');
+            errorBox.classList.add('hidden');
+            
+            try {
+                const apiKey = ""; // Canvas injects the API key automatically
+                const colorFamily = hexToColorName(buttonColor);
+                const activeRef = referenceImage || defaultReference;
+
+                // Restructured Prompt: Relies heavily on the natural color family
+                const fullPrompt = `
+You are a strict image compositor. Using the provided reference image of a blank 3D button, apply these modifications exactly:
+
+1. COLORIZATION (CRITICAL): Tint the main body of the 3D button to a vivid ${colorFamily} color (Hex approximation: ${buttonColor}). Do NOT change the soft matte texture or the 3D shape.
+2. ADD ICON: Overlay a pure white ceramic [ ${promptText} ] icon perfectly in the center of the button. The icon must look physically embossed on the surface.
+3. BACKGROUND: Keep the entire background solid, pure absolute black (#000000).
+4. FRAMING: Maintain the exact padding around the button from the reference image. Do not zoom or crop.
+
+Do not add any text or watermarks.
+`.trim();
+
+                let imageUrl = "";
+
+                if (apiProvider === 'openrouter') {
+                    // --- OpenRouter Generation Logic ---
+                    if (!openRouterKey) throw new Error("OpenRouter API Key is missing. Please configure it in Settings.");
+                    
+                    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${openRouterKey}`,
+                            "Content-Type": "application/json",
+                            "HTTP-Referer": window.location.href,
+                            "X-Title": "Purple 3D Generator"
+                        },
+                        body: JSON.stringify({
+                            model: openRouterModel,
+                            messages: [{ role: "user", content: fullPrompt }]
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.error) throw new Error(data.error.message || "OpenRouter API Error");
+                    
+                    const content = data.choices[0].message.content;
+                    
+                    // Parse markdown image format ![alt](url) or direct URLs from the response
+                    const urlMatch = content.match(/!\[.*?\]\((https?:\/\/[^\)]+)\)/) || content.match(/(https?:\/\/[^\s\)]+)/);
+                    
+                    if (urlMatch && urlMatch[1]) {
+                        imageUrl = urlMatch[1];
+                    } else if (content.startsWith("http") || content.startsWith("data:image")) {
+                        imageUrl = content;
+                    } else {
+                        throw new Error("Could not parse an image URL from the OpenRouter model's response.");
+                    }
+                } else {
+                    // --- Google Native Generation Logic ---
+                    if (activeRef) {
+                        const base64ImageData = activeRef.split(',')[1];
+                        const mimeType = activeRef.split(';')[0].split(':')[1];
+                        
+                        const response = await fetch(
+                            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`,
+                            {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    contents: [{
+                                        parts: [
+                                            { text: fullPrompt },
+                                            { inlineData: { mimeType: mimeType, data: base64ImageData } }
+                                        ]
+                                    }],
+                                    generationConfig: { responseModalities: ['TEXT', 'IMAGE'] }
+                                }),
+                            }
+                        );
+                        const data = await response.json();
+                        if(data.error) throw new Error(data.error.message || "API Error");
+                        const b64 = data.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+                        if(b64) imageUrl = `data:image/png;base64,${b64}`;
+                    } else {
+                        // Fallback to text generation if the image loading entirely failed
+                        const fallbackPrompt = `A premium 3D neumorphic app icon perfectly centered on a pure black background (#000000). The button is a rounded square ("squircle") colored solid ${colorFamily}. The button is deeply pillowy with a matte soft-touch plastic finish. Centered on the button is a pure white ceramic [ ${promptText} ] icon. Soft top-left diffused lighting. Generous 20px black padding around the button. No text.`;
+                        
+                        const response = await fetch(
+                            `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`,
+                            {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    instances: { prompt: fallbackPrompt },
+                                    parameters: { sampleCount: 1, aspectRatio: "1:1" },
+                                }),
+                            }
+                        );
+                        const data = await response.json();
+                        if(data.error) throw new Error(data.error.message || "API Error");
+                        if (data.predictions && data.predictions[0]) {
+                            const b64 = data.predictions[0].bytesBase64Encoded;
+                            imageUrl = `data:image/png;base64,${b64}`;
+                        }
+                    }
+                }
+
+                if (imageUrl) {
+                    
+                    // DEDUCT TOKENS ON SUCCESSFUL GENERATION
+                    userCredits -= COST_PER_GENERATION;
+                    updateCreditDisplays();
+                    animateDeduction();
+
+                    const newImage = {
+                        id: Date.now().toString(),
+                        url: imageUrl,
+                        prompt: promptText,
+                        timestamp: new Date().toLocaleTimeString(),
+                        color: buttonColor,
+                        feedback: null
+                    };
+
+                    gallery.unshift(newImage); // Add to beginning
+                    
+                    messageInput.value = "";
+                    messageInput.style.height = '52px';
+                    removeReferenceImage();
+                    renderGallery();
+
+                } else {
+                    throw new Error("Failed to generate image data.");
+                }
+            } catch (error) {
+                console.error("Generation error:", error);
+                showError("Generation failed. " + (error.message || "Please try again."));
+            } finally {
+                isGenerating = false;
+                validateInput();
+                generateIconUI.classList.remove('hidden');
+                loadingIconUI.classList.add('hidden');
+            }
+        }
+
+        // --- Gallery Logic ---
+        function setViewMode(mode) {
+            viewMode = mode;
+            if(mode === 'grid') {
+                viewGridBtn.className = "p-1.5 rounded-md transition-colors bg-neutral-800 text-white";
+                viewListBtn.className = "p-1.5 rounded-md transition-colors text-neutral-500 hover:text-neutral-300";
+                galleryContainer.className = "w-full transition-all grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6";
+            } else {
+                viewListBtn.className = "p-1.5 rounded-md transition-colors bg-neutral-800 text-white";
+                viewGridBtn.className = "p-1.5 rounded-md transition-colors text-neutral-500 hover:text-neutral-300";
+                galleryContainer.className = "w-full transition-all flex flex-col gap-4";
+            }
+            renderGallery();
+        }
+
+        function deleteImage(id) {
+            gallery = gallery.filter(img => img.id !== id);
+            renderGallery();
+        }
+
+        function downloadImage(url, prompt) {
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `purple-icon-${prompt.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function handleFeedback(id, type) {
+            gallery = gallery.map(img => {
+                if (img.id === id) {
+                    return { ...img, feedback: img.feedback === type ? null : type };
+                }
+                return img;
+            });
+            renderGallery();
+        }
+
+        function renderGallery() {
+            galleryContainer.innerHTML = ''; // Clear current
+
+            if (gallery.length === 0) {
+                emptyGalleryState.classList.remove('hidden');
+                filledGalleryState.classList.add('hidden');
+                return;
+            }
+
+            emptyGalleryState.classList.add('hidden');
+            filledGalleryState.classList.remove('hidden');
+            galleryCount.textContent = gallery.length;
+
+            gallery.forEach(img => {
+                const itemDiv = document.createElement('div');
+                
+                if (viewMode === 'grid') {
+                    itemDiv.className = "group relative bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-purple-500/30 transition-all duration-300 flex flex-col aspect-square";
+                    
+                    const feedbackUpClass = img.feedback === 'up' ? "bg-green-500/20 text-green-400" : "bg-black/40 text-neutral-300 hover:text-green-400 hover:bg-green-500/10";
+                    const feedbackDownClass = img.feedback === 'down' ? "bg-red-500/20 text-red-400" : "bg-black/40 text-neutral-300 hover:text-red-400 hover:bg-green-500/10";
+
+                    itemDiv.innerHTML = `
+                        <div class="relative overflow-hidden bg-neutral-950 flex items-center justify-center w-full h-full">
+                            <img src="${img.url}" alt="${img.prompt}" class="w-full h-full object-contain p-2 drop-shadow-2xl" />
+                            
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
+                                <button onclick="downloadImage('${img.url}', '${img.prompt}')" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors border border-white/10">
+                                    <i data-lucide="download" class="w-4 h-4"></i> Download
+                                </button>
+                                <button onclick="deleteImage('${img.id}')" class="flex items-center gap-2 bg-red-500/20 hover:bg-red-500/40 text-red-200 px-4 py-2 rounded-full text-sm font-medium transition-colors border border-red-500/20">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i> Delete
+                                </button>
+                            </div>
+
+                            <div class="absolute bottom-3 left-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20 pointer-events-auto">
+                                <button onclick="event.stopPropagation(); handleFeedback('${img.id}', 'up');" class="p-1.5 rounded-full transition-colors backdrop-blur-md ${feedbackUpClass}" title="Good result">
+                                    <i data-lucide="thumbs-up" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="event.stopPropagation(); handleFeedback('${img.id}', 'down');" class="p-1.5 rounded-full transition-colors backdrop-blur-md ${feedbackDownClass}" title="Bad result">
+                                    <i data-lucide="thumbs-down" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                            <p class="text-white text-xs font-medium truncate capitalize text-right drop-shadow-md">
+                                ${img.prompt}
+                            </p>
+                        </div>
+                    `;
+                } else {
+                    itemDiv.className = "group relative bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-purple-500/30 transition-all duration-300 flex items-center p-3 pr-5";
+                    
+                    const feedbackUpClass = img.feedback === 'up' ? "text-green-400" : "text-neutral-500 hover:text-green-400";
+                    const feedbackDownClass = img.feedback === 'down' ? "text-red-400" : "text-neutral-500 hover:text-red-400";
+
+                    itemDiv.innerHTML = `
+                        <div class="relative overflow-hidden bg-neutral-950 flex items-center justify-center w-24 h-24 rounded-xl shrink-0">
+                            <img src="${img.url}" alt="${img.prompt}" class="w-full h-full object-contain p-2 drop-shadow-2xl" />
+                        </div>
+                        <div class="ml-4 flex-1 flex items-center justify-between">
+                            <div>
+                                <p class="text-white font-medium capitalize text-lg">${img.prompt}</p>
+                                <div class="flex items-center gap-3 mt-1">
+                                    <p class="text-neutral-500 text-sm flex items-center gap-1.5">
+                                        <i data-lucide="cloud-upload" class="w-3 h-3"></i> Saved state
+                                    </p>
+                                    <div class="flex items-center gap-1 border-l border-neutral-800 pl-3">
+                                        <button onclick="handleFeedback('${img.id}', 'up')" class="p-1 rounded transition-colors ${feedbackUpClass}">
+                                            <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                        <button onclick="handleFeedback('${img.id}', 'down')" class="p-1 rounded transition-colors ${feedbackDownClass}">
+                                            <i data-lucide="thumbs-down" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="downloadImage('${img.url}', '${img.prompt}')" class="p-2.5 bg-neutral-800 hover:bg-neutral-700 text-white rounded-full transition-colors" title="Download">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="deleteImage('${img.id}')" class="p-2.5 bg-neutral-800 hover:bg-red-500/20 text-neutral-400 hover:text-red-400 rounded-full transition-colors" title="Delete">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                galleryContainer.appendChild(itemDiv);
+            });
+
+            // Re-initialize icons for newly added DOM elements
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
