@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Thumbnail Extractor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-50 text-neutral-900 font-sans p-4 md:p-8 flex flex-col items-center justify-center">
+
+    <!-- Header Section -->
+    <div class="max-w-5xl w-full text-center mb-10">
+        <div class="inline-flex items-center justify-center p-3 bg-red-100 rounded-full mb-4">
+            <!-- Youtube Icon -->
+            <svg class="w-8 h-8 text-red-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-neutral-900 mb-4">
+            YouTube Thumbnail Extractor
+        </h1>
+        <p class="text-lg text-neutral-600 max-w-2xl mx-auto">
+            Instantly grab high-resolution thumbnails from any YouTube video. Just paste the URL below and download it for your own projects.
+        </p>
+    </div>
+
+    <!-- Main App Container (2-Column Grid) -->
+    <div class="max-w-5xl w-full bg-white rounded-2xl shadow-xl border border-neutral-100 overflow-hidden flex flex-col md:flex-row">
+        
+        <!-- LEFT COLUMN: Input & Controls -->
+        <div class="w-full md:w-5/12 p-6 md:p-8 border-b md:border-b-0 md:border-r border-neutral-100 bg-white flex flex-col justify-center">
+            <h2 class="text-xl font-bold mb-6 flex items-center">
+                <!-- Search Icon -->
+                <svg class="w-5 h-5 mr-2 text-blue-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                Extract Thumbnail
+            </h2>
+            
+            <form id="extract-form" class="space-y-4">
+                <div>
+                    <label for="yt-url" class="block text-sm font-medium text-neutral-700 mb-2">
+                        YouTube Video URL
+                    </label>
+                    <input
+                        id="yt-url"
+                        type="text"
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        class="w-full px-4 py-3 rounded-lg border border-neutral-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors outline-none"
+                    />
+                </div>
+                
+                <!-- Error Message (Hidden by default) -->
+                <div id="error-container" class="hidden flex items-start text-red-600 text-sm bg-red-50 p-3 rounded-md">
+                    <!-- Alert Icon -->
+                    <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                    <span id="error-message"></span>
+                </div>
+
+                <button
+                    id="submit-btn"
+                    type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                    <span id="btn-spinner" class="hidden flex items-center">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Extracting...
+                    </span>
+                    <span id="btn-text">Get Thumbnail</span>
+                </button>
+            </form>
+
+            <div class="mt-8 text-sm text-neutral-500 bg-neutral-50 p-4 rounded-lg">
+                <p class="font-semibold text-neutral-700 mb-1">Supported Formats:</p>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>youtube.com/watch?v=ID</li>
+                    <li>youtu.be/ID</li>
+                    <li>youtube.com/embed/ID</li>
+                    <li>youtube.com/shorts/ID</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Preview & Download -->
+        <div class="w-full md:w-7/12 p-6 md:p-8 bg-neutral-50 flex flex-col justify-center items-center">
+            
+            <!-- Empty State Placeholder -->
+            <div id="empty-state" class="w-full h-full min-h-[300px] flex flex-col items-center justify-center text-neutral-400 border-2 border-dashed border-neutral-300 rounded-xl p-6 text-center">
+                <!-- Image Icon -->
+                <svg class="w-16 h-16 text-neutral-300 mb-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                <h3 class="text-lg font-medium text-neutral-500 mb-2">No Preview Available</h3>
+                <p class="text-sm max-w-[250px]">
+                    Paste a YouTube URL on the left and click extract to see the high-resolution thumbnail here.
+                </p>
+            </div>
+
+            <!-- Active Preview State (Hidden by default) -->
+            <div id="preview-state" class="w-full hidden animate-fade-in">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold flex items-center text-neutral-800">
+                        <!-- Check Icon -->
+                        <svg class="w-5 h-5 mr-2 text-green-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                        Thumbnail Extracted
+                    </h3>
+                    <span id="quality-badge" class="text-xs font-medium px-2.5 py-1 bg-green-100 text-green-800 rounded-full">
+                        HD Quality
+                    </span>
+                </div>
+                
+                <div class="relative group rounded-xl overflow-hidden shadow-lg border border-neutral-200 bg-black aspect-video flex items-center justify-center">
+                    <img 
+                        id="thumbnail-img"
+                        src="" 
+                        alt="YouTube Thumbnail Preview" 
+                        class="w-full h-auto object-cover"
+                    />
+                    
+                    <!-- Hover overlay for quick download -->
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <button 
+                            id="download-overlay-btn"
+                            class="bg-white text-neutral-900 rounded-full p-3 transform scale-90 group-hover:scale-100 transition-transform shadow-xl hover:bg-neutral-100"
+                            title="Download Thumbnail"
+                        >
+                            <!-- Download Icon -->
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                    <button
+                        id="download-main-btn"
+                        class="flex-1 bg-neutral-900 hover:bg-black text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed shadow-md"
+                    >
+                        <span id="dl-spinner" class="hidden flex items-center">
+                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Downloading...
+                        </span>
+                        <span id="dl-text" class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                            Download High-Res
+                        </span>
+                    </button>
+                    <a
+                        id="new-tab-link"
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex-1 bg-white hover:bg-neutral-100 text-neutral-700 border border-neutral-300 font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center text-center shadow-sm"
+                    >
+                        Open in New Tab
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const form = document.getElementById('extract-form');
+            const inputUrl = document.getElementById('yt-url');
+            const errorContainer = document.getElementById('error-container');
+            const errorMessage = document.getElementById('error-message');
+            const submitBtn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnSpinner = document.getElementById('btn-spinner');
+            
+            const emptyState = document.getElementById('empty-state');
+            const previewState = document.getElementById('preview-state');
+            const thumbnailImg = document.getElementById('thumbnail-img');
+            const qualityBadge = document.getElementById('quality-badge');
+            
+            const downloadOverlayBtn = document.getElementById('download-overlay-btn');
+            const downloadMainBtn = document.getElementById('download-main-btn');
+            const newTabLink = document.getElementById('new-tab-link');
+            const dlText = document.getElementById('dl-text');
+            const dlSpinner = document.getElementById('dl-spinner');
+
+            // State variables
+            let currentVideoId = '';
+            let currentQuality = 'maxresdefault';
+            let isDownloading = false;
+
+            // Extract YouTube ID using Regex
+            const extractVideoID = (url) => {
+                const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+                const match = url.match(regExp);
+                return (match && match[7].length === 11) ? match[7] : null;
+            };
+
+            const showError = (msg) => {
+                errorMessage.textContent = msg;
+                errorContainer.classList.remove('hidden');
+            };
+
+            const hideError = () => {
+                errorContainer.classList.add('hidden');
+            };
+
+            const updateImageSource = () => {
+                const url = `https://img.youtube.com/vi/${currentVideoId}/${currentQuality}.jpg`;
+                thumbnailImg.src = url;
+                newTabLink.href = url;
+                
+                if(currentQuality === 'maxresdefault') {
+                    qualityBadge.textContent = 'HD Quality';
+                    qualityBadge.className = 'text-xs font-medium px-2.5 py-1 bg-green-100 text-green-800 rounded-full';
+                } else {
+                    qualityBadge.textContent = 'Standard Quality';
+                    qualityBadge.className = 'text-xs font-medium px-2.5 py-1 bg-yellow-100 text-yellow-800 rounded-full';
+                }
+            };
+
+            // Handle Form Submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                hideError();
+                
+                const url = inputUrl.value.trim();
+                
+                if (!url) {
+                    showError('Please enter a YouTube URL.');
+                    return;
+                }
+
+                // Show loading state
+                submitBtn.disabled = true;
+                btnText.classList.add('hidden');
+                btnSpinner.classList.remove('hidden');
+
+                // Simulate slight delay for UI feedback
+                setTimeout(() => {
+                    const id = extractVideoID(url);
+                    
+                    if (id) {
+                        currentVideoId = id;
+                        currentQuality = 'maxresdefault'; // Reset to highest quality
+                        
+                        updateImageSource();
+                        
+                        // Switch UI states
+                        emptyState.classList.add('hidden');
+                        previewState.classList.remove('hidden');
+                    } else {
+                        showError('Invalid YouTube URL. Please make sure it is a standard video link.');
+                        currentVideoId = '';
+                        emptyState.classList.remove('hidden');
+                        previewState.classList.add('hidden');
+                    }
+
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    btnText.classList.remove('hidden');
+                    btnSpinner.classList.add('hidden');
+                }, 400);
+            });
+
+            // Handle Image Load Error (Fallback to lower qualities)
+            thumbnailImg.addEventListener('error', () => {
+                if (!currentVideoId) return;
+
+                if (currentQuality === 'maxresdefault') {
+                    currentQuality = 'hqdefault';
+                    updateImageSource();
+                } else if (currentQuality === 'hqdefault') {
+                    currentQuality = 'mqdefault';
+                    updateImageSource();
+                }
+            });
+
+            // Handle Download Process
+            const processDownload = async () => {
+                if (!currentVideoId || isDownloading) return;
+                
+                isDownloading = true;
+                downloadMainBtn.disabled = true;
+                dlText.classList.add('hidden');
+                dlSpinner.classList.remove('hidden');
+
+                const imageUrl = `https://img.youtube.com/vi/${currentVideoId}/${currentQuality}.jpg`;
+                
+                try {
+                    // Use CORS proxy to allow fetching the image data directly
+                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(imageUrl)}`;
+                    const response = await fetch(proxyUrl);
+                    
+                    if (!response.ok) throw new Error('Network response failed');
+                    
+                    const blob = await response.blob();
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    
+                    // Create a temporary anchor element to trigger the download
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = blobUrl;
+                    a.download = `youtube-thumbnail-${currentVideoId}.jpg`;
+                    document.body.appendChild(a);
+                    a.click();
+                    
+                    // Clean up
+                    window.URL.revokeObjectURL(blobUrl);
+                    document.body.removeChild(a);
+                } catch (err) {
+                    console.error('Direct download failed, falling back to new tab', err);
+                    // Fallback if proxy fails
+                    window.open(imageUrl, '_blank');
+                } finally {
+                    isDownloading = false;
+                    downloadMainBtn.disabled = false;
+                    dlText.classList.remove('hidden');
+                    dlSpinner.classList.add('hidden');
+                }
+            };
+
+            // Attach Download Event Listeners
+            downloadMainBtn.addEventListener('click', processDownload);
+            downloadOverlayBtn.addEventListener('click', processDownload);
+        });
+    </script>
+</body>
+</html>
