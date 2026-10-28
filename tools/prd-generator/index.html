@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist PRD Generator</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- html2pdf for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Configure Tailwind with custom palette -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandBg: '#f1f0fb',
+                        brandPrimary: '#8b84f4',
+                        brandHighlight: '#e07cd0',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f0fb; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c5c1f8; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8b84f4; 
+        }
+        
+        /* Smooth transitions */
+        .input-transition {
+            transition: all 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-brandBg text-gray-800 font-sans min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-8">
+        
+        <!-- LEFT PANEL: Editor Form -->
+        <div class="w-full md:w-1/3 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-[calc(100vh-4rem)]">
+            <div class="p-6 border-b border-gray-100 bg-white z-10 sticky top-0">
+                <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    <i data-lucide="file-text" class="text-brandPrimary"></i>
+                    PRD Builder
+                </h1>
+                <p class="text-sm text-gray-500 mt-1">Fill out the fields below to construct your document.</p>
+            </div>
+            
+            <div class="p-6 overflow-y-auto flex-1 space-y-6">
+                <!-- Project Details -->
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 flex items-center gap-2">
+                        <i data-lucide="info" class="w-4 h-4 text-brandHighlight"></i> Core Information
+                    </h2>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Project Title</label>
+                        <input type="text" id="input-title" placeholder="e.g., E-commerce Mobile App" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Project Description</label>
+                        <textarea id="input-description" rows="3" placeholder="Briefly describe what the project is..." class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Objectives</label>
+                        <textarea id="input-objectives" rows="3" placeholder="What are the main goals? (e.g., Increase user retention by 20%)" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Target Audience</label>
+                        <input type="text" id="input-audience" placeholder="e.g., Young professionals aged 25-35" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b pb-2">
+                        <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                            <i data-lucide="list" class="w-4 h-4 text-brandHighlight"></i> Features
+                        </h2>
+                        <button onclick="addFeature()" class="text-sm text-brandPrimary hover:text-brandHighlight font-medium flex items-center gap-1 transition-colors">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Blank
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <select id="preset-features" onchange="addPresetFeature()" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent text-sm text-gray-700 bg-white">
+                            <option value="" disabled selected>Select a preset feature to add...</option>
+                            <option value="User Authentication (Login/Register/Social)">User Authentication (Login/Register/Social)</option>
+                            <option value="Role-Based Access Control (Admin/User)">Role-Based Access Control (Admin/User)</option>
+                            <option value="Payment Gateway Integration (Stripe/PayPal)">Payment Gateway Integration (Stripe/PayPal)</option>
+                            <option value="Real-time Chat / Messaging">Real-time Chat / Messaging</option>
+                            <option value="Push & Email Notifications">Push & Email Notifications</option>
+                            <option value="Dashboard & Analytics">Dashboard & Analytics</option>
+                            <option value="Search & Filtering">Search & Filtering</option>
+                            <option value="Data Export (CSV/PDF)">Data Export (CSV/PDF)</option>
+                            <option value="Third-party API Integration">Third-party API Integration</option>
+                        </select>
+                    </div>
+
+                    <div id="features-container" class="space-y-3 mt-2">
+                        <!-- Dynamic features will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Design & Technical -->
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 flex items-center gap-2">
+                        <i data-lucide="palette" class="w-4 h-4 text-brandHighlight"></i> Design & Tech
+                    </h2>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Color Palette</label>
+                            <div class="flex gap-2 items-center mt-2">
+                                <input type="color" id="input-color-1" value="#8b84f4" class="w-8 h-8 rounded cursor-pointer border-0 p-0">
+                                <input type="color" id="input-color-2" value="#e07cd0" class="w-8 h-8 rounded cursor-pointer border-0 p-0">
+                                <input type="color" id="input-color-3" value="#f1f0fb" class="w-8 h-8 rounded cursor-pointer border-0 p-0">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Icon Library</label>
+                            <select id="input-icons" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                                <option value="Lucide">Lucide Icons</option>
+                                <option value="FontAwesome">FontAwesome</option>
+                                <option value="Material Icons">Material Icons</option>
+                                <option value="Heroicons">Heroicons</option>
+                                <option value="Custom SVG">Custom SVGs</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Language / Localization</label>
+                        <select id="input-language" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                            <option value="English (US)">English (US)</option>
+                            <option value="English (UK)">English (UK)</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="French">French</option>
+                            <option value="Multiple (i18n support)">Multiple (i18n support)</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">UI Theme</label>
+                        <select id="input-theme" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                            <option value="Light Mode Only">Light Mode Only</option>
+                            <option value="Dark Mode Only">Dark Mode Only</option>
+                            <option value="Light & Dark (System Toggle)">Light & Dark (System Toggle)</option>
+                            <option value="Custom Brand Theme">Custom Brand Theme</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Technical Architecture -->
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 flex items-center gap-2">
+                        <i data-lucide="server" class="w-4 h-4 text-brandHighlight"></i> Architecture
+                    </h2>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Platform Target</label>
+                        <select id="input-platform" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                            <option value="Web Application">Web Application</option>
+                            <option value="Mobile App (iOS/Android)">Mobile App (iOS/Android)</option>
+                            <option value="Desktop Software">Desktop Software</option>
+                            <option value="Cross-Platform (Web + Mobile)">Cross-Platform (Web + Mobile)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Frontend Stack</label>
+                        <input type="text" id="input-frontend" list="frontends" placeholder="e.g., React.js, Tailwind, TypeScript" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                        <datalist id="frontends">
+                            <option value="React.js / Next.js">
+                            <option value="Vue.js / Nuxt">
+                            <option value="Angular">
+                            <option value="HTML / CSS / Vanilla JS">
+                            <option value="Flutter">
+                            <option value="React Native">
+                        </datalist>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Backend & Database</label>
+                        <input type="text" id="input-backend" list="backends" placeholder="e.g., Supabase, Node.js, Firebase" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                        <datalist id="backends">
+                            <option value="Supabase (PostgreSQL)">
+                            <option value="Firebase / Firestore">
+                            <option value="Node.js / Express">
+                            <option value="Python (Django/FastAPI)">
+                            <option value="PHP (Laravel)">
+                            <option value="Ruby on Rails">
+                        </datalist>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Hosting / Servers</label>
+                        <input type="text" id="input-hosting" list="hostings" placeholder="e.g., Vercel, AWS, Heroku" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                        <datalist id="hostings">
+                            <option value="Vercel">
+                            <option value="AWS">
+                            <option value="Google Cloud Platform">
+                            <option value="Heroku">
+                            <option value="Netlify">
+                            <option value="Self-hosted / VPS">
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- Timeline & Stakeholders -->
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold text-gray-800 border-b pb-2 flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-4 h-4 text-brandHighlight"></i> Planning
+                    </h2>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Target Launch Date</label>
+                        <input type="date" id="input-date" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Stakeholders (comma separated)</label>
+                        <input type="text" id="input-stakeholders" placeholder="e.g., John Doe (CEO), Jane Smith (Lead Dev)" class="input-transition w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brandPrimary focus:border-transparent">
+                    </div>
+                </div>
+                
+                <!-- Bottom padding so it doesn't get cut off behind sticky footer -->
+                <div class="h-4"></div>
+            </div>
+            
+        </div>
+
+        <!-- RIGHT PANEL: Live Preview & Actions -->
+        <div class="w-full md:w-2/3 flex flex-col h-[calc(100vh-4rem)]">
+            
+            <!-- Action Bar -->
+            <div class="bg-white p-4 rounded-t-2xl shadow-sm border border-gray-100 flex items-center justify-between z-10">
+                <span class="font-semibold text-gray-700 flex items-center gap-2">
+                    <i data-lucide="eye" class="text-brandPrimary"></i> Live Preview
+                </span>
+                <div class="flex gap-2">
+                    <button onclick="copyToClipboard()" class="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-xl font-medium transition-colors text-sm" id="btn-copy">
+                        <i data-lucide="copy" class="w-4 h-4"></i> Copy Text
+                    </button>
+                    <button onclick="downloadPDF()" class="flex items-center gap-2 px-4 py-2 bg-brandPrimary text-white hover:bg-opacity-90 rounded-xl font-medium transition-colors shadow-sm text-sm" id="btn-pdf">
+                        <i data-lucide="download" class="w-4 h-4"></i> Download PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview Document Area -->
+            <div class="flex-1 overflow-y-auto bg-gray-50 border border-t-0 border-gray-100 rounded-b-2xl p-4 md:p-8 relative">
+                <!-- The actual document container for PDF export -->
+                <div id="prd-document" class="bg-white p-8 md:p-12 shadow-sm rounded-lg min-h-full max-w-3xl mx-auto">
+                    
+                    <div class="border-b-2 border-brandPrimary pb-6 mb-8">
+                        <p class="text-brandHighlight text-sm font-bold tracking-wider uppercase mb-2">Product Requirements Document</p>
+                        <h1 id="prev-title" class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">Untitled Project</h1>
+                    </div>
+
+                    <div class="space-y-8">
+                        <section>
+                            <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <span class="bg-brandBg text-brandPrimary p-1.5 rounded-lg"><i data-lucide="align-left" class="w-5 h-5"></i></span>
+                                Description
+                            </h2>
+                            <p id="prev-description" class="text-gray-600 leading-relaxed whitespace-pre-wrap italic text-gray-400">No description provided.</p>
+                        </section>
+
+                        <section>
+                            <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <span class="bg-brandBg text-brandPrimary p-1.5 rounded-lg"><i data-lucide="target" class="w-5 h-5"></i></span>
+                                Objectives
+                            </h2>
+                            <p id="prev-objectives" class="text-gray-600 leading-relaxed whitespace-pre-wrap italic text-gray-400">No objectives provided.</p>
+                        </section>
+
+                        <section>
+                            <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <span class="bg-brandBg text-brandPrimary p-1.5 rounded-lg"><i data-lucide="users" class="w-5 h-5"></i></span>
+                                Target Audience
+                            </h2>
+                            <p id="prev-audience" class="text-gray-600 leading-relaxed italic text-gray-400">Not specified.</p>
+                        </section>
+
+                        <section>
+                            <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <span class="bg-brandBg text-brandPrimary p-1.5 rounded-lg"><i data-lucide="layers" class="w-5 h-5"></i></span>
+                                Key Features
+                            </h2>
+                            <ul id="prev-features" class="list-disc pl-5 text-gray-600 space-y-2">
+                                <li class="italic text-gray-400">No features added.</li>
+                            </ul>
+                        </section>
+
+                        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-brandBg p-6 rounded-xl border border-gray-100">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800 mb-3">Design Guidelines</h2>
+                                <div class="space-y-3 text-sm text-gray-700">
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-medium w-20">Theme:</span>
+                                        <span id="prev-theme" class="bg-white px-2 py-1 rounded border shadow-sm">Light Mode Only</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-medium w-20">Palette:</span>
+                                        <div class="flex gap-2" id="prev-palette">
+                                            <!-- Color swatches injected here -->
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-medium w-20">Icons:</span>
+                                        <span id="prev-icons" class="bg-white px-2 py-1 rounded border shadow-sm">Lucide</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800 mb-3">Technical Details</h2>
+                                <div class="space-y-3 text-sm text-gray-700">
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-medium w-24">Platform:</span>
+                                        <span id="prev-platform" class="bg-white px-2 py-1 rounded border shadow-sm">Web Application</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-medium w-24">Language:</span>
+                                        <span id="prev-language" class="bg-white px-2 py-1 rounded border shadow-sm">English (US)</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-medium w-24">Frontend:</span>
+                                        <span id="prev-frontend" class="bg-white px-2 py-1 rounded border shadow-sm text-gray-400 italic">Not set</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-medium w-24">Backend:</span>
+                                        <span id="prev-backend" class="bg-white px-2 py-1 rounded border shadow-sm text-gray-400 italic">Not set</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-medium w-24">Hosting:</span>
+                                        <span id="prev-hosting" class="bg-white px-2 py-1 rounded border shadow-sm text-gray-400 italic">Not set</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="border-t border-gray-200 pt-6">
+                            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                <span class="bg-brandBg text-brandPrimary p-1.5 rounded-lg"><i data-lucide="clipboard-list" class="w-5 h-5"></i></span>
+                                Timeline & Stakeholders
+                            </h2>
+                            
+                            <div class="bg-white border rounded-xl overflow-hidden shadow-sm">
+                                <div class="grid grid-cols-3 p-4 border-b bg-gray-50 font-semibold text-gray-700 text-sm">
+                                    <div class="col-span-1">Target Launch</div>
+                                    <div class="col-span-2" id="prev-date">Not set</div>
+                                </div>
+                                <div class="grid grid-cols-3 p-4 text-sm text-gray-600">
+                                    <div class="col-span-1 font-semibold text-gray-700">Stakeholders</div>
+                                    <div class="col-span-2">
+                                        <ul id="prev-stakeholders" class="list-none space-y-1">
+                                            <li class="italic text-gray-400">None defined.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Footer Signature -->
+    <footer class="mt-8 text-center text-sm text-gray-500 font-medium">
+        This tool is built with 🤖 by Html Lab
+    </footer>
+
+    <!-- Message Modal for Feedback -->
+    <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 hidden opacity-0 transition-opacity">
+        <div class="bg-white rounded-2xl p-6 shadow-xl flex items-center gap-3 transform scale-95 transition-transform duration-200" id="modal-content">
+            <i data-lucide="check-circle" class="text-green-500 w-6 h-6"></i>
+            <p id="message-text" class="font-medium text-gray-800">Action successful</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // State Management
+        let features = ["User authentication and profile management", "Dashboard analytics"];
+        
+        // DOM Elements
+        const inputs = {
+            title: document.getElementById('input-title'),
+            description: document.getElementById('input-description'),
+            objectives: document.getElementById('input-objectives'),
+            audience: document.getElementById('input-audience'),
+            color1: document.getElementById('input-color-1'),
+            color2: document.getElementById('input-color-2'),
+            color3: document.getElementById('input-color-3'),
+            icons: document.getElementById('input-icons'),
+            language: document.getElementById('input-language'),
+            theme: document.getElementById('input-theme'),
+            platform: document.getElementById('input-platform'),
+            frontend: document.getElementById('input-frontend'),
+            backend: document.getElementById('input-backend'),
+            hosting: document.getElementById('input-hosting'),
+            date: document.getElementById('input-date'),
+            stakeholders: document.getElementById('input-stakeholders'),
+        };
+
+        const previews = {
+            title: document.getElementById('prev-title'),
+            description: document.getElementById('prev-description'),
+            objectives: document.getElementById('prev-objectives'),
+            audience: document.getElementById('prev-audience'),
+            features: document.getElementById('prev-features'),
+            palette: document.getElementById('prev-palette'),
+            icons: document.getElementById('prev-icons'),
+            language: document.getElementById('prev-language'),
+            theme: document.getElementById('prev-theme'),
+            platform: document.getElementById('prev-platform'),
+            frontend: document.getElementById('prev-frontend'),
+            backend: document.getElementById('prev-backend'),
+            hosting: document.getElementById('prev-hosting'),
+            date: document.getElementById('prev-date'),
+            stakeholders: document.getElementById('prev-stakeholders'),
+        };
+
+        // Event Listeners for Live Preview
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', updatePreview);
+            input.addEventListener('change', updatePreview);
+        });
+
+        // Initialize features
+        renderFeaturesList();
+        updatePreview();
+
+        // Feature Management Functions
+        function renderFeaturesList() {
+            const container = document.getElementById('features-container');
+            container.innerHTML = '';
+            
+            features.forEach((feat, index) => {
+                const div = document.createElement('div');
+                div.className = 'flex gap-2 group';
+                div.innerHTML = `
+                    <input type="text" value="${escapeHtml(feat)}" oninput="updateFeature(${index}, this.value)" placeholder="Describe feature..." class="input-transition flex-1 min-w-0 px-4 py-2 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:bg-white focus:ring-2 focus:ring-brandPrimary focus:border-transparent text-sm">
+                    <button onclick="removeFeature(${index})" class="p-2 flex-shrink-0 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Remove feature">
+                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+            updatePreview();
+        }
+
+        function addFeature() {
+            features.push("");
+            renderFeaturesList();
+            
+            // Focus new input
+            const container = document.getElementById('features-container');
+            const inputs = container.querySelectorAll('input');
+            if(inputs.length > 0) {
+                inputs[inputs.length - 1].focus();
+            }
+        }
+
+        function addPresetFeature() {
+            const select = document.getElementById('preset-features');
+            if(select.value) {
+                features.push(select.value);
+                select.value = ""; // reset dropdown
+                renderFeaturesList();
+            }
+        }
+
+        function updateFeature(index, value) {
+            features[index] = value;
+            updatePreview();
+        }
+
+        function removeFeature(index) {
+            features.splice(index, 1);
+            renderFeaturesList();
+        }
+
+        // Main Update Preview Function
+        function updatePreview() {
+            // Text fields
+            updateTextField(previews.title, inputs.title.value, 'Untitled Project');
+            updateTextField(previews.description, inputs.description.value, 'No description provided.');
+            updateTextField(previews.objectives, inputs.objectives.value, 'No objectives provided.');
+            updateTextField(previews.audience, inputs.audience.value, 'Not specified.');
+            
+            // Features
+            if (features.filter(f => f.trim() !== "").length === 0) {
+                previews.features.innerHTML = '<li class="italic text-gray-400">No features added.</li>';
+            } else {
+                previews.features.innerHTML = features
+                    .filter(f => f.trim() !== "")
+                    .map(f => `<li>${escapeHtml(f)}</li>`)
+                    .join('');
+            }
+
+            // Design & Tech
+            previews.palette.innerHTML = `
+                <div class="w-6 h-6 rounded-md shadow-sm border border-gray-200" style="background-color: ${inputs.color1.value}" title="${inputs.color1.value}"></div>
+                <div class="w-6 h-6 rounded-md shadow-sm border border-gray-200" style="background-color: ${inputs.color2.value}" title="${inputs.color2.value}"></div>
+                <div class="w-6 h-6 rounded-md shadow-sm border border-gray-200" style="background-color: ${inputs.color3.value}" title="${inputs.color3.value}"></div>
+            `;
+            previews.icons.innerText = inputs.icons.value;
+            previews.theme.innerText = inputs.theme.value;
+
+            previews.language.innerText = inputs.language.value;
+            previews.platform.innerText = inputs.platform.value;
+
+            updateTechField(previews.frontend, inputs.frontend.value);
+            updateTechField(previews.backend, inputs.backend.value);
+            updateTechField(previews.hosting, inputs.hosting.value);
+
+            // Date formatting
+            const dateVal = inputs.date.value;
+            if (dateVal) {
+                const dateObj = new Date(dateVal);
+                previews.date.innerText = dateObj.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+                previews.date.className = 'col-span-2 font-medium text-gray-800';
+            } else {
+                previews.date.innerText = 'Not set';
+                previews.date.className = 'col-span-2 italic text-gray-400';
+            }
+
+            // Stakeholders
+            const stakeholdersVal = inputs.stakeholders.value;
+            if (stakeholdersVal.trim() === '') {
+                previews.stakeholders.innerHTML = '<li class="italic text-gray-400">None defined.</li>';
+            } else {
+                previews.stakeholders.innerHTML = stakeholdersVal
+                    .split(',')
+                    .map(s => s.trim())
+                    .filter(s => s.length > 0)
+                    .map(s => `<li>• ${escapeHtml(s)}</li>`)
+                    .join('');
+            }
+        }
+
+        // Helper for formatting preview text
+        function updateTextField(element, value, placeholder) {
+            if (value.trim() === '') {
+                element.innerText = placeholder;
+                element.classList.add('italic', 'text-gray-400');
+                element.classList.remove('text-gray-900', 'text-gray-600');
+            } else {
+                element.innerText = value;
+                element.classList.remove('italic', 'text-gray-400');
+                if(element.tagName === 'H1') element.classList.add('text-gray-900');
+                else element.classList.add('text-gray-600');
+            }
+        }
+
+        function updateTechField(element, value) {
+            if (value.trim() === '') {
+                element.innerText = 'Not set';
+                element.classList.add('text-gray-400', 'italic');
+                element.classList.remove('text-gray-800');
+            } else {
+                element.innerText = value;
+                element.classList.remove('text-gray-400', 'italic');
+                element.classList.add('text-gray-800');
+            }
+        }
+
+        // Utility to prevent XSS
+        function escapeHtml(unsafe) {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+
+        // Generate Plain Text for Clipboard
+        function generatePlainText() {
+            const title = inputs.title.value || 'Untitled Project';
+            const desc = inputs.description.value || 'N/A';
+            const obj = inputs.objectives.value || 'N/A';
+            const aud = inputs.audience.value || 'N/A';
+            
+            const validFeatures = features.filter(f => f.trim() !== "");
+            const featsText = validFeatures.length > 0 
+                ? validFeatures.map(f => `- ${f}`).join('\n')
+                : 'N/A';
+
+            const c1 = inputs.color1.value;
+            const c2 = inputs.color2.value;
+            const c3 = inputs.color3.value;
+            
+            const dateVal = inputs.date.value ? new Date(inputs.date.value).toLocaleDateString() : 'TBD';
+            const stak = inputs.stakeholders.value || 'N/A';
+
+            return `PRODUCT REQUIREMENTS DOCUMENT
+
+1. PROJECT TITLE
+${title}
+
+2. OVERVIEW & DESCRIPTION
+${desc}
+
+3. OBJECTIVES
+${obj}
+
+4. TARGET AUDIENCE
+${aud}
+
+5. KEY FEATURES
+${featsText}
+
+6. DESIGN REQUIREMENTS
+- Theme: ${inputs.theme.value}
+- Color Palette: ${c1}, ${c2}, ${c3}
+- Icon Library: ${inputs.icons.value}
+
+7. TECHNICAL DETAILS
+- Platform: ${inputs.platform.value}
+- Language/Localization: ${inputs.language.value}
+- Frontend: ${inputs.frontend.value || 'TBD'}
+- Backend: ${inputs.backend.value || 'TBD'}
+- Hosting/Servers: ${inputs.hosting.value || 'TBD'}
+
+8. TIMELINE & STAKEHOLDERS
+- Target Launch Date: ${dateVal}
+- Stakeholders: ${stak}
+`;
+        }
+
+        // Actions
+        function copyToClipboard() {
+            const text = generatePlainText();
+            
+            // Method 1: Clipboard API (Requires HTTPS)
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showMessage("PRD Text Copied to Clipboard!");
+                }).catch(err => {
+                    // Fallback to execCommand
+                    fallbackCopy(text);
+                });
+            } else {
+                // Fallback for older browsers / iframe restrictions
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; 
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showMessage("PRD Text Copied to Clipboard!");
+            } catch (err) {
+                console.error('Fallback copy failed', err);
+                alert("Failed to copy text. Please try again.");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('prd-document');
+            const title = inputs.title.value ? inputs.title.value.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'untitled_project';
+            const filename = `PRD_${title}.pdf`;
+            
+            const btn = document.getElementById('btn-pdf');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Generating...`;
+            lucide.createIcons();
+            
+            const opt = {
+                margin:       0.5,
+                filename:     filename,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalContent;
+                lucide.createIcons();
+                showMessage("PDF Downloaded Successfully!");
+            }).catch(err => {
+                console.error('PDF Generation Error:', err);
+                btn.innerHTML = originalContent;
+                lucide.createIcons();
+                alert('Error generating PDF.');
+            });
+        }
+
+        // Custom Message UI (Replacement for native alert)
+        function showMessage(msg) {
+            const modal = document.getElementById('message-modal');
+            const content = document.getElementById('modal-content');
+            document.getElementById('message-text').innerText = msg;
+            
+            modal.classList.remove('hidden');
+            // Trigger reflow
+            void modal.offsetWidth;
+            
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+
+            setTimeout(() => {
+                modal.classList.add('opacity-0');
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 200); // match transition duration
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
