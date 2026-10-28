@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Theme Testimonials</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-neutral-950 text-neutral-200">
+
+<section id="testimonials-section" class="py-24 overflow-hidden bg-neutral-950 min-h-screen flex items-center relative">
+  
+  <!-- Ambient background shapes to enhance the glassmorphism refraction with the orange highlight -->
+  <!-- Top-left glow removed as requested -->
+  <div class="absolute bottom-0 right-1/4 w-[30rem] h-[30rem] bg-[#fe5923]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+  <div class="px-4 md:px-6 max-w-7xl mx-auto w-full relative z-10" id="testimonial-container">
+    
+    <div class="grid grid-cols-1 gap-16 w-full md:grid-cols-2 lg:gap-24">
+      
+      <!-- Left side: Heading and navigation -->
+      <div class="flex flex-col justify-center animate-on-scroll opacity-0 translate-x-16 transition-all duration-[1900ms] ease-out">
+        <div class="space-y-6">
+          
+          <!-- Badge (Glass Morphism) -->
+          <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/5 border border-white/10 text-neutral-300 backdrop-blur-md shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1.5 text-[#fe5923]"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>Trusted by developers</span>
+          </div>
+
+          <!-- Headings -->
+          <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
+            Loved by the community
+          </h2>
+          <p class="max-w-[600px] text-neutral-400 md:text-xl/relaxed">
+            Don't just take our word for it. See what developers and companies have to say about our starter template.
+          </p>
+
+          <!-- Navigation Dots -->
+          <div class="flex items-center gap-3 pt-4" id="testimonial-dots">
+            <button data-index="0" class="testimonial-dot relative overflow-hidden h-2.5 w-10 bg-white/20 rounded-full transition-all duration-300" aria-label="View testimonial 1">
+              <span class="progress-fill absolute left-0 top-0 h-full bg-[#fe5923] w-0 pointer-events-none shadow-[0_0_10px_rgba(254,89,35,0.8)]"></span>
+            </button>
+            <button data-index="1" class="testimonial-dot relative overflow-hidden h-2.5 w-2.5 bg-white/20 rounded-full transition-all duration-300" aria-label="View testimonial 2">
+              <span class="progress-fill absolute left-0 top-0 h-full bg-[#fe5923] w-0 pointer-events-none shadow-[0_0_10px_rgba(254,89,35,0.8)]"></span>
+            </button>
+            <button data-index="2" class="testimonial-dot relative overflow-hidden h-2.5 w-2.5 bg-white/20 rounded-full transition-all duration-300" aria-label="View testimonial 3">
+              <span class="progress-fill absolute left-0 top-0 h-full bg-[#fe5923] w-0 pointer-events-none shadow-[0_0_10px_rgba(254,89,35,0.8)]"></span>
+            </button>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="pt-6 flex flex-wrap gap-4">
+            <a href="https://example.com/review" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#fe5923] text-white font-medium hover:bg-[#e04b1a] transition-all shadow-[0_0_20px_rgba(254,89,35,0.3)] hover:shadow-[0_0_25px_rgba(254,89,35,0.5)] gap-2 group">
+              <span>Leave a review</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+            
+            <a href="https://example.com/wall-of-love" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-all backdrop-blur-md gap-2 group">
+              <span>Wall of Love</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#fe5923] transition-transform group-hover:scale-110"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right side: Testimonial cards -->
+      <div class="relative h-full mr-10 min-h-[350px] md:min-h-[400px] animate-on-scroll opacity-0 translate-x-16 transition-all duration-[1900ms] ease-out delay-[200ms]">
+        
+        <!-- Testimonial 1 -->
+        <div class="testimonial-slide absolute inset-0 transition-all duration-500 ease-in-out z-10 opacity-100 translate-x-0 scale-100">
+          <div class="bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] rounded-2xl p-8 h-full flex flex-col relative z-20">
+            <div class="mb-6 flex gap-2">
+              <!-- 5 Stars with orange highlight -->
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="relative mb-6 flex-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute -top-2 -left-2 text-white/10 rotate-180"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+              <p class="relative z-10 text-lg font-medium leading-relaxed text-neutral-200">"This starter template saved me weeks of setup time. The Supabase integration is flawless, and the UI components are beautiful and easy to customize. Worth every penny!"</p>
+            </div>
+            <div class="h-[1px] w-full bg-white/10 my-4 shrink-0"></div>
+            <div class="flex items-center gap-4">
+              <div class="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-full border border-[#fe5923]/30 bg-white/5">
+                <img class="aspect-square h-full w-full object-cover opacity-90" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Alex Johnson" />
+              </div>
+              <div>
+                <h3 class="font-semibold text-white">Alex Johnson</h3>
+                <p class="text-sm text-neutral-400">Full Stack Developer, TechFlow</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="testimonial-slide absolute inset-0 transition-all duration-500 ease-in-out z-0 opacity-0 translate-x-[100px] scale-90 pointer-events-none">
+          <div class="bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] rounded-2xl p-8 h-full flex flex-col relative z-20">
+            <div class="mb-6 flex gap-2">
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="relative mb-6 flex-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute -top-2 -left-2 text-white/10 rotate-180"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+              <p class="relative z-10 text-lg font-medium leading-relaxed text-neutral-200">"I've used many starter templates, but this one stands out for its clean architecture and attention to detail. The TypeScript support is excellent, and the documentation is comprehensive."</p>
+            </div>
+            <div class="h-[1px] w-full bg-white/10 my-4 shrink-0"></div>
+            <div class="flex items-center gap-4">
+              <div class="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-full border border-[#fe5923]/30 bg-white/5">
+                <img class="aspect-square h-full w-full object-cover opacity-90" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Sarah Miller" />
+              </div>
+              <div>
+                <h3 class="font-semibold text-white">Sarah Miller</h3>
+                <p class="text-sm text-neutral-400">Frontend Engineer, DesignHub</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="testimonial-slide absolute inset-0 transition-all duration-500 ease-in-out z-0 opacity-0 translate-x-[100px] scale-90 pointer-events-none">
+          <div class="bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] rounded-2xl p-8 h-full flex flex-col relative z-20">
+            <div class="mb-6 flex gap-2">
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="h-5 w-5 fill-[#fe5923] text-[#fe5923]" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="relative mb-6 flex-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute -top-2 -left-2 text-white/10 rotate-180"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+              <p class="relative z-10 text-lg font-medium leading-relaxed text-neutral-200">"Our team was able to launch our MVP in record time thanks to this template. The authentication flow and user management features worked right out of the box. Highly recommended!"</p>
+            </div>
+            <div class="h-[1px] w-full bg-white/10 my-4 shrink-0"></div>
+            <div class="flex items-center gap-4">
+              <div class="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-full border border-[#fe5923]/30 bg-white/5">
+                <img class="aspect-square h-full w-full object-cover opacity-90" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Michael Chen" />
+              </div>
+              <div>
+                <h3 class="font-semibold text-white">Michael Chen</h3>
+                <p class="text-sm text-neutral-400">Product Manager, InnovateLabs</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Decorative elements (Glass blocks) -->
+        <div class="absolute -bottom-6 -left-6 h-24 w-24 rounded-2xl bg-white/5 backdrop-blur-md border border-[#fe5923]/20 z-0 shadow-[0_0_30px_rgba(254,89,35,0.15)]"></div>
+        <div class="absolute -top-6 -right-6 h-24 w-24 rounded-2xl bg-white/5 backdrop-blur-md border border-[#fe5923]/20 z-0 shadow-[0_0_30px_rgba(254,89,35,0.15)]"></div>
+      </div>
+    </div>
+
+    <!-- Logo cloud -->
+    <div class="mt-24 text-center animate-on-scroll opacity-0 translate-x-16 transition-all duration-[1900ms] ease-out delay-[400ms]">
+      <h3 class="text-sm font-medium text-neutral-500 mb-8 uppercase tracking-wider">Trusted by developers from companies worldwide</h3>
+      <div class="flex flex-wrap justify-center gap-x-12 gap-y-8">
+        <div class="text-2xl font-semibold text-neutral-700">Google</div>
+        <div class="text-2xl font-semibold text-neutral-700">Microsoft</div>
+        <div class="text-2xl font-semibold text-neutral-700">Airbnb</div>
+        <div class="text-2xl font-semibold text-neutral-700">Spotify</div>
+        <div class="text-2xl font-semibold text-neutral-700">Netflix</div>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<!-- Functional Logic for Animations and Sliders -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Scroll Animations (Replicating Framer Motion useInView)
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.2
+    };
+
+    const scrollObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Slide in smoothly from the right
+          entry.target.classList.remove('opacity-0', 'translate-x-16');
+          entry.target.classList.add('opacity-100', 'translate-x-0');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      scrollObserver.observe(el);
+    });
+
+    // 2. Testimonial Slider Logic
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const dots = document.querySelectorAll('.testimonial-dot');
+    let activeIndex = 0;
+    const totalSlides = slides.length;
+    let autoRotateInterval;
+    const intervalTime = 6000;
+
+    function updateSlider(newIndex) {
+      activeIndex = newIndex;
+      
+      slides.forEach((slide, index) => {
+        if (index === activeIndex) {
+          // Active state (visible, centered)
+          slide.classList.remove('opacity-0', 'translate-x-[100px]', 'scale-90', 'z-0', 'pointer-events-none');
+          slide.classList.add('opacity-100', 'translate-x-0', 'scale-100', 'z-10');
+        } else {
+          // Inactive state (hidden, pushed right)
+          slide.classList.remove('opacity-100', 'translate-x-0', 'scale-100', 'z-10');
+          slide.classList.add('opacity-0', 'translate-x-[100px]', 'scale-90', 'z-0', 'pointer-events-none');
+        }
+      });
+
+      // Updated class manipulation for Glass Theme Dots with Progress
+      dots.forEach((dot, index) => {
+        const fill = dot.querySelector('.progress-fill');
+        
+        // Instantly reset the progress bar
+        fill.style.transition = 'none';
+        fill.style.width = '0%';
+
+        if (index === activeIndex) {
+          dot.classList.remove('w-2.5');
+          dot.classList.add('w-10');
+          
+          // Force a browser reflow so the reset takes effect immediately
+          void fill.offsetWidth;
+          
+          // Animate the progress bar linearly over the interval time
+          fill.style.transition = `width ${intervalTime}ms linear`;
+          fill.style.width = '100%';
+        } else {
+          dot.classList.remove('w-10');
+          dot.classList.add('w-2.5');
+        }
+      });
+    }
+
+    // Auto rotate
+    function startAutoRotate() {
+      clearInterval(autoRotateInterval);
+      autoRotateInterval = setInterval(() => {
+        updateSlider((activeIndex + 1) % totalSlides);
+      }, intervalTime);
+    }
+
+    // Click events for dots
+    dots.forEach((dot) => {
+      dot.addEventListener('click', (e) => {
+        const index = parseInt(e.target.getAttribute('data-index'));
+        updateSlider(index);
+        startAutoRotate(); // Reset timer on manual click
+      });
+    });
+
+    // Initialize
+    updateSlider(0);
+    startAutoRotate();
+  });
+</script>
+
+</body>
+</html>
