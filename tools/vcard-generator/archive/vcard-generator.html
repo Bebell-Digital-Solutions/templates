@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang-key="app_title">vCard Creator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary-color: #DF1783;
+            /* Light Theme */
+            --bg-primary: #f3f4f6;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e5e7eb;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --border-color: #d1d5db;
+        }
+
+        .dark {
+            --primary-color: #DF1783;
+            /* Dark Theme */
+            --bg-primary: #1f2937;
+            --bg-secondary: #374151;
+            --bg-tertiary: #4b5563;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --border-color: #4b5563;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: var(--bg-tertiary); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+        
+        .modal-hidden { display: none; }
+        
+        #profiles-side-panel {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        #profiles-side-panel.open {
+            transform: translateX(0);
+        }
+    </style>
+    <script>
+        // Set initial theme based on localStorage or system preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+        // Set initial primary color from localStorage
+        const savedColor = localStorage.getItem('vcard-primary-color');
+        if (savedColor) {
+            document.documentElement.style.setProperty('--primary-color', savedColor);
+        }
+    </script>
+</head>
+<body class="transition-colors duration-300">
+
+    <div id="app-container" class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- Header -->
+        <header class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-[var(--text-primary)]" data-lang-key="header_title">vCard Creator</h1>
+                <p class="text-[var(--text-secondary)]" data-lang-key="header_subtitle">Generate your personal vCard file easily.</p>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <button id="theme-toggle" title="Toggle Theme" class="h-10 w-10 flex items-center justify-center rounded-full text-white bg-[var(--primary-color)] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary-color)] dark:focus:ring-offset-[var(--bg-primary)]">
+                    <i class="fa-solid fa-sun block dark:hidden"></i>
+                    <i class="fa-solid fa-moon hidden dark:block"></i>
+                </button>
+                 <button id="lang-toggle" title="Change Language" class="h-10 w-10 flex items-center justify-center rounded-full text-white bg-[var(--primary-color)] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--bg-gray-500)] dark:focus:ring-offset-[var(--bg-gray-500)]">
+                    <i class="fa-solid fa-globe"></i>
+                </button>
+                <button id="profiles-btn" title="Manage Profiles" class="h-10 w-10 flex items-center justify-center rounded-full text-white bg-[var(--primary-color)] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary-color)] dark:focus:ring-offset-[var(--bg-primary)]">
+                    <i class="fa-solid fa-users"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            
+            <!-- Left Column: Form -->
+            <div class="lg:col-span-3 h-[calc(100vh-220px)] overflow-y-auto custom-scrollbar pr-4">
+                <form id="vcard-form" class="space-y-6">
+                    <!-- Name Section -->
+                    <div class="p-6 bg-[var(--bg-secondary)] rounded-lg shadow-sm">
+                            <h3 class="text-lg font-semibold border-b border-[var(--border-color)] pb-3 mb-4" data-lang-key="section_name">Name</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div><label class="block text-sm font-medium" data-lang-key="name_prefix">Prefix</label><input type="text" id="prefix" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                                <div><label class="block text-sm font-medium" data-lang-key="name_suffix">Suffix</label><input type="text" id="suffix" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                                <div><label class="block text-sm font-medium" data-lang-key="name_first">First Name</label><input type="text" id="firstname" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                                <div><label class="block text-sm font-medium" data-lang-key="name_middle">Middle Name</label><input type="text" id="middlename" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                                <div><label class="block text-sm font-medium" data-lang-key="name_last">Last Name</label><input type="text" id="lastname" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                                <div><label class="block text-sm font-medium" data-lang-key="name_nickname">Nickname</label><input type="text" id="nickname" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            </div>
+                        </div>
+                        
+                    <!-- Images Section -->
+                    <div class="p-6 bg-[var(--bg-secondary)] rounded-lg shadow-sm">
+                        <h3 class="text-lg font-semibold border-b border-[var(--border-color)] pb-3 mb-4" data-lang-key="section_images">Images</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium" data-lang-key="images_photo_url">Photo URL</label>
+                                <input type="url" id="photo-url" placeholder="https://example.com/photo.jpg" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium" data-lang-key="images_logo_url">Logo URL</label>
+                                <input type="url" id="logo-url" placeholder="https://example.com/logo.png" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Work Section -->
+                    <div class="p-6 bg-[var(--bg-secondary)] rounded-lg shadow-sm">
+                        <h3 class="text-lg font-semibold border-b border-[var(--border-color)] pb-3 mb-4" data-lang-key="section_work">Work</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="block text-sm font-medium" data-lang-key="work_org">Organization</label><input type="text" id="organization" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="work_title">Title</label><input type="text" id="title" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="work_role">Role</label><input type="text" id="role" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="work_url">Work URL</label><input type="url" id="work_url" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Emails Section -->
+                    <div class="p-6 bg-[var(--bg-secondary)] rounded-lg shadow-sm">
+                        <h3 class="text-lg font-semibold border-b border-[var(--border-color)] pb-3 mb-4" data-lang-key="section_emails">Emails</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="block text-sm font-medium" data-lang-key="email_personal">Email</label><input type="email" id="email" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="email_work">Work Email</label><input type="email" id="work_email" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Phones Section -->
+                    <div class="p-6 bg-[var(--bg-secondary)] rounded-lg shadow-sm">
+                        <h3 class="text-lg font-semibold border-b border-[var(--border-color)] pb-3 mb-4" data-lang-key="section_phones">Phones</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="block text-sm font-medium" data-lang-key="phone_home">Home Phone</label><input type="tel" id="home_phone" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="phone_work">Work Phone</label><input type="tel" id="work_phone" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="phone_cell">Cell Phone</label><input type="tel" id="cell_phone" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="phone_pager">Pager</label><input type="tel" id="pager_phone" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="phone_home_fax">Home Fax</label><input type="tel" id="home_fax" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="phone_work_fax">Work Fax</label><input type="tel" id="work_fax" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Home Address Section -->
+                    <div class="p-6 bg-[var(--bg-secondary)] rounded-lg shadow-sm">
+                        <h3 class="text-lg font-semibold border-b border-[var(--border-color)] pb-3 mb-4" data-lang-key="section_home_address">Home Address</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="sm:col-span-2"><label class="block text-sm font-medium" data-lang-key="address_street">Street</label><input type="text" id="home_street" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="address_city">City</label><input type="text" id="home_city" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="address_state">State / Province</label><input type="text" id="home_state" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="address_zip">Postal Code</label><input type="text" id="home_postal" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="address_country">Country</label><input type="text" id="home_country" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Work Address Section -->
+                    <div class="p-6 bg-[var(--bg-secondary)] rounded-lg shadow-sm">
+                        <h3 class="text-lg font-semibold border-b border-[var(--border-color)] pb-3 mb-4" data-lang-key="section_work_address">Work Address</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="sm:col-span-2"><label class="block text-sm font-medium" data-lang-key="address_street">Street</label><input type="text" id="work_street" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="address_city">City</label><input type="text" id="work_city" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="address_state">State / Province</label><input type="text" id="work_state" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="address_zip">Postal Code</label><input type="text" id="work_postal" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                            <div><label class="block text-sm font-medium" data-lang-key="address_country">Country</label><input type="text" id="work_country" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Social -->
+                    <div class="p-6 bg-[var(--bg-secondary)] rounded-lg shadow-sm">
+                       <h3 class="text-lg font-semibold border-b border-[var(--border-color)] pb-3 mb-4" data-lang-key="section_social">Social</h3>
+                       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           <div><label class="block text-sm font-medium">LinkedIn</label><input type="url" id="social_linkedin" placeholder="https://www.linkedin.com/in/YOURPROFILE/" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">Twitter</label><input type="url" id="social_twitter" placeholder="https://twitter.com/YOURPROFILE" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">Facebook</label><input type="url" id="social_facebook" placeholder="https://www.facebook.com/YOURPROFILE/" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">Instagram</label><input type="url" id="social_instagram" placeholder="https://www.instagram.com/YOURPROFILE/" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">Threads</label><input type="url" id="social_threads" placeholder="https://www.threads.net/@YOURPROFILE" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">YouTube</label><input type="url" id="social_youtube" placeholder="https://www.youtube.com/c/YOURPROFILE" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">TikTok</label><input type="url" id="social_tiktok" placeholder="https://www.tiktok.com/@YOURPROFILE" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">Pinterest</label><input type="url" id="social_pinterest" placeholder="https://www.pinterest.com/YOURPROFILE/" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">Discord</label><input type="text" id="social_discord" placeholder="your_username" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">Telegram</label><input type="text" id="social_telegram" placeholder="https://t.me/your_username" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium" data-lang-key="social_whatsapp">WhatsApp</label><input type="tel" id="social_whatsapp" placeholder="+1234567890" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">Spotify</label><input type="url" id="social_spotify" placeholder="https://open.spotify.com/user/..." class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                           <div><label class="block text-sm font-medium">Airbnb</label><input type="url" id="social_airbnb" placeholder="https://www.airbnb.com/users/show/..." class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></div>
+                       </div>
+                   </div>
+
+                    <!-- Other Section -->
+                    <div class="p-6 bg-[var(--bg-secondary)] rounded-lg shadow-sm">
+                        <h3 class="text-lg font-semibold border-b border-[var(--border-color)] pb-3 mb-4" data-lang-key="section_other">Other</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium" data-lang-key="other_note">Note</label>
+                                <textarea id="note" rows="4" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium">UID</label>
+                                <input type="text" id="uid" class="mt-1 block w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-sm focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] text-[var(--text-primary)]">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Column: Preview -->
+            <div class="lg:col-span-2">
+                <div class="sticky top-8">
+                    <h2 class="text-2xl font-bold mb-4" data-lang-key="preview_title">Preview</h2>
+                    <div class="w-full max-w-sm mx-auto bg-[var(--bg-secondary)] rounded-2xl shadow-lg overflow-hidden">
+                        <!-- Preview content -->
+                        <div class="h-32 bg-[var(--primary-color)] relative">
+                             <img id="preview-logo" class="absolute top-4 right-4 h-12 w-12 object-contain" src="" alt="Logo Preview" style="display: none;">
+                        </div>
+                        <div class="relative p-6">
+                            <div class="absolute -mt-20">
+                                <img id="preview-photo" class="h-24 w-24 rounded-full border-4 border-[var(--bg-secondary)] object-cover bg-[var(--bg-tertiary)]" src="https://placehold.co/96x96/e2e8f0/64748b?text=Photo" alt="Contact Photo">
+                            </div>
+                            <div class="pt-8">
+                                <h3 id="preview-name" class="text-xl font-bold" data-lang-key="preview_placeholder_name">Your Name</h3>
+                                <p id="preview-title-org" class="text-sm text-[var(--text-secondary)]" data-lang-key="preview_placeholder_title_org">Title at Organization</p>
+                            </div>
+                            <div class="mt-6 space-y-4 text-sm">
+                                <div id="preview-social-container" class="hidden">
+                                    <h4 class="font-semibold text-[var(--text-secondary)]" data-lang-key="preview_social">Social</h4>
+                                    <div id="preview-social" class="mt-2 flex flex-wrap gap-3 text-lg text-[var(--text-secondary)]"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 space-y-4">
+                        <button id="download-btn" class="w-full bg-[var(--primary-color)] hover:opacity-90 text-white font-bold py-3 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary-color)] dark:focus:ring-offset-[var(--bg-primary)] transition-transform transform hover:scale-105">
+                            <span data-lang-key="download_button">Download vCard</span>
+                        </button>
+                        <button id="save-profile-btn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-[var(--bg-primary)] transition-transform transform hover:scale-105">
+                            <span data-lang-key="save_profile_button">Save Profile</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="text-center mt-8 py-4 border-t border-[var(--border-color)]">
+            <p class="text-[var(--text-secondary)]" style="font-size: 10px;" data-lang-key="footer_text">Developed with ❤️ by Bebell Digital Solutions.</p>
+        </footer>
+    </div>
+    
+    <!-- Profiles Side Panel -->
+    <div id="profiles-side-panel" class="fixed top-0 right-0 h-full w-80 bg-[var(--bg-secondary)] shadow-2xl z-40 p-6 flex flex-col">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold" data-lang-key="profiles_title">Profiles</h2>
+            <button id="profiles-close-btn" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-2xl font-bold">&times;</button>
+        </div>
+        <div class="flex-grow overflow-y-auto custom-scrollbar -mr-4 pr-4">
+            <ul id="profiles-list" class="space-y-2">
+                <!-- Profile items will be injected here by JS -->
+            </ul>
+        </div>
+        <div class="mt-6">
+            <button id="new-profile-btn" class="w-full text-center py-2 px-4 rounded-md bg-[var(--primary-color)] text-white hover:opacity-90">
+                <span data-lang-key="new_profile_button">New Profile</span>
+            </button>
+        </div>
+    </div>
+    <div id="panel-overlay" class="modal-hidden fixed inset-0 bg-black/60 z-30"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- STATE & DATA ---
+            const translations = {
+                en: { app_title: "vCard Creator", header_title: "vCard Creator", header_subtitle: "Generate your personal vCard file easily.", section_name: "Name", name_prefix: "Prefix", name_suffix: "Suffix", name_first: "First Name", name_middle: "Middle Name", name_last: "Last Name", name_nickname: "Nickname", section_work: "Work", work_org: "Organization", work_title: "Title", work_role: "Role", work_url: "Work URL", section_emails: "Emails", email_personal: "Email", email_work: "Work Email", section_phones: "Phones", phone_home: "Home Phone", phone_work: "Work Phone", phone_cell: "Cell Phone", phone_pager: "Pager", phone_home_fax: "Home Fax", phone_work_fax: "Work Fax", section_home_address: "Home Address", section_work_address: "Work Address", address_street: "Street", address_city: "City", address_state: "State / Province", address_zip: "Postal Code", address_country: "Country", section_images: "Images", images_photo_url: "Photo URL", images_logo_url: "Logo URL", section_social: "Social", social_whatsapp: "WhatsApp", section_other: "Other", other_note: "Note", preview_title: "Preview", preview_placeholder_name: "Your Name", preview_placeholder_title_org: "Title at Organization", preview_social: "Social", download_button: "Download vCard", footer_text: "Developed with ❤️ by Bebell Digital Solutions.", save_profile_button: "Save Profile", profiles_title: "Profiles", new_profile_button: "New Profile", profile_name_placeholder: "Unnamed Profile", settings_save: "Save Configuration" },
+                es: { app_title: "Creador de vCard", header_title: "Creador de vCard", header_subtitle: "Genere su archivo vCard personal fácilmente.", section_name: "Nombre", name_prefix: "Prefijo", name_suffix: "Sufijo", name_first: "Nombre", name_middle: "Segundo Nombre", name_last: "Apellido", name_nickname: "Apodo", section_work: "Trabajo", work_org: "Organización", work_title: "Título", work_role: "Rol", work_url: "URL del Trabajo", section_emails: "Correos Electrónicos", email_personal: "Correo", email_work: "Correo del Trabajo", section_phones: "Teléfonos", phone_home: "Teléfono de Casa", phone_work: "Teléfono del Trabajo", phone_cell: "Celular", phone_pager: "Buscapersonas", phone_home_fax: "Fax de Casa", phone_work_fax: "Fax del Trabajo", section_home_address: "Dirección de Casa", section_work_address: "Dirección del Trabajo", address_street: "Calle", address_city: "Ciudad", address_state: "Estado / Provincia", address_zip: "Código Postal", address_country: "País", section_images: "Imágenes", images_photo_url: "URL de Foto", images_logo_url: "URL de Logo", section_social: "Redes Sociales", social_whatsapp: "WhatsApp", section_other: "Otro", other_note: "Nota", preview_title: "Vista Previa", preview_placeholder_name: "Su Nombre", preview_placeholder_title_org: "Título en Organización", preview_social: "Redes Sociales", download_button: "Descargar vCard", footer_text: "Desarrollado con ❤️ por Bebell Digital Solutions.", save_profile_button: "Guardar Perfil", profiles_title: "Perfiles", new_profile_button: "Nuevo Perfil", profile_name_placeholder: "Perfil sin Nombre", settings_save: "Guardar Configuración" }
+            };
+            let currentLang = localStorage.getItem('vcard-lang') || 'en';
+            let profiles = [];
+            let currentProfileId = null;
+
+            // --- DOM Elements ---
+            const allInputIds = [ 'prefix', 'suffix', 'firstname', 'middlename', 'lastname', 'nickname', 'organization', 'title', 'role', 'work_url', 'email', 'work_email', 'home_phone', 'work_phone', 'cell_phone', 'pager_phone', 'home_fax', 'work_fax', 'home_street', 'home_city', 'home_state', 'home_postal', 'home_country', 'work_street', 'work_city', 'work_state', 'work_postal', 'work_country', 'photo-url', 'logo-url', 'social_linkedin', 'social_twitter', 'social_facebook', 'social_instagram', 'social_threads', 'social_youtube', 'social_tiktok', 'social_pinterest', 'social_discord', 'social_telegram', 'social_whatsapp', 'social_spotify', 'social_airbnb', 'note', 'uid' ];
+            const form = document.getElementById('vcard-form');
+            const themeToggle = document.getElementById('theme-toggle');
+            const langToggle = document.getElementById('lang-toggle');
+            const downloadBtn = document.getElementById('download-btn');
+            const saveProfileBtn = document.getElementById('save-profile-btn');
+            const profilesBtn = document.getElementById('profiles-btn');
+            const profilesPanel = document.getElementById('profiles-side-panel');
+            const profilesCloseBtn = document.getElementById('profiles-close-btn');
+            const profilesList = document.getElementById('profiles-list');
+            const newProfileBtn = document.getElementById('new-profile-btn');
+            const panelOverlay = document.getElementById('panel-overlay');
+
+            // --- FUNCTIONS ---
+            const toggleTheme = () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            };
+
+            const setLanguage = (lang) => {
+                currentLang = lang;
+                localStorage.setItem('vcard-lang', lang);
+                document.documentElement.lang = lang;
+                document.querySelectorAll('[data-lang-key]').forEach(el => {
+                    const key = el.getAttribute('data-lang-key');
+                    const translation = translations[lang]?.[key] || translations.en[key];
+                    if (translation) el.textContent = translation;
+                });
+            };
+
+            const toggleLanguage = () => setLanguage(currentLang === 'en' ? 'es' : 'en');
+
+            const socialIconSVG = (type) => {
+                const icons = { linkedin: `<i class="fab fa-linkedin"></i>`, twitter: `<i class="fab fa-twitter"></i>`, facebook: `<i class="fab fa-facebook"></i>`, instagram: `<i class="fab fa-instagram"></i>`, threads: `<i class="fab fa-threads"></i>`, youtube: `<i class="fab fa-youtube"></i>`, tiktok: `<i class="fab fa-tiktok"></i>`, pinterest: `<i class="fab fa-pinterest"></i>`, discord: `<i class="fab fa-discord"></i>`, telegram: `<i class="fab fa-telegram"></i>`, whatsapp: `<i class="fab fa-whatsapp"></i>`, spotify: `<i class="fab fa-spotify"></i>`, airbnb: `<i class="fab fa-airbnb"></i>`, };
+                return icons[type] || '';
+            }
+
+            const updatePreview = () => {
+                const getVal = (id) => document.getElementById(id).value.trim();
+                
+                const fullName = [getVal('prefix'), getVal('firstname'), getVal('middlename'), getVal('lastname'), getVal('suffix')].filter(Boolean).join(' ');
+                document.getElementById('preview-name').textContent = fullName || (translations[currentLang]?.preview_placeholder_name || 'Your Name');
+                
+                const title = getVal('title');
+                const org = getVal('organization');
+                document.getElementById('preview-title-org').textContent = (title && org) ? `${title} at ${org}` : title || org || (translations[currentLang]?.preview_placeholder_title_org || 'Title at Organization');
+                
+                // Update images
+                const photoUrl = getVal('photo-url');
+                const logoUrl = getVal('logo-url');
+                document.getElementById('preview-photo').src = photoUrl || 'https://placehold.co/96x96/e2e8f0/64748b?text=Photo';
+                const logoImg = document.getElementById('preview-logo');
+                logoImg.src = logoUrl || '';
+                logoImg.style.display = logoUrl ? 'block' : 'none';
+
+                // Update Social Icons
+                const socialFields = [ { type: 'linkedin', url: getVal('social_linkedin') }, { type: 'twitter', url: getVal('social_twitter') }, { type: 'facebook', url: getVal('social_facebook') }, { type: 'instagram', url: getVal('social_instagram') }, { type: 'threads', url: getVal('social_threads') }, { type: 'youtube', url: getVal('social_youtube') }, { type: 'tiktok', url: getVal('social_tiktok') }, { type: 'pinterest', url: getVal('social_pinterest') }, { type: 'discord', url: getVal('social_discord') }, { type: 'telegram', url: getVal('social_telegram') }, { type: 'whatsapp', url: getVal('social_whatsapp') }, { type: 'spotify', url: getVal('social_spotify') }, { type: 'airbnb', url: getVal('social_airbnb') } ];
+                const socialHtml = socialFields.filter(s => s.url).map(s => `<a href="${s.url.startsWith('http') ? s.url : `https://${s.url}`}" target="_blank" class="hover:text-[var(--primary-color)]" title="${s.type}">${socialIconSVG(s.type)}</a>`).join('');
+                document.getElementById('preview-social').innerHTML = socialHtml;
+                document.getElementById('preview-social-container').classList.toggle('hidden', !socialHtml);
+            };
+
+            const generateVCF = () => {
+                const getVal = (id) => document.getElementById(id).value.trim();
+                let vcf = 'BEGIN:VCARD\nVERSION:3.0\n';
+                vcf += `N:${getVal('lastname')};${getVal('firstname')};${getVal('middlename')};${getVal('prefix')};${getVal('suffix')}\n`;
+                vcf += `FN:${[getVal('prefix'), getVal('firstname'), getVal('middlename'), getVal('lastname'), getVal('suffix')].filter(Boolean).join(' ')}\n`;
+                if(getVal('nickname')) vcf += `NICKNAME:${getVal('nickname')}\n`;
+                if(getVal('organization')) vcf += `ORG:${getVal('organization')}\n`;
+                if(getVal('title')) vcf += `TITLE:${getVal('title')}\n`;
+                if(getVal('role')) vcf += `ROLE:${getVal('role')}\n`;
+                if(getVal('work_url')) vcf += `URL;type=WORK:${getVal('work_url')}\n`;
+                if(getVal('email')) vcf += `EMAIL;type=INTERNET,HOME:${getVal('email')}\n`;
+                if(getVal('work_email')) vcf += `EMAIL;type=INTERNET,WORK:${getVal('work_email')}\n`;
+                if(getVal('home_phone')) vcf += `TEL;type=HOME,VOICE:${getVal('home_phone')}\n`;
+                if(getVal('work_phone')) vcf += `TEL;type=WORK,VOICE:${getVal('work_phone')}\n`;
+                if(getVal('cell_phone')) vcf += `TEL;type=CELL,VOICE:${getVal('cell_phone')}\n`;
+                if(getVal('pager_phone')) vcf += `TEL;type=PAGER:${getVal('pager_phone')}\n`;
+                if(getVal('home_fax')) vcf += `TEL;type=HOME,FAX:${getVal('home_fax')}\n`;
+                if(getVal('work_fax')) vcf += `TEL;type=WORK,FAX:${getVal('work_fax')}\n`;
+                if(getVal('home_street') || getVal('home_city')) vcf += `ADR;type=HOME:;;${getVal('home_street')};${getVal('home_city')};${getVal('home_state')};${getVal('home_postal')};${getVal('home_country')}\n`;
+                if(getVal('work_street') || getVal('work_city')) vcf += `ADR;type=WORK:;;${getVal('work_street')};${getVal('work_city')};${getVal('work_state')};${getVal('work_postal')};${getVal('work_country')}\n`;
+                if (getVal('photo-url')) vcf += `PHOTO;VALUE=URI:${getVal('photo-url')}\n`;
+                if (getVal('logo-url')) vcf += `LOGO;VALUE=URI:${getVal('logo-url')}\n`;
+                const socialProfiles = [ {type: 'linkedin', value: getVal('social_linkedin')}, {type: 'twitter', value: getVal('social_twitter')}, {type: 'facebook', value: getVal('social_facebook')}, {type: 'instagram', value: getVal('social_instagram')}, {type: 'threads', value: getVal('social_threads')}, {type: 'youtube', value: getVal('social_youtube')}, {type: 'tiktok', value: getVal('social_tiktok')}, {type: 'pinterest', value: getVal('social_pinterest')}, {type: 'discord', value: getVal('social_discord') ? `https://discord.com/users/${getVal('social_discord')}`:''}, {type: 'telegram', value: getVal('social_telegram')}, {type: 'whatsapp', value: getVal('social_whatsapp') ? `https://wa.me/${getVal('social_whatsapp').replace(/\D/g, '')}`:''}, {type: 'spotify', value: getVal('social_spotify')}, {type: 'airbnb', value: getVal('social_airbnb')} ];
+                socialProfiles.forEach(p => { if(p.value) vcf += `X-SOCIALPROFILE;type=${p.type}:${p.value}\n`; });
+                if(getVal('note')) vcf += `NOTE:${getVal('note').replace(/\n/g, '\\n')}\n`;
+                if(getVal('uid')) vcf += `UID:${getVal('uid')}\n`;
+                vcf += `REV:${new Date().toISOString()}\nEND:VCARD`;
+                return vcf;
+            };
+
+            const downloadVCF = () => {
+                const vcfContent = generateVCF();
+                const blob = new Blob([vcfContent], { type: 'text/vcard;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const firstname = document.getElementById('firstname').value.trim();
+                const lastname = document.getElementById('lastname').value.trim();
+                const filename = `${firstname || 'contact'}${lastname ? '_' + lastname : ''}`.replace(/ /g, '_') || 'contact';
+                a.href = url;
+                a.download = `${filename}.vcf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+            
+            // --- Profile Management ---
+
+            const renderProfilesList = () => {
+                profilesList.innerHTML = '';
+                if (profiles.length === 0) {
+                    profilesList.innerHTML = `<li class="text-sm text-center text-[var(--text-secondary)] p-4">No profiles saved yet.</li>`;
+                    return;
+                }
+                profiles.forEach(profile => {
+                    const profileName = (profile.firstname || profile.lastname) ? `${profile.firstname || ''} ${profile.lastname || ''}`.trim() : (translations[currentLang].profile_name_placeholder || 'Unnamed Profile');
+                    const li = document.createElement('li');
+                    li.className = `flex justify-between items-center p-2 rounded-md cursor-pointer hover:bg-[var(--bg-tertiary)] ${profile.id === currentProfileId ? 'bg-[var(--primary-color)]/20' : ''}`;
+                    li.dataset.id = profile.id;
+                    li.innerHTML = `
+                        <span class="truncate">${profileName}</span>
+                        <button data-delete-id="${profile.id}" class="text-red-500 hover:text-red-700 text-xs p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    `;
+                    profilesList.appendChild(li);
+                });
+            };
+
+            const loadProfilesFromStorage = () => {
+                profiles = JSON.parse(localStorage.getItem('vcard-profiles')) || [];
+                renderProfilesList();
+            };
+            
+            const clearForm = () => {
+                form.reset();
+                currentProfileId = null;
+                updatePreview();
+                renderProfilesList();
+            };
+
+            const saveCurrentProfile = () => {
+                const profileData = { id: currentProfileId || crypto.randomUUID() };
+                allInputIds.forEach(id => profileData[id] = document.getElementById(id)?.value || '');
+                
+                const existingIndex = profiles.findIndex(p => p.id === profileData.id);
+                if (existingIndex > -1) {
+                    profiles[existingIndex] = profileData;
+                } else {
+                    profiles.push(profileData);
+                }
+                currentProfileId = profileData.id;
+                
+                localStorage.setItem('vcard-profiles', JSON.stringify(profiles));
+                renderProfilesList();
+            };
+            
+            const loadProfile = (id, closePanel = false) => {
+                const profile = profiles.find(p => p.id === id);
+                if (!profile) return;
+                
+                form.reset(); // Start by clearing the form
+                allInputIds.forEach(inputId => {
+                    if (document.getElementById(inputId)) {
+                        document.getElementById(inputId).value = profile[inputId] || '';
+                    }
+                });
+                
+                currentProfileId = id;
+                updatePreview();
+                renderProfilesList();
+                if (closePanel) {
+                    toggleProfilesPanel();
+                }
+            };
+
+            const deleteProfile = (id) => {
+                // Removed the blocking confirm() dialog which may not work in all environments.
+                profiles = profiles.filter(p => p.id !== id);
+                localStorage.setItem('vcard-profiles', JSON.stringify(profiles));
+                
+                if (currentProfileId === id) {
+                    clearForm();
+                } else {
+                    renderProfilesList();
+                }
+            };
+            
+            const toggleProfilesPanel = () => {
+                profilesPanel.classList.toggle('open');
+                panelOverlay.classList.toggle('modal-hidden');
+            };
+
+            // --- EVENT LISTENERS ---
+            
+            themeToggle.addEventListener('click', toggleTheme);
+            langToggle.addEventListener('click', toggleLanguage);
+            saveProfileBtn.addEventListener('click', saveCurrentProfile);
+            newProfileBtn.addEventListener('click', () => {
+                clearForm();
+                toggleProfilesPanel();
+            });
+            
+            profilesBtn.addEventListener('click', toggleProfilesPanel);
+            profilesCloseBtn.addEventListener('click', toggleProfilesPanel);
+            panelOverlay.addEventListener('click', toggleProfilesPanel);
+            
+            profilesList.addEventListener('click', (e) => {
+                const target = e.target.closest('li');
+                const deleteButton = e.target.closest('button');
+                
+                if (deleteButton && deleteButton.dataset.deleteId) {
+                    deleteProfile(deleteButton.dataset.deleteId);
+                } else if (target && target.dataset.id) {
+                    loadProfile(target.dataset.id, true);
+                }
+            });
+            
+            form.addEventListener('input', updatePreview);
+            downloadBtn.addEventListener('click', downloadVCF);
+
+            // --- INITIALIZATION ---
+            setLanguage(currentLang);
+            loadProfilesFromStorage();
+            if(profiles.length > 0) {
+                const firstProfile = profiles[0];
+                if(firstProfile && firstProfile.id) {
+                    loadProfile(firstProfile.id);
+                } else {
+                    clearForm();
+                }
+            } else {
+                 clearForm();
+            }
+        });
+    </script>
+</body>
+</html>
+
