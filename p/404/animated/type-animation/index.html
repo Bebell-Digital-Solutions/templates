@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>404 - Page Not Found | Infinite Loop</title>
+    <!-- Google Fonts + GSAP (Removed the broken SplitText CDN) -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            user-select: none;
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        body {
+            background-color: #000;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .copy-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        p {
+            color: #fff;
+            font-size: 24px;
+            letter-spacing: 0.2px;
+            margin: 0;
+            display: inline-block;
+            position: relative;
+            background-color: #000;
+            white-space: pre;
+            line-height: 1.4;
+        }
+
+        .handle {
+            background: #fc5800;
+            width: 14px;
+            height: 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin-top: 1px;
+            display: block;
+            box-shadow: 0 0 3px #fc5800; /* Added a matching orange glow */
+            border-radius: 1px;
+        }
+
+        @media (max-width: 600px) {
+            p {
+                font-size: 18px;
+            }
+            .handle {
+                width: 10px;
+                height: 24px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .copy-container {
+                transform: translate(-50%, -50%) scale(0.92);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="copy-container">
+        <p id="text-target">404, esta página no se encuentra.</p>
+        <span class="handle"></span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // DOM elements
+        const $copyContainer = document.querySelector('.copy-container');
+        const $textParagraph = document.getElementById('text-target');
+        const $handle = document.querySelector('.handle');
+
+        // Save original text once on load
+        const originalText = $textParagraph.textContent;
+
+        // Animation state
+        let charElements = [];
+        let currentAnimation = null;
+
+        // Helper: Native JS alternative to SplitText
+        function splitTextIntoChars() {
+            $textParagraph.innerHTML = ''; // Clear current content
+            charElements = [];
+            const chars = originalText.split('');
+            
+            chars.forEach(char => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.className = 'char';
+                span.style.opacity = 0;
+                span.style.visibility = 'hidden';
+                $textParagraph.appendChild(span);
+                charElements.push(span);
+            });
+        }
+
+        // Helper: get exact pixel width of paragraph text
+        function getTextWidth() {
+            if (!$textParagraph) return 280;
+            const rect = $textParagraph.getBoundingClientRect();
+            return rect.width;
+        }
+
+        // Helper: get handle start left position relative to copy-container
+        function getHandleStartLeft() {
+            const containerRect = $copyContainer.getBoundingClientRect();
+            const paragraphRect = $textParagraph.getBoundingClientRect();
+            return paragraphRect.left - containerRect.left;
+        }
+
+        // Helper: get handle end left position
+        function getHandleEndLeft() {
+            const startLeft = getHandleStartLeft();
+            const textWidth = getTextWidth();
+            return startLeft + textWidth; 
+        }
+
+        // Completely reset everything to initial state
+        function fullReset() {
+            if (currentAnimation) {
+                currentAnimation.kill();
+                currentAnimation = null;
+            }
+            gsap.killTweensOf('.handle');
+            gsap.killTweensOf('.char');
+            
+            // Re-split text via vanilla JS to ensure a clean DOM
+            splitTextIntoChars();
+            
+            // Reset handle to start position
+            const startLeft = getHandleStartLeft();
+            gsap.set('.handle', { 
+                left: startLeft, 
+                autoAlpha: 1,
+                visibility: "visible"
+            });
+        }
+
+        // Step 1: Pre-blink effect (cursor flashes before typing)
+        function preBlink() {
+            const tl = gsap.timeline();
+            tl.to('.handle', { duration: 0.2, autoAlpha: 0, repeat: 2, yoyo: true, ease: "none" });
+            tl.set('.handle', { autoAlpha: 1 });
+            return tl;
+        }
+
+        // Step 2 & 3: Typewriter effect + sync sliding handle across
+        function typeAndSlide() {
+            const tl = gsap.timeline();
+            if (charElements.length === 0) return tl;
+
+            const staggerTime = 0.05;
+            const totalDuration = charElements.length * staggerTime;
+            
+            // Stagger the text in
+            tl.to(charElements, {
+                duration: 0.01,
+                autoAlpha: 1,
+                stagger: staggerTime,
+                ease: "none"
+            }, 0);
+
+            // Move the cursor alongside the text appearing
+            const startLeft = getHandleStartLeft();
+            const endLeft = getHandleEndLeft();
+            
+            tl.fromTo('.handle', 
+                { left: startLeft },
+                {
+                    duration: totalDuration,
+                    left: endLeft,
+                    ease: `steps(${charElements.length})`
+                }, 
+            0);
+
+            return tl;
+        }
+
+        // Step 4: End blink - cursor blinks at the end of text
+        function endBlink() {
+            const tl = gsap.timeline({ repeat: 3, yoyo: true, repeatDelay: 0.1 });
+            tl.to('.handle', { duration: 0.35, autoAlpha: 0, ease: "none" });
+            tl.set('.handle', { autoAlpha: 1 });
+            return tl;
+        }
+
+        // Full animation cycle with proper sequencing
+        function runCycle(onComplete) {
+            fullReset();
+            const master = gsap.timeline({ onComplete: onComplete });
+            
+            master.add(preBlink(), 0);
+            master.add(typeAndSlide(), "+=0.1"); // Text and Cursor move at same time
+            master.add(endBlink(), "+=0.2");
+            master.add(gsap.delayedCall(1.5, () => {}), "+=0.1");
+            
+            return master;
+        }
+
+        // Infinite loop - recursively run cycles
+        function startInfiniteLoop() {
+            if (currentAnimation) {
+                currentAnimation.kill();
+            }
+            currentAnimation = runCycle(() => {
+                setTimeout(() => {
+                    startInfiniteLoop();
+                }, 50);
+            });
+        }
+
+        // Handle window resize - restart animation to maintain correct positioning
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                startInfiniteLoop();
+            }, 150);
+        });
+
+        // Start the animation when page is fully loaded
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                startInfiniteLoop();
+            }, 100);
+        });
+        
+        // Fallback in case load event already fired
+        if (document.readyState === 'complete') {
+            setTimeout(() => {
+                startInfiniteLoop();
+            }, 100);
+        }
+    })();
+</script>
+</body>
+</html>
