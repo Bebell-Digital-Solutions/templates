@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ Builder - Create Embeddable FAQ Sections</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #DF1783;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        .btn-primary {
+            background: #DF1783;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #c41572;
+        }
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: 600px;
+        }
+        .panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .panel-header {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 600;
+            color: #475569;
+        }
+        .panel-content {
+            padding: 1rem;
+            height: calc(100% - 60px);
+            overflow-y: auto;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+        }
+
+        .brand-text {
+            font-size: 1.7em;
+            font-weight: bold;
+            color: #df1783;
+        }
+        
+        /* Editor Panel Styles */
+        .editor-section {
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+        .tab-list {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            overflow-x: auto;
+        }
+        .tab-button {
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .tab-button.active {
+            border-bottom-color: #DF1783;
+            color: #DF1783;
+            font-weight: 600;
+        }
+        .tab-button:hover {
+            background: #f8fafc;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        .input, .textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .input:focus, .textarea:focus {
+            outline: none;
+            border-color: #DF1783;
+        }
+        .textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .faq-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .faq-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .faq-item-title {
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .faq-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+        /* Customization Sidebar */
+        .customization-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 320px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+        .customization-sidebar.open {
+            transform: translateX(0);
+        }
+        .customization-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .customization-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+        .customization-content {
+            padding: 0 1rem;
+        }
+        .color-swatch {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .color-swatch.active {
+            border-color: #DF1783;
+            transform: scale(1.1);
+        }
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 0.5rem;
+        }
+        .slider-container {
+            margin: 1rem 0;
+        }
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #DF1783;
+            cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #DF1783;
+            cursor: pointer;
+            border: none;
+        }
+        .style-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 0.5rem;
+        }
+        .style-option {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .style-option.active {
+            border-color: #DF1783;
+            background: #fdf2f8;
+        }
+        
+        /* Preview Panel Styles */
+        .preview-container {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            background: white;
+        }
+        
+        /* FAQ Widget Styles */
+        .faq-widget {
+            max-width: 100%;
+        }
+        .faq-widget .faq-tabs {
+            display: flex;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+        }
+        
+        .faq-widget .faq-tab {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 500;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .faq-widget .faq-tab.active {
+            border-bottom-color: var(--primary-color, #DF1783);
+            color: var(--primary-color, #DF1783);
+        }
+        
+        .faq-widget .faq-content {
+            display: none;
+        }
+        .faq-widget .faq-content.active {
+            display: block;
+        }
+        .faq-widget .faq-accordion {
+            border: var(--border-width, 1px) solid #e2e8f0;
+            border-radius: var(--border-radius, 8px);
+            overflow: hidden;
+        }
+        .faq-widget .faq-question {
+            background: #f8fafc;
+            border: none;
+            padding: var(--spacing, 16px);
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: var(--border-width, 1px) solid #e2e8f0;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--font-size, 16px);
+        }
+        .faq-widget .faq-question:hover:not(.active) {
+            background: #f1f5f9;
+        }
+        .faq-widget .faq-question.active {
+            background: var(--primary-color, #DF1783);
+            color: white;
+        }
+        .faq-widget .faq-question.active:hover {
+            background: var(--primary-color, #DF1783) !important;
+            color: white !important;
+        }
+        .faq-widget .faq-answer {
+            padding: var(--spacing, 16px);
+            display: none;
+            background: white;
+            border-bottom: var(--border-width, 1px) solid #e2e8f0;
+            font-size: var(--font-size, 16px);
+        }
+        .faq-widget .faq-answer.active {
+            display: block;
+        }
+        .faq-widget .faq-icon {
+            transition: transform 0.2s;
+        }
+        .faq-widget .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* FAQ Cards Style */
+        .faq-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .faq-card {
+            flex: 1 1 calc(50% - 8px);
+            min-width: 250px;
+        }
+
+        .faq-card-answer {
+            color: #6b7280; 
+            font-size: 16px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            white-space: normal;
+            hyphens: auto;
+        }
+        
+        .tab-delete-btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            border: none;
+            color: #64748b;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+            padding: 0;
+            transition: all 0.2s;
+        }
+
+        .tab-delete-btn:hover {
+            background: #e2e8f0;
+            color: #dc2626;
+        }
+
+        .tab-container {
+            display: flex;
+            align-items: center;
+            margin-right: 8px;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+        }
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            width: 600px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            overflow-x: auto;
+            margin: 1rem 0;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #374151;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover {
+            background: #4b5563;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .customization-sidebar {
+                width: 280px;
+            }
+            
+            .faq-card {
+                flex: 1 1 100%;
+            }
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 2rem;
+        }
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        
+        /* Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            border-top: 1px solid #eaeaea;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">
+                <img src="https://bucket.mlcdn.com/a/3336/3336910/images/2a926c37fc929607aeed2f835f3a06e0e9f3cff8.png" alt="VibeCoding Studio Logo" class="brand-logo">
+                <span class="brand-text">FAQ Builder</span>
+            </div>
+            <h1></h1>
+            <div class="header-buttons">
+                <button class="btn btn-secondary" onclick="toggleCustomization()">🎨 Customize</button>
+                <button class="btn btn-primary" onclick="generateCode()">📋 Get Code</button>
+            </div>
+        </div>
+        
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Editor Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    📝 FAQ Editor
+                </div>
+                <div class="panel-content" id="editor-content">
+                    <div class="editor-section">
+                        <div class="section-title">FAQ Tabs</div>
+                        <div class="tab-list" id="tab-list">
+                            <button class="tab-button active" data-tab="0">General</button>
+                        </div>
+                        <button class="btn btn-secondary" onclick="addTab()">+ Add Tab</button>
+                    </div>
+                    <div class="editor-section">
+                        <div class="section-title">Questions & Answers</div>
+                        <div id="faq-items">
+                            <!-- FAQ items will be inserted here -->
+                        </div>
+                        <button class="btn btn-primary" onclick="addFAQItem()">+ Add Question</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Preview Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    👀 Preview
+                </div>
+                <div class="panel-content">
+                    <div class="preview-container">
+                        <div id="preview-widget" class="faq-widget">
+                            <div class="empty-state">
+                                <h3>No questions yet</h3>
+                                <p>Add some questions and answers to see the preview</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Customization Sidebar -->
+        <div class="sidebar-overlay" onclick="toggleCustomization()"></div>
+        <div id="customization-sidebar" class="customization-sidebar">
+            <div class="customization-header">
+                <h3>🎨 Customize FAQ</h3>
+                <button class="close-btn" onclick="toggleCustomization()">&times;</button>
+            </div>
+            
+            <div class="customization-content">
+                <!-- Color Customization -->
+                <div class="customization-section">
+                    <label>🎨 Primary Color</label>
+                    <div class="color-grid">
+                        <div class="color-swatch active" style="background: #DF1783" data-color="#DF1783"></div>
+                        <div class="color-swatch" style="background: #3B82F6" data-color="#3B82F6"></div>
+                        <div class="color-swatch" style="background: #10B981" data-color="#10B981"></div>
+                        <div class="color-swatch" style="background: #F59E0B" data-color="#F59E0B"></div>
+                        <div class="color-swatch" style="background: #EF4444" data-color="#EF4444"></div>
+                        <div class="color-swatch" style="background: #8B5CF6" data-color="#8B5CF6"></div>
+                        <div class="color-swatch" style="background: #06B6D4" data-color="#06B6D4"></div>
+                        <div class="color-swatch" style="background: #84CC16" data-color="#84CC16"></div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <input type="color" id="custom-color" value="#DF1783" onchange="updatePrimaryColor(this.value)" style="width: 100%; height: 40px; border: none; border-radius: 6px;">
+                    </div>
+                </div>
+                
+                <!-- Typography -->
+                <div class="customization-section">
+                    <label>📝 Typography</label>
+                    <div class="slider-container">
+                        <label style="font-size: 12px; color: #666;">Font size: <span id="font-size-value">16</span>px</label>
+                        <input type="range" class="slider" id="font-size-slider" min="12" max="24" value="16" oninput="updateFontSize(this.value)">
+                    </div>
+                </div>
+                
+                <!-- Display Style -->
+                <div class="customization-section">
+                    <label>🔧 Display Style</label>
+                    <div class="style-options">
+                        <div class="style-option active" onclick="setDisplayStyle('accordion')" data-style="accordion">
+                            Accordion
+                        </div>
+                        <div class="style-option" onclick="setDisplayStyle('card')" data-style="card">
+                            Cards
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Spacing -->
+                <div class="customization-section">
+                    <label>📏 Spacing</label>
+                    <div class="slider-container">
+                        <label style="font-size: 12px; color: #666;">Spacing: <span id="spacing-value">16</span>px</label>
+                        <input type="range" class="slider" id="spacing-slider" min="8" max="32" value="16" step="4" oninput="updateSpacing(this.value)">
+                    </div>
+                </div>
+                
+                <!-- Border & Shape -->
+                <div class="customization-section">
+                    <label>🔲 Borders & Shape</label>
+                    <div class="slider-container">
+                        <label style="font-size: 12px; color: #666;">Border radius: <span id="border-radius-value">8</span>px</label>
+                        <input type="range" class="slider" id="border-radius-slider" min="0" max="20" value="8" step="2" oninput="updateBorderRadius(this.value)">
+                    </div>
+                    <div class="slider-container">
+                        <label style="font-size: 12px; color: #666;">Border width: <span id="border-width-value">1</span>px</label>
+                        <input type="range" class="slider" id="border-width-slider" min="0" max="4" value="1" step="1" oninput="updateBorderWidth(this.value)">
+                    </div>
+                </div>
+                
+                <!-- Reset -->
+                <div class="customization-section">
+                    <button class="btn btn-secondary" onclick="resetToDefaults()" style="width: 100%;">
+                        ↺ Reset to Defaults
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Code Generation Modal -->
+    <div id="code-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🎉 Generated Code</h2>
+                <button class="close-btn" onclick="closeCodeModal()">&times;</button>
+            </div>
+            <p>Copy this code and paste it into your website where you want the FAQ to appear:</p>
+            <div class="code-block" id="generated-code">
+                <button class="copy-btn" onclick="copyCode()">Copy</button>
+                <pre id="code-content"></pre>
+            </div>
+            <div style="margin-top: 1rem;">
+                <small style="color: #6b7280;">This code is self-contained and requires no external dependencies.</small>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add/Edit FAQ Modal -->
+    <div id="faq-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="faq-modal-title">✏️ Add Question</h2>
+                <button class="close-btn" onclick="closeFAQModal()">&times;</button>
+            </div>
+            <div class="input-group">
+                <label>Question</label>
+                <input type="text" class="input" id="faq-question-input" placeholder="Enter your question">
+            </div>
+            <div class="input-group">
+                <label>Answer</label>
+                <textarea class="textarea" id="faq-answer-input" placeholder="Enter the answer" rows="4"></textarea>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="closeFAQModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveFAQ()">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>All rights reserved <br>Powered with 💖 by Bebell Digital Solutions</p>
+    </footer>
+
+<script>
+    // Application State
+    let state = {
+        tabs: [
+            { id: 0, name: 'General', faqs: [] }
+        ],
+        activeTab: 0,
+        activePreviewTab: 0,
+        activeFAQ: null, // { tabIndex: number, faqIndex: number }
+        editingFAQ: null,
+        settings: {
+            primaryColor: '#DF1783',
+            displayStyle: 'accordion', // 'accordion' or 'card'
+            fontSize: 16,
+            spacing: 16,
+            borderRadius: 8,
+            borderWidth: 1
+        }
+    };
+    
+    // Initialize Application
+    function init() {
+        updateTabList();
+        updateFAQItems();
+        updatePreview();
+        updateCustomizationUI();
+        initColorSwatches();
+        initDisplayStyleOptions();
+    }
+    
+    // Color Swatch Management
+    function initColorSwatches() {
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.addEventListener('click', function() {
+                document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                this.classList.add('active');
+                updatePrimaryColor(this.dataset.color);
+            });
+        });
+    }
+    
+    // Display Style Options Initialization
+    function initDisplayStyleOptions() {
+        document.querySelectorAll('.style-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.style-option').forEach(o => o.classList.remove('active'));
+                this.classList.add('active');
+                setDisplayStyle(this.dataset.style);
+            });
+        });
+    }
+    
+    // Tab Management
+    function addTab() {
+        const name = prompt('Enter tab name:');
+        if (name && name.trim()) {
+            const newTab = {
+                id: Date.now(),
+                name: name.trim(),
+                faqs: []
+            };
+            state.tabs.push(newTab);
+            updateTabList();
+            switchTab(newTab.id);
+        }
+    }
+    
+    function deleteTab(tabId) {
+        if (state.tabs.length <= 1) {
+            alert('You must have at least one tab');
+            return;
+        }
+        
+        if (confirm('Are you sure you want to delete this tab and all its questions?')) {
+            const tabIndex = state.tabs.findIndex(t => t.id === tabId);
+            state.tabs.splice(tabIndex, 1);
+            
+            // Switch to first tab if we deleted the active one
+            if (tabId === state.activeTab) {
+                state.activeTab = state.tabs[0].id;
+                state.activePreviewTab = 0;
+            }
+            
+            updateTabList();
+            updateFAQItems();
+            updatePreview();
+        }
+    }
+    
+    function renameTab(tabId) {
+        const tab = state.tabs.find(t => t.id === tabId);
+        if (tab) {
+            const newName = prompt('New tab name:', tab.name);
+            if (newName && newName.trim()) {
+                tab.name = newName.trim();
+                updateTabList();
+                updatePreview();
+            }
+        }
+    }
+    
+    function switchTab(tabId) {
+        state.activeTab = tabId;
+        state.activePreviewTab = state.tabs.findIndex(t => t.id === tabId);
+        state.activeFAQ = null; // Reset active FAQ when switching tabs
+        updateTabList();
+        updateFAQItems();
+        updatePreview();
+    }
+    
+    function updateTabList() {
+        const tabList = document.getElementById('tab-list');
+        tabList.innerHTML = '';
+        
+        state.tabs.forEach(tab => {
+            const tabContainer = document.createElement('div');
+            tabContainer.className = 'tab-container';
+            
+            const button = document.createElement('button');
+            button.className = `tab-button ${tab.id === state.activeTab ? 'active' : ''}`;
+            button.textContent = tab.name;
+            button.onclick = () => switchTab(tab.id);
+            button.ondblclick = () => renameTab(tab.id);
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'tab-delete-btn';
+            deleteBtn.innerHTML = '×';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                deleteTab(tab.id);
+            };
+            
+            tabContainer.appendChild(button);
+            if (state.tabs.length > 1) {
+                tabContainer.appendChild(deleteBtn);
+            }
+            tabList.appendChild(tabContainer);
+        });
+    }
+    
+    // FAQ Management
+    function addFAQItem() {
+        state.editingFAQ = null;
+        document.getElementById('faq-modal-title').textContent = '✏️ Add Question';
+        document.getElementById('faq-question-input').value = '';
+        document.getElementById('faq-answer-input').value = '';
+        document.getElementById('faq-modal').style.display = 'block';
+    }
+    
+    function editFAQ(index) {
+        const currentTab = getCurrentTab();
+        const faq = currentTab.faqs[index];
+        
+        state.editingFAQ = index;
+        document.getElementById('faq-modal-title').textContent = '✏️ Edit Question';
+        document.getElementById('faq-question-input').value = faq.question;
+        document.getElementById('faq-answer-input').value = faq.answer;
+        document.getElementById('faq-modal').style.display = 'block';
+    }
+    
+    function deleteFAQ(index) {
+        if (confirm('Are you sure you want to delete this FAQ?')) {
+            const currentTab = getCurrentTab();
+            currentTab.faqs.splice(index, 1);
+            
+            // Reset active FAQ if it was deleted
+            if (state.activeFAQ && state.activeFAQ.faqIndex === index) {
+                state.activeFAQ = null;
+            }
+            
+            updateFAQItems();
+            updatePreview();
+        }
+    }
+    
+    function saveFAQ() {
+        const question = document.getElementById('faq-question-input').value.trim();
+        const answer = document.getElementById('faq-answer-input').value.trim();
+        
+        if (!question || !answer) {
+            alert('Please fill in both question and answer');
+            return;
+        }
+        
+        const currentTab = getCurrentTab();
+        const faq = { question, answer };
+        
+        if (state.editingFAQ !== null) {
+            currentTab.faqs[state.editingFAQ] = faq;
+        } else {
+            currentTab.faqs.push(faq);
+        }
+        
+        closeFAQModal();
+        updateFAQItems();
+        updatePreview();
+    }
+    
+    function closeFAQModal() {
+        document.getElementById('faq-modal').style.display = 'none';
+        state.editingFAQ = null;
+    }
+    
+    function updateFAQItems() {
+        const container = document.getElementById('faq-items');
+        const currentTab = getCurrentTab();
+        
+        if (currentTab.faqs.length === 0) {
+            container.innerHTML = '<div class="empty-state"><p>No questions added yet. Click "Add Question" to get started.</p></div>';
+            return;
+        }
+        
+        container.innerHTML = '';
+        currentTab.faqs.forEach((faq, index) => {
+            const item = document.createElement('div');
+            item.className = 'faq-item';
+            item.innerHTML = `
+                <div class="faq-item-header">
+                    <div class="faq-item-title">${escapeHtml(faq.question)}</div>
+                    <div class="faq-actions">
+                        <button class="btn-small btn-edit" onclick="editFAQ(${index})">Edit</button>
+                        <button class="btn-small btn-delete" onclick="deleteFAQ(${index})">Delete</button>
+                    </div>
+                </div>
+                <div style="color: #6b7280; font-size: 14px;">${escapeHtml(faq.answer)}</div>
+            `;
+            container.appendChild(item);
+        });
+    }
+    
+    // Preview Management
+    function updatePreview() {
+        const preview = document.getElementById('preview-widget');
+        const allTabs = state.tabs;
+        
+        if (allTabs.every(tab => tab.faqs.length === 0)) {
+            preview.innerHTML = `
+                <div class="empty-state">
+                    <h3>No FAQ items</h3>
+                    <p>Add some questions and answers to see the preview</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        
+        // Add tabs if multiple sections with content
+        const tabsWithContent = allTabs.filter(tab => tab.faqs.length > 0);
+        if (tabsWithContent.length > 1) {
+            html += '<div class="faq-tabs">';
+            tabsWithContent.forEach((tab, index) => {
+                const isActive = index === state.activePreviewTab;
+                html += `<button class="faq-tab ${isActive ? 'active' : ''}" 
+                          onclick="switchPreviewTab(${index})">${escapeHtml(tab.name)}</button>`;
+            });
+            html += '</div>';
+        }
+        
+        // Add content for each tab
+        tabsWithContent.forEach((tab, tabIndex) => {
+            const isActive = tabIndex === state.activePreviewTab;
+            html += `<div class="faq-content ${isActive ? 'active' : ''}" data-tab="${tabIndex}">`;
+            
+            if (state.settings.displayStyle === 'accordion') {
+                html += '<div class="faq-accordion">';
+                
+                tab.faqs.forEach((faq, faqIndex) => {
+                    const isFAQActive = state.activeFAQ && 
+                                       state.activeFAQ.tabIndex === tabIndex && 
+                                       state.activeFAQ.faqIndex === faqIndex;
+                    
+                    html += `
+                        <button class="faq-question ${isFAQActive ? 'active' : ''}" 
+                                onclick="togglePreviewFAQ(${tabIndex}, ${faqIndex})"
+                                style="background: ${isFAQActive ? state.settings.primaryColor : '#f8fafc'}; 
+                                       color: ${isFAQActive ? 'white' : '#374151'}; 
+                                       border: none; 
+                                       padding: ${state.settings.spacing}px; 
+                                       width: 100%; 
+                                       text-align: left; 
+                                       cursor: pointer; 
+                                       font-weight: 500; 
+                                       border-bottom: ${state.settings.borderWidth}px solid #e2e8f0; 
+                                       transition: all 0.2s; 
+                                       display: flex; 
+                                       justify-content: space-between; 
+                                       align-items: center; 
+                                       font-size: ${state.settings.fontSize}px;"
+                                onmouseover="if(!this.classList.contains('active')) { this.style.background='#f1f5f9' }"
+                                onmouseout="if(!this.classList.contains('active')) { this.style.background='#f8fafc' }">
+                            ${escapeHtml(faq.question)}
+                            <span class="faq-icon" style="transform: ${isFAQActive ? 'rotate(180deg)' : 'rotate(0deg)'}; color: ${isFAQActive ? 'white' : state.settings.primaryColor};">▼</span>
+                        </button>
+                        <div class="faq-answer ${isFAQActive ? 'active' : ''}" data-tab="${tabIndex}" data-faq="${faqIndex}" 
+                             style="padding: ${state.settings.spacing}px; font-size: ${state.settings.fontSize}px; display: ${isFAQActive ? 'block' : 'none'};">
+                            ${escapeHtml(faq.answer)}
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+            } else if (state.settings.displayStyle === 'card') {
+                html += `<div class="faq-cards" style="gap: ${state.settings.spacing}px; padding: ${state.settings.spacing}px;">`;
+                
+                tab.faqs.forEach((faq, faqIndex) => {
+                    html += `
+                        <div class="faq-card" style="border: ${state.settings.borderWidth}px solid #e2e8f0; 
+                                                    border-radius: ${state.settings.borderRadius}px; 
+                                                    padding: ${state.settings.spacing}px; 
+                                                    background: white;
+                                                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                            <h3 class="faq-card-question" style="font-size: ${state.settings.fontSize}px; 
+                                                               margin-bottom: ${state.settings.spacing / 2}px; 
+                                                               color: ${state.settings.primaryColor};">
+                                ${escapeHtml(faq.question)}
+                            </h3>
+                            <div class="faq-card-answer" style="color: #6b7280; font-size: ${state.settings.fontSize}px;">
+                                ${escapeHtml(faq.answer)}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+            }
+            
+            html += '</div>';
+        });
+        
+        preview.innerHTML = html;
+        updatePreviewStyles();
+    }
+    
+    function switchPreviewTab(tabIndex) {
+        state.activePreviewTab = tabIndex;
+        state.activeFAQ = null; // Reset active FAQ when switching tabs
+        
+        document.querySelectorAll('.faq-tab').forEach((tab, index) => {
+            tab.classList.toggle('active', index === tabIndex);
+        });
+        document.querySelectorAll('.faq-content').forEach((content, index) => {
+            content.classList.toggle('active', index === tabIndex);
+        });
+    }
+    
+    function togglePreviewFAQ(tabIndex, faqIndex) {
+        const isCurrentlyActive = state.activeFAQ && 
+                                 state.activeFAQ.tabIndex === tabIndex && 
+                                 state.activeFAQ.faqIndex === faqIndex;
+        
+        // Close all FAQs first
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.classList.remove('active');
+            q.style.background = '#f8fafc';
+            q.style.color = '#374151';
+            const qIcon = q.querySelector('.faq-icon');
+            if (qIcon) {
+                qIcon.style.transform = 'rotate(0deg)';
+                qIcon.style.color = state.settings.primaryColor;
+            }
+        });
+        document.querySelectorAll('.faq-answer').forEach(a => {
+            a.classList.remove('active');
+            a.style.display = 'none';
+        });
+        
+        if (!isCurrentlyActive) {
+            // Open the clicked FAQ
+            state.activeFAQ = { tabIndex, faqIndex };
+            
+            const button = event.target.closest('.faq-question');
+            const answer = document.querySelector(`.faq-answer[data-tab="${tabIndex}"][data-faq="${faqIndex}"]`);
+            const icon = button.querySelector('.faq-icon');
+            
+            button.classList.add('active');
+            button.style.background = state.settings.primaryColor;
+            button.style.color = 'white';
+            answer.classList.add('active');
+            answer.style.display = 'block';
+            if (icon) {
+                icon.style.transform = 'rotate(180deg)';
+                icon.style.color = 'white';
+            }
+        } else {
+            // Close the FAQ
+            state.activeFAQ = null;
+        }
+    }
+    
+    function updatePreviewStyles() {
+        const preview = document.getElementById('preview-widget');
+        const { primaryColor, fontSize, spacing, borderRadius, borderWidth } = state.settings;
+        
+        preview.style.setProperty('--primary-color', primaryColor);
+        preview.style.setProperty('--font-size', fontSize + 'px');
+        preview.style.setProperty('--spacing', spacing + 'px');
+        preview.style.setProperty('--border-radius', borderRadius + 'px');
+        preview.style.setProperty('--border-width', borderWidth + 'px');
+    }
+    
+    // Customization Functions
+    function toggleCustomization() {
+        const sidebar = document.getElementById('customization-sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        const isOpen = sidebar.classList.contains('open');
+        
+        if (isOpen) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        } else {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+        }
+    }
+    
+    function updatePrimaryColor(color) {
+        state.settings.primaryColor = color;
+        document.getElementById('custom-color').value = color;
+        updatePreview();
+    }
+    
+    function updateFontSize(size) {
+        state.settings.fontSize = parseInt(size);
+        document.getElementById('font-size-value').textContent = size;
+        updatePreview();
+    }
+    
+    function updateSpacing(spacing) {
+        state.settings.spacing = parseInt(spacing);
+        document.getElementById('spacing-value').textContent = spacing;
+        updatePreview();
+    }
+    
+    function updateBorderRadius(radius) {
+        state.settings.borderRadius = parseInt(radius);
+        document.getElementById('border-radius-value').textContent = radius;
+        updatePreview();
+    }
+    
+    function updateBorderWidth(width) {
+        state.settings.borderWidth = parseInt(width);
+        document.getElementById('border-width-value').textContent = width;
+        updatePreview();
+    }
+    
+    function setDisplayStyle(style) {
+        state.settings.displayStyle = style;
+        state.activeFAQ = null; // Reset active FAQ when changing display style
+        updatePreview();
+    }
+    
+    function resetToDefaults() {
+        state.settings = {
+            primaryColor: '#DF1783',
+            displayStyle: 'accordion',
+            fontSize: 16,
+            spacing: 16,
+            borderRadius: 8,
+            borderWidth: 1
+        };
+        
+        state.activeFAQ = null;
+        updateCustomizationUI();
+        updatePreview();
+        
+        // Reset color swatch selection
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        document.querySelector('.color-swatch[data-color="#DF1783"]').classList.add('active');
+        
+        // Reset style options
+        document.querySelectorAll('.style-option').forEach(option => {
+            option.classList.toggle('active', option.dataset.style === 'accordion');
+        });
+    }
+    
+    function updateCustomizationUI() {
+        const { primaryColor, fontSize, spacing, borderRadius, borderWidth, displayStyle } = state.settings;
+        
+        document.getElementById('custom-color').value = primaryColor;
+        document.getElementById('font-size-slider').value = fontSize;
+        document.getElementById('font-size-value').textContent = fontSize;
+        document.getElementById('spacing-slider').value = spacing;
+        document.getElementById('spacing-value').textContent = spacing;
+        document.getElementById('border-radius-slider').value = borderRadius;
+        document.getElementById('border-radius-value').textContent = borderRadius;
+        document.getElementById('border-width-slider').value = borderWidth;
+        document.getElementById('border-width-value').textContent = borderWidth;
+        
+        document.querySelectorAll('.style-option').forEach(option => {
+            option.classList.toggle('active', option.dataset.style === displayStyle);
+        });
+    }
+    
+    // Code Generation
+    function generateCode() {
+        const code = generateEmbeddableCode();
+        document.getElementById('code-content').textContent = code;
+        document.getElementById('code-modal').style.display = 'block';
+    }
+    
+    function generateEmbeddableCode() {
+        const { primaryColor, fontSize, spacing, borderRadius, borderWidth, displayStyle } = state.settings;
+        const tabsWithFAQs = state.tabs.filter(tab => tab.faqs.length > 0);
+        
+        if (tabsWithFAQs.length === 0) {
+            return '<!-- No FAQ content to generate -->';
+        }
+        
+        let html = `<!-- FAQ Widget - Generated by FAQ Builder --> 
+<div class="faq-widget" style="max-width: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: ${fontSize}px;">`;
+        
+        // Add tabs if multiple sections
+        if (tabsWithFAQs.length > 1) {
+            html += `
+    <div class="faq-tabs" style="display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 1rem; overflow-x: auto;">`;
+            
+            tabsWithFAQs.forEach((tab, index) => {
+                html += `
+        <button class="faq-tab ${index === 0 ? 'active' : ''}" 
+                onclick="switchFAQTab(${index})"
+                style="padding: 10px 20px; border: none; background: none; cursor: pointer; font-weight: 500; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; ${index === 0 ? `border-bottom-color: ${primaryColor}; color: ${primaryColor};` : ''}" 
+                onmouseover="this.style.background='#f8fafc'"
+                onmouseout="this.style.background='none'">
+            ${escapeHtml(tab.name)}
+        </button>`;
+            });
+            
+            html += `
+    </div>`;
+        }
+        
+        // Add content for each tab
+        tabsWithFAQs.forEach((tab, tabIndex) => {
+            html += `
+    <div class="faq-content ${tabIndex === 0 ? 'active' : ''}" data-tab="${tabIndex}" style="display: ${tabIndex === 0 ? 'block' : 'none'};">`;
+            
+            if (displayStyle === 'accordion') {
+                html += `
+        <div class="faq-accordion" style="border: ${borderWidth}px solid #e2e8f0; border-radius: ${borderRadius}px; overflow: hidden;">`;
+                
+                tab.faqs.forEach((faq, faqIndex) => {
+                    html += `
+            <button class="faq-question" 
+                    onclick="toggleFAQ(${tabIndex}, ${faqIndex})"
+                    style="background: #f8fafc; color: #374151; border: none; padding: ${spacing}px; width: 100%; text-align: left; cursor: pointer; font-weight: 500; border-bottom: ${borderWidth}px solid #e2e8f0; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; font-size: ${fontSize}px;" 
+                    onmouseover="if(!this.classList.contains('active')) { this.style.background='#f1f5f9' }"
+                    onmouseout="if(!this.classList.contains('active')) { this.style.background='#f8fafc' }">
+                ${escapeHtml(faq.question)}
+                <span class="faq-icon" style="transition: transform 0.2s; color: ${primaryColor};">▼</span>
+            </button>
+            <div class="faq-answer" data-tab="${tabIndex}" data-faq="${faqIndex}" 
+                 style="padding: ${spacing}px; display: none; background: white; border-bottom: ${borderWidth}px solid #e2e8f0; font-size: ${fontSize}px; color: #374151;">
+                ${escapeHtml(faq.answer)}
+            </div>`;
+                });
+                
+                html += `
+        </div>`;
+            } else if (displayStyle === 'card') {
+                html += `
+        <div class="faq-cards" style="display: flex; flex-wrap: wrap; gap: ${spacing}px; padding: ${spacing}px;">`;
+                
+                tab.faqs.forEach((faq, faqIndex) => {
+                    html += `
+            <div class="faq-card" style="flex: 1 1 calc(50% - ${spacing/2}px); min-width: 250px; border: ${borderWidth}px solid #e2e8f0; border-radius: ${borderRadius}px; padding: ${spacing}px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <h3 class="faq-card-question" style="font-size: ${fontSize}px; margin-bottom: ${spacing/2}px; color: ${primaryColor}; margin-top: 0;">
+                    ${escapeHtml(faq.question)}
+                </h3>
+                <div class="faq-card-answer" style="color: #6b7280; font-size: ${fontSize}px;">
+                    ${escapeHtml(faq.answer)}
+                </div>
+            </div>`;
+                });
+                
+                html += `
+        </div>`;
+            }
+            
+            html += `
+    </div>`;
+        });
+        
+        html += `
+</div>
+
+<script>
+// FAQ Widget JavaScript
+function switchFAQTab(tabIndex) {
+    document.querySelectorAll('.faq-tab').forEach((tab, index) => {
+        if (index === tabIndex) {
+            tab.classList.add('active');
+            tab.style.borderBottomColor = '${primaryColor}';
+            tab.style.color = '${primaryColor}';
+        } else {
+            tab.classList.remove('active');
+            tab.style.borderBottomColor = 'transparent';
+            tab.style.color = 'inherit';
+        }
+    });
+    document.querySelectorAll('.faq-content').forEach((content, index) => {
+        content.style.display = index === tabIndex ? 'block' : 'none';
+    });
+    
+    // Close all open FAQs when switching tabs
+    document.querySelectorAll('.faq-question').forEach(q => {
+        q.classList.remove('active');
+        q.style.background = '#f8fafc';
+        q.style.color = '#374151';
+    });
+    document.querySelectorAll('.faq-answer').forEach(a => a.style.display = 'none');
+    document.querySelectorAll('.faq-icon').forEach(icon => icon.style.transform = 'rotate(0deg)');
+}
+
+function toggleFAQ(tabIndex, faqIndex) {
+    const button = event.target.closest('.faq-question');
+    const answer = document.querySelector(\`.faq-answer[data-tab="\${tabIndex}"][data-faq="\${faqIndex}"]\`);
+    const icon = button.querySelector('.faq-icon');
+    
+    const isActive = button.classList.contains('active');
+    
+    // Close all other FAQs
+    document.querySelectorAll('.faq-question').forEach(q => {
+        q.classList.remove('active');
+        q.style.background = '#f8fafc';
+        q.style.color = '#374151';
+    });
+    document.querySelectorAll('.faq-answer').forEach(a => a.style.display = 'none');
+    document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+    
+    if (!isActive) {
+        button.classList.add('active');
+        button.style.background = '${primaryColor}';
+        button.style.color = 'white';
+        icon.style.transform = 'rotate(180deg)';
+        answer.style.display = 'block';
+    }
+}
+<\/script>
+<!-- End FAQ Widget -->`;
+        
+        return html;
+    }
+    
+    function copyCode() {
+        const code = document.getElementById('code-content').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+        }).catch(() => {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = code;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+        });
+    }
+    
+    function closeCodeModal() {
+        document.getElementById('code-modal').style.display = 'none';
+    }
+    
+    // Utility Functions
+    function getCurrentTab() {
+        return state.tabs.find(tab => tab.id === state.activeTab);
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    // Event Listeners
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+            e.target.style.display = 'none';
+        }
+    });
+    
+    // Handle Enter key in inputs
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            if (e.target.id === 'faq-question-input') {
+                document.getElementById('faq-answer-input').focus();
+            } else if (e.target.id === 'faq-answer-input' && e.ctrlKey) {
+                saveFAQ();
+            }
+        }
+        
+        if (e.key === 'Escape') {
+            if (document.getElementById('faq-modal').style.display === 'block') {
+                closeFAQModal();
+            }
+            if (document.getElementById('code-modal').style.display === 'block') {
+                closeCodeModal();
+            }
+            if (document.getElementById('customization-sidebar').classList.contains('open')) {
+                toggleCustomization();
+            }
+        }
+    });
+    
+    // Initialize the application
+    init();
+</script>
+
+</body>
+</html>
