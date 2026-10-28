@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashLite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Base Styles & Font */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* CSS variables for theming, manipulated by JS */
+        :root {
+            --primary-color: #DF1783;
+            --primary-color-hover: #c31371;
+            --primary-text-color: #ffffff; /* Contrast color for text on primary bg */
+        }
+
+        /* Light Theme */
+        .light {
+            --bg-primary: #f3f4f6; /* gray-100 */
+            --bg-secondary: #ffffff; /* white */
+            --bg-tertiary: #e5e7eb; /* gray-200 */
+            --text-primary: #1f2937; /* gray-800 */
+            --text-secondary: #4b5563; /* gray-600 */
+            --border-color: #d1d5db; /* gray-300 */
+        }
+
+        /* Dark Theme */
+        .dark {
+            --bg-primary: #1f2937; /* gray-800 */
+            --bg-secondary: #374151; /* gray-700 */
+            --bg-tertiary: #4b5563; /* gray-600 */
+            --text-primary: #f9fafb; /* gray-50 */
+            --text-secondary: #d1d5db; /* gray-300 */
+            --border-color: #4b5563; /* gray-600 */
+        }
+
+        .dark .themed-bg-tertiary:hover {
+            background-color: #1e2837;
+        }
+        
+        /* Themed style classes */
+        .themed-bg-primary { background-color: var(--bg-primary); }
+        .themed-bg-secondary { background-color: var(--bg-secondary); }
+        .themed-bg-tertiary { background-color: var(--bg-tertiary); }
+        .themed-text-primary { color: var(--text-primary); }
+        .themed-text-secondary { color: var(--text-secondary); }
+        .themed-border { border-color: var(--border-color); }
+
+        /* Primary color classes */
+        .primary-bg { background-color: var(--primary-color); color: var(--primary-text-color); }
+        .primary-bg:hover { background-color: var(--primary-color-hover); }
+        .primary-text { color: var(--primary-color); }
+        
+        /* Header specific styling */
+        #main-header { background-color: var(--primary-color); color: var(--primary-text-color); }
+        #main-header #greeting { color: var(--primary-text-color); }
+        #main-header #date-time { color: var(--primary-text-color); opacity: 0.8; }
+        #main-header .themed-bg-tertiary { background-color: rgba(255, 255, 255, 0.1); color: var(--primary-text-color);}
+        #main-header .themed-bg-tertiary:hover { background-color: rgba(255, 255, 255, 0.2); }
+        #main-header .themed-border { border-color: rgba(255, 255, 255, 0.2); }
+
+        /* --- USER REQUESTED CHANGES --- */
+        /* Sidebar Header custom style */
+        #sidebar-header {
+            background-color: var(--primary-color);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        #sidebar-header #brand-name,
+        #sidebar-header [data-lucide="app-window"],
+        #sidebar-header #mobile-close-sidebar i {
+            color: var(--primary-text-color);
+        }
+        /* --- END OF CHANGES --- */
+
+        /* Sidebar Toggle Floating Button */
+        #sidebar-toggle {
+            position: absolute;
+            top: 20px;
+            left: -12px;
+            z-index: 40;
+            width: 24px;
+            height: 24px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out, background-color 0.2s ease-in-out;
+        }
+        #sidebar-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Active sidebar link style */
+        .sidebar-link.active { background-color: var(--primary-color); color: var(--primary-text-color); }
+        .sidebar-link.active .icon, .sidebar-link.active .sidebar-text, .sidebar-link.active .themed-text-secondary { color: var(--primary-text-color); }
+        
+        /* Transitions */
+        * { transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out; }
+        #sidebar { transition: width 0.3s ease-in-out, transform 0.3s ease-in-out; }
+
+        /* Sidebar collapsed state */
+        #sidebar.collapsed { width: 80px; }
+        #sidebar.collapsed .sidebar-text, #sidebar.collapsed #sidebar-username, #sidebar.collapsed #sidebar-settings-label, #sidebar.collapsed #brand-name, #sidebar.collapsed #workspace-controls { display: none; }
+        #sidebar.collapsed #user-profile-settings-btn { justify-content: center; }
+        #sidebar.collapsed #user-profile-settings-btn .ml-3 { display: none; } /* Hides username/settings text div */
+        #sidebar.collapsed #user-profile-settings-btn .icon { display: none; } /* Hides the settings icon */
+        #sidebar.collapsed #user-profile-settings-btn img { width: 2.5rem; height: 2.5rem; } /* Resizes avatar to be the focus */
+        #sidebar.collapsed > #sidebar-header { justify-content: center; }
+        #sidebar:not(.collapsed) #workspace-icon-btn { display: none; }
+        #sidebar.collapsed #workspace-icon-btn { display: flex; }
+
+        /* Mobile specific styles */
+        @media (max-width: 768px) {
+            #sidebar { position: fixed; left: 0; top: 0; height: 100%; z-index: 100; transform: translateX(-100%); width: 300px; }
+            #sidebar.mobile-visible { transform: translateX(0); }
+            #sidebar.collapsed { width: 300px; }
+            #sidebar.collapsed .sidebar-text, #sidebar.collapsed #sidebar-username, #sidebar.collapsed #sidebar-settings-label, #sidebar.collapsed #brand-name, #sidebar.collapsed #workspace-controls { display: block; }
+            #sidebar.collapsed #workspace-icon-btn { display: none; }
+            #sidebar:not(.collapsed) #workspace-icon-btn { display: none; }
+        }
+
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: var(--bg-tertiary); border-radius: 20px; }
+
+        /* App Edit/Delete icons */
+        .app-edit-controls { display: none; }
+        body.is-editing-apps .app-item:hover .app-edit-controls { display: flex; }
+        body.is-editing-apps .sidebar-link { pointer-events: none; } /* Disable clicking apps in edit mode */
+        body.is-editing-apps .app-item .app-name-text { display: none; }
+        
+        .sidebar-link-container { position: relative; }
+
+        /* Onboarding details/summary dropdown */
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] .summary-icon { transform: rotate(90deg); }
+
+    </style>
+</head>
+<body class="themed-bg-primary themed-text-primary">
+
+    <div id="app-container">
+        <!-- ONBOARDING WIZARD -->
+        <div id="onboarding-wizard" class="hidden min-h-screen flex items-center justify-center p-4">
+             <div class="w-full max-w-2xl themed-bg-secondary rounded-xl shadow-lg p-8 space-y-6">
+                 <img src="https://bucket.mlcdn.com/a/3336/3336910/images/25aa202951877ef017a8b83ad2e29c8480014a48.png" alt="DashLite Logo" class="w-24 h-24 mx-auto">
+                 <h1 class="text-3xl font-bold text-center" data-i18n-key="onboardingTitle">Welcome to DashLite!</h1>
+                 <p class="text-center themed-text-secondary" data-i18n-key="onboardingSubtitle">Let's set up your personal dashboard.</p>
+                 
+                 <div class="space-y-6 pt-4">
+                      <div class="space-y-4">
+                          <div>
+                               <label for="username" class="text-sm font-medium themed-text-secondary" data-i18n-key="username">Username</label>
+                               <input type="text" id="username" class="mt-1 block w-full themed-bg-primary border themed-border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]">
+                          </div>
+                      </div>
+
+                      <!-- Collapsible Settings -->
+                      <details class="themed-bg-primary rounded-lg border themed-border">
+                          <summary class="font-semibold p-3 cursor-pointer flex justify-between items-center">
+                               <span>Personalization Settings</span>
+                               <i data-lucide="chevron-right" class="summary-icon transition-transform"></i>
+                          </summary>
+                          <div class="p-4 border-t themed-border space-y-4">
+                               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                   <div>
+                                       <label for="profile-pic" class="text-sm font-medium themed-text-secondary" data-i18n-key="profilePicture">Profile Picture</label>
+                                       <input type="file" id="profile-pic" accept="image/*" class="mt-1 block w-full text-sm themed-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[var(--primary-color)] file:text-white hover:file:bg-[var(--primary-color-hover)]">
+                                   </div>
+                                    <div>
+                                       <label for="primary-color" class="text-sm font-medium themed-text-secondary" data-i18n-key="primaryColor">Primary Color</label>
+                                       <input type="color" id="primary-color" value="#DF1783" class="mt-1 block w-full h-10 rounded-md border-none cursor-pointer">
+                                   </div>
+                               </div>
+                               
+                               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                   <div>
+                                       <span class="text-sm font-medium themed-text-secondary" data-i18n-key="theme">Theme</span>
+                                       <button id="onboarding-theme-toggle" class="mt-2 w-full themed-bg-tertiary font-semibold py-2 px-4 rounded-md" data-i18n-key="toggleTheme">Toggle Light/Dark</button>
+                                   </div>
+                                   <div>
+                                       <span class="text-sm font-medium themed-text-secondary" data-i18n-key="language">Language</span>
+                                       <button id="onboarding-lang-toggle" class="mt-2 w-full themed-bg-tertiary font-semibold py-2 px-4 rounded-md" data-i18n-key="translateToSpanish">Translate to Spanish</button>
+                                   </div>
+
+
+
+<div>
+                                   <span class="text-sm font-medium themed-text-secondary" data-i18n-key="dateTimeFormat">Date/Time Format</span>
+                                   <div class="mt-2 flex space-x-4">
+                                       <label class="flex items-center"><input type="radio" name="time-format" value="12h" class="form-radio text-[var(--primary-color)] focus:ring-[var(--primary-color)]" checked><span class="ml-2">12-hour</span></label>
+                                       <label class="flex items-center"><input type="radio" name="time-format" value="24h" class="form-radio text-[var(--primary-color)] focus:ring-[var(--primary-color)]"><span class="ml-2">24-hour</span></label>
+                                   </div>
+                               </div>
+
+
+                               </div>
+                          </div>
+                      </details>
+                 </div>
+
+                 <button id="save-launch-btn" class="w-full primary-bg font-bold py-3 px-4 rounded-lg mt-6" data-i18n-key="saveAndLaunch">Save & Launch</button>
+             </div>
+        </div>
+
+        <!-- MAIN DASHBOARD -->
+        <div id="main-dashboard" class="hidden">
+            <div class="flex h-screen">
+                <div id="mobile-overlay" class="hidden md:hidden fixed inset-0 bg-black bg-opacity-50 z-50"></div>
+                
+                <!-- SIDEBAR -->
+                <nav id="sidebar" class="w-64 themed-bg-secondary flex flex-col flex-shrink-0 border-r themed-border">
+                    <div id="sidebar-header" class="flex items-center justify-between h-16 border-b px-4">
+                        <div class="flex items-center overflow-hidden">
+                            <i data-lucide="app-window" class="flex-shrink-0"></i>
+                            <span id="brand-name" class="text-xl font-bold ml-2 whitespace-nowrap">DashLite</span>
+                        </div>
+                        <button id="mobile-close-sidebar" class="md:hidden p-1"><i data-lucide="x" class="w-6 h-6"></i></button>
+                    </div>
+
+                    <!-- WORKSPACE SWITCHER -->
+                    <div class="p-4 border-b themed-border">
+                        <div id="workspace-controls" class="relative">
+                             <div class="relative flex items-center">
+                                 <select id="workspace-switcher" class="w-full h-10 themed-bg-tertiary themed-text-primary text-sm font-semibold pl-3 pr-8 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"></select>
+                                 <i data-lucide="chevron-down" class="absolute right-2 w-4 h-4 pointer-events-none"></i>
+                             </div>
+                             <div class="flex items-center justify-center space-x-1 mt-2">
+                                 <button id="add-workspace-btn" class="flex-1 themed-bg-tertiary themed-text-secondary text-xs p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600" data-i18n-key="addWorkspace">Add</button>
+                                 <button id="edit-workspace-btn" class="flex-1 themed-bg-tertiary themed-text-secondary text-xs p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600" data-i18n-key="edit">Edit</button>
+                                 <button id="delete-workspace-btn" class="flex-1 themed-bg-tertiary themed-text-secondary text-xs p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600" data-i18n-key="delete">Delete</button>
+                             </div>
+                        </div>
+                        <button id="workspace-icon-btn" class="hidden items-center justify-center w-full h-10 themed-bg-tertiary rounded-md">
+                            <i data-lucide="folder-kanban" class="w-6 h-6 themed-text-primary"></i>
+                        </button>
+                    </div>
+
+                    <div id="app-list-container" class="flex-grow p-4 space-y-2 overflow-y-auto">
+                        <div id="default-apps" class="pb-2 space-y-1">
+                            <button data-app-id="default-1" class="sidebar-link w-full flex items-center p-2 rounded-md themed-text-secondary hover:themed-bg-tertiary text-left">
+                                <i data-lucide="home" class="icon w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="sidebar-text font-medium" data-i18n-key="defaultApp1">Home</span>
+                            </button>
+                            <button data-app-id="default-2" class="sidebar-link w-full flex items-center p-2 rounded-md themed-text-secondary hover:themed-bg-tertiary text-left">
+                                <i data-lucide="layout-dashboard" class="icon w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="sidebar-text font-medium" data-i18n-key="defaultApp2">Whiteboard</span>
+                            </button>
+                        </div>
+
+                        <hr class="themed-border my-2">
+
+                         <button id="add-new-app-btn" class="w-full flex items-center justify-center py-2 px-4 rounded-md themed-bg-tertiary themed-text-primary font-semibold hover:bg-gray-300 dark:hover:bg-gray-600">
+                             <i data-lucide="plus" class="w-4 h-4 mr-2 flex-shrink-0"></i>
+                             <span class="sidebar-text" data-i18n-key="addNew">Add New</span>
+                         </button>
+                        <div id="app-list" class="space-y-1"></div>
+                    </div>
+
+                    <div class="p-4 border-t themed-border space-y-2">
+                        <button id="user-profile-settings-btn" data-app-id="settings" class="sidebar-link w-full flex items-center p-2 rounded-md themed-text-secondary hover:themed-bg-tertiary text-left">
+                            <img id="sidebar-profile-pic" src="https://placehold.co/40x40/DF1783/ffffff?text=U" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                            <div class="ml-3 flex-1 overflow-hidden">
+                                <p id="sidebar-username" class="font-semibold text-sm themed-text-primary truncate">Username</p>
+                                <p id="sidebar-settings-label" class="text-xs themed-text-secondary" data-i18n-key="settings">Settings</p>
+                            </div>
+                            <i data-lucide="settings" class="icon w-5 h-5 ml-2 flex-shrink-0"></i>
+                        </button>
+                         <p class="text-xs text-center themed-text-secondary sidebar-text pt-2" data-i18n-key="footerSignature">Made with 💖 by Bebell Digital Solutions.</p>
+                    </div>
+                </nav>
+
+                <!-- MAIN CONTENT -->
+                <main id="main-content-area" class="flex-1 flex flex-col min-w-0 relative">
+                    <button id="sidebar-toggle" class="p-1 primary-bg"><i data-lucide="panel-left-close" class="w-3 h-3"></i></button>
+                    <header id="main-header" class="flex items-center justify-between h-16 px-6 flex-shrink-0">
+                        <div class="flex items-center space-x-4">
+                             <div class="pl-4">
+                                 <h2 id="greeting" class="text-lg font-semibold">Welcome back! 👋</h2>
+                                 <p id="date-time" class="text-sm">Loading...</p>
+                             </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button id="help-btn" class="w-10 h-10 flex items-center justify-center rounded-full themed-bg-tertiary" title="Help"><i data-lucide="help-circle" class="w-5 h-5"></i></button>
+                            <button id="main-lang-toggle" class="w-10 h-10 flex items-center justify-center rounded-full themed-bg-tertiary" title="Toggle Language"><i data-lucide="languages" class="w-5 h-5"></i></button>
+                            <button id="main-theme-toggle" class="w-10 h-10 flex items-center justify-center rounded-full themed-bg-tertiary" title="Toggle Theme"><i data-lucide="sun" class="w-5 h-5"></i></button>
+                        </div>
+                    </header>
+                    
+                    <div id="content-container" class="flex-1 relative">
+                        <!-- Homepage Content -->
+                        <div id="home-page" class="hidden w-full h-full flex flex-col items-center justify-center text-center p-8">
+                            <i data-lucide="app-window" style="width: 100px; height: 100px;" class="themed-text-secondary mb-6"></i>
+                            <!-- USER-REQUESTED CHANGE: Added translation keys -->
+                            <h1 class="text-4xl font-bold themed-text-primary" data-i18n-key="homeWelcomeTitle">Welcome to DashLite!</h1>
+                            <p class="themed-text-secondary mt-2 text-lg" data-i18n-key="homeWelcomeSubtitle">Select an app from the sidebar to get started.</p>
+                        </div>
+                        
+                        <!-- Iframe for apps -->
+                        <iframe id="main-iframe" class="w-full h-full border-0" src="about:blank"></iframe>
+                        <!-- Settings Page Content -->
+                        <div id="settings-page" class="hidden absolute inset-0 themed-bg-primary p-8 overflow-y-auto"></div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- MODALS -->
+        <div id="add-app-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"></div>
+        <div id="workspace-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"></div>
+        <div id="help-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"></div>
+        <div id="confirm-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"></div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-notification" class="hidden fixed bottom-5 right-5 rounded-lg shadow-lg py-3 px-5 text-sm font-semibold z-50"></div>
+
+    <!-- Container for custom scripts -->
+    <div id="user-script-container" style="display: none;"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CONFIGURATION & STATE ---
+            const imageKitConfig = {
+                publicKey: "YOUR_PUBLIC_KEY",
+                authenticationEndpoint: "https://yourserver.com/auth",
+                uploadUrl: "https://upload.imagekit.io/api/v1/files/upload"
+            };
+
+            const state = {
+                settings: JSON.parse(localStorage.getItem('dashlite_settings')) || null,
+                workspaces: JSON.parse(localStorage.getItem('dashlite_workspaces')) || [],
+                activeWorkspaceId: localStorage.getItem('dashlite_activeWorkspaceId') || null,
+                activeAppId: null,
+                sidebarCollapsed: localStorage.getItem('dashlite_sidebarCollapsed') === 'true',
+                language: 'en'
+            };
+
+            // USER-REQUESTED CHANGE: Added translation keys for homepage
+            const translations = {
+                en: { onboardingTitle: 'Welcome to DashLite!', onboardingSubtitle: "Let's set up your personal dashboard.", username: 'Username', profilePicture: 'Profile Picture', primaryColor: 'Primary Color', dateTimeFormat: 'Date/Time Format', theme: 'Theme', toggleTheme: 'Toggle Light/Dark', language: 'Language', translateToSpanish: 'Translate to Spanish', saveAndLaunch: 'Save & Launch', settings: 'Settings', addNew: 'Add New', addNewApp: 'Add New Web App', editApp: "Edit Web App", lucideIconName: 'Lucide Icon Name', browseIcons: 'Browse icons on lucide.dev', name: 'Name', url: 'URL', cancel: 'Cancel', save: 'Save', greetingMorning: 'Good morning,', greetingAfternoon: 'Good afternoon,', greetingEvening: 'Good evening,', footerSignature: "Made with 💖 by 4ever.", editApps: "Manage Apps", dangerZone: "Danger Zone", deleteAllData: "Delete All Data", confirmDelete: "Confirm Deletion", areYouSure: "Are you sure? This action cannot be undone.", addWorkspace: "Add", edit: "Edit", delete: "Delete", newWorkspace: "New Workspace", editWorkspace: "Edit Workspace", workspaceName: "Workspace Name", enableEditMode: "Enable Edit Mode", disableEditMode: "Disable Edit Mode", switchToSpanish: 'Español', switchToEnglish: 'English', defaultApp1: 'Home', defaultApp2: 'Whiteboard', homeWelcomeTitle: 'Welcome to DashLite!', homeWelcomeSubtitle: 'Select an app from the sidebar to get started.' },
+                es: { onboardingTitle: '¡Bienvenido a DashLite!', onboardingSubtitle: 'Configuremos su tablero personal.', username: 'Nombre de usuario', profilePicture: 'Foto de perfil', primaryColor: 'Color primario', dateTimeFormat: 'Formato de fecha/hora', theme: 'Tema', toggleTheme: 'Alternar claro/oscuro', language: 'Idioma', translateToSpanish: 'Traducir al Inglés', saveAndLaunch: 'Guardar y lanzar', settings: 'Configuración', addNew: 'Añadir nuevo', addNewApp: 'Agregar nueva aplicación web', editApp: "Editar aplicación web", lucideIconName: 'Nombre del ícono de Lucide', browseIcons: 'Explorar íconos en lucide.dev', name: 'Nombre', url: 'URL', cancel: 'Cancelar', save: 'Guardar', greetingMorning: 'Buenos días,', greetingAfternoon: 'Buenas tardes,', greetingEvening: 'Buenas noches,', footerSignature: "Hecho con 💖 4ever", editApps: "Gestionar aplicaciones", dangerZone: "Zona de peligro", deleteAllData: "Eliminar todos los datos", confirmDelete: "Confirmar eliminación", areYouSure: "¿Estás seguro? Esta acción no se puede deshacer.", addWorkspace: "Añadir", edit: "Editar", delete: "Eliminar", newWorkspace: "Nuevo espacio de trabajo", editWorkspace: "Editar espacio de trabajo", workspaceName: "Nombre del espacio de trabajo", enableEditMode: "Habilitar modo de edición", disableEditMode: "Deshabilitar modo de edición", switchToSpanish: 'Español', switchToEnglish: 'English', defaultApp1: 'Inicio', defaultApp2: 'Pizarra Blanca', homeWelcomeTitle: '¡Bienvenido a DashLite!', homeWelcomeSubtitle: 'Seleccione una aplicación de la barra lateral para comenzar.' }
+            };
+
+            // --- DOM ELEMENT SELECTORS ---
+            const onboardingWizard = document.getElementById('onboarding-wizard');
+            const mainDashboard = document.getElementById('main-dashboard');
+            const mainIframe = document.getElementById('main-iframe');
+            const settingsPage = document.getElementById('settings-page');
+            const homePage = document.getElementById('home-page');
+            const sidebar = document.getElementById('sidebar');
+
+            // --- CORE HELPER FUNCTIONS (DEFINED BEFORE USE) ---
+            const saveState = () => {
+                localStorage.setItem('dashlite_settings', JSON.stringify(state.settings));
+                localStorage.setItem('dashlite_workspaces', JSON.stringify(state.workspaces));
+                localStorage.setItem('dashlite_activeWorkspaceId', state.activeWorkspaceId);
+                localStorage.setItem('dashlite_sidebarCollapsed', state.sidebarCollapsed);
+            };
+
+            const applyTranslations = () => {
+                const lang = state.settings?.language || state.language;
+                document.querySelectorAll('[data-i18n-key]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-key');
+                    if (translations[lang] && translations[lang][key]) {
+                        el.textContent = translations[lang][key];
+                    }
+                });
+            };
+            
+            const getContrastYIQ = (hex) => {
+                if(!hex) return '#ffffff';
+                const hexcolor = hex.startsWith('#') ? hex.substring(1) : hex;
+                const r = parseInt(hexcolor.substr(0, 2), 16);
+                const g = parseInt(hexcolor.substr(2, 2), 16);
+                const b = parseInt(hexcolor.substr(4, 2), 16);
+                return ((r * 299) + (g * 587) + (b * 114)) / 1000 >= 128 ? '#000000' : '#ffffff';
+            };
+            
+            const darkenHex = (hex, amount) => {
+                if(!hex) return '#000000';
+                let color = hex.startsWith('#') ? hex.slice(1) : hex;
+                let num = parseInt(color, 16);
+                let r = (num >> 16) - amount; if (r < 0) r = 0;
+                let g = ((num >> 8) & 0x00FF) - amount; if (g < 0) g = 0;
+                let b = (num & 0x0000FF) - amount; if (b < 0) b = 0;
+                return "#" + (g | (b << 8) | (r << 16)).toString(16).padStart(6, '0').slice(-6);
+            }
+            
+            const applyThemeAndColor = () => {
+                const theme = state.settings?.theme || document.documentElement.className;
+                const color = state.settings?.primaryColor || '#DF1783';
+                document.documentElement.className = theme;
+                document.documentElement.style.setProperty('--primary-color', color);
+
+                if (color.toUpperCase() === '#DF1783') {
+                    document.documentElement.style.setProperty('--primary-color-hover', '#c31371');
+                } else {
+                    document.documentElement.style.setProperty('--primary-color-hover', darkenHex(color, 20));
+                }
+                
+                document.documentElement.style.setProperty('--primary-text-color', getContrastYIQ(color));
+            };
+            
+            const applyCustomScripts = () => {
+                const scriptContainer = document.getElementById('user-script-container');
+                if (scriptContainer) {
+                    scriptContainer.innerHTML = ''; 
+                }
+                if (state.settings && state.settings.customScripts) {
+                    scriptContainer.innerHTML = state.settings.customScripts;
+                }
+            };
+
+            const showToast = (message, isError = false) => {
+                const toast = document.getElementById('toast-notification');
+                toast.textContent = message;
+                const bgColor = isError ? '#ef4444' : (state.settings?.primaryColor || '#DF1783');
+                toast.style.backgroundColor = bgColor;
+                toast.style.color = getContrastYIQ(bgColor);
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 3000);
+            };
+
+            const showAppModal = (appToEdit = null) => {
+                const modal = document.getElementById('add-app-modal');
+                const lang = state.settings?.language || state.language;
+                const modalTitleKey = appToEdit ? 'editApp' : 'addNewApp';
+
+                modal.innerHTML = `
+                    <div class="themed-bg-secondary rounded-lg shadow-xl p-6 w-full max-w-md space-y-4">
+                        <h3 class="text-xl font-bold themed-text-primary" data-i18n-key="${modalTitleKey}">${translations[lang][modalTitleKey]}</h3>
+                        <form id="add-app-form" class="space-y-4">
+                            <div><label for="app-icon" class="text-sm font-medium themed-text-secondary" data-i18n-key="lucideIconName">${translations[lang].lucideIconName}</label><input type="text" id="app-icon" value="${appToEdit?.icon || ''}" placeholder="e.g., mail" class="mt-1 block w-full themed-bg-primary border themed-border rounded-md py-2 px-3"><a href="https://lucide.dev/icons/" target="_blank" class="text-xs primary-text hover:underline" data-i18n-key="browseIcons">${translations[lang].browseIcons}</a></div>
+                            <div><label for="app-name" class="text-sm font-medium themed-text-secondary" data-i18n-key="name">${translations[lang].name}</label><input type="text" id="app-name" value="${appToEdit?.name || ''}" placeholder="e.g., Gmail" required class="mt-1 block w-full themed-bg-primary border themed-border rounded-md py-2 px-3"></div>
+                            <div><label for="app-url" class="text-sm font-medium themed-text-secondary" data-i18n-key="url">${translations[lang].url}</label><input type="url" id="app-url" value="${appToEdit?.url || ''}" placeholder="https://mail.google.com" required class="mt-1 block w-full themed-bg-primary border themed-border rounded-md py-2 px-3"></div>
+                            <div class="flex justify-end space-x-3 pt-4"><button type="button" id="cancel-add-app-btn" class="themed-bg-tertiary themed-text-primary font-semibold py-2 px-4 rounded-md" data-i18n-key="cancel">${translations[lang].cancel}</button><button type="submit" class="primary-bg font-semibold py-2 px-4 rounded-md" data-i18n-key="save">${translations[lang].save}</button></div>
+                        </form>
+                    </div>`;
+                modal.classList.remove('hidden');
+
+                document.getElementById('cancel-add-app-btn').onclick = () => modal.classList.add('hidden');
+                document.getElementById('add-app-form').onsubmit = (e) => {
+                    e.preventDefault();
+                    const activeWorkspace = state.workspaces.find(ws => ws.id == state.activeWorkspaceId);
+                    if (!activeWorkspace) return;
+
+                    if (appToEdit) {
+                        const app = activeWorkspace.apps.find(a => a.id === appToEdit.id);
+                        app.icon = document.getElementById('app-icon').value || 'globe';
+                        app.name = document.getElementById('app-name').value;
+                        app.url = document.getElementById('app-url').value;
+                    } else {
+                        if (activeWorkspace.apps.length >= 12) {
+                            showToast('Workspace is full (12 apps max).', true); return;
+                        }
+                        activeWorkspace.apps.push({
+                            id: Date.now(),
+                            icon: document.getElementById('app-icon').value || 'globe',
+                            name: document.getElementById('app-name').value,
+                            url: document.getElementById('app-url').value,
+                        });
+                    }
+                    saveState();
+                    renderAppList();
+                    modal.classList.add('hidden');
+                };
+            };
+            
+            const showConfirmationModal = (messageKey, onConfirm) => {
+                const modal = document.getElementById('confirm-modal');
+                const lang = state.settings?.language || state.language;
+                modal.innerHTML = `
+                    <div class="themed-bg-secondary rounded-lg shadow-xl p-6 w-full max-w-sm text-center">
+                        <i data-lucide="alert-triangle" class="w-12 h-12 text-red-500 mx-auto"></i>
+                        <h3 class="text-lg font-bold themed-text-primary mt-4" data-i18n-key="confirmDelete">${translations[lang].confirmDelete}</h3>
+                        <p class="text-sm themed-text-secondary mt-2" data-i18n-key="${messageKey}">${translations[lang][messageKey]}</p>
+                        <div class="flex justify-center space-x-4 mt-6">
+                            <button id="confirm-cancel" class="themed-bg-tertiary themed-text-primary font-semibold py-2 px-6 rounded-md">${translations[lang].cancel}</button>
+                            <button id="confirm-ok" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md">${translations[lang].delete}</button>
+                        </div>
+                    </div>`;
+                modal.classList.remove('hidden');
+                lucide.createIcons();
+                document.getElementById('confirm-cancel').onclick = () => modal.classList.add('hidden');
+                document.getElementById('confirm-ok').onclick = () => {
+                    onConfirm();
+                    modal.classList.add('hidden');
+                };
+            };
+            
+            const showWorkspaceModal = (workspaceToEdit = null) => {
+                const modal = document.getElementById('workspace-modal');
+                const lang = state.settings.language;
+                const titleKey = workspaceToEdit ? 'editWorkspace' : 'newWorkspace';
+
+                modal.innerHTML = `
+                <div class="themed-bg-secondary rounded-lg shadow-xl p-6 w-full max-w-md space-y-4">
+                    <h3 class="text-xl font-bold themed-text-primary">${translations[lang][titleKey]}</h3>
+                    <form id="workspace-form">
+                        <div>
+                            <label for="workspace-name" class="text-sm font-medium themed-text-secondary">${translations[lang].workspaceName}</label>
+                            <input type="text" id="workspace-name-input" value="${workspaceToEdit?.name || ''}" class="mt-1 block w-full themed-bg-primary border themed-border rounded-md py-2 px-3" required>
+                        </div>
+                        <div class="flex justify-end space-x-3 pt-4">
+                            <button type="button" id="cancel-workspace-btn" class="themed-bg-tertiary themed-text-primary font-semibold py-2 px-4 rounded-md">${translations[lang].cancel}</button>
+                            <button type="submit" class="primary-bg font-semibold py-2 px-4 rounded-md">${translations[lang].save}</button>
+                        </div>
+                    </form>
+                </div>`;
+                modal.classList.remove('hidden');
+
+                document.getElementById('cancel-workspace-btn').onclick = () => modal.classList.add('hidden');
+                document.getElementById('workspace-form').onsubmit = (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('workspace-name-input').value.trim();
+                    if (!name) return;
+
+                    if (workspaceToEdit) {
+                        const ws = state.workspaces.find(w => w.id == workspaceToEdit.id);
+                        if (ws) ws.name = name;
+                    } else {
+                        if (state.workspaces.length >= 6) {
+                            showToast('Maximum of 6 workspaces reached.', true);
+                            return;
+                        }
+                        const newWs = { id: Date.now(), name, apps: [] };
+                        state.workspaces.push(newWs);
+                        state.activeWorkspaceId = newWs.id;
+                    }
+                    saveState();
+                    renderWorkspaceSwitcher();
+                    renderAppList();
+                    modal.classList.add('hidden');
+                };
+            };
+            
+            const showHelpModal = () => {
+                const modal = document.getElementById('help-modal');
+                modal.innerHTML = `
+                <div class="themed-bg-secondary rounded-lg shadow-xl p-6 w-full max-w-lg text-left">
+                    <h3 class="text-xl font-bold themed-text-primary mb-4">DashLite Help</h3>
+                    <div class="space-y-4 themed-text-secondary text-sm">
+                        <p><strong>Workspaces:</strong> Use the dropdown to switch between different sets of apps. You can have up to 6 workspaces.</p>
+                        <p><strong>Managing Apps:</strong> Go to Settings -> Manage Apps to enable edit mode. You can then edit or delete apps from the sidebar.</p>
+                        <p><strong>Customization:</strong> All your settings, including theme and primary color, are available on the Settings page.</p>
+                        <p><strong>Data:</strong> All data is stored locally in your browser. Clearing your browser data will delete your DashLite setup.</p>
+                    </div>
+                     <div class="flex justify-end pt-4">
+                         <button id="close-help-btn" class="primary-bg font-semibold py-2 px-4 rounded-md">Close</button>
+                    </div>
+                </div>`;
+                modal.classList.remove('hidden');
+                document.getElementById('close-help-btn').onclick = () => modal.classList.add('hidden');
+            };
+
+            const attachAppListListeners = () => {
+                document.querySelectorAll('[data-edit-app-id]').forEach(btn => btn.onclick = (e) => {
+                    e.stopPropagation();
+                    const appId = e.currentTarget.dataset.editAppId;
+                    const activeWorkspace = state.workspaces.find(ws => ws.id == state.activeWorkspaceId);
+                    const app = activeWorkspace.apps.find(a => a.id == appId);
+                    showAppModal(app);
+                });
+
+                document.querySelectorAll('[data-delete-app-id]').forEach(btn => btn.onclick = (e) => {
+                    e.stopPropagation();
+                    const appId = e.currentTarget.dataset.deleteAppId;
+                    showConfirmationModal('areYouSure', () => {
+                        const activeWorkspace = state.workspaces.find(ws => ws.id == state.activeWorkspaceId);
+                        activeWorkspace.apps = activeWorkspace.apps.filter(a => a.id != appId);
+                        saveState();
+                        renderAppList();
+                    });
+                });
+                
+                document.querySelectorAll('.sidebar-link').forEach(link => {
+                    if (link.closest('.app-item')) {
+                        link.onclick = (e) => {
+                            e.preventDefault();
+                            if (document.body.classList.contains('is-editing-apps')) return;
+                            const appId = e.currentTarget.dataset.appId;
+                            const activeWorkspace = state.workspaces.find(ws => ws.id == state.activeWorkspaceId);
+                            const app = activeWorkspace.apps.find(a => a.id == appId);
+                            if (app) setActiveApp(app.id, app.url);
+                        };
+                    }
+                });
+            };
+
+            const renderAppList = () => {
+                const appList = document.getElementById('app-list');
+                appList.innerHTML = '';
+                const activeWorkspace = state.workspaces.find(ws => ws.id == state.activeWorkspaceId);
+                if (!activeWorkspace) return;
+
+                activeWorkspace.apps.forEach(app => {
+                    const container = document.createElement('div');
+                    container.className = 'sidebar-link-container app-item';
+                    
+                    const link = document.createElement('a');
+                    link.href = '#';
+                    link.className = 'sidebar-link flex items-center p-2 rounded-md themed-text-secondary hover:themed-bg-tertiary w-full';
+                    link.dataset.appId = app.id;
+                    
+                    const appName = `<span class="sidebar-text font-medium flex-1 app-name-text truncate">${app.name}</span>`;
+                    const editControls = `
+                        <div class="app-edit-controls absolute right-2 top-1/2 -translate-y-1/2 items-center space-x-1 bg-white dark:bg-gray-600 p-1 rounded-md shadow">
+                           <button data-edit-app-id="${app.id}" class="p-1 rounded-full hover:bg-green-200"><i data-lucide="pencil" class="w-4 h-4 text-green-600"></i></button>
+                           <button data-delete-app-id="${app.id}" class="p-1 rounded-full hover:bg-red-200"><i data-lucide="trash-2" class="w-4 h-4 text-red-600"></i></button>
+                        </div>
+                    `;
+                    
+                    link.innerHTML = `<i data-lucide="${app.icon || 'globe'}" class="icon w-5 h-5 mr-3 flex-shrink-0"></i> ${appName}`;
+                    
+                    container.appendChild(link);
+                    container.innerHTML += editControls;
+                    appList.appendChild(container);
+                });
+                lucide.createIcons();
+                attachAppListListeners();
+            };
+            
+            const renderWorkspaceSwitcher = () => {
+                const switcher = document.getElementById('workspace-switcher');
+                switcher.innerHTML = '';
+                state.workspaces.forEach(ws => {
+                    const option = document.createElement('option');
+                    option.value = ws.id;
+                    option.textContent = ws.name;
+                    if (ws.id == state.activeWorkspaceId) option.selected = true;
+                    switcher.appendChild(option);
+                });
+            };
+
+            const renderSettingsPage = () => {
+                const lang = state.settings.language;
+                const settings = state.settings;
+
+                settingsPage.innerHTML = `
+                    <div class="max-w-4xl mx-auto space-y-8 pb-12">
+                        <h2 class="text-3xl font-bold themed-text-primary">${translations[lang].settings}</h2>
+
+                        <form id="settings-form" class="themed-bg-secondary p-6 rounded-lg shadow space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="flex flex-col items-center space-y-2">
+                                    <img id="settings-profile-pic-preview" src="${settings.profilePic || `https://placehold.co/128x128/${settings.primaryColor.substring(1)}/ffffff?text=${settings.username.charAt(0).toUpperCase()}`}" alt="Profile Preview" class="w-32 h-32 rounded-full object-cover">
+                                    <input type="file" id="settings-profile-pic" accept="image/*" class="hidden">
+                                    <label for="settings-profile-pic" class="themed-bg-tertiary themed-text-primary text-sm font-semibold py-2 px-4 rounded-md cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600">Change Picture</label>
+                                </div>
+
+                                <div class="md:col-span-2 space-y-4">
+                                    <div>
+                                        <label for="settings-username" class="text-sm font-medium themed-text-secondary">${translations[lang].username}</label>
+                                        <input type="text" id="settings-username" value="${settings.username}" class="mt-1 block w-full themed-bg-primary border themed-border rounded-md py-2 px-3">
+                                    </div>
+                                    <div>
+                                        <label for="settings-primary-color" class="text-sm font-medium themed-text-secondary">${translations[lang].primaryColor}</label>
+                                        <input type="color" id="settings-primary-color" value="${settings.primaryColor}" class="mt-1 block w-full h-10 rounded-md border-none cursor-pointer">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-t themed-border pt-6">
+                                <div>
+                                    <span class="text-sm font-medium themed-text-secondary">${translations[lang].dateTimeFormat}</span>
+                                    <div class="mt-2 flex space-x-4">
+                                        <label class="flex items-center"><input type="radio" name="settings-time-format" value="12h" class="form-radio text-[var(--primary-color)] focus:ring-[var(--primary-color)]" ${settings.timeFormat === '12h' ? 'checked' : ''}><span class="ml-2">12-hour</span></label>
+                                        <label class="flex items-center"><input type="radio" name="settings-time-format" value="24h" class="form-radio text-[var(--primary-color)] focus:ring-[var(--primary-color)]" ${settings.timeFormat === '24h' ? 'checked' : ''}><span class="ml-2">24-hour</span></label>
+                                    </div>
+                                </div>
+                                 <div>
+                                    <span class="text-sm font-medium themed-text-secondary">${translations[lang].theme}</span>
+                                    <button type="button" id="settings-theme-toggle" class="mt-2 w-full themed-bg-tertiary font-semibold py-2 px-4 rounded-md">${translations[lang].toggleTheme}</button>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium themed-text-secondary">${translations[lang].language}</span>
+                                    <button type="button" id="settings-lang-toggle" class="mt-2 w-full themed-bg-tertiary font-semibold py-2 px-4 rounded-md">${settings.language === 'en' ? translations[lang].switchToSpanish : translations[lang].switchToEnglish}</button>
+                                </div>
+                            </div>
+
+                            <div class="text-right border-t themed-border pt-6">
+                                <button type="submit" class="primary-bg font-bold py-2 px-6 rounded-lg">${translations[lang].save}</button>
+                            </div>
+                        </form>
+                        
+                        <div class="themed-bg-secondary p-6 rounded-lg shadow">
+                            <h3 class="text-lg font-semibold themed-text-primary mb-2">${translations[lang].editApps}</h3>
+                            <p class="themed-text-secondary text-sm mb-4">Toggle edit mode to modify your app links in the sidebar.</p>
+                            <button id="toggle-edit-mode-btn" class="font-semibold py-2 px-4 rounded-md themed-bg-tertiary">${document.body.classList.contains('is-editing-apps') ? translations[lang].disableEditMode : translations[lang].enableEditMode}</button>
+                        </div>
+                        
+                        <div class="themed-bg-secondary p-6 rounded-lg shadow">
+                            <h3 class="text-lg font-semibold themed-text-primary mb-2">Custom Scripts</h3>
+                            <p class="themed-text-secondary text-sm mb-4">Add scripts for widgets like chatbots. Snippets are added to the page and will execute. Use with caution.</p>
+                            <textarea id="custom-scripts-textarea" class="w-full h-32 themed-bg-primary border themed-border rounded-md p-2 font-mono text-sm" placeholder="<script>...your script here...<\/script>">${settings.customScripts || ''}</textarea>
+                            <p class="text-xs themed-text-secondary mt-2">Remember to save settings after adding or changing scripts.</p>
+                        </div>
+
+                        <div class="border-red-500 border-2 p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-semibold text-red-500 mb-2">${translations[lang].dangerZone}</h3>
+                                <p class="text-red-400 text-sm mb-4">This action will permanently delete all your settings, apps, and workspaces.</p>
+                                <button id="delete-all-data-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">${translations[lang].deleteAllData}</button>
+                        </div>
+                    </div>`;
+
+                const form = document.getElementById('settings-form');
+                const profilePicInput = document.getElementById('settings-profile-pic');
+                const profilePicPreview = document.getElementById('settings-profile-pic-preview');
+
+                const settingsColorInput = document.getElementById('settings-primary-color');
+                settingsColorInput.addEventListener('input', (e) => {
+                    const newColor = e.target.value;
+                    document.documentElement.style.setProperty('--primary-color', newColor);
+                     if (newColor.toUpperCase() === '#DF1783') {
+                         document.documentElement.style.setProperty('--primary-color-hover', '#c31371');
+                    } else {
+                         document.documentElement.style.setProperty('--primary-color-hover', darkenHex(newColor, 20));
+                    }
+                    document.documentElement.style.setProperty('--primary-text-color', getContrastYIQ(newColor));
+
+                    if (profilePicPreview.src.includes('placehold.co')) {
+                        const username = document.getElementById('settings-username').value || state.settings.username;
+                        profilePicPreview.src = `https://placehold.co/128x128/${newColor.substring(1)}/ffffff?text=${username.charAt(0).toUpperCase()}`;
+                    }
+                });
+
+                profilePicInput.onchange = () => {
+                    const file = profilePicInput.files[0];
+                    if (file) {
+                        profilePicPreview.src = URL.createObjectURL(file);
+                    }
+                };
+                
+                document.getElementById('settings-theme-toggle').onclick = toggleTheme;
+                document.getElementById('settings-lang-toggle').onclick = () => {
+                    toggleLanguage();
+                    if (state.activeAppId === 'settings') {
+                        renderSettingsPage(); 
+                    }
+                };
+
+                form.onsubmit = async (e) => {
+                    e.preventDefault();
+                    
+                    state.settings.username = document.getElementById('settings-username').value;
+                    state.settings.primaryColor = document.getElementById('settings-primary-color').value;
+                    state.settings.timeFormat = document.querySelector('input[name="settings-time-format"]:checked').value;
+                    state.settings.customScripts = document.getElementById('custom-scripts-textarea').value;
+
+                    const newPicFile = profilePicInput.files[0];
+                    if (newPicFile) {
+                        state.settings.profilePic = await handleProfilePicUpload(newPicFile);
+                    }
+
+                    saveState();
+                    
+                    applyThemeAndColor();
+                    applyTranslations();
+                    updateClockAndGreeting();
+                    applyCustomScripts();
+                    
+                    document.getElementById('sidebar-username').textContent = state.settings.username;
+                    const newColor = state.settings.primaryColor.substring(1);
+                    const newUsernameChar = state.settings.username.charAt(0).toUpperCase();
+                    
+                    const newAvatarUrl = state.settings.profilePic || `https://placehold.co/40x40/${newColor}/ffffff?text=${newUsernameChar}`;
+                    document.getElementById('sidebar-profile-pic').src = newAvatarUrl;
+
+                    profilePicPreview.src = state.settings.profilePic || `https://placehold.co/128x128/${newColor}/ffffff?text=${newUsernameChar}`;
+
+                    showToast('Settings saved successfully!');
+                };
+
+                document.getElementById('toggle-edit-mode-btn').onclick = (e) => {
+                    document.body.classList.toggle('is-editing-apps');
+                    e.target.textContent = document.body.classList.contains('is-editing-apps') ? translations[lang].disableEditMode : translations[lang].enableEditMode;
+                    renderAppList();
+                };
+                document.getElementById('delete-all-data-btn').onclick = () => {
+                    showConfirmationModal('areYouSure', () => {
+                        localStorage.clear();
+                        window.location.reload();
+                    });
+                };
+            };
+            
+            // --- DATA INITIALIZATION ---
+            (function initializeData() {
+                if (state.workspaces.length === 0) {
+                    const defaultWorkspace = { id: Date.now(), name: 'My Workspace', apps: [] };
+                    state.workspaces.push(defaultWorkspace);
+                    state.activeWorkspaceId = defaultWorkspace.id;
+                    saveState();
+                }
+                if (!state.activeWorkspaceId || !state.workspaces.find(ws => ws.id == state.activeWorkspaceId)) {
+                    state.activeWorkspaceId = state.workspaces[0]?.id || null;
+                }
+            })();
+            
+            // --- MAIN APP LOGIC ---
+            const setActiveApp = (appId, url) => {
+                state.activeAppId = appId;
+                document.querySelectorAll('.sidebar-link').forEach(link => {
+                    link.classList.toggle('active', link.dataset.appId == appId);
+                });
+                
+                mainIframe.classList.add('hidden');
+                settingsPage.classList.add('hidden');
+                homePage.classList.add('hidden');
+                
+                if (appId === 'settings') {
+                    mainIframe.src = 'about:blank';
+                    settingsPage.classList.remove('hidden');
+                    renderSettingsPage();
+                } else if (appId === 'default-1') {
+                    mainIframe.src = 'about:blank';
+                    homePage.classList.remove('hidden');
+                } else if (url) {
+                    mainIframe.src = url;
+                    mainIframe.classList.remove('hidden');
+                }
+            };
+            
+            const updateClockAndGreeting = () => {
+                if (!state.settings) return;
+                const now = new Date();
+                const lang = state.settings.language;
+
+                const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: state.settings.timeFormat === '12h' };
+                const timeString = now.toLocaleTimeString(lang === 'es' ? 'es-ES' : 'en-US', timeOptions);
+                const dateString = now.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+                
+                document.getElementById('date-time').textContent = `${dateString} | ${timeString}`;
+
+                const hour = now.getHours();
+                const greetingKey = hour < 12 ? 'greetingMorning' : hour < 18 ? 'greetingAfternoon' : 'greetingEvening';
+                document.getElementById('greeting').textContent = `${translations[lang][greetingKey]} ${state.settings.username} 👋`;
+            };
+
+            const initializeDashboard = () => {
+                applyThemeAndColor();
+                applyTranslations();
+                applyCustomScripts();
+                renderWorkspaceSwitcher();
+                renderAppList();
+                updateClockAndGreeting();
+                setInterval(updateClockAndGreeting, 30000); 
+                setActiveApp('default-1', null);
+
+                document.getElementById('sidebar-username').textContent = state.settings.username;
+                document.getElementById('sidebar-profile-pic').src = state.settings.profilePic || `https://placehold.co/40x40/${state.settings.primaryColor.substring(1)}/ffffff?text=${state.settings.username.charAt(0).toUpperCase()}`;
+                
+                sidebar.classList.toggle('collapsed', state.sidebarCollapsed);
+                
+                onboardingWizard.classList.add('hidden');
+                mainDashboard.classList.remove('hidden');
+                
+                const themeToggleButton = document.getElementById('main-theme-toggle');
+                const newThemeIconName = state.settings.theme === 'dark' ? 'moon' : 'sun';
+                themeToggleButton.innerHTML = `<i data-lucide="${newThemeIconName}" class="w-5 h-5"></i>`;
+
+                const sidebarToggleButton = document.getElementById('sidebar-toggle');
+                const newSidebarIconName = state.sidebarCollapsed ? 'panel-right-close' : 'panel-left-close';
+                sidebarToggleButton.innerHTML = `<i data-lucide="${newSidebarIconName}" class="w-3 h-3"></i>`;
+                
+                lucide.createIcons();
+            };
+
+            const handleProfilePicUpload = async (file) => {
+                 if (!file) return state.settings?.profilePic || null;
+                 return new Promise((resolve) => {
+                       const reader = new FileReader();
+                       reader.onload = (e) => resolve(e.target.result);
+                       reader.onerror = () => resolve(null);
+                       reader.readAsDataURL(file);
+                 });
+            };
+
+            // --- EVENT LISTENERS ---
+            document.getElementById('save-launch-btn').addEventListener('click', async () => {
+                const username = document.getElementById('username').value;
+                if (!username.trim()) { showToast('Please enter a username.', true); return; }
+                
+                state.settings = {
+                    username: username,
+                    profilePic: null,
+                    primaryColor: document.getElementById('primary-color').value,
+                    timeFormat: document.querySelector('input[name="time-format"]:checked').value,
+                    language: state.language,
+                    theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+                    customScripts: ''
+                };
+
+                const picFile = document.getElementById('profile-pic').files[0];
+                if (picFile) {
+                    state.settings.profilePic = await handleProfilePicUpload(picFile);
+                }
+                saveState();
+                initializeDashboard();
+            });
+
+            const toggleTheme = () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                document.documentElement.classList.toggle('light', !isDark);
+                if (state.settings) {
+                    state.settings.theme = isDark ? 'dark' : 'light';
+                    saveState();
+                }
+                
+                const themeToggleButton = document.getElementById('main-theme-toggle');
+                if (themeToggleButton) {
+                    const newIconName = isDark ? 'moon' : 'sun';
+                    themeToggleButton.innerHTML = `<i data-lucide="${newIconName}" class="w-5 h-5"></i>`;
+                }
+                lucide.createIcons();
+            };
+
+            const toggleLanguage = () => {
+                const currentLang = state.settings?.language || state.language;
+                const newLang = currentLang === 'en' ? 'es' : 'en';
+                
+                if (state.settings) {
+                    state.settings.language = newLang;
+                }
+                state.language = newLang; 
+                
+                applyTranslations();
+                
+                if (state.settings) {
+                    saveState();
+                    updateClockAndGreeting();
+                }
+            };
+            
+            // --- MOBILE SWIPE LOGIC ---
+            let touchStartX = 0;
+            const mainContentArea = document.getElementById('main-content-area');
+            mainContentArea.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, { passive: true });
+            mainContentArea.addEventListener('touchend', e => {
+                if (e.changedTouches[0].screenX > touchStartX + 75 && window.innerWidth <= 768) {
+                    sidebar.classList.add('mobile-visible');
+                    document.getElementById('mobile-overlay').classList.remove('hidden');
+                }
+            });
+
+            document.getElementById('onboarding-theme-toggle').addEventListener('click', () => {
+                 document.documentElement.classList.toggle('dark');
+                 document.documentElement.classList.toggle('light');
+            });
+            document.getElementById('onboarding-lang-toggle').addEventListener('click', toggleLanguage);
+            document.getElementById('main-theme-toggle').addEventListener('click', toggleTheme);
+            document.getElementById('main-lang-toggle').addEventListener('click', toggleLanguage);
+            document.getElementById('add-new-app-btn').addEventListener('click', () => showAppModal());
+            document.getElementById('user-profile-settings-btn').addEventListener('click', () => setActiveApp('settings'));
+            document.getElementById('help-btn').addEventListener('click', showHelpModal);
+            
+            document.getElementById('add-workspace-btn').addEventListener('click', () => showWorkspaceModal());
+            document.getElementById('edit-workspace-btn').addEventListener('click', () => {
+                const ws = state.workspaces.find(w => w.id == state.activeWorkspaceId);
+                if (ws) showWorkspaceModal(ws);
+            });
+            document.getElementById('delete-workspace-btn').addEventListener('click', () => {
+                 if (state.workspaces.length <= 1) {
+                      showToast('Cannot delete the last workspace.', true);
+                      return;
+                 }
+                showConfirmationModal('areYouSure', () => {
+                    state.workspaces = state.workspaces.filter(w => w.id != state.activeWorkspaceId);
+                    state.activeWorkspaceId = state.workspaces[0]?.id || null;
+                    saveState();
+                    renderWorkspaceSwitcher();
+                    renderAppList();
+                });
+            });
+
+            document.getElementById('workspace-switcher').addEventListener('change', (e) => {
+                state.activeWorkspaceId = e.target.value;
+                saveState();
+                renderAppList();
+            });
+
+            document.getElementById('sidebar-toggle').addEventListener('click', () => {
+                 if (window.innerWidth <= 768) {
+                      sidebar.classList.add('mobile-visible');
+                      document.getElementById('mobile-overlay').classList.remove('hidden');
+                 } else {
+                      state.sidebarCollapsed = !state.sidebarCollapsed;
+                      sidebar.classList.toggle('collapsed', state.sidebarCollapsed);
+                      const sidebarToggleButton = document.getElementById('sidebar-toggle');
+                      const newSidebarIconName = state.sidebarCollapsed ? 'panel-right-close' : 'panel-left-close';
+                      sidebarToggleButton.innerHTML = `<i data-lucide="${newSidebarIconName}" class="w-3 h-3"></i>`;
+                      lucide.createIcons();
+                      saveState();
+                 }
+            });
+            document.getElementById('mobile-close-sidebar').onclick = () => {
+                sidebar.classList.remove('mobile-visible');
+                document.getElementById('mobile-overlay').classList.add('hidden');
+            };
+            document.getElementById('mobile-overlay').onclick = () => document.getElementById('mobile-close-sidebar').click();
+
+            // Default app button listeners
+            document.querySelector('[data-app-id="default-1"]').addEventListener('click', () => setActiveApp('default-1', null));
+            document.querySelector('[data-app-id="default-2"]').addEventListener('click', () => setActiveApp('default-2', 'https://www.tldraw.com/'));
+
+
+            // --- INITIAL LOAD ---
+            if (state.settings) {
+                initializeDashboard();
+            } else {
+                onboardingWizard.classList.remove('hidden');
+                applyThemeAndColor();
+                applyTranslations();
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>
