@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Table Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #DF1783;
+            /* Light Theme */
+            --bg-primary: #f3f4f6;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e5e7eb;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --border-color: #d1d5db;
+            --shadow-inset: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+        }
+
+        body.dark {
+            --primary-color: #DF1783;
+            /* Dark Theme */
+            --bg-primary: #1f2937;
+            --bg-secondary: #374151;
+            --bg-tertiary: #4b5563;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --border-color: #4b5563;
+            --shadow-inset: inset 0 2px 4px 0 rgb(0 0 0 / 0.2);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        aside {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+        }
+
+        h1, .legend-title, .theme-toggle-card label { color: var(--text-primary); }
+        p { color: var(--text-secondary); }
+        .form-label { color: var(--text-secondary); font-size: 14px; }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-tertiary); }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        .form-input, .form-select, .form-textarea, .form-radio {
+            background-color: var(--bg-primary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-inset);
+        }
+        .form-input::placeholder, .form-textarea::placeholder { color: var(--text-secondary); opacity: 0.7; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { --tw-ring-color: var(--primary-color); border-color: var(--primary-color); }
+        .form-radio:checked { background-color: var(--primary-color); border-color: var(--primary-color); }
+
+        .fieldset-card, .theme-toggle-card {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            border-width: 1px;
+            margin-bottom: 1.5rem;
+        }
+        .legend-title { font-size: 1.25rem; font-weight: 600; padding: 0 0.5rem; }
+        
+        #preview-area {
+             background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+             background-size: 20px 20px;
+             background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        [x-cloak] { display: none !important; }
+
+        [contenteditable="true"] {
+            outline: 2px dashed var(--primary-color);
+            background-color: rgba(223, 23, 131, 0.1);
+        }
+        
+        .toggle-label { background-color: var(--bg-tertiary); }
+        .toggle-checkbox:checked + .toggle-label { background-color: #48bb78; }
+    </style>
+</head>
+<body class="dark">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- CONTROLS PANEL -->
+        <aside class="w-full md:w-1/3 lg:w-1/4 h-screen overflow-y-auto p-6 border-r">
+            <h1 class="text-2xl font-bold mb-2">Pricing Table Generator</h1>
+            <p class="mb-6">Customize your pricing table on the left. Double-click text on the preview to edit it directly.</p>
+            
+            <div class="theme-toggle-card flex items-center justify-between p-4 rounded-lg border mb-6">
+                <label for="themeToggle" class="text-base font-semibold">Generator Theme</label>
+                <div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" name="themeToggle" id="themeToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/><label for="themeToggle" class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer"></label></div>
+            </div>
+
+            <!-- SECTIONS -->
+            <fieldset class="fieldset-card">
+                <legend class="legend-title">Global Settings</legend>
+                <div class="space-y-4 mt-4">
+                    <div class="flex items-center justify-between">
+                         <label for="showHeader" class="form-label mb-0">Show Header Banner</label>
+                         <div class="relative inline-block w-10 mr-2 align-middle select-none"><input type="checkbox" name="showHeader" id="showHeader" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/><label for="showHeader" class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer"></label></div>
+                    </div>
+                    <div id="header-options" class="space-y-4">
+                        <div><label for="headerTitle" class="form-label">Title</label><input type="text" id="headerTitle" placeholder="Header Title" value="Choose Your Plan" class="form-input w-full"></div>
+                        <div><label for="headerSubtitle" class="form-label">Subtitle</label><input type="text" id="headerSubtitle" placeholder="Header Subtitle" value="Flexible pricing for teams of all sizes." class="form-input w-full"></div>
+                        <div><label for="headerBgColor" class="form-label">Background Color</label><input type="color" id="headerBgColor" value="#1F2937" class="w-full h-10 p-1 form-input"></div>
+                        <div><label for="headerBgImage" class="form-label">BG Image URL (Optional)</label><input type="text" id="headerBgImage" placeholder="https://example.com/image.png" class="form-input w-full"></div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="fieldset-card">
+                <legend class="legend-title">Tabs & Plans</legend>
+                <div class="space-y-4 mt-4">
+                    <div>
+                        <label class="form-label">Number of Tabs</label>
+                        <div class="flex items-center space-x-4 mt-1">
+                            <label class="flex items-center"><input type="radio" name="numTabs" value="1" class="form-radio" checked><span class="ml-2">1 Tab</span></label>
+                            <label class="flex items-center"><input type="radio" name="numTabs" value="2" class="form-radio"><span class="ml-2">2 Tabs</span></label>
+                        </div>
+                    </div>
+                    <div id="tabNamesContainer" class="space-y-4">
+                        <div><label for="tab1Name" class="form-label">Tab 1 Name</label><input type="text" id="tab1Name" placeholder="e.g., Monthly" value="Monthly" class="form-input w-full"></div>
+                        <div id="tab2NameContainer" class="hidden"><label for="tab2Name" class="form-label">Tab 2 Name</label><input type="text" id="tab2Name" placeholder="e.g., Yearly" value="Yearly" class="form-input w-full"></div>
+                    </div>
+                    <div>
+                        <label for="numColumns" class="form-label">Number of Plans: <span id="numColumnsValue">3</span></label>
+                        <input type="range" id="numColumns" min="1" max="4" value="3" class="w-full h-2 rounded-lg appearance-none cursor-pointer" style="background-color: var(--bg-tertiary);">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="fieldset-card">
+                <legend class="legend-title">Color & Style</legend>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div><label for="primaryColor" class="form-label">Primary Color</label><input type="color" id="primaryColor" value="#DF1783" class="w-full h-10 p-1 form-input"></div>
+                    <div><label for="previewBgColor" class="form-label">Preview BG</label><input type="color" id="previewBgColor" value="#FFFFFF" class="w-full h-10 p-1 form-input"></div>
+                    <div><label for="headerTitleColor" class="form-label">Header Title</label><input type="color" id="headerTitleColor" value="#FFFFFF" class="w-full h-10 p-1 form-input"></div>
+                    <div><label for="headerSubtitleColor" class="form-label">Header Subtitle</label><input type="color" id="headerSubtitleColor" value="#E5E7EB" class="w-full h-10 p-1 form-input"></div>
+                    <div><label for="columnTitleColor" class="form-label">Plan Title</label><input type="color" id="columnTitleColor" value="#FFFFFF" class="w-full h-10 p-1 form-input"></div>
+                    <div><label for="priceColor" class="form-label">Price Text</label><input type="color" id="priceColor" value="#FFFFFF" class="w-full h-10 p-1 form-input"></div>
+                    <div><label for="featureTextColor" class="form-label">Feature Text</label><input type="color" id="featureTextColor" value="#D1D5DB" class="w-full h-10 p-1 form-input"></div>
+                    <div><label for="buttonTextColor" class="form-label">Button Text</label><input type="color" id="buttonTextColor" value="#FFFFFF" class="w-full h-10 p-1 form-input"></div>
+                    <div><label for="columnBgColor" class="form-label">Plan BG</label><input type="color" id="columnBgColor" value="#111827" class="w-full h-10 p-1 form-input"></div>
+                    <div><label for="borderColor" class="form-label">Border Color</label><input type="color" id="borderColor" value="#4B5563" class="w-full h-10 p-1 form-input"></div>
+                </div>
+                <div class="space-y-4 mt-4">
+                     <div>
+                        <label for="previewBgOpacity" class="form-label">Preview BG Opacity: <span id="previewBgOpacityValue">1.00</span></label>
+                        <input type="range" id="previewBgOpacity" min="0" max="1" step="0.05" value="1" class="w-full h-2 rounded-lg appearance-none cursor-pointer" style="background-color: var(--bg-tertiary);">
+                    </div>
+                    <div>
+                        <label for="columnBgOpacity" class="form-label">Plan BG Opacity: <span id="columnBgOpacityValue">1.00</span></label>
+                        <input type="range" id="columnBgOpacity" min="0" max="1" step="0.05" value="1" class="w-full h-2 rounded-lg appearance-none cursor-pointer" style="background-color: var(--bg-tertiary);">
+                    </div>
+                </div>
+            </fieldset>
+
+            <div id="columns-container"></div>
+            
+             <fieldset class="fieldset-card">
+                <legend class="legend-title">Export & Embed</legend>
+                 <div class="mt-4 space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-base" style="color: var(--text-primary);">1. Local Export</h5>
+                        <div class="flex gap-2 mt-2">
+                             <button id="downloadCodeBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition">Download HTML</button>
+                        </div>
+                    </div>
+                    <hr style="border-color: var(--border-color);">
+                     <div>
+                        <h3 class="font-semibold text-base" style="color: var(--text-primary);">2. Generate Embeddable Iframe</h5>
+                        <p class="text-sm mt-1" style="color: var(--text-secondary);">Saves the file to your GitHub repo and creates an iframe snippet.</p>
+                        <div class="space-y-3 mt-4">
+                            <div><label for="githubUser" class="form-label">GitHub Username</label><input type="text" id="githubUser" placeholder="Your GitHub Username" class="form-input w-full"></div>
+                            <div><label for="githubRepo" class="form-label">GitHub Repository Name</label><input type="text" id="githubRepo" placeholder="e.g., pricing-tables" class="form-input w-full"></div>
+                            <div><label for="githubToken" class="form-label">GitHub Personal Access Token</label><input type="password" id="githubToken" placeholder="ghp_..." class="form-input w-full"></div>
+                            <button id="generateEmbedBtn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">Generate Embed Code</button>
+                        </div>
+                    </div>
+                    <div id="embed-output-container" class="hidden mt-4">
+                        <label class="form-label">Your Iframe Embed Code:</label>
+                        <textarea id="iframe-output" rows="4" class="form-textarea w-full text-xs font-mono" readonly></textarea>
+                        <button id="copyIframeBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition mt-2">Copy Iframe</button>
+                    </div>
+                     <div id="github-status" class="text-sm mt-2"></div>
+                 </div>
+            </fieldset>
+        </aside>
+
+        <main id="preview-area" class="w-full md:w-2/3 lg:w-3/4 h-screen overflow-y-auto p-4 md:p-8">
+            <div id="preview-content" class="w-full h-full"></div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const config = {
+                numTabs: 1, tab1Name: 'Monthly', tab2Name: 'Yearly', numColumns: 3,
+                header: { show: true, title: 'Choose Your Plan', subtitle: 'Flexible pricing for teams of all sizes.', bgColor: '#1F2937', bgImage: '' },
+                style: {
+                    primaryColor: '#DF1783',
+                    headerTitleColor: '#FFFFFF', headerSubtitleColor: '#E5E7EB',
+                    columnTitleColor: '#FFFFFF', priceColor: '#FFFFFF', featureTextColor: '#D1D5DB',
+                    buttonTextColor: '#FFFFFF', columnBgColor: '#111827', borderColor: '#4B5563',
+                    columnBgOpacity: 1
+                },
+                columns: [
+                    { title: 'Starter', imageUrl: 'https://placehold.co/600x400/111827/FFF?text=Starter', showImage: true, pricePrefix: '$', priceAmount: '29', priceSuffix: '/mo', badge: '', buttonText: 'Get Started', buttonUrl: '#', features: ['10 Team Members', '5 Projects', 'Basic Analytics', 'Email Support'], showBorder: false, borderWeight: 0 },
+                    { title: 'Business', imageUrl: 'https://placehold.co/600x400/111827/FFF?text=Business', showImage: true, pricePrefix: '$', priceAmount: '79', priceSuffix: '/mo', badge: 'Most Popular', buttonText: 'Choose Plan', buttonUrl: '#', features: ['50 Team Members', 'Unlimited Projects', 'Advanced Analytics', 'Priority Support', 'API Access'], showBorder: true, borderWeight: 2 },
+                    { title: 'Enterprise', imageUrl: 'https://placehold.co/600x400/111827/FFF?text=Enterprise', showImage: true, pricePrefix: '', priceAmount: 'Custom', priceSuffix: '', badge: '', buttonText: 'Contact Us', buttonUrl: '#', features: ['Unlimited Members', 'Dedicated Manager', 'Custom Integrations', '24/7 Support', 'SLA'], showBorder: false, borderWeight: 0 },
+                    { title: 'Free', imageUrl: 'https://placehold.co/600x400/111827/FFF?text=Free', showImage: true, pricePrefix: '$', priceAmount: '0', priceSuffix: '/mo', badge: '', buttonText: 'Sign Up', buttonUrl: '#', features: ['1 User', '1 Project', 'Basic Features'], showBorder: false, borderWeight: 0 }
+                ]
+            };
+            
+            const controls = {
+                themeToggle: document.getElementById('themeToggle'),
+                showHeader: document.getElementById('showHeader'),
+                headerOptions: document.getElementById('header-options'),
+                headerTitle: document.getElementById('headerTitle'),
+                headerSubtitle: document.getElementById('headerSubtitle'),
+                headerBgColor: document.getElementById('headerBgColor'),
+                headerBgImage: document.getElementById('headerBgImage'),
+                tab1Name: document.getElementById('tab1Name'),
+                tab2NameContainer: document.getElementById('tab2NameContainer'),
+                tab2Name: document.getElementById('tab2Name'),
+                numColumns: document.getElementById('numColumns'),
+                numColumnsValue: document.getElementById('numColumnsValue'),
+                primaryColor: document.getElementById('primaryColor'),
+                previewBgColor: document.getElementById('previewBgColor'),
+                headerTitleColor: document.getElementById('headerTitleColor'),
+                headerSubtitleColor: document.getElementById('headerSubtitleColor'),
+                columnTitleColor: document.getElementById('columnTitleColor'),
+                priceColor: document.getElementById('priceColor'),
+                featureTextColor: document.getElementById('featureTextColor'),
+                buttonTextColor: document.getElementById('buttonTextColor'),
+                columnBgColor: document.getElementById('columnBgColor'),
+                borderColor: document.getElementById('borderColor'),
+                previewBgOpacity: document.getElementById('previewBgOpacity'),
+                previewBgOpacityValue: document.getElementById('previewBgOpacityValue'),
+                columnBgOpacity: document.getElementById('columnBgOpacity'),
+                columnBgOpacityValue: document.getElementById('columnBgOpacityValue'),
+                columnsContainer: document.getElementById('columns-container'),
+                downloadCodeBtn: document.getElementById('downloadCodeBtn'),
+                previewArea: document.getElementById('preview-area'),
+                previewContent: document.getElementById('preview-content'),
+                githubUser: document.getElementById('githubUser'),
+                githubRepo: document.getElementById('githubRepo'),
+                githubToken: document.getElementById('githubToken'),
+                generateEmbedBtn: document.getElementById('generateEmbedBtn'),
+                embedOutputContainer: document.getElementById('embed-output-container'),
+                iframeOutput: document.getElementById('iframe-output'),
+                copyIframeBtn: document.getElementById('copyIframeBtn'),
+                githubStatus: document.getElementById('github-status')
+            };
+
+            function getFullHtml() {
+                let html = controls.previewContent.innerHTML.replace(/ data-path="[^"]*"/g, '');
+                const alpineCdn = config.numTabs > 1 ? `<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"><\/script>` : '';
+                return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Pricing Plans</title><script src="https://cdn.tailwindcss.com"><\/script>${alpineCdn}<style>[x-cloak]{display:none!important}</style></head><body>${html}</body></html>`;
+            }
+
+            function setPropertyByPath(obj, path, value) {
+                const keys = path.split(/[.\[\]]/).filter(Boolean); let current = obj;
+                for (let i = 0; i < keys.length - 1; i++) { current = current[keys[i]]; }
+                current[keys[keys.length - 1]] = value;
+            }
+
+            function hexToRgba(hex, opacity) {
+                let r = 0, g = 0, b = 0;
+                if (hex.length == 4) { r = "0x" + hex[1] + hex[1]; g = "0x" + hex[2] + hex[2]; b = "0x" + hex[3] + hex[3]; } 
+                else if (hex.length == 7) { r = "0x" + hex[1] + hex[2]; g = "0x" + hex[3] + hex[4]; b = "0x" + hex[5] + hex[6]; }
+                return `rgba(${+r},${+g},${+b},${opacity})`;
+            }
+
+            function generateColumnControls() {
+                controls.columnsContainer.innerHTML = '';
+                for (let i = 0; i < config.numColumns; i++) {
+                    const col = config.columns[i];
+                    controls.columnsContainer.insertAdjacentHTML('beforeend', `
+                        <fieldset class="fieldset-card column-controls" data-index="${i}">
+                            <legend class="legend-title">Plan ${i + 1} Details</legend>
+                            <div class="space-y-4 mt-4">
+                                <div class="flex items-center justify-between"><label class="form-label mb-0">Show Top Image</label><div class="relative inline-block w-10 mr-2 align-middle"><input type="checkbox" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer column-showImage" ${col.showImage ? 'checked' : ''}/><label class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer"></label></div></div>
+                                <div class="column-image-options ${col.showImage ? '' : 'hidden'}"><label class="form-label">Image URL</label><input type="text" class="form-input w-full column-imageUrl" value="${col.imageUrl}"></div>
+                                <div><label class="form-label">Title</label><input type="text" class="form-input w-full column-title" value="${col.title}"></div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div><label class="form-label">Prefix</label><input type="text" class="form-input w-full column-pricePrefix" value="${col.pricePrefix}"></div>
+                                    <div><label class="form-label">Price</label><input type="text" class="form-input w-full column-priceAmount" value="${col.priceAmount}"></div>
+                                    <div><label class="form-label">Suffix</label><input type="text" class="form-input w-full column-priceSuffix" value="${col.priceSuffix}"></div>
+                                </div>
+                                <div><label class="form-label">Badge</label><input type="text" class="form-input w-full column-badge" value="${col.badge}"></div>
+                                <div class="flex items-center justify-between"><label class="form-label mb-0">Show Border</label><div class="relative inline-block w-10 mr-2 align-middle"><input type="checkbox" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer column-showBorder" ${col.showBorder ? 'checked' : ''}/><label class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer"></label></div></div>
+                                <div class="column-border-options ${col.showBorder ? '' : 'hidden'}">
+                                    <label class="form-label">Border Weight (px): <span class="column-borderWeightValue">${col.borderWeight}</span></label>
+                                    <input type="range" class="w-full h-2 rounded-lg appearance-none cursor-pointer column-borderWeight" min="0" max="10" step="1" value="${col.borderWeight}" style="background-color: var(--bg-tertiary);">
+                                </div>
+                                <div><label class="form-label">Button Text</label><input type="text" class="form-input w-full column-buttonText" value="${col.buttonText}"></div>
+                                <div><label class="form-label">Button URL</label><input type="text" class="form-input w-full column-buttonUrl" value="${col.buttonUrl}"></div>
+                                <div><label class="form-label">Features</label><div class="space-y-2 features-list">${col.features.map(f => `<div class="flex items-center gap-2"><input type="text" class="form-input feature-input" value="${f}"><button class="remove-feature-btn text-red-500 hover:text-red-400 p-1 rounded-full">&times;</button></div>`).join('')}</div><button class="add-feature-btn mt-2 text-indigo-400 hover:text-indigo-300 text-sm font-semibold">+ Add Feature</button></div>
+                            </div>
+                        </fieldset>`);
+                }
+            }
+
+            function renderPreview() {
+                const s = config.style;
+                const cssVars = `--primary-color: ${s.primaryColor}; --header-title-color: ${s.headerTitleColor}; --header-subtitle-color: ${s.headerSubtitleColor}; --column-title-color: ${s.columnTitleColor}; --price-color: ${s.priceColor}; --feature-text-color: ${s.featureTextColor}; --button-text-color: ${s.buttonTextColor};`;
+                
+                let headerStyle = `position: relative; z-index: 1; background-color: ${config.header.bgColor};`;
+                if (config.header.bgImage) {
+                    headerStyle = `position: relative; z-index: 1; background: url('${config.header.bgImage}'); background-size: cover; background-position: center;`;
+                }
+                const headerOverlay = config.header.bgImage ? `<div class="absolute inset-0 bg-black opacity-50 rounded-2xl" style="z-index: -1;"></div>` : '';
+
+                const headerHtml = config.header.show ? `<div class="relative mx-auto max-w-4xl text-center rounded-2xl p-8" style="${headerStyle}">${headerOverlay}<h2 data-path="header.title" class="text-3xl font-bold tracking-tight sm:text-4xl" style="color: var(--header-title-color);">${config.header.title}</h2><p data-path="header.subtitle" class="mt-2 text-lg leading-8" style="color: var(--header-subtitle-color);">${config.header.subtitle}</p></div>` : '';
+                
+                const columnsHtml = (tabIndex) => Array.from({ length: config.numColumns }, (_, i) => {
+                    const col = config.columns[i]; let priceAmount = col.priceAmount;
+                    if (tabIndex === 1 && !isNaN(parseFloat(priceAmount))) { priceAmount = (parseFloat(priceAmount) * 10).toFixed(0); }
+                    const columnStyle = `background-color: ${hexToRgba(s.columnBgColor, s.columnBgOpacity)}; ${col.showBorder ? `border: ${col.borderWeight}px solid ${s.borderColor};` : ''}`;
+                    
+                    return `<div class="relative w-5/6 flex-shrink-0 md:w-full pt-4">
+                        ${col.badge ? `<div class="absolute top-0 left-1/2 -translate-x-1/2 z-10 py-1.5 px-4 text-xs font-semibold rounded-full truncate" style="background-color: var(--primary-color); color: var(--button-text-color); max-width: 120px;">${col.badge}</div>` : ''}
+                        <div class="flex flex-col rounded-2xl shadow-lg h-full" style="${columnStyle}">
+                            ${col.showImage && col.imageUrl ? `<img src="${col.imageUrl}" alt="${col.title} plan image" class="h-48 w-full object-cover rounded-t-2xl">` : ''}
+                            <div class="p-6 sm:p-8 flex flex-col flex-1">
+                                <h3 data-path="columns[${i}].title" class="text-xl font-semibold" style="color: var(--column-title-color);">${col.title}</h3>
+                                <div class="mt-4 flex items-baseline" style="color: var(--price-color);">
+                                    <span data-path="columns[${i}].pricePrefix" class="ml-1 text-xl font-semibold">${col.pricePrefix}</span>
+                                    <span data-path="columns[${i}].priceAmount" class="text-4xl font-bold tracking-tight">${priceAmount}</span>
+                                    <span data-path="columns[${i}].priceSuffix" class="ml-1 text-xl font-semibold">${col.priceSuffix}</span>
+                                </div>
+                                <ul role="list" class="mt-8 space-y-4 flex-1" style="color: var(--feature-text-color);">${col.features.map((f, fi) => `<li class="flex items-start"><svg class="flex-shrink-0 h-6 w-6" style="color: var(--primary-color);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M4.5 12.75l6 6 9-13.5"></path></svg><span data-path="columns[${i}].features[${fi}]" class="ml-3 text-sm">${f}</span></li>`).join('')}</ul>
+                                <a href="${col.buttonUrl}" class="mt-8 block rounded-lg py-3 px-6 text-center text-base font-semibold shadow-sm hover:opacity-90" style="background-color: var(--primary-color); color: var(--button-text-color);"><span data-path="columns[${i}].buttonText">${col.buttonText}</span></a>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+
+                const tabSwitcher = config.numTabs > 1 ? `<div class="mt-6 flex justify-center"><div class="flex rounded-full p-1" style="background-color: ${hexToRgba(s.columnBgColor, 0.8)};">
+                    <button @click="activeTab = 'tab1'" :style="activeTab === 'tab1' ? { backgroundColor: 'var(--primary-color)' } : {}" class="px-5 py-2 text-sm font-semibold rounded-full transition-colors duration-300" style="color: var(--button-text-color);">${config.tab1Name}</button>
+                    <button @click="activeTab = 'tab2'" :style="activeTab === 'tab2' ? { backgroundColor: 'var(--primary-color)' } : {}" class="px-5 py-2 text-sm font-semibold rounded-full transition-colors duration-300" style="color: var(--button-text-color);">${config.tab2Name}</button>
+                    </div></div>` : '';
+                
+                const responsiveColsContainer = (tabIndex) => `<div class="isolate mx-auto mt-10"><div class="flex overflow-x-auto space-x-8 md:space-x-0 md:grid md:grid-cols-${config.numColumns} md:gap-8 pb-4 -mx-6 px-6 md:mx-0 md:px-0">${columnsHtml(tabIndex)}</div></div>`;
+
+                controls.previewContent.innerHTML = `<div class="py-12 sm:py-16 w-full" style="${cssVars}"><div class="mx-auto max-w-7xl px-6 lg:px-8" x-data="{ activeTab: 'tab1' }">${headerHtml}${tabSwitcher}<div x-show="activeTab === 'tab1'" x-transition>${responsiveColsContainer(0)}</div>${config.numTabs > 1 ? `<div x-show="activeTab === 'tab2'" x-cloak x-transition>${responsiveColsContainer(1)}</div>` : ''}</div></div>`;
+            }
+
+            function updateState() {
+                config.numTabs = parseInt(document.querySelector('input[name="numTabs"]:checked').value, 10);
+                config.tab1Name = controls.tab1Name.value; config.tab2Name = controls.tab2Name.value;
+                config.numColumns = parseInt(controls.numColumns.value, 10);
+                Object.assign(config.header, { show: controls.showHeader.checked, title: controls.headerTitle.value, subtitle: controls.headerSubtitle.value, bgColor: controls.headerBgColor.value, bgImage: controls.headerBgImage.value });
+                Object.assign(config.style, { primaryColor: controls.primaryColor.value, headerTitleColor: controls.headerTitleColor.value, headerSubtitleColor: controls.headerSubtitleColor.value, columnTitleColor: controls.columnTitleColor.value, priceColor: controls.priceColor.value, featureTextColor: controls.featureTextColor.value, buttonTextColor: controls.buttonTextColor.value, columnBgColor: controls.columnBgColor.value, borderColor: controls.borderColor.value, columnBgOpacity: controls.columnBgOpacity.value });
+                document.querySelectorAll('.column-controls').forEach((el, i) => { if (config.columns[i]) { Object.assign(config.columns[i], { showImage: el.querySelector('.column-showImage').checked, imageUrl: el.querySelector('.column-imageUrl').value, title: el.querySelector('.column-title').value, pricePrefix: el.querySelector('.column-pricePrefix').value, priceAmount: el.querySelector('.column-priceAmount').value, priceSuffix: el.querySelector('.column-priceSuffix').value, badge: el.querySelector('.column-badge').value, buttonText: el.querySelector('.column-buttonText').value, buttonUrl: el.querySelector('.column-buttonUrl').value, features: Array.from(el.querySelectorAll('.feature-input')).map(input => input.value), showBorder: el.querySelector('.column-showBorder').checked, borderWeight: el.querySelector('.column-borderWeight').value }); } });
+                controls.previewArea.style.backgroundColor = hexToRgba(controls.previewBgColor.value, controls.previewBgOpacity.value);
+                renderPreview();
+            }
+
+            function addEventListeners() {
+                document.querySelector('aside').addEventListener('input', (e) => {
+                    const id = e.target.id;
+                    const classList = e.target.classList;
+
+                    if (id.includes('Value')) { return; }
+                    if (id === 'numColumns') { controls.numColumnsValue.textContent = e.target.value; generateColumnControls(); } 
+                    else if (id === 'previewBgOpacity') { controls.previewBgOpacityValue.textContent = parseFloat(e.target.value).toFixed(2); }
+                    else if (id === 'columnBgOpacity') { controls.columnBgOpacityValue.textContent = parseFloat(e.target.value).toFixed(2); }
+                    else if (classList.contains('column-borderWeight')) { 
+                        e.target.closest('.column-border-options').querySelector('.column-borderWeightValue').textContent = e.target.value;
+                    }
+                    updateState();
+                });
+                document.querySelectorAll('input[name="numTabs"]').forEach(radio => radio.addEventListener('change', () => {
+                    controls.tab2NameContainer.classList.toggle('hidden', radio.value !== '2');
+                    updateState();
+                }));
+                controls.themeToggle.addEventListener('change', (e) => document.body.classList.toggle('dark', !e.target.checked));
+                controls.showHeader.addEventListener('change', () => controls.headerOptions.classList.toggle('hidden', !controls.showHeader.checked));
+                controls.columnsContainer.addEventListener('click', e => { if (e.target.matches('.add-feature-btn')) { e.preventDefault(); e.target.previousElementSibling.insertAdjacentHTML('beforeend', `<div class="flex items-center gap-2"><input type="text" class="form-input feature-input" value="New Feature"><button class="remove-feature-btn text-red-500 hover:text-red-400 p-1 rounded-full">&times;</button></div>`); } else if (e.target.matches('.remove-feature-btn')) { e.preventDefault(); e.target.parentElement.remove(); } else { return; } updateState(); });
+                controls.columnsContainer.addEventListener('change', e => { 
+                    if (e.target.matches('.column-showImage')) { e.target.closest('.column-controls').querySelector('.column-image-options').classList.toggle('hidden', !e.target.checked); }
+                    if (e.target.matches('.column-showBorder')) { e.target.closest('.column-controls').querySelector('.column-border-options').classList.toggle('hidden', !e.target.checked); }
+                });
+                controls.previewContent.addEventListener('dblclick', (e) => {
+                    const target = e.target.closest('[data-path]'); if (!target) return;
+                    target.contentEditable = true; target.focus();
+                    const onEditEnd = () => { target.contentEditable = false; setPropertyByPath(config, target.dataset.path, target.innerText); target.removeEventListener('blur', onEditEnd); target.removeEventListener('keydown', onKeydown); updateState(); };
+                    const onKeydown = (ev) => { if (ev.key === 'Enter' || ev.key === 'Escape') { ev.preventDefault(); onEditEnd(); }};
+                    target.addEventListener('blur', onEditEnd); target.addEventListener('keydown', onKeydown);
+                });
+                
+                controls.downloadCodeBtn.addEventListener('click', () => { 
+                    const fullHtml = getFullHtml();
+                    const a = document.createElement('a'); 
+                    a.href = URL.createObjectURL(new Blob([fullHtml], { type: 'text/html' })); 
+                    a.download = 'pricing-table.html'; 
+                    document.body.appendChild(a); a.click(); document.body.removeChild(a); 
+                });
+
+                controls.generateEmbedBtn.addEventListener('click', async () => {
+                    const user = controls.githubUser.value.trim();
+                    const repo = controls.githubRepo.value.trim();
+                    const token = controls.githubToken.value.trim();
+                    const statusEl = controls.githubStatus;
+
+                    if (!user || !repo || !token) {
+                        statusEl.textContent = 'Please fill in all GitHub fields.';
+                        statusEl.style.color = 'red';
+                        return;
+                    }
+                    statusEl.textContent = 'Generating and uploading...';
+                    statusEl.style.color = 'inherit';
+
+                    const fileName = `pricing-table-${Date.now()}.html`;
+                    const fullHtml = getFullHtml();
+                    const content = btoa(unescape(encodeURIComponent(fullHtml))); // Correctly encode UTF-8 to Base64
+
+                    const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/tables/${fileName}`;
+
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${token}`,
+                                'Accept': 'application/vnd.github.v3+json'
+                            },
+                            body: JSON.stringify({
+                                message: 'Add new pricing table',
+                                content: content
+                            })
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            statusEl.textContent = 'Successfully uploaded to GitHub!';
+                            statusEl.style.color = 'green';
+                            const publicUrl = `https://${user}.github.io/${repo}/tables/${fileName}`;
+                            const iframeCode = `<iframe src="${publicUrl}" style="width:100%; height:800px; border:0;" title="Pricing Table"></iframe>`;
+                            controls.iframeOutput.value = iframeCode;
+                            controls.embedOutputContainer.classList.remove('hidden');
+                        } else {
+                            throw new Error(result.message || 'Failed to upload to GitHub.');
+                        }
+                    } catch (error) {
+                        statusEl.textContent = `Error: ${error.message}`;
+                        statusEl.style.color = 'red';
+                    }
+                });
+
+                controls.copyIframeBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(controls.iframeOutput.value).then(() => {
+                        controls.copyIframeBtn.textContent = 'Copied!';
+                        setTimeout(() => controls.copyIframeBtn.textContent = 'Copy Iframe', 2000);
+                    });
+                });
+            }
+            function init() { 
+                controls.themeToggle.checked = !document.body.classList.contains('dark');
+                generateColumnControls(); 
+                addEventListeners(); 
+                updateState(); 
+            }
+            init();
+        });
+    </script>
+</body>
+</html>
+
