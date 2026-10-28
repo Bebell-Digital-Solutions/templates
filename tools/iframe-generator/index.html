@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de iFrame</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://bucket.mlcdn.com/a/3336/3336910/images/8693866308ced9e7451285a4fc716d1d589c8bc4.png">    
+    
+    <style>
+        :root {
+            --primary-color: #DF1783;
+            --hover-color: #BF146E;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+        }
+        
+        .lang-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: var(--primary-color); /* #DF1783 */
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s, background-color 0.3s;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .lang-toggle-btn:hover {
+            transform: scale(1.05);
+            background-color: var(--hover-color);
+        }
+        
+        .lang-toggle-icon {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 30px;
+            width: 100%;
+        }
+        
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .brand-logo {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+        }
+
+        .brand-text {
+            font-size: clamp(1.5rem, 4vw, 1.7rem);
+            font-weight: bold;
+            color: #000;
+            white-space: nowrap;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            margin-top: 0;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .generator-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            box-sizing: border-box;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input[type="url"], select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        
+        input[type="url"]:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(223, 23, 131, 0.2);
+        }
+        
+        .dimensions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .dimensions .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .result {
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .result-label {
+            font-weight: bold;
+        }
+        
+        .copy-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+        
+        .copy-btn:hover {
+            background-color: #3e8e41;
+        }
+        
+        .copy-btn.copied {
+            background-color: #2196F3;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        
+        .preview {
+            margin-top: 1rem;
+            border: 1px dashed #ccc;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .preview-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* ===== FAQ ACCORDION ===== */
+        .faq-section {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            box-sizing: border-box;
+        }
+        
+        .faq-item {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+        
+        .faq-item summary {
+            padding: 1rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        
+        .faq-item summary::-webkit-details-marker {
+            display: none;
+        }
+        
+        .faq-item summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            transition: transform 0.3s;
+        }
+        
+        .faq-item[open] summary::after {
+            transform: rotate(45deg);
+        }
+        
+        .faq-content {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            color: #555;
+        }
+        
+        .faq-content ol {
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+        
+        .faq-content li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .drive-badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #1967d2;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            vertical-align: middle;
+            font-weight: normal;
+        }
+
+        /* ===== TOOLTIPS ===== */
+        .has-tooltip {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted #999;
+            display: inline-block;
+        }
+
+        .has-tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, bottom 0.3s;
+            pointer-events: none;
+            z-index: 100;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-weight: normal;
+        }
+        
+        .has-tooltip::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, bottom 0.3s;
+            margin-bottom: -2px;
+        }
+
+        .has-tooltip:hover::after,
+        .has-tooltip:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px 20px;
+            position: fixed;
+            z-index: 1001;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: visibility 0s, opacity 0.3s, bottom 0.3s;
+            opacity: 0;
+        }
+
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+
+        .toast.error {
+            background-color: #e74c3c;
+        }
+
+        .toast.success {
+            background-color: #2ecc71;
+        }
+
+        /* ===== ADVANCED OPTIONS & BUTTONS ===== */
+        .advanced-options {
+            margin-bottom: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            background: #fafafa;
+        }
+        
+        .advanced-options summary {
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            color: #555;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .advanced-options summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .advanced-options summary::after {
+            content: '▼';
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+
+        .advanced-options[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .advanced-content {
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+        }
+        
+        .checkbox-group {
+            margin-bottom: 0.8rem;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .checkbox-group input {
+            margin-right: 8px;
+            width: auto;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .secondary-btn {
+            background-color: #f1f1f1;
+            color: #333;
+            width: auto;
+            flex: 0 0 auto;
+        }
+        
+        .secondary-btn:hover {
+            background-color: #ddd;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding-top: 30px;
+            background: transparent;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 12px;
+            width: 100%;
+            border-radius: 7px;
+            z-index: 10;
+            margin: 0 auto;
+            max-width: 820px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 0;
+            flex-wrap: wrap;
+            padding: 0.25rem;
+        }
+
+        .social-link {
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius);
+            background: white;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+        }
+
+        .social-link:hover {
+            color: var(--text);
+            background: var(--card);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .bebell-footer {
+            padding: 20px;
+        }
+
+        .bebell-footer p {
+            align-items: center;
+            text-align: center;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .bebell-link {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .bebell-link:hover {
+            color: #df1783;
+        }
+        
+        .faq-title {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .generator-card {
+                padding: 1.5rem;
+            }
+            
+            .header {
+                gap: 10px;
+            }
+            
+            .brand {
+                gap: 8px;
+            }
+            
+            .lang-toggle-btn {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .generator-card {
+                padding: 1rem;
+            }
+            
+            .dimensions .form-group {
+                min-width: 100%;
+            }
+            
+            .brand-text {
+                white-space: normal;
+                text-align: center;
+            }
+            
+            .custom-image {
+                width: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="lang-toggle-btn" class="lang-toggle-btn" title="Translate / Traducir">
+        <img src="https://bucket.mlcdn.com/a/3336/3336910/images/a39a5b843d7bf446387d4791fb7e71fddf180e94.png" alt="Translation Icon" class="lang-toggle-icon">
+    </button>
+
+
+
+
+    
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header">
+                <div class="brand">
+                    <img src="https://bucket.mlcdn.com/a/3336/3336910/images/c506fa1172c62b4aeed105882b84095ade5e6a2a.png" alt="VibeCoding Studio Logo" class="brand-logo">
+                    <span class="brand-text" data-i18n="title">Generador de iFrame</span>
+                </div>
+                <p class="subtitle" data-i18n="subtitle">Crea códigos de inserción para todos tus proyectos web</p>
+            </div>
+        </header>
+    </div>
+    
+    <div class="generator-card">
+        <div class="form-group">
+            <label for="url">
+                <span class="has-tooltip" data-i18n="urlLabel" data-i18n-tooltip="tooltipUrl" data-tooltip="Ingresa la URL completa incluyendo https://">URL del Sitio Web</span> 
+                <span id="drive-badge" class="drive-badge" style="display: none;" data-i18n="driveDetected">Carpeta de Drive Detectada</span>
+                <span id="sheets-badge" class="drive-badge" style="display: none; background: #e6f4ea; color: #1e8e3e;" data-i18n="sheetsDetected">Hoja de Cálculo Detectada</span>
+                <span id="docs-badge" class="drive-badge" style="display: none; background: #e8f0fe; color: #1565c0;" data-i18n="docsDetected">Documento de Google Detectado</span>
+            </label>
+            <input type="url" id="url" data-i18n-placeholder="urlPlaceholder" placeholder="https://ejemplo.com" required>
+        </div>  
+        
+        <div class="form-group" id="drive-options" style="display: none;">
+            <label for="drive-view">
+                <span class="has-tooltip" data-i18n="driveViewLabel" data-i18n-tooltip="tooltipDriveView" data-tooltip="Elige cómo se mostrarán los archivos">Vista de Google Drive</span>
+            </label>
+            <select id="drive-view">
+                <option value="list" data-i18n="driveViewList">Lista</option>
+                <option value="grid" data-i18n="driveViewGrid">Cuadrícula</option>
+            </select>
+        </div>
+
+        <div class="dimensions">
+            <div class="form-group">
+                <label for="width">
+                    <span class="has-tooltip" data-i18n="widthLabel" data-i18n-tooltip="tooltipDims" data-tooltip="Usa % para diseño adaptativo o px para tamaño fijo">Ancho</span>
+                </label>
+                <select id="width">
+                    <option value="100%">100%</option>
+                    <option value="800px">800px</option>
+                    <option value="600px">600px</option>
+                    <option value="400px">400px</option>
+                    <option value="custom" data-i18n="customOption">Personalizado</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="height">
+                    <span class="has-tooltip" data-i18n="heightLabel" data-i18n-tooltip="tooltipDims" data-tooltip="Usa % para diseño adaptativo o px para tamaño fijo">Alto</span>
+                </label>
+                <select id="height">
+                    <option value="500px">500px</option>
+                    <option value="400px">400px</option>
+                    <option value="300px">300px</option>
+                    <option value="200px">200px</option>
+                    <option value="custom" data-i18n="customOption">Personalizado</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="dimensions" id="custom-dimensions" style="display: none;">
+            <div class="form-group">
+                <label for="custom-width" data-i18n="customWidthLabel">Ancho Personalizado</label>
+                <input type="text" id="custom-width" data-i18n-placeholder="customWidthPlaceholder" placeholder="ej. 350px u 80%">
+            </div>
+            
+            <div class="form-group">
+                <label for="custom-height" data-i18n="customHeightLabel">Alto Personalizado</label>
+                <input type="text" id="custom-height" data-i18n-placeholder="customHeightPlaceholder" placeholder="ej. 250px o 60%">
+            </div>
+        </div>
+        
+        <details class="advanced-options">
+            <summary>
+                <span class="has-tooltip" data-i18n="advancedOptions" data-i18n-tooltip="tooltipAdvanced" data-tooltip="Configuraciones extra para SEO y rendimiento">Opciones Avanzadas</span>
+            </summary>
+            <div class="advanced-content">
+                <div class="form-group">
+                    <label for="iframe-title" data-i18n="iframeTitleLabel">Título del iFrame (Accesibilidad/SEO)</label>
+                    <input type="text" id="iframe-title" data-i18n-placeholder="iframeTitlePlaceholder" placeholder="Ej. Mapa de ubicación">
+                </div>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="lazy-load" checked>
+                        <span data-i18n="lazyLoadLabel">Carga diferida (Mejora la velocidad de la página)</span>
+                    </label>
+                </div>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="show-border">
+                        <span data-i18n="showBorderLabel">Mostrar borde</span>
+                    </label>
+                </div>
+            </div>
+        </details>
+        
+        <div class="button-group">
+            <button id="generate-btn" data-i18n="generateBtn" style="flex: 1;">Generar Código iFrame</button>
+            <button id="clear-btn" class="secondary-btn has-tooltip" data-i18n="clearBtn" data-i18n-tooltip="tooltipClear" data-tooltip="Restablecer todos los campos">Limpiar</button>
+        </div>
+        
+        <div class="result" id="result">
+            <div class="result-header">
+                <div class="result-label" data-i18n="resultLabel">Tu Código iFrame:</div>
+                <button class="copy-btn" id="copy-btn" data-i18n="copyBtn">Copiar Código</button>
+            </div>
+            <textarea id="iframe-code" readonly></textarea>
+            
+            <div class="preview">
+                <div class="preview-label" data-i18n="previewLabel">Vista Previa:</div>
+                <div id="iframe-preview"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h2 class="faq-title" data-i18n="faqSectionTitle">Preguntas Frecuentes</h2>
+        
+        <details class="faq-item">
+            <summary data-i18n="faqWebTitle">¿Cómo insertar una página web normal?</summary>
+            <div class="faq-content">
+                <ol>
+                    <li data-i18n="faqWeb1">Abre la página web que deseas insertar en tu navegador.</li>
+                    <li data-i18n="faqWeb2">Copia la URL completa de la barra de direcciones (incluyendo https://).</li>
+                    <li data-i18n="faqWeb3">Pega la URL en el campo "URL del Sitio Web" de esta herramienta.</li>
+                    <li data-i18n="faqWeb4">Ajusta el ancho y alto según tus necesidades.</li>
+                    <li data-i18n="faqWeb5">Haz clic en "Generar Código iFrame" y copia el resultado.</li>
+                    <li data-i18n="faqWeb6">Nota: Algunos sitios web (como Google.com o Facebook) bloquean la inserción por motivos de seguridad (X-Frame-Options). Si la vista previa se muestra en blanco o con un error, el sitio no permite ser insertado.</li>
+                </ol>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary data-i18n="faqDriveTitle">¿Cómo insertar una carpeta de Google Drive?</summary>
+            <div class="faq-content">
+                <ol>
+                    <li data-i18n="faqDrive1">Ve a tu Google Drive.</li>
+                    <li data-i18n="faqDrive2">Haz clic derecho en la carpeta que deseas compartir.</li>
+                    <li data-i18n="faqDrive3">Selecciona "Compartir".</li>
+                    <li data-i18n="faqDrive4">Abre el menú desplegable de "Acceso general".</li>
+                    <li data-i18n="faqDrive5">Selecciona "Cualquier persona con el enlace".</li>
+                    <li data-i18n="faqDrive6">Haz clic en "Copiar enlace" y luego en "Hecho".</li>
+                    <li data-i18n="faqDrive7">Pega el enlace en el campo URL de arriba. Nuestra herramienta extraerá automáticamente el ID.</li>
+                    <li data-i18n="faqDrive8">Elige entre vista de Lista o Cuadrícula y haz clic en "Generar Código iFrame".</li>
+                </ol>
+            </div>
+        </details>
+        
+        <details class="faq-item">
+            <summary data-i18n="faqSheetsTitle">¿Cómo insertar una Hoja de Cálculo de Google (Google Sheets)?</summary>
+            <div class="faq-content">
+                <ol>
+                    <li data-i18n="faqSheets1">Para insertar una hoja de cálculo que se actualice en vivo en un sitio web, usa la función "Publicar en la web".</li>
+                    <li data-i18n="faqSheets2">Primero, abre tu hoja de cálculo, ve a Archivo > Compartir > Publicar en la web.</li>
+                    <li data-i18n="faqSheets3">Selecciona "Enlace", elige el documento entero o una hoja específica, y haz clic en "Publicar".</li>
+                    <li data-i18n="faqSheets4">Copia el enlace que te dan allí, o copia la URL normal de tu hoja de cálculo, y pégala en esta herramienta.</li>
+                    <li data-i18n="faqSheets5">Nuestra herramienta la convertirá automáticamente en el formato correcto para un iframe interactivo.</li>
+                </ol>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary data-i18n="faqDocsTitle">¿Cómo insertar un Documento de Google (Google Docs)?</summary>
+            <div class="faq-content">
+                <ol>
+                    <li data-i18n="faqDocs1">1. Prepara el documento: Abre tu Google Doc y haz clic en Archivo > Compartir > Publicar en la web.</li>
+                    <li data-i18n="faqDocs2">En el cuadro de diálogo, haz clic en Publicar para confirmar. Esta acción hace que el documento sea visible para cualquiera con el enlace.</li>
+                    <li data-i18n="faqDocs3">2. Genera el enlace: Cambia a la pestaña "Enlace" en el menú "Publicar en la web" y copia la URL generada.</li>
+                    <li data-i18n="faqDocs4">3. Inserta en tu sitio: Pega esa URL en nuestro generador de arriba para crear tu iframe personalizado y adaptable.</li>
+                    <li data-i18n="faqDocs5">Limitaciones: Solo lectura (no se pueden editar), Permisos (Debe ser "Cualquier persona con el enlace"), Formato (El formato complejo puede variar).</li>
+                </ol>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary data-i18n="faqYoutubeTitle">¿Cómo insertar un video de YouTube?</summary>
+            <div class="faq-content">
+                <ol>
+                    <li data-i18n="faqYoutube1">Ve al video de YouTube que quieres insertar.</li>
+                    <li data-i18n="faqYoutube2">Haz clic en el botón "Compartir" debajo del video.</li>
+                    <li data-i18n="faqYoutube3">Selecciona "Insertar" (el ícono con los símbolos < >).</li>
+                    <li data-i18n="faqYoutube4">Copia la URL que está dentro del atributo src="..." (normalmente se ve como https://www.youtube.com/embed/VIDEO_ID).</li>
+                    <li data-i18n="faqYoutube5">Pega ESA URL (no el enlace normal del video) en nuestra herramienta.</li>
+                </ol>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary data-i18n="faqMapsTitle">¿Cómo insertar un mapa de Google Maps?</summary>
+            <div class="faq-content">
+                <ol>
+                    <li data-i18n="faqMaps1">Busca tu ubicación en Google Maps.</li>
+                    <li data-i18n="faqMaps2">Haz clic en "Compartir" y luego selecciona la pestaña "Insertar un mapa".</li>
+                    <li data-i18n="faqMaps3">Copia solo la URL que está dentro de src="..." dentro del código que te dan.</li>
+                    <li data-i18n="faqMaps4">Pega esa URL en el generador.</li>
+                </ol>
+            </div>
+        </details>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="https://bebell-digital-solutions.github.io/iframe-generator" class="social-link" rel="noopener">
+                <span>🧰</span> <span data-i18n="footerIframe">Generador de iFrame</span>
+            </a>
+            <a href="https://bebell-digital-solutions.github.io/faq-builder-en" class="social-link" rel="noopener">
+                <span>🧰</span> <span data-i18n="footerFaq">Generador de FAQ</span>
+            </a>
+            <a href="https://bebell-digital-solutions.github.io/carousel-generator" class="social-link" rel="noopener">
+                <span>🧰</span> <span data-i18n="footerCarousel">Generador de Carrusel</span>
+            </a>
+            <a href="https://bebell-digital-solutions.github.io/magic-toolbox-database/en-v03" class="social-link" rel="noopener">
+                <span>🧰</span> <span data-i18n="footerMagic">Caja de Herramientas Mágica</span>
+            </a>
+            <a href="mailto:soporte@bebelldigitalsolutions.com" class="social-link" rel="noopener">
+                <span>📨</span> <span data-i18n="footerSupport">Soporte Técnico</span>
+            </a>
+        </div>
+
+        <div class="bebell-footer">
+            <p><span data-i18n="footerDev">Desarrollado con 💖 por</span>   
+                <a href="https://bebelldigitalsolutions.com" class="bebell-link">
+                    Bebell Digital Solutions.
+                </a><br>
+                <a id="copyrightYear"> © 2024 • Todos los derechos reservados.</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "iFrame Generator",
+                subtitle: "Create embed code for all your Web Projects",
+                urlLabel: "Website URL",
+                urlPlaceholder: "https://example.com",
+                widthLabel: "Width",
+                heightLabel: "Height",
+                customOption: "Custom",
+                customWidthLabel: "Custom Width",
+                customWidthPlaceholder: "e.g. 350px or 80%",
+                customHeightLabel: "Custom Height",
+                customHeightPlaceholder: "e.g. 250px or 60%",
+                generateBtn: "Generate iFrame Code",
+                resultLabel: "Your iFrame Code:",
+                copyBtn: "Copy Code",
+                previewLabel: "Preview:",
+                footerIframe: "iFrame Generator",
+                footerFaq: "FAQ Generator",
+                footerCarousel: "Carousel Generator",
+                footerMagic: "Magic Toolbox",
+                footerSupport: "Technical Support",
+                footerDev: "Developed with 💖 by",
+                alertUrl: "Please enter a website URL",
+                copiedText: "Copied!",
+                copyrightText: "All rights reserved.",
+                driveDetected: "Google Drive Folder Detected",
+                driveViewLabel: "Google Drive View",
+                driveViewList: "List",
+                driveViewGrid: "Grid",
+                faqDriveTitle: "How to embed a Google Drive folder",
+                faqDrive1: "Go to your Google Drive.",
+                faqDrive2: "Right-click on the folder.",
+                faqDrive3: "Select 'Share'.",
+                faqDrive4: "Open the 'General access' drop-down menu.",
+                faqDrive5: "Select 'Anyone with the link'.",
+                faqDrive6: "Click 'Copy link' and then 'Done'.",
+                faqDrive7: "Paste the link into the URL field above. Our tool will automatically detect the folder ID.",
+                faqDrive8: "Choose between List or Grid view and click 'Generate iFrame Code'.",
+                sheetsDetected: "Google Sheet Detected",
+                faqSheetsTitle: "How to embed a Google Sheet",
+                faqSheets1: "To embed a live, updating Google Sheet in a website, use the 'Publish to the web' feature.",
+                faqSheets2: "First, open your spreadsheet, go to File > Share > Publish to web.",
+                faqSheets3: "Select 'Link', choose the entire document or a specific sheet, and click 'Publish'.",
+                faqSheets4: "Copy the provided link or your standard spreadsheet URL and paste it into this tool.",
+                faqSheets5: "Our tool will automatically convert it into the correct interactive iframe format.",
+                docsDetected: "Google Doc Detected",
+                faqDocsTitle: "How to embed a Google Doc",
+                faqDocs1: "1. Prepare the Document: Open your Google Doc and click File > Share > Publish to web.",
+                faqDocs2: "In the dialog box, click Publish to confirm. This action makes the document viewable by anyone who has the link.",
+                faqDocs3: "2. Generate the Link: Switch to the 'Link' tab in the 'Publish to web' menu and copy the generated URL.",
+                faqDocs4: "3. Insert into Website: Paste that URL into our generator above to create your custom responsive iframe.",
+                faqDocs5: "Limitations to Note: View-Only (Embedded documents are read-only), Permissions (Must be 'Anyone with the link'), Formatting (Complex formatting may render differently).",
+                advancedOptions: "Advanced Options",
+                iframeTitleLabel: "iFrame Title (Accessibility/SEO)",
+                iframeTitlePlaceholder: "e.g. Location Map",
+                lazyLoadLabel: "Lazy Loading (Improves page speed)",
+                showBorderLabel: "Show Border",
+                clearBtn: "Clear",
+                faqWebTitle: "How to embed a standard webpage",
+                faqWeb1: "Open the webpage you want to embed in your browser.",
+                faqWeb2: "Copy the full URL from the address bar (including https://).",
+                faqWeb3: "Paste the URL into the 'Website URL' field of this tool.",
+                faqWeb4: "Adjust the width and height according to your needs.",
+                faqWeb5: "Click 'Generate iFrame Code' and copy the result.",
+                faqWeb6: "Note: Some websites (like Google.com or Facebook) block embedding for security reasons (X-Frame-Options). If the preview shows a blank space or an error, the site does not allow embedding.",
+                faqYoutubeTitle: "How to embed a YouTube video",
+                faqYoutube1: "Go to the YouTube video you want to embed.",
+                faqYoutube2: "Click the 'Share' button below the video.",
+                faqYoutube3: "Select 'Embed' (the icon with < > symbols).",
+                faqYoutube4: "Copy ONLY the URL inside the src=\"...\" attribute (usually looks like https://www.youtube.com/embed/VIDEO_ID).",
+                faqYoutube5: "Paste THAT URL (not the standard video link) into our tool.",
+                faqMapsTitle: "How to embed a Google Map",
+                faqMaps1: "Search for your location on Google Maps.",
+                faqMaps2: "Click 'Share' and then select the 'Embed a map' tab.",
+                faqMaps3: "Copy only the URL inside the src=\"...\" attribute from the provided code.",
+                faqMaps4: "Paste that URL into the generator.",
+                faqSectionTitle: "Frequently Asked Questions",
+                tooltipUrl: "Enter the complete URL including https://",
+                tooltipDriveView: "Choose how the files will be displayed",
+                tooltipDims: "Use % for responsiveness or px for fixed size",
+                tooltipAdvanced: "Extra configurations for SEO and performance",
+                tooltipClear: "Reset all fields"
+            },
+            es: {
+                title: "Generador de iFrame",
+                subtitle: "Crea códigos de inserción para todos tus proyectos web",
+                urlLabel: "URL del Sitio Web",
+                urlPlaceholder: "https://ejemplo.com",
+                widthLabel: "Ancho",
+                heightLabel: "Alto",
+                customOption: "Personalizado",
+                customWidthLabel: "Ancho Personalizado",
+                customWidthPlaceholder: "ej. 350px u 80%",
+                customHeightLabel: "Alto Personalizado",
+                customHeightPlaceholder: "ej. 250px o 60%",
+                generateBtn: "Generar Código iFrame",
+                resultLabel: "Tu Código iFrame:",
+                copyBtn: "Copiar Código",
+                previewLabel: "Vista Previa:",
+                footerIframe: "Generador de iFrame",
+                footerFaq: "Generador de FAQ",
+                footerCarousel: "Generador de Carrusel",
+                footerMagic: "Caja de Herramientas Mágica",
+                footerSupport: "Soporte Técnico",
+                footerDev: "Desarrollado con 💖 por",
+                alertUrl: "Por favor, ingresa la URL de un sitio web",
+                copiedText: "¡Copiado!",
+                copyrightText: "Todos los derechos reservados.",
+                driveDetected: "Carpeta de Drive Detectada",
+                driveViewLabel: "Vista de Google Drive",
+                driveViewList: "Lista",
+                driveViewGrid: "Cuadrícula",
+                faqDriveTitle: "Cómo insertar una carpeta de Google Drive",
+                faqDrive1: "Ve a tu Google Drive.",
+                faqDrive2: "Haz clic derecho en la carpeta.",
+                faqDrive3: "Selecciona 'Compartir'.",
+                faqDrive4: "Abre el menú desplegable de 'Acceso general'.",
+                faqDrive5: "Selecciona 'Cualquier persona con el enlace'.",
+                faqDrive6: "Haz clic en 'Copiar enlace' y luego en 'Hecho'.",
+                faqDrive7: "Pega el enlace en el campo URL de arriba. Nuestra herramienta extraerá automáticamente el ID.",
+                faqDrive8: "Elige entre vista de Lista o Cuadrícula y haz clic en 'Generar Código iFrame'.",
+                sheetsDetected: "Hoja de Cálculo Detectada",
+                faqSheetsTitle: "¿Cómo insertar una Hoja de Cálculo de Google (Google Sheets)?",
+                faqSheets1: "Para insertar una hoja de cálculo que se actualice en vivo en un sitio web, usa la función 'Publicar en la web'.",
+                faqSheets2: "Primero, abre tu hoja de cálculo, ve a Archivo > Compartir > Publicar en la web.",
+                faqSheets3: "Selecciona 'Enlace', elige el documento entero o una hoja específica, y haz clic en 'Publicar'.",
+                faqSheets4: "Copia el enlace que te dan allí, o copia la URL normal de tu hoja de cálculo, y pégala en esta herramienta.",
+                faqSheets5: "Nuestra herramienta la convertirá automáticamente en el formato correcto para un iframe interactivo.",
+                docsDetected: "Documento de Google Detectado",
+                faqDocsTitle: "¿Cómo insertar un Documento de Google (Google Docs)?",
+                faqDocs1: "1. Prepara el documento: Abre tu Google Doc y haz clic en Archivo > Compartir > Publicar en la web.",
+                faqDocs2: "En el cuadro de diálogo, haz clic en Publicar para confirmar. Esta acción hace que el documento sea visible para cualquiera con el enlace.",
+                faqDocs3: "2. Genera el enlace: Cambia a la pestaña 'Enlace' en el menú 'Publicar en la web' y copia la URL generada.",
+                faqDocs4: "3. Inserta en tu sitio: Pega esa URL en nuestro generador de arriba para crear tu iframe personalizado y adaptable.",
+                faqDocs5: "Limitaciones: Solo lectura (no se pueden editar), Permisos (Debe ser 'Cualquier persona con el enlace'), Formato (El formato complejo puede variar).",
+                advancedOptions: "Opciones Avanzadas",
+                iframeTitleLabel: "Título del iFrame (Accesibilidad/SEO)",
+                iframeTitlePlaceholder: "Ej. Mapa de ubicación",
+                lazyLoadLabel: "Carga diferida (Mejora la velocidad de la página)",
+                showBorderLabel: "Mostrar borde",
+                clearBtn: "Limpiar",
+                faqWebTitle: "¿Cómo insertar una página web normal?",
+                faqWeb1: "Abre la página web que deseas insertar en tu navegador.",
+                faqWeb2: "Copia la URL completa de la barra de direcciones (incluyendo https://).",
+                faqWeb3: "Pega la URL en el campo 'URL del Sitio Web' de esta herramienta.",
+                faqWeb4: "Ajusta el ancho y alto según tus necesidades.",
+                faqWeb5: "Haz clic en 'Generar Código iFrame' y copia el resultado.",
+                faqWeb6: "Nota: Algunos sitios web (como Google.com o Facebook) bloquean la inserción por motivos de seguridad (X-Frame-Options). Si la vista previa se muestra en blanco o con un error, el sitio no permite ser insertado.",
+                faqYoutubeTitle: "¿Cómo insertar un video de YouTube?",
+                faqYoutube1: "Ve al video de YouTube que quieres insertar.",
+                faqYoutube2: "Haz clic en el botón 'Compartir' debajo del video.",
+                faqYoutube3: "Selecciona 'Insertar' (el ícono con los símbolos < >).",
+                faqYoutube4: "Copia la URL que está dentro del atributo src=\"...\" (normalmente se ve como https://www.youtube.com/embed/VIDEO_ID).",
+                faqYoutube5: "Pega ESA URL (no el enlace normal del video) en nuestra herramienta.",
+                faqMapsTitle: "¿Cómo insertar un mapa de Google Maps?",
+                faqMaps1: "Busca tu ubicación en Google Maps.",
+                faqMaps2: "Haz clic en 'Compartir' y luego selecciona la pestaña 'Insertar un mapa'.",
+                faqMaps3: "Copia solo la URL que está dentro de src=\"...\" dentro del código que te dan.",
+                faqMaps4: "Pega esa URL en el generador.",
+                faqSectionTitle: "Preguntas Frecuentes",
+                tooltipUrl: "Ingresa la URL completa incluyendo https://",
+                tooltipDriveView: "Elige cómo se mostrarán los archivos",
+                tooltipDims: "Usa % para adaptabilidad o px para tamaño fijo",
+                tooltipAdvanced: "Configuraciones extra para SEO y rendimiento",
+                tooltipClear: "Restablecer todos los campos"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const widthSelect = document.getElementById('width');
+            const heightSelect = document.getElementById('height');
+            const customDimensions = document.getElementById('custom-dimensions');
+            const generateBtn = document.getElementById('generate-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const result = document.getElementById('result');
+            const iframeCode = document.getElementById('iframe-code');
+            const iframePreview = document.getElementById('iframe-preview');
+            const langToggleBtn = document.getElementById('lang-toggle-btn');
+            const toast = document.getElementById('toast');
+            
+            const urlInput = document.getElementById('url');
+            const driveOptions = document.getElementById('drive-options');
+            const driveViewSelect = document.getElementById('drive-view');
+            const driveBadge = document.getElementById('drive-badge');
+            const sheetsBadge = document.getElementById('sheets-badge');
+            const docsBadge = document.getElementById('docs-badge');
+
+            let currentLang = 'es';
+            let currentFolderId = null;
+            let currentSheetId = null;
+            let currentSheetGid = null;
+            let currentDocId = null;
+
+            function updateLanguage(lang) {
+                currentLang = lang;
+                document.title = translations[lang].title;
+                
+                // Update elements with data-i18n
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (translations[lang][key]) {
+                        // Don't overwrite the spans that might be inside a label, just text
+                        if(el.tagName === 'SPAN' || el.tagName === 'BUTTON' || el.tagName === 'SUMMARY' || el.tagName === 'H2') {
+                            el.textContent = translations[lang][key];
+                        }
+                    }
+                });
+                
+                // Update tooltips
+                document.querySelectorAll('[data-i18n-tooltip]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-tooltip');
+                    if (translations[lang][key]) {
+                        el.setAttribute('data-tooltip', translations[lang][key]);
+                    }
+                });
+                
+                // Update placeholders
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-placeholder');
+                    if (translations[lang][key]) {
+                        el.setAttribute('placeholder', translations[lang][key]);
+                    }
+                });
+
+                // Update copyright
+                document.getElementById('copyrightYear').textContent = `© ${new Date().getFullYear()} • ${translations[lang].copyrightText}`;
+            }
+
+            langToggleBtn.addEventListener('click', function() {
+                currentLang = currentLang === 'es' ? 'en' : 'es';
+                updateLanguage(currentLang);
+            });
+
+            // Toast Notification Function
+            let toastTimeout;
+            function showToast(message, type = 'success') {
+                toast.textContent = message;
+                toast.className = `toast show ${type}`;
+                
+                clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(function() {
+                    toast.className = toast.className.replace("show", "");
+                }, 3000);
+            }
+            
+            // Set initial language
+            updateLanguage(currentLang);
+            
+            // Show/hide custom dimensions fields
+            widthSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customDimensions.style.display = 'flex';
+                } else if (heightSelect.value !== 'custom') {
+                    customDimensions.style.display = 'none';
+                }
+            });
+            
+            heightSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customDimensions.style.display = 'flex';
+                } else if (widthSelect.value !== 'custom') {
+                    customDimensions.style.display = 'none';
+                }
+            });
+
+            // Detect Google Drive Folder URL
+            urlInput.addEventListener('input', function() {
+                const url = this.value;
+                
+                // Reset matches
+                currentFolderId = null;
+                currentSheetId = null;
+                currentSheetGid = null;
+                currentDocId = null;
+                driveOptions.style.display = 'none';
+                driveBadge.style.display = 'none';
+                sheetsBadge.style.display = 'none';
+                docsBadge.style.display = 'none';
+                
+                // Regex to extract folder ID from drive.google.com/drive/folders/ID
+                const driveFolderRegex = /\/folders\/([a-zA-Z0-9_-]+)/;
+                const folderMatch = url.match(driveFolderRegex);
+                
+                // Regex to extract sheet ID from docs.google.com/spreadsheets/d/ID
+                const sheetRegex = /\/spreadsheets\/d\/(e\/[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+)/;
+                const sheetMatch = url.match(sheetRegex);
+
+                // Regex to extract doc ID from docs.google.com/document/d/ID
+                const docRegex = /\/document\/d\/(e\/[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+)/;
+                const docMatch = url.match(docRegex);
+
+                if (folderMatch && folderMatch[1]) {
+                    currentFolderId = folderMatch[1];
+                    driveOptions.style.display = 'block';
+                    driveBadge.style.display = 'inline-block';
+                } else if (sheetMatch && sheetMatch[1]) {
+                    currentSheetId = sheetMatch[1];
+                    sheetsBadge.style.display = 'inline-block';
+                    
+                    // Try to extract gid (sheet tab) if present
+                    const gidRegex = /[?&#]gid=([0-9]+)/;
+                    const gidMatch = url.match(gidRegex);
+                    if (gidMatch && gidMatch[1]) {
+                        currentSheetGid = gidMatch[1];
+                    }
+                } else if (docMatch && docMatch[1]) {
+                    currentDocId = docMatch[1];
+                    docsBadge.style.display = 'inline-block';
+                }
+            });
+
+            // Generate iframe code
+            generateBtn.addEventListener('click', function() {
+                const url = document.getElementById('url').value;
+                
+                if (!url) {
+                    showToast(translations[currentLang].alertUrl, 'error');
+                    return;
+                }
+                
+                // Get width and height values
+                let width = widthSelect.value;
+                let height = heightSelect.value;
+                
+                if (width === 'custom') {
+                    width = document.getElementById('custom-width').value || '100%';
+                }
+                
+                if (height === 'custom') {
+                    height = document.getElementById('custom-height').value || '500px';
+                }
+
+                // Handle Google Drive Folders and Sheets specifically
+                let finalUrl = url;
+                if (currentFolderId) {
+                    const viewType = driveViewSelect.value;
+                    finalUrl = `https://drive.google.com/embeddedfolderview?id=${currentFolderId}#${viewType}`;
+                } else if (currentSheetId) {
+                    finalUrl = `https://docs.google.com/spreadsheets/d/${currentSheetId}/pubhtml?widget=true&headers=false`;
+                    if (currentSheetGid) {
+                        finalUrl += `&gid=${currentSheetGid}`;
+                    }
+                } else if (currentDocId) {
+                    finalUrl = `https://docs.google.com/document/d/${currentDocId}/pub`;
+                }
+
+                // Get advanced options
+                const title = document.getElementById('iframe-title').value;
+                const lazyLoad = document.getElementById('lazy-load').checked;
+                const showBorder = document.getElementById('show-border').checked;
+                
+                // Build attributes string
+                let attrs = `width="${width}" height="${height}"`;
+                if (title) attrs += ` title="${title}"`;
+                if (lazyLoad) attrs += ` loading="lazy"`;
+                
+                if (showBorder) {
+                    attrs += ` style="border: 1px solid #ccc;"`;
+                } else {
+                    attrs += ` frameborder="0" style="border: 0;"`;
+                }
+
+                // Generate iframe code
+                const code = `<iframe src="${finalUrl}" ${attrs} allowfullscreen></iframe>`;
+                
+                // Display the code
+                iframeCode.value = code;
+                result.style.display = 'block';
+                
+                // Create preview
+                iframePreview.innerHTML = code;
+                
+                // Scroll to result
+                result.scrollIntoView({ behavior: 'smooth' });
+                showToast(translations[currentLang].title + " ✅", 'success');
+            });
+            
+            // Clear button functionality
+            document.getElementById('clear-btn').addEventListener('click', function() {
+                urlInput.value = '';
+                document.getElementById('iframe-title').value = '';
+                document.getElementById('lazy-load').checked = true;
+                document.getElementById('show-border').checked = false;
+                
+                widthSelect.value = '100%';
+                heightSelect.value = '500px';
+                customDimensions.style.display = 'none';
+                
+                driveOptions.style.display = 'none';
+                driveBadge.style.display = 'none';
+                sheetsBadge.style.display = 'none';
+                docsBadge.style.display = 'none';
+                currentFolderId = null;
+                currentSheetId = null;
+                currentSheetGid = null;
+                currentDocId = null;
+                
+                result.style.display = 'none';
+                iframeCode.value = '';
+                iframePreview.innerHTML = '';
+            });
+            
+            // Copy code to clipboard
+            copyBtn.addEventListener('click', function() {
+                iframeCode.select();
+                document.execCommand('copy');
+                
+                showToast(translations[currentLang].copiedText, 'success');
+                
+                // Change button text temporarily
+                const originalText = translations[currentLang].copyBtn;
+                copyBtn.textContent = translations[currentLang].copiedText;
+                copyBtn.classList.add('copied');
+                
+                setTimeout(function() {
+                    copyBtn.textContent = originalText;
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
