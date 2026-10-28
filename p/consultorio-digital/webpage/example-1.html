@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consultorio Digital | HealthCare</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+    }
+    /* Custom scrollbar for WebKit browsers */
+    .scrollbar-thin::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: #fb923c; /* orange-500 */
+      border-radius: 4px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+      background: #f97316; /* orange-600 */
+    }
+    /* Fallback for Firefox */
+    .scrollbar-thin {
+      scrollbar-width: thin;
+      scrollbar-color: #fb923c transparent;
+    }
+    .btn-disabled {
+      opacity: 0.5;
+      cursor: not-allowed !important;
+    }
+    /* Basic styling for select arrow for better cross-browser appearance */
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23059669%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.4-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E'); /* Emerald color for arrow */
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 0.65em auto;
+      padding-right: 2.5rem; /* Make space for the arrow */
+    }
+    html {
+      scroll-padding-top: 80px; /* Navbar height */
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.6.2",
+    "react/": "https://esm.sh/react@^19.1.0/"
+  }
+}
+</script>
+</head>
+<body class="bg-white text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="bg-emerald-600 shadow-md fixed w-full z-50">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <div class="flex-shrink-0">
+          <a href="#home" class="text-2xl font-bold text-white">
+            Health<span class="text-orange-500">Care</span>
+          </a>
+        </div>
+        <div class="hidden md:block">
+          <div class="ml-10 flex items-baseline space-x-4">
+            <a href="#home" class="text-emerald-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Inicio</a>
+            <a href="#about" class="text-emerald-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Sobre Nosotros</a>
+            <a href="#service" class="text-emerald-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Servicios</a>
+            <a href="#pages" class="text-emerald-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Doctores</a>
+            <a href="#blog" class="text-emerald-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150">Blog</a>
+          </div>
+        </div>
+        <div class="hidden md:block">
+           <a href="#contact-form-section" class="bg-orange-500 text-white hover:bg-orange-600 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150 whitespace-nowrap">
+              Contáctanos
+            </a>
+        </div>
+        <div class="md:hidden flex items-center">
+          <button id="mobile-menu-button" class="p-2 rounded-md text-emerald-100 hover:text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-expanded="false">
+            <span class="sr-only">Open main menu</span>
+            <i id="mobile-menu-icon" class="ri-menu-line text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="md:hidden hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <a href="#home" class="text-emerald-100 hover:text-white hover:bg-emerald-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-150">Inicio</a>
+        <a href="#about" class="text-emerald-100 hover:text-white hover:bg-emerald-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-150">Sobre Nosotros</a>
+        <a href="#service" class="text-emerald-100 hover:text-white hover:bg-emerald-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-150">Servicios</a>
+        <a href="#pages" class="text-emerald-100 hover:text-white hover:bg-emerald-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-150">Doctores</a>
+        <a href="#blog" class="text-emerald-100 hover:text-white hover:bg-emerald-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-150">Blog</a>
+        <a href="#contact-form-section" class="bg-orange-500 text-white hover:bg-orange-600 block w-full text-center mt-2 px-4 py-2 rounded-md text-base font-medium transition-colors duration-150">
+           Contáctanos
+         </a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+  
+    <!-- Header Section -->
+    <header 
+      id="home" 
+      class="bg-cover bg-center pt-20"
+      style="background-image: linear-gradient(to right, rgba(18, 172, 142, 0.9), rgba(18, 172, 142, 0.7)), url('https://bucket.mlcdn.com/a/3336/3336910/images/558c2f5ded60a6725cfad8f6819f80b0ebe661a0.png');">
+      <div id="contact-form-section" class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div class="text-white">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-white">
+              Brindando una Experiencia Excepcional al Paciente
+            </h1>
+            <p class="text-lg md:text-xl mb-8 text-emerald-100 max-w-xl">
+              Bienvenido, donde las experiencias excepcionales del paciente son nuestra prioridad.
+              Con atención compasiva, instalaciones de vanguardia y un
+              enfoque centrado en el paciente, estamos dedicados a tu bienestar. Confía
+              en nosotros con tu salud y experimenta la diferencia.
+            </p>
+            <a 
+              href="#service"
+              class="bg-orange-500 text-white hover:bg-orange-600 px-8 py-3 rounded-md text-lg font-semibold transition-colors duration-150 shadow-lg">
+              Ver Servicios
+            </a>
+          </div>
+          <div class="bg-white p-8 rounded-lg shadow-2xl">
+            <h4 class="text-2xl font-bold text-center mb-6 text-emerald-600">Reserva Ahora</h4>
+            <form id="booking-form" class="space-y-4">
+              <input type="text" name="firstName" placeholder="Nombre" required class="w-full px-4 py-3 rounded-md bg-emerald-50 text-emerald-700 placeholder-emerald-700 focus:ring-2 focus:ring-emerald-600 outline-none border border-transparent focus:border-emerald-600" />
+              <input type="text" name="lastName" placeholder="Apellido" required class="w-full px-4 py-3 rounded-md bg-emerald-50 text-emerald-700 placeholder-emerald-700 focus:ring-2 focus:ring-emerald-600 outline-none border border-transparent focus:border-emerald-600" />
+              <input type="text" name="address" placeholder="Dirección" class="w-full px-4 py-3 rounded-md bg-emerald-50 text-emerald-700 placeholder-emerald-700 focus:ring-2 focus:ring-emerald-600 outline-none border border-transparent focus:border-emerald-600" />
+              <input type="tel" name="phone" placeholder="Teléfono" required class="w-full px-4 py-3 rounded-md bg-emerald-50 text-emerald-700 placeholder-emerald-700 focus:ring-2 focus:ring-emerald-600 outline-none border border-transparent focus:border-emerald-600" />
+              <input type="date" name="bookingDate" aria-label="Seleccionar Fecha" required class="w-full px-4 py-3 rounded-md bg-emerald-50 text-emerald-700 placeholder-emerald-700 focus:ring-2 focus:ring-emerald-600 outline-none border border-transparent focus:border-emerald-600" />
+              <select name="bookingTime" aria-label="Horarios Disponibles" required class="w-full px-4 py-3 rounded-md bg-emerald-50 text-emerald-700 focus:ring-2 focus:ring-emerald-600 outline-none border border-transparent focus:border-emerald-600">
+                <option value="" disabled selected>Horarios Disponibles</option>
+                <option value="09:00">09:00 AM</option>
+                <option value="10:00">10:00 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="14:00">02:00 PM</option>
+                <option value="15:00">03:00 PM</option>
+                <option value="16:00">04:00 PM</option>
+              </select>
+              <button type="submit" class="w-full bg-emerald-600 text-white hover:bg-emerald-700 px-6 py-3 rounded-md font-semibold transition-colors duration-150 shadow-md">
+                Reservar Cita
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    
+    
+    
+
+    <!-- Service Section -->
+    <section id="service" class="py-16 lg:py-24 bg-white">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="md:flex md:items-center md:justify-between mb-12">
+          <div class="mb-8 md:mb-0 text-center md:text-left">
+            <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-3">Nuestro Servicio Especial</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto md:mx-0">
+              Más allá de simplemente brindar atención médica, nuestro compromiso radica en
+              ofrecer un servicio incomparable adaptado a tus necesidades únicas.
+            </p>
+          </div>
+          <a href="#contact-form-section" class="block md:inline-block text-center mt-4 md:mt-0 px-6 py-3 border border-emerald-600 text-emerald-600 rounded-md font-semibold hover:bg-emerald-600 hover:text-white transition-colors duration-150 whitespace-nowrap">
+            Solicitar un Servicio
+          </a>
+        </div>
+        
+        
+        
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:justify-items-center">
+          <!-- Service Card 1 -->
+          <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 text-center group md:max-w-sm lg:max-w-none">
+            <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-50 group-hover:bg-emerald-600 transition-colors duration-300">
+              <i class="ri-microscope-line text-4xl text-emerald-600 group-hover:text-white transition-colors duration-300"></i>
+            </div>
+            <h4 class="text-xl font-semibold text-gray-800 mb-3">Pruebas de Laboratorio</h4>
+            <p class="text-gray-600 mb-4 text-sm">Diagnósticos precisos, resultados rápidos: Experimenta pruebas de laboratorio de primera categoría en nuestras instalaciones.</p>
+            <a href="#" class="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors duration-150">
+              Saber Más <i class="ri-arrow-right-s-line ml-1"></i>
+            </a>
+          </div>
+          
+          
+          <!-- Service Card 2 -->
+          <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 text-center group md:max-w-sm lg:max-w-none">
+            <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-50 group-hover:bg-emerald-600 transition-colors duration-300">
+              <i class="ri-mental-health-line text-4xl text-emerald-600 group-hover:text-white transition-colors duration-300"></i>
+            </div>
+            <h4 class="text-xl font-semibold text-gray-800 mb-3">Chequeo de Salud</h4>
+            <p class="text-gray-600 mb-4 text-sm">Nuestras evaluaciones exhaustivas y valoraciones expertas te ayudan a mantenerte proactivo acerca de tu salud.</p>
+            <a href="#" class="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors duration-150">
+              Saber Más <i class="ri-arrow-right-s-line ml-1"></i>
+            </a>
+          </div>
+          
+          
+          <!-- Service Card 3 -->
+          <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 text-center group md:max-w-sm lg:max-w-none">
+            <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-50 group-hover:bg-emerald-600 transition-colors duration-300">
+              <i class="ri-hospital-line text-4xl text-emerald-600 group-hover:text-white transition-colors duration-300"></i>
+            </div>
+            <h4 class="text-xl font-semibold text-gray-800 mb-3">Odontología General</h4>
+            <p class="text-gray-600 mb-4 text-sm">Experimenta cuidado oral integral con Odontología. Confía en nosotros para mantener tu sonrisa saludable y brillante.</p>
+            <a href="#" class="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors duration-150">
+              Saber Más <i class="ri-arrow-right-s-line ml-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 lg:py-24 bg-emerald-50">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div class="order-2 lg:order-1">
+            <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-6">Sobre Nosotros</h2>
+            <div class="space-y-4 text-lg text-gray-600">
+              <p>
+                Bienvenido a nuestro sitio web de salud, tu destino único para información
+                confiable y completa sobre atención médica. Estamos comprometidos a
+                promover el bienestar y proporcionar recursos valiosos para empoderarte
+                en tu viaje de salud.
+              </p>
+              <p>
+                Explora nuestra amplia colección de artículos y guías escritos por expertos que cubren una
+                amplia gama de temas de salud. Desde comprender condiciones médicas comunes
+                hasta consejos para mantener un estilo de vida saludable, nuestro contenido está diseñado
+                para educar, inspirar y apoyarte en la toma de decisiones informadas para tu salud.
+              </p>
+              <p>
+                Descubre consejos prácticos de salud y recomendaciones de estilo de vida para optimizar
+                tu bienestar físico y mental. Creemos que pequeños cambios pueden llevar a
+                mejoras significativas en tu calidad de vida, y estamos aquí para
+                guiarte en tu camino hacia una vida más saludable y feliz.
+              </p>
+            </div>
+          </div>
+          <div class="order-1 lg:order-2">
+            <img 
+              src="https://picsum.photos/seed/aboutus/600/500" 
+              alt="Sobre Nosotros" 
+              class="rounded-lg shadow-xl w-full h-auto object-cover aspect-[6/5]"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section (Blog) -->
+    <section id="blog" class="py-16 lg:py-24 bg-white">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div>
+            <img 
+              src="https://picsum.photos/seed/whychooseus/600/700" 
+              alt="Por qué elegirnos" 
+              class="rounded-lg shadow-xl w-full h-auto object-cover aspect-[6/7]"
+            />
+          </div>
+          <div>
+            <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-6">Por Qué Elegirnos</h2>
+            <p class="text-lg text-gray-600 mb-10">
+              Con un compromiso inquebrantable con tu bienestar, nuestro equipo de
+              profesionales de la salud altamente capacitados asegura que recibas nada
+              menos que experiencias excepcionales como paciente.
+            </p>
+            <div class="space-y-8">
+              <!-- Item 1 -->
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 inline-flex items-center justify-center w-16 h-16 rounded-lg bg-emerald-50 shadow-md">
+                  <i class="ri-hand-heart-line text-3xl text-emerald-600"></i>
+                </div>
+                <div>
+                  <h4 class="text-xl font-semibold text-gray-800 mb-1">Cuidado Intensivo</h4>
+                  <p class="text-gray-600">Nuestra Unidad de Cuidados Intensivos está equipada con tecnología avanzada y atendida por un equipo de profesionales.</p>
+                </div>
+              </div>
+              <!-- Item 2 -->
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 inline-flex items-center justify-center w-16 h-16 rounded-lg bg-emerald-50 shadow-md">
+                  <i class="ri-truck-line text-3xl text-emerald-600"></i>
+                </div>
+                <div>
+                  <h4 class="text-xl font-semibold text-gray-800 mb-1">Ambulancia Gratuita</h4>
+                  <p class="text-gray-600">Una iniciativa compasiva para priorizar tu salud y bienestar sin ninguna carga financiera.</p>
+                </div>
+              </div>
+              <!-- Item 3 -->
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 inline-flex items-center justify-center w-16 h-16 rounded-lg bg-emerald-50 shadow-md">
+                  <i class="ri-hospital-line text-3xl text-emerald-600"></i>
+                </div>
+                <div>
+                  <h4 class="text-xl font-semibold text-gray-800 mb-1">Médico y Quirúrgico</h4>
+                  <p class="text-gray-600">Nuestros servicios médicos y quirúrgicos ofrecen soluciones de atención médica avanzada para satisfacer tus necesidades médicas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Doctors Section (Pages) -->
+    <section id="pages" class="py-16 lg:py-24 bg-emerald-50">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="md:flex md:items-center md:justify-between mb-12">
+          <div class="mb-8 md:mb-0 text-center md:text-left">
+            <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-3">Nuestros Doctores Especiales</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto md:mx-0">
+              Nos enorgullece nuestro equipo excepcional de doctores, cada uno especialista
+              en sus respectivos campos.
+            </p>
+          </div>
+          <div class="flex items-center justify-center gap-3">
+            <button id="doctor-carousel-prev" aria-label="Previous Doctor" class="p-3 rounded-full bg-white text-emerald-600 shadow-md hover:bg-emerald-100 transition-colors duration-150">
+              <i class="ri-arrow-left-s-line text-2xl"></i>
+            </button>
+            <button id="doctor-carousel-next" aria-label="Next Doctor" class="p-3 rounded-full bg-white text-emerald-600 shadow-md hover:bg-emerald-100 transition-colors duration-150">
+              <i class="ri-arrow-right-s-line text-2xl"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="doctor-carousel-scroll-container" class="flex overflow-x-auto snap-x snap-mandatory scrollbar-thin scroll-smooth -mx-3">
+          <!-- Doctor Card 1 -->
+          <div class="doctor-card flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 p-3 snap-start">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col group text-center border border-transparent hover:border-emerald-50">
+              <div class="relative">
+                <img src="https://picsum.photos/seed/emily/400/400" alt="Dra. Emily Santiago" class="w-full h-72 object-cover transition-transform duration-300 group-hover:scale-105" />
+                <div class="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
+                  <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 0ms"><i class="ri-instagram-line text-xl"></i></a>
+                  <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 100ms"><i class="ri-facebook-fill text-xl"></i></a>
+                  <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 200ms"><i class="ri-heart-fill text-xl"></i></a>
+                  <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 300ms"><i class="ri-twitter-fill text-xl"></i></a>
+                </div>
+              </div>
+              <div class="p-6 flex-grow flex flex-col">
+                <h4 class="text-xl font-semibold text-gray-800 mb-1">Dra. Emily Santiago</h4>
+                <p class="text-emerald-600 font-medium">Cardióloga</p>
+              </div>
+            </div>
+          </div>
+          <!-- Doctor Card 2 -->
+          <div class="doctor-card flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 p-3 snap-start">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col group text-center border border-transparent hover:border-emerald-50">
+              <div class="relative">
+                <img src="https://picsum.photos/seed/michael/400/400" alt="Dr. Michael Lee" class="w-full h-72 object-cover transition-transform duration-300 group-hover:scale-105" />
+                <div class="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 0ms"><i class="ri-instagram-line text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 100ms"><i class="ri-facebook-fill text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 200ms"><i class="ri-heart-fill text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 300ms"><i class="ri-twitter-fill text-xl"></i></a>
+                </div>
+              </div>
+              <div class="p-6 flex-grow flex flex-col">
+                <h4 class="text-xl font-semibold text-gray-800 mb-1">Dr. Michael Lee</h4>
+                <p class="text-emerald-600 font-medium">Dermatólogo</p>
+              </div>
+            </div>
+          </div>
+          <!-- Doctor Card 3 -->
+          <div class="doctor-card flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 p-3 snap-start">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col group text-center border border-transparent hover:border-emerald-50">
+              <div class="relative">
+                <img src="https://picsum.photos/seed/alicia/400/400" alt="Dra. Alicia Anderson" class="w-full h-72 object-cover transition-transform duration-300 group-hover:scale-105" />
+                <div class="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 0ms"><i class="ri-instagram-line text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 100ms"><i class="ri-facebook-fill text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 200ms"><i class="ri-heart-fill text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 300ms"><i class="ri-twitter-fill text-xl"></i></a>
+                </div>
+              </div>
+              <div class="p-6 flex-grow flex flex-col">
+                <h4 class="text-xl font-semibold text-gray-800 mb-1">Dra. Alicia Anderson</h4>
+                <p class="text-emerald-600 font-medium">Neurocirujana</p>
+              </div>
+            </div>
+          </div>
+          <!-- Doctor Card 4 -->
+          <div class="doctor-card flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 p-3 snap-start">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col group text-center border border-transparent hover:border-emerald-50">
+              <div class="relative">
+                <img src="https://picsum.photos/seed/jose/400/400" alt="Dr. José Alberto" class="w-full h-72 object-cover transition-transform duration-300 group-hover:scale-105" />
+                <div class="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 0ms"><i class="ri-instagram-line text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 100ms"><i class="ri-facebook-fill text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 200ms"><i class="ri-heart-fill text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 300ms"><i class="ri-twitter-fill text-xl"></i></a>
+                </div>
+              </div>
+              <div class="p-6 flex-grow flex flex-col">
+                <h4 class="text-xl font-semibold text-gray-800 mb-1">Dr. José Alberto</h4>
+                <p class="text-emerald-600 font-medium">Urólogo</p>
+              </div>
+            </div>
+          </div>
+          <!-- Doctor Card 5 -->
+          <div class="doctor-card flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 p-3 snap-start">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col group text-center border border-transparent hover:border-emerald-50">
+              <div class="relative">
+                <img src="https://picsum.photos/seed/patrick/400/400" alt="Dr. Patrick Domingo" class="w-full h-72 object-cover transition-transform duration-300 group-hover:scale-105" />
+                <div class="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 0ms"><i class="ri-instagram-line text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 100ms"><i class="ri-facebook-fill text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 200ms"><i class="ri-heart-fill text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 300ms"><i class="ri-twitter-fill text-xl"></i></a>
+                </div>
+              </div>
+              <div class="p-6 flex-grow flex flex-col">
+                <h4 class="text-xl font-semibold text-gray-800 mb-1">Dr. Patrick Domingo</h4>
+                <p class="text-emerald-600 font-medium">Neurocirujano</p>
+              </div>
+            </div>
+          </div>
+          <!-- Doctor Card 6 -->
+          <div class="doctor-card flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 p-3 snap-start">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col group text-center border border-transparent hover:border-emerald-50">
+              <div class="relative">
+                <img src="https://picsum.photos/seed/laura/400/400" alt="Sra. Laura Personal" class="w-full h-72 object-cover transition-transform duration-300 group-hover:scale-105" />
+                <div class="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 0ms"><i class="ri-instagram-line text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 100ms"><i class="ri-facebook-fill text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 200ms"><i class="ri-heart-fill text-xl"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-white text-gray-800 hover:bg-emerald-600 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 scale-90 group-hover:scale-100 opacity-0 group-hover:opacity-100" style="transition-delay: 300ms"><i class="ri-twitter-fill text-xl"></i></a>
+                </div>
+              </div>
+              <div class="p-6 flex-grow flex flex-col">
+                <h4 class="text-xl font-semibold text-gray-800 mb-1">Sra. Laura Personal</h4>
+                <p class="text-emerald-600 font-medium">Enfermera</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-emerald-50">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div class="lg:col-span-1">
+          <h3 class="text-2xl font-bold text-emerald-600 mb-4">
+            Health<span class="text-orange-500">Care</span>
+          </h3>
+          <p class="text-gray-800 text-sm leading-relaxed mb-4">
+            Nos sentimos honrados de ser parte de tu viaje de atención médica y comprometidos
+            a brindar atención compasiva, personalizada y de primera categoría en cada
+            paso del camino.
+          </p>
+          <p class="text-gray-800 text-sm leading-relaxed">
+            Confía en nosotros con tu salud, y trabajemos juntos para lograr los
+            mejores resultados posibles para ti y tus seres queridos.
+          </p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-emerald-600 mb-4">Sobre Nosotros</h4>
+          <ul class="space-y-2">
+            <li><a href="#home" class="text-gray-800 hover:text-emerald-600 text-sm transition-colors">Inicio</a></li>
+            <li><a href="#about" class="text-gray-800 hover:text-emerald-600 text-sm transition-colors">Sobre Nosotros</a></li>
+            <li><a href="#" class="text-gray-800 hover:text-emerald-600 text-sm transition-colors">Trabaja con Nosotros</a></li>
+            <li><a href="#blog" class="text-gray-800 hover:text-emerald-600 text-sm transition-colors">Nuestro Blog</a></li>
+            <li><a href="#" class="text-gray-800 hover:text-emerald-600 text-sm transition-colors">Términos y Condiciones</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-emerald-600 mb-4">Servicios</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-800 hover:text-emerald-600 text-sm transition-colors">Términos de Búsqueda</a></li>
+            <li><a href="#" class="text-gray-800 hover:text-emerald-600 text-sm transition-colors">Búsqueda Avanzada</a></li>
+            <li><a href="#" class="text-gray-800 hover:text-emerald-600 text-sm transition-colors">Política de Privacidad</a></li>
+            <li><a href="#" class="text-gray-800 hover:text-emerald-600 text-sm transition-colors">Proveedores</a></li>
+            <li><a href="#" class="text-gray-800 hover:text-emerald-600 text-sm transition-colors">Nuestras Tiendas</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-emerald-600 mb-4">Contáctanos</h4>
+          <ul class="space-y-3">
+            <li class="flex items-start text-gray-800 text-sm">
+              <i class="ri-map-pin-2-fill text-emerald-600 mr-2 mt-1 text-base"></i>
+              123, Calle London Bridge, Londres
+            </li>
+            <li class="flex items-start text-gray-800 text-sm">
+              <i class="ri-mail-fill text-emerald-600 mr-2 mt-1 text-base"></i>
+              <a href="mailto:support@care.com" class="hover:text-emerald-600 transition-colors">support@care.com</a>
+            </li>
+            <li class="flex items-start text-gray-800 text-sm">
+              <i class="ri-phone-fill text-emerald-600 mr-2 mt-1 text-base"></i>
+              <a href="tel:+0123456789" class="hover:text-emerald-600 transition-colors">(+012) 3456 789</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="bg-emerald-600">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="sm:flex sm:items-center sm:justify-between text-center sm:text-left">
+          <p class="text-xs text-white mb-2 sm:mb-0">
+            Copyright © <span id="currentYear"></span> Powered by Bebell Digital Solutions. All rights reserved.
+          </p>
+          <div class="flex justify-center space-x-4 text-white">
+            <a href="#" aria-label="Instagram" class="hover:text-orange-500 transition-colors"><i class="ri-instagram-line text-lg"></i></a>
+            <a href="#" aria-label="Facebook" class="hover:text-orange-500 transition-colors"><i class="ri-facebook-fill text-lg"></i></a>
+            <a href="#" aria-label="Heart/Favorites" class="hover:text-orange-500 transition-colors"><i class="ri-heart-fill text-lg"></i></a>
+            <a href="#" aria-label="Twitter" class="hover:text-orange-500 transition-colors"><i class="ri-twitter-fill text-lg"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // --- Navbar Mobile Menu ---
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+
+      if (mobileMenuButton && mobileMenu && mobileMenuIcon) {
+        mobileMenuButton.addEventListener('click', () => {
+          const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+          mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+          mobileMenu.classList.toggle('hidden');
+          if (!isExpanded) {
+            mobileMenuIcon.classList.remove('ri-menu-line');
+            mobileMenuIcon.classList.add('ri-close-line');
+          } else {
+            mobileMenuIcon.classList.remove('ri-close-line');
+            mobileMenuIcon.classList.add('ri-menu-line');
+          }
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenuButton.setAttribute('aria-expanded', 'false');
+            mobileMenu.classList.add('hidden');
+            mobileMenuIcon.classList.remove('ri-close-line');
+            mobileMenuIcon.classList.add('ri-menu-line');
+          });
+        });
+      }
+      
+      // --- Smooth Scrolling for Anchor Links ---
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const href = this.getAttribute('href');
+          if (href === '#' || href.startsWith('#!')) return; // Allow empty hashes or framework-specific ones
+
+          const targetId = href.substring(1);
+          const targetElement = document.getElementById(targetId);
+
+          if (targetElement) {
+            e.preventDefault();
+            // const navbarHeight = document.querySelector('nav')?.offsetHeight || 0;
+            // let elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+            // let offsetPosition = elementPosition - navbarHeight;
+            
+            // window.scrollTo({
+            //  top: offsetPosition,
+            //  behavior: "smooth"
+            // });
+            // Using scrollIntoView as it's simpler and html scroll-padding-top handles the offset
+             targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+          }
+        });
+      });
+
+      // --- Booking Form Handling ---
+      const bookingForm = document.getElementById('booking-form');
+      if (bookingForm) {
+        bookingForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const formData = new FormData(bookingForm);
+          const firstName = formData.get('firstName');
+          const lastName = formData.get('lastName');
+          const phone = formData.get('phone');
+          const date = formData.get('bookingDate');
+          const time = formData.get('bookingTime');
+
+          if (!firstName || !lastName || !phone || !date || !time) {
+            alert('Por favor, complete todos los campos requeridos.');
+            return;
+          }
+          alert(`Cita solicitada para ${firstName} ${lastName} el ${date} a las ${time}. Nos pondremos en contacto con usted pronto.`);
+          bookingForm.reset();
+        });
+      }
+
+      // --- Doctors Carousel ---
+      const scrollContainer = document.getElementById('doctor-carousel-scroll-container');
+      const prevButton = document.getElementById('doctor-carousel-prev');
+      const nextButton = document.getElementById('doctor-carousel-next');
+      const doctorCards = Array.from(document.querySelectorAll('.doctor-card'));
+
+      if (scrollContainer && prevButton && nextButton && doctorCards.length > 0) {
+        let currentIndex = 0;
+        let cardsPerView = 3;
+
+        const calculateCardsPerView = () => {
+          if (window.innerWidth < 640) return 1; // Tailwind 'sm' breakpoint
+          if (window.innerWidth < 1024) return 2; // Tailwind 'lg' breakpoint
+          return 3;
+        };
+
+        const updateButtonStates = () => {
+          prevButton.disabled = currentIndex === 0;
+          prevButton.classList.toggle('btn-disabled', currentIndex === 0);
+          
+          const maxIndex = Math.max(0, doctorCards.length - cardsPerView);
+          nextButton.disabled = currentIndex >= maxIndex;
+          nextButton.classList.toggle('btn-disabled', currentIndex >= maxIndex);
+        };
+
+        const scrollToCurrentCard = (smooth = true) => {
+          if (doctorCards[currentIndex]) {
+            const cardToScrollTo = doctorCards[currentIndex];
+            // cardToScrollTo.offsetLeft is relative to the scrollContainer's content box
+            scrollContainer.scrollTo({
+              left: cardToScrollTo.offsetLeft,
+              behavior: smooth ? 'smooth' : 'auto',
+            });
+          }
+           updateButtonStates();
+        };
+        
+        const adjustCarouselOnResize = () => {
+            const newCardsPerView = calculateCardsPerView();
+            if (newCardsPerView !== cardsPerView) {
+                cardsPerView = newCardsPerView;
+                 // Ensure currentIndex is valid after resize
+                const maxPossibleIndex = Math.max(0, doctorCards.length - cardsPerView);
+                currentIndex = Math.min(currentIndex, maxPossibleIndex);
+                scrollToCurrentCard(false); // No animation on resize
+            } else {
+                 // Even if cardsPerView hasn't changed, ensure current card is aligned
+                 scrollToCurrentCard(false);
+            }
+             updateButtonStates();
+        };
+
+
+        prevButton.addEventListener('click', () => {
+          if (currentIndex > 0) {
+            currentIndex--;
+            scrollToCurrentCard();
+          }
+        });
+
+        nextButton.addEventListener('click', () => {
+          const maxIndex = Math.max(0, doctorCards.length - cardsPerView);
+          if (currentIndex < maxIndex) {
+            currentIndex++;
+            scrollToCurrentCard();
+          }
+        });
+        
+        // Listen for scroll events on the container to update currentIndex if user swipes
+        // This is a bit tricky with snap scrolling; a simpler approach is to ensure buttons are always in sync
+        // For robust swipe detection updating currentIndex, IntersectionObserver would be better.
+        // For now, buttons are the primary control for currentIndex state.
+
+        window.addEventListener('resize', adjustCarouselOnResize);
+
+        // Initial setup
+        cardsPerView = calculateCardsPerView();
+        updateButtonStates();
+        // Small delay to ensure layout is complete before initial scroll alignment attempt
+        setTimeout(() => scrollToCurrentCard(false), 100); 
+      }
+      
+      // --- Footer Current Year ---
+      const yearSpan = document.getElementById('currentYear');
+      if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+      }
+
+    });
+  </script>
+</body>
+</html>
