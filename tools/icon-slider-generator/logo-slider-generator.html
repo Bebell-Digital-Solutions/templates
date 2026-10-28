@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Image Slider Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Added Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://bucket.mlcdn.com/a/3336/3336910/images/fa62e06dd2b6ed2d1d9e77e5dd944bef2904d5d1.png">
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            /* Light Theme */
+            --bg-primary: #f3f4f6;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e5e7eb;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --border-color: #d1d5db;
+            --shadow-inset: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+            --card-bg: var(--bg-secondary);
+            --bg: var(--bg-primary);
+            --text: var(--text-primary);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        html.dark {
+             /* Dark Theme */
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --bg-tertiary: #374151;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --border-color: #4b5563;
+            --shadow-inset: inset 0 2px 4px 0 rgb(255 255 255 / 0.05);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .top-menu-bar {
+            position: fixed; top: 2rem; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 4rem); max-width: 1400px; z-index: 1100;
+            background-color: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 0 1.5rem; transition: all 0.3s ease-in-out;
+        }
+
+        html.dark .top-menu-bar {
+            background-color: rgba(31, 41, 55, 0.75); /* bg-secondary with alpha */
+        }
+
+        .top-menu-bar.hidden { top: -100px; }
+        .top-menu-content { height: 70px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-container { display: flex; align-items: center; gap: 1rem; }
+        #appLogo { height: 40px; width: 40px; object-fit: cover; border-radius: 8px; }
+        #appBrandNameDisplay { font-size: 1.5rem; font-weight: 600; color: var(--text); }
+        .top-menu-actions { display: flex; align-items: center; gap: 1rem; }
+        .fab {
+            width: 40px; height: 40px; border-radius: 50%; background-color: var(--bg);
+            color: var(--text); border: 1px solid var(--border-color); display: flex;
+            justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease;
+        }
+        .fab:hover { background-color: var(--border-color); }
+
+        .settings-container { background-color: transparent; }
+        h1, .legend-title { color: var(--text-primary); }
+        p, .form-label { color: var(--text-secondary); }
+        .form-label { font-size: 14px; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-tertiary); }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        .form-input, .form-select, .form-textarea {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-inset);
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+        .form-input::placeholder, .form-textarea::placeholder { color: var(--text-secondary); opacity: 0.7; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { --tw-ring-color: var(--primary-color); border-color: var(--primary-color); }
+        
+        .fieldset-card {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            border-width: 1px;
+            margin-bottom: 1.5rem;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .legend-title { font-size: 1.25rem; font-weight: 600; padding: 0 0.5rem; }
+        
+        #preview-area {
+             background-image: linear-gradient(45deg, var(--border-color) 25%, transparent 25%), linear-gradient(-45deg, var(--border-color) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--border-color) 75%), linear-gradient(-45deg, transparent 75%, var(--border-color) 75%);
+             background-size: 20px 20px;
+             background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+             background-color: var(--bg-secondary);
+             transition: background-color 0.3s, border-color 0.3s;
+border-radius: 10px;
+        }
+        
+        #drop-zone.dragover {
+            border-color: var(--primary-color);
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+
+        .draggable-item { cursor: grab; user-select: none; }
+        .draggable-item.dragging { opacity: 0.5; background: var(--bg-tertiary); }
+        .drag-over { border-top: 2px solid var(--primary-color); }
+
+        .preview-fixed-container {
+            position: fixed;
+            top: 120px; /* Positioned below the top bar */
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 4rem);
+            max-width: 1400px;
+            z-index: 10;
+        }
+
+        /* The main content area is pushed down further to create space for BOTH fixed elements */
+        main {
+            padding-top: 290px; /* 120px for top bar + 150px for preview + 20px gap */
+        }
+
+        /* Settings Panel Styles */
+        #settingsPanel {
+            position: fixed;
+            top: 0;
+            right: -400px; /* Start off-screen */
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background-color: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -10px 0 20px -10px rgba(0,0,0,0.1);
+            z-index: 1200;
+            transition: right 0.3s ease-in-out, background-color 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        #settingsPanel.open { right: 0; }
+        #workspace-list { overflow-y: auto; }
+
+        /* Custom Modal & Toast Styles */
+         #confirmModal, #toast { transition: opacity 0.3s; }
+    </style>
+</head>
+<body>
+
+<!-- New Top Navigation Bar -->
+<div class="top-menu-bar">
+    <div class="top-menu-content">
+        <div class="logo-container">
+            <img id="appLogo" src="https://bucket.mlcdn.com/a/3336/3336910/images/b81ca864affb6311afa662ccb36a290aa2a0c9e3.png" alt="App Logo">
+            <span id="appBrandNameDisplay">Logo Slider</span>
+        </div>
+        <div class="top-menu-actions">
+            <div class="fab" id="settingsBtn" title="Settings"><i class="fas fa-cog"></i></div>
+            <div class="fab" id="supportBtn" title="Support" onclick="window.open('https://helpcenter.easylistings.website', '_blank')"><i class="fa fa-info-circle"></i></div>
+            <div class="fab" id="darkModeToggle" title="Toggle Theme"><i class="fas fa-moon"></i></div>
+        </div>
+    </div>
+</div>
+
+<!-- All page content, including the sticky preview and scrollable settings, is now wrapped in <main> -->
+<main class="relative min-h-screen">
+    <!-- The preview container is now fixed instead of sticky -->
+    <div class="preview-fixed-container">
+        <div id="preview-area" class="w-full h-[150px] overflow-hidden p-4 md:p-8 flex items-center justify-center border-b bg-white" style="border-color: var(--border-color);">
+            <div id="preview-content" class="w-full h-full"></div>
+        </div>
+    </div>
+
+    <!-- SCROLLABLE SETTINGS SECTION -->
+    <div class="settings-container p-6 md:p-8">
+        <div class="mx-auto max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Column 1 -->
+            <div class="space-y-6">
+                    <fieldset class="fieldset-card">
+                        <legend class="legend-title">ImageKit Setup</legend>
+                        <div class="space-y-4 mt-4">
+                            <p class="text-xs -mt-2 mb-3">ImageKit is used for real-time image optimization. <a href="https://imagekit.io/registration" target="_blank" class="font-semibold underline" style="color: var(--primary-color);">Sign up for a free account.</a></p>
+                            <div>
+                                <label for="ikUrlEndpoint" class="form-label">ImageKit URL-Endpoint</label>
+                                <input type="text" id="ikUrlEndpoint" placeholder="https://ik.imagekit.io/your_id" class="form-input w-full">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="fieldset-card">
+                        <legend class="legend-title">Image Management</legend>
+                        <div class="space-y-4 mt-4">
+                            <div id="drop-zone" class="transition-colors duration-300 flex justify-center rounded-lg border border-dashed px-6 py-10" style="border-color: var(--border-color);">
+                                <div class="text-center">
+                                    <svg class="mx-auto h-12 w-12" style="color: var(--text-secondary);" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd"></path></svg>
+                                    <div class="mt-4 flex text-sm leading-6" style="color: var(--text-secondary);">
+                                        <label for="file-upload" class="relative cursor-pointer rounded-md font-semibold" style="color: var(--primary-color);"><span>Upload files</span><input id="file-upload" type="file" class="sr-only" multiple accept="image/*"></label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="text-center">
+                                <button id="manualEditBtn" class="text-sm font-semibold" style="color: var(--primary-color);">Edit Image Paths Manually</button>
+                            </div>
+                            <textarea id="imagePaths" rows="5" class="form-textarea w-full hidden" placeholder="Enter one image path per line, e.g., /slider/image1.jpg"></textarea>
+                            <p class="text-xs mt-2">Drag and drop images below to reorder them.</p>
+                            <div id="image-list-controls" class="space-y-3"></div>
+                        </div>
+                    </fieldset>
+                </div>
+                <!-- Column 2 -->
+                <div class="space-y-6">
+                    <fieldset class="fieldset-card">
+                        <legend class="legend-title">Slider Settings</legend>
+                        <div class="space-y-6 mt-4">
+                             <div>
+                                <label for="containerHeight" class="form-label">Slider Height: <span id="containerHeightValue">150</span>px</label>
+                                <input type="range" id="containerHeight" min="50" max="150" value="150" class="w-full h-2 rounded-lg appearance-none cursor-pointer" style="background-color: var(--bg-tertiary);">
+                            </div>
+                            <div>
+                                <label class="form-label">Aspect Ratio</label>
+                                <div class="flex items-center space-x-4 mt-1">
+                                    <label><input type="radio" name="aspectRatio" value="1/1" class="form-radio" checked> <span class="ml-1 text-sm">Square</span></label>
+                                    <label><input type="radio" name="aspectRatio" value="16/9" class="form-radio"> <span class="ml-1 text-sm">Horizontal</span></label>
+                                    <label><input type="radio" name="aspectRatio" value="4/5" class="form-radio"> <span class="ml-1 text-sm">Vertical</span></label>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="imageSpacing" class="form-label">Image Spacing: <span id="imageSpacingValue">16</span>px</label>
+                                <input type="range" id="imageSpacing" min="0" max="100" value="16" class="w-full h-2 rounded-lg appearance-none cursor-pointer" style="background-color: var(--bg-tertiary);">
+                            </div>
+                            <div>
+                                <label for="animationSpeed" class="form-label">Animation Duration (s): <span id="animationSpeedValue">20</span>s</label>
+                                <input type="range" id="animationSpeed" min="5" max="120" value="20" class="w-full h-2 rounded-lg appearance-none cursor-pointer" style="background-color: var(--bg-tertiary);">
+                                <p class="text-xs mt-1">Higher duration means a slower animation.</p>
+                            </div>
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset class="fieldset-card">
+                        <legend class="legend-title">Export & Embed</legend>
+                         <div class="mt-4 space-y-4">
+                            <div>
+                                <h3 class="font-semibold text-base">1. Download Code</h3>
+                                <button id="downloadCodeBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition">Download HTML</button>
+                            </div>
+                            <hr style="border-color: var(--border-color);">
+                             <div>
+                                <h3 class="font-semibold text-base">2. Deploy to GitHub</h3>
+                                <div class="space-y-3 mt-2">
+                                    <div><label for="githubUser" class="form-label">GitHub Username</label><input type="text" id="githubUser" class="form-input w-full"></div>
+                                    <div><label for="githubRepo" class="form-label">Repository</label><input type="text" id="githubRepo" class="form-input w-full"></div>
+                                    <div><label for="githubToken" class="form-label">Access Token</label><input type="password" id="githubToken" class="form-input w-full"></div>
+                                    <button id="generateEmbedBtn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md transition">Generate & Deploy</button>
+                                </div>
+                            </div>
+                            <div id="embed-output-container" class="hidden mt-4">
+                                <label class="form-label">Your Iframe Embed Code:</label>
+                                <textarea id="iframe-output" rows="4" class="form-textarea w-full text-xs font-mono" readonly></textarea>
+                                <button id="copyIframeBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition mt-2">Copy Iframe</button>
+                            </div>
+                             <div id="github-status" class="text-sm mt-2"></div>
+                         </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Panel HTML -->
+    <div id="settingsPanel">
+        <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border-color);">
+            <h2 class="text-xl font-bold" style="color: var(--text-primary);">Workspaces</h2>
+            <button id="closeSettingsBtn" class="text-2xl" style="color: var(--text-secondary);">&times;</button>
+        </div>
+        <div class="p-4 border-b" style="border-color: var(--border-color);">
+             <label for="workspaceName" class="form-label">Save Current Workspace As</label>
+             <div class="flex gap-2 mt-1">
+                 <input type="text" id="workspaceName" placeholder="e.g., Project Homepage" class="form-input w-full">
+                 <button id="saveWorkspaceBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition">Save</button>
+             </div>
+        </div>
+        <div id="workspace-list" class="flex-grow p-4 space-y-2">
+            <!-- Saved workspaces will be listed here -->
+        </div>
+    </div>
+
+    <!-- Custom Modal & Toast HTML -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[1300] flex items-center justify-center p-4">
+        <div class="p-6 rounded-lg shadow-xl max-w-sm w-full" style="background-color: var(--bg-secondary);">
+            <p id="confirmMessage" class="mb-4" style="color: var(--text-primary);">Are you sure?</p>
+            <div class="flex justify-end gap-3">
+                <button id="confirmCancelBtn" class="px-4 py-2 rounded-md" style="background-color: var(--bg-tertiary); color: var(--text-primary);">Cancel</button>
+                <button id="confirmOkBtn" class="px-4 py-2 rounded-md bg-red-600 text-white">Confirm</button>
+            </div>
+        </div>
+    </div>
+    <div id="toast" class="hidden fixed bottom-5 right-5 bg-green-600 text-white p-4 rounded-lg shadow-xl z-[1400]">
+        <p id="toastMessage"></p>
+    </div>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let state = {};
+
+        const controls = {
+            ikUrlEndpoint: document.getElementById('ikUrlEndpoint'),
+            imagePaths: document.getElementById('imagePaths'),
+            imageListControls: document.getElementById('image-list-controls'),
+            dropZone: document.getElementById('drop-zone'),
+            fileUpload: document.getElementById('file-upload'),
+            manualEditBtn: document.getElementById('manualEditBtn'),
+            containerHeight: document.getElementById('containerHeight'),
+            containerHeightValue: document.getElementById('containerHeightValue'),
+            imageSpacing: document.getElementById('imageSpacing'),
+            imageSpacingValue: document.getElementById('imageSpacingValue'),
+            animationSpeed: document.getElementById('animationSpeed'),
+            animationSpeedValue: document.getElementById('animationSpeedValue'),
+            previewContent: document.getElementById('preview-content'),
+            downloadCodeBtn: document.getElementById('downloadCodeBtn'),
+            githubUser: document.getElementById('githubUser'),
+            githubRepo: document.getElementById('githubRepo'),
+            githubToken: document.getElementById('githubToken'),
+            generateEmbedBtn: document.getElementById('generateEmbedBtn'),
+            embedOutputContainer: document.getElementById('embed-output-container'),
+            iframeOutput: document.getElementById('iframe-output'),
+            copyIframeBtn: document.getElementById('copyIframeBtn'),
+            githubStatus: document.getElementById('github-status'),
+            darkModeToggle: document.getElementById('darkModeToggle'),
+            settingsBtn: document.getElementById('settingsBtn'),
+            settingsPanel: document.getElementById('settingsPanel'),
+            closeSettingsBtn: document.getElementById('closeSettingsBtn'),
+            workspaceName: document.getElementById('workspaceName'),
+            saveWorkspaceBtn: document.getElementById('saveWorkspaceBtn'),
+            workspaceList: document.getElementById('workspace-list'),
+            toast: document.getElementById('toast'),
+            toastMessage: document.getElementById('toastMessage'),
+            confirmModal: document.getElementById('confirmModal'),
+            confirmMessage: document.getElementById('confirmMessage'),
+            confirmOkBtn: document.getElementById('confirmOkBtn'),
+            confirmCancelBtn: document.getElementById('confirmCancelBtn'),
+        };
+        
+        const defaultState = {
+            imagekit: { urlEndpoint: "https://ik.imagekit.io/mlcdn/a/3336/3336910/images/", },
+            images: [
+                { path: 'be0c12e2e742e27602330f8f117f81b182bf90d3.jpeg', removeBg: false, tone: 'none' },
+                { path: '4cf1766a2a6d7ad47f872e42880c54178a2a4b87.jpeg', removeBg: true, tone: 'none' },
+                { path: 'a4b104928b5e40e2d1d2b8656114e9f3900388d2.jpeg', removeBg: false, tone: 'bw' },
+                { path: '59c25f385c34537126b4862f92f25c7e0f805244.jpeg', removeBg: false, tone: 'none' },
+                { path: '0e32f05c31713217032f64b38d3840e6c27181e5.jpeg', removeBg: false, tone: 'sepia' },
+                { path: '22867548f07823f0de0726d408544d642db0b127.jpeg', removeBg: false, tone: 'none' },
+                { path: 'be0c12e2e742e27602330f8f117f81b182bf90d3.jpeg', removeBg: false, tone: 'none' },
+                { path: '4cf1766a2a6d7ad47f872e42880c54178a2a4b87.jpeg', removeBg: false, tone: 'none' },
+            ],
+            slider: { aspectRatio: '1/1', spacing: 16, speed: 20, height: 150 }
+        };
+
+        function buildImageUrl(image) {
+            if (!state.imagekit.urlEndpoint || !image.path) return 'https://placehold.co/600x600/e5e7eb/4b5563?text=Invalid+Image';
+            let transformations = [];
+            if (image.removeBg) transformations.push('e-bg-removal');
+            if (image.tone === 'bw') transformations.push('e-grayscale');
+            if (image.tone === 'sepia') transformations.push('e-sepia');
+            const url = state.imagekit.urlEndpoint.endsWith('/') ? state.imagekit.urlEndpoint : state.imagekit.urlEndpoint + '/';
+            const path = image.path.startsWith('/') ? image.path.substring(1) : image.path;
+            if (transformations.length > 0) return `${url}${path}?tr=${transformations.join(':')}`;
+            return `${url}${path}`;
+        }
+
+        function renderImageListControls() {
+             controls.imageListControls.innerHTML = state.images.map((img, index) => `
+                <div class="p-3 border rounded-lg draggable-item overflow-hidden" draggable="true" data-index="${index}" style="border-color: var(--border-color); background-color: var(--bg-primary);">
+                    <p class="text-sm font-medium truncate" title="${img.path}">${img.path}</p>
+                    <div class="flex items-center justify-between mt-2">
+                        <div class="flex items-center flex-wrap gap-x-4 gap-y-2">
+                             <div class="flex items-center">
+                                <input type="checkbox" id="bg-remove-${index}" data-index="${index}" class="image-control-bg h-4 w-4 rounded" ${img.removeBg ? 'checked' : ''}>
+                                <label for="bg-remove-${index}" class="ml-2 text-xs">Remove BG</label>
+                            </div>
+                            <select data-index="${index}" class="image-control-tone form-select text-xs p-1 rounded-md">
+                                <option value="none" ${img.tone === 'none' ? 'selected' : ''}>Original</option>
+                                <option value="bw" ${img.tone === 'bw' ? 'selected' : ''}>B & W</option>
+                                <option value="sepia" ${img.tone === 'sepia' ? 'selected' : ''}>Sepia</option>
+                            </select>
+                        </div>
+                        <button data-index="${index}" class="delete-image-btn text-red-500 hover:text-red-700 text-xl font-bold">&times;</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPreview() {
+            const { aspectRatio, spacing, speed, height } = state.slider;
+            const imagesHtml = state.images.map(img => `<div class="slide"><img src="${buildImageUrl(img)}" alt="Slider Image" loading="lazy" class="slide-img"></div>`).join('');
+            const sliderTrackHtml = imagesHtml + imagesHtml;
+            const sliderHtml = `<div class="slider-container"><div class="slider-track">${sliderTrackHtml}</div></div>`;
+            const sliderCss = `<style>.slider-container{width:100%;overflow:hidden;mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent);-webkit-mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent)}@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}.slider-track{display:flex;gap:${spacing}px;width:fit-content;animation:scroll ${speed}s linear infinite}.slide{flex-shrink:0;height:100%;aspect-ratio:${aspectRatio}}.slide-img{width:100%;height:100%;object-fit:cover;border-radius:.75rem}.slider-container{height:${height}px;max-height:55vh}</style>`;
+            controls.previewContent.innerHTML = sliderCss + sliderHtml;
+        }
+        
+        function getFullHtml() {
+            const { aspectRatio, spacing, speed, height } = state.slider;
+            const imagesHtml = state.images.map(img => `<div class="slide"><img src="${buildImageUrl(img)}" alt="Slider Image" loading="lazy" class="slide-img"></div>`).join('');
+            const sliderTrackHtml = imagesHtml + imagesHtml;
+            return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Image Slider</title><style>.slider-container{width:100%;overflow:hidden;mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent);-webkit-mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent)}@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}.slider-track{display:flex;gap:${spacing}px;width:fit-content;animation:scroll ${speed}s linear infinite}.slide{flex-shrink:0;height:${height}px;max-height:80vh;aspect-ratio:${aspectRatio}}.slide-img{width:100%;height:100%;object-fit:cover;border-radius:.75rem}</style></head><body><div class="slider-container"><div class="slider-track">${sliderTrackHtml}</div></div></body></html>`;
+        }
+        
+        function handleFiles(files) {
+            const newPaths = Array.from(files).map(file => file.name);
+            const currentPaths = controls.imagePaths.value.trim();
+            const updatedPaths = currentPaths ? `${currentPaths}\n${newPaths.join('\n')}` : newPaths.join('\n');
+            controls.imagePaths.value = updatedPaths;
+            updateAndSaveState();
+        }
+
+        function updateAndSaveState(fromUI = true) {
+            if (fromUI) {
+                state.imagekit.urlEndpoint = controls.ikUrlEndpoint.value.trim();
+                const paths = controls.imagePaths.value.trim().split('\n').filter(Boolean);
+                const newImages = paths.map(path => {
+                    const existing = state.images.find(img => img.path === path);
+                    return existing || { path, removeBg: false, tone: 'none' };
+                });
+                state.images = newImages;
+                state.slider.aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+                state.slider.spacing = parseInt(controls.imageSpacing.value, 10);
+                state.slider.speed = parseInt(controls.animationSpeed.value, 10);
+                state.slider.height = parseInt(controls.containerHeight.value, 10);
+            }
+            
+            controls.ikUrlEndpoint.value = state.imagekit.urlEndpoint;
+            controls.imagePaths.value = state.images.map(img => img.path).join('\n');
+            document.querySelector(`input[name="aspectRatio"][value="${state.slider.aspectRatio}"]`).checked = true;
+            controls.imageSpacing.value = state.slider.spacing;
+            controls.imageSpacingValue.textContent = state.slider.spacing;
+            controls.animationSpeed.value = state.slider.speed;
+            controls.animationSpeedValue.textContent = state.slider.speed;
+            controls.containerHeight.value = state.slider.height;
+            controls.containerHeightValue.textContent = state.slider.height;
+
+            renderImageListControls();
+            renderPreview();
+            
+            localStorage.setItem('lastActiveWorkspace', JSON.stringify(state));
+        }
+
+        function showToast(message, duration = 3000) {
+            controls.toastMessage.textContent = message;
+            controls.toast.classList.remove('hidden');
+            setTimeout(() => { controls.toast.classList.add('hidden'); }, duration);
+        }
+
+        function showConfirm(message, onConfirm) {
+            controls.confirmMessage.textContent = message;
+            controls.confirmModal.classList.remove('hidden');
+
+            const handleConfirm = () => { onConfirm(); cleanup(); };
+            const handleCancel = () => { cleanup(); };
+            const cleanup = () => {
+                controls.confirmModal.classList.add('hidden');
+                controls.confirmOkBtn.removeEventListener('click', handleConfirm);
+                controls.confirmCancelBtn.removeEventListener('click', handleCancel);
+            };
+
+            controls.confirmOkBtn.addEventListener('click', handleConfirm, { once: true });
+            controls.confirmCancelBtn.addEventListener('click', handleCancel, { once: true });
+        }
+
+        function applyTheme(theme) {
+            const icon = controls.darkModeToggle.querySelector('i');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                document.documentElement.classList.remove('dark');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
+        
+        function toggleTheme() {
+            const currentTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+            applyTheme(currentTheme);
+            localStorage.setItem('theme', currentTheme);
+        }
+
+        function getWorkspaces() {
+            return JSON.parse(localStorage.getItem('imageSliderWorkspaces') || '{}');
+        }
+
+        function saveWorkspace() {
+            const name = controls.workspaceName.value.trim();
+            if (!name) {
+                showToast('Please enter a name for the workspace.');
+                return;
+            }
+            const workspaces = getWorkspaces();
+            workspaces[name] = JSON.parse(JSON.stringify(state));
+            localStorage.setItem('imageSliderWorkspaces', JSON.stringify(workspaces));
+            controls.workspaceName.value = '';
+            renderWorkspaces();
+            showToast(`Workspace "${name}" saved!`);
+        }
+
+        function loadWorkspace(name) {
+            const workspaces = getWorkspaces();
+            if (workspaces[name]) {
+                state = workspaces[name];
+                updateAndSaveState(false);
+                controls.settingsPanel.classList.remove('open');
+            }
+        }
+
+        function deleteWorkspace(name) {
+            showConfirm(`Are you sure you want to delete workspace "${name}"?`, () => {
+                const workspaces = getWorkspaces();
+                delete workspaces[name];
+                localStorage.setItem('imageSliderWorkspaces', JSON.stringify(workspaces));
+                renderWorkspaces();
+                showToast(`Workspace "${name}" deleted.`);
+            });
+        }
+
+        function renderWorkspaces() {
+            const workspaces = getWorkspaces();
+            controls.workspaceList.innerHTML = Object.keys(workspaces).map(name => `
+                <div class="p-2 border rounded-md flex justify-between items-center" style="border-color:var(--border-color); background-color: var(--bg-primary);">
+                    <span class="font-medium text-sm truncate pr-2">${name}</span>
+                    <div class="flex gap-2">
+                        <button class="load-ws-btn text-xs bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-2 rounded-md" data-name="${name}">Load</button>
+                        <button class="delete-ws-btn text-xs bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md" data-name="${name}">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function setupEventListeners() {
+            document.querySelector('.settings-container').addEventListener('input', () => updateAndSaveState());
+            controls.imageListControls.addEventListener('change', (e) => {
+                const index = e.target.dataset.index; if (!index) return;
+                if (e.target.classList.contains('image-control-bg')) state.images[index].removeBg = e.target.checked;
+                if (e.target.classList.contains('image-control-tone')) state.images[index].tone = e.target.value;
+                updateAndSaveState();
+            });
+            controls.imageListControls.addEventListener('click', (e) => {
+                if (e.target.classList.contains('delete-image-btn')) {
+                    state.images.splice(parseInt(e.target.dataset.index, 10), 1);
+                    updateAndSaveState();
+                }
+            });
+            controls.manualEditBtn.addEventListener('click', () => controls.imagePaths.classList.toggle('hidden'));
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => controls.dropZone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }));
+            ['dragenter', 'dragover'].forEach(ev => controls.dropZone.addEventListener(ev, () => controls.dropZone.classList.add('dragover')));
+            ['dragleave', 'drop'].forEach(ev => controls.dropZone.addEventListener(ev, () => controls.dropZone.classList.remove('dragover')));
+            controls.dropZone.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
+            controls.fileUpload.addEventListener('change', e => handleFiles(e.target.files));
+            let draggedItemIndex=null;controls.imageListControls.addEventListener("dragstart",e=>{const t=e.target.closest(".draggable-item");t&&(draggedItemIndex=parseInt(t.dataset.index,10),e.dataTransfer.effectAllowed="move",setTimeout(()=>t.classList.add("dragging"),0))}),controls.imageListControls.addEventListener("dragend",e=>{const t=e.target.closest(".draggable-item");t&&t.classList.remove("dragging"),document.querySelectorAll(".drag-over").forEach(e=>e.classList.remove("drag-over")),draggedItemIndex=null}),controls.imageListControls.addEventListener("dragover",e=>{e.preventDefault();const t=e.target.closest(".draggable-item");t&&null!==draggedItemIndex&&parseInt(t.dataset.index,10)!==draggedItemIndex&&(document.querySelectorAll(".drag-over").forEach(e=>e.classList.remove("drag-over")),t.classList.add("drag-over"))}),controls.imageListControls.addEventListener("drop",e=>{e.preventDefault();const t=e.target.closest(".draggable-item");if(t&&null!==draggedItemIndex){const o=parseInt(t.dataset.index,10);t.classList.remove("drag-over");const[n]=state.images.splice(draggedItemIndex,1);state.images.splice(o,0,n),updateAndSaveState()}});
+            controls.downloadCodeBtn.addEventListener('click', () => { const html=getFullHtml(),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([html],{type:"text/html"})),a.download="image-slider.html",a.click(),a.remove()});
+            controls.generateEmbedBtn.addEventListener('click', async () => {/* Gist logic can be re-added here */});
+            controls.copyIframeBtn.addEventListener('click', () => navigator.clipboard.writeText(controls.iframeOutput.value).then(() => {controls.copyIframeBtn.textContent="Copied!",setTimeout(()=>controls.copyIframeBtn.textContent="Copy Iframe",2e3)}));
+            controls.darkModeToggle.addEventListener('click', toggleTheme);
+            controls.settingsBtn.addEventListener('click', () => controls.settingsPanel.classList.add('open'));
+            controls.closeSettingsBtn.addEventListener('click', () => controls.settingsPanel.classList.remove('open'));
+            controls.saveWorkspaceBtn.addEventListener('click', saveWorkspace);
+            controls.workspaceList.addEventListener('click', (e) => {
+                const name = e.target.dataset.name;
+                if (!name) return;
+                if (e.target.classList.contains('load-ws-btn')) loadWorkspace(name);
+                if (e.target.classList.contains('delete-ws-btn')) deleteWorkspace(name);
+            });
+        }
+
+        function init() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme);
+
+            let lastState;
+            try {
+                lastState = JSON.parse(localStorage.getItem('lastActiveWorkspace'));
+            } catch (e) {
+                console.error("Could not parse last active workspace from localStorage:", e);
+                lastState = null;
+            }
+            state = lastState || defaultState;
+
+            controls.githubUser.value = localStorage.getItem('githubUser') || '';
+            controls.githubRepo.value = localStorage.getItem('githubRepo') || '';
+            controls.githubToken.value = localStorage.getItem('githubToken') || '';
+            
+            setupEventListeners();
+            updateAndSaveState(false);
+            renderWorkspaces();
+        }
+
+        init();
+    });
+    </script>
+</body>
+</html>
+
+
+
+
