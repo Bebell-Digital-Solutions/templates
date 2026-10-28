@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Links Management Tool</title>
+  <!-- Font Awesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Favicon -->
+  <link rel="icon" href="https://bucket.mlcdn.com/a/3336/3336910/images/57b364ac1627c977a7d07e51b23e2cfda448b921.png">
+  <!-- jsPDF library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+  <!-- Confetti Script -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+<style>
+    /* CSS Variables for theming */
+    :root {
+        --primary: #df1783;
+        --secondary: #8c318f;
+        --border-radius-sm: 0.5rem;
+        --border-radius-md: 0.75rem;
+    }
+
+    /* Light Theme */
+    body.light {
+        --bg-color: #f4f5f7;
+        --card-color: #ffffff;
+        --card-color-transparent: rgba(255, 255, 255, 0.7);
+        --text-color: #1a202c;
+        --subtext-color: #4a5568;
+        --border-color: #e2e8f0;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Dark Theme */
+    body.dark {
+        --bg-color: #1a202c;
+        --card-color: #2d3748;
+        --card-color-transparent: rgba(45, 55, 72, 0.7);
+        --text-color: #e2e8f0;
+        --subtext-color: #a0aec0;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12);
+    }
+    
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s ease, color 0.3s ease;
+        margin: 0;
+        padding-top: 2rem;
+    }
+    
+    /* Top Menu Bar */
+    .top-menu-bar {
+        position: sticky;
+        top: 1.5rem;
+        z-index: 50;
+        max-width: 980px;
+        margin: 0 auto;
+        width: 95%;
+        background-color: var(--card-color-transparent);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        padding: 0.75rem 1.5rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .top-menu-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+    }
+    
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    #appLogo {
+        height: 42px;
+        width: auto;
+    }
+    
+    #appBrandNameDisplay {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2d3748; /* Default color for light theme */
+        transition: color 0.3s ease;
+    }
+
+    body.dark #appBrandNameDisplay {
+        color: var(--text-color); /* Color for dark theme */
+    }
+
+    #appBrandNameDisplay span {
+        color: var(--primary);
+    }
+    
+    .top-menu-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .fab {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--card-color);
+        color: var(--subtext-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
+    }
+    
+    .fab:hover {
+        color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: 0 0 12px rgba(223, 23, 131, 0.4);
+    }
+    
+    /* Main Content */
+    .main-container {
+        max-width: 980px;
+        margin: 2rem auto 0;
+        padding: 0 1.5rem;
+    }
+    
+    #bookmark-tool {
+        padding-top: 30px;
+        margin: 0 auto;
+        min-height: 680px;
+        padding-bottom: 60px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: var(--subtext-color);
+        margin-bottom: 2rem;
+    }
+    
+    input, button {
+        font-family: 'Inter', sans-serif;
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: var(--border-radius-sm);
+        margin: 0.5rem 0;
+        padding: 15px 20px;
+        font-size: 1rem;
+    }
+
+    input {
+        border: 1px solid var(--border-color);
+        background-color: var(--card-color);
+        color: var(--text-color);
+        transition: all 0.3s ease;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(223, 23, 131, 0.2);
+    }
+
+    button {
+        cursor: pointer;
+        border: none;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+    }
+    
+    #save-button {
+        background: linear-gradient(145deg, var(--secondary), var(--primary));
+    }
+    #save-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(223, 23, 131, 0.4);
+    }
+
+    /* Action Buttons (PDF/CSV) */
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin: 15px 0;
+        padding-top: 30px;
+    }
+    
+    .action-button {
+        flex: 1;
+        padding: 10px;
+        background-color: var(--card-color);
+        color: var(--subtext-color);
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .action-button:hover {
+        color: var(--primary);
+        border-color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+    
+    /* Bookmarks Grid */
+    #bookmarks-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 50px;
+    }
+    
+    .bookmark {
+        position: relative;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        background-color: var(--card-color);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+
+    .bookmark:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+    }
+    
+    .bookmark img {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        display: block;
+    }
+    
+    .bookmark a { text-decoration: none; color: inherit; }
+
+    .bookmark-content {
+        padding: 15px;
+        text-align: left;
+    }
+    
+    .bookmark-url {
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        margin-bottom: 10px;
+        color: var(--text-color);
+    }
+    .bookmark-meta {
+        font-size: 0.8rem;
+        color: var(--subtext-color);
+    }
+    .bookmark-meta p {
+        margin: 4px 0;
+    }
+
+    .delete-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        color: white;
+        background-color: rgba(0,0,0,0.5);
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .delete-icon:hover {
+        background-color: var(--primary);
+        transform: scale(1.1);
+    }
+
+    /* Tags Dropdown */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        margin-top: 10px;
+    }
+    
+    .dropdown-button {
+        background-image: linear-gradient(to right, var(--secondary), var(--primary));
+        color: white;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+    }
+
+    .dropdown-button:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow);
+    }
+    
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-sm);
+        box-shadow: var(--shadow);
+        z-index: 1;
+        padding: 10px;
+        max-height: 200px;
+        overflow-y: auto;
+        min-width: 150px;
+    }
+    
+    .dropdown-content .tag-button {
+        display: block;
+        background-color: transparent;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        padding: 5px 15px;
+        font-size: 0.8rem;
+        margin: 5px 0;
+        text-align: left;
+    }
+    
+    .dropdown-content .tag-button:hover {
+        background-color: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+    
+    .dropdown.active .dropdown-content { display: block; }
+    
+    /* Footer */
+    .footer {
+        margin-top: 4rem;
+        padding: 2rem 1rem;
+        text-align: center;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 0;
+        flex-wrap: wrap;
+        padding: 0.25rem;
+    }
+    
+    .social-link {
+        color: var(--subtext-color);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius-sm);
+        background: var(--card-color);
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        border: 1px solid var(--border-color);
+    }
+    
+    .social-link:hover {
+        color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+    
+    .bebell-footer p {
+        text-align: center;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        margin: 0;
+        padding: 20px;
+        padding-bottom: 30px;
+        color: var(--subtext-color);
+    }
+    
+    .bebell-link {
+        color: inherit;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+    
+    .bebell-link:hover { color: var(--primary); }
+    
+    .https-badge {
+        background-color: var(--primary);
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.8em;
+        font-family: monospace;
+    }
+
+    /* Back to Top Button */
+    #back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: none;
+        cursor: pointer;
+        z-index: 9999;
+    }
+    #back-to-top img {
+        width: 40px;
+        height: 40px;
+        transition: transform 0.2s;
+    }
+    #back-to-top:hover img {
+        transform: scale(1.1);
+    }
+
+    /* Toast Notification */
+    .toast-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: var(--card-color);
+        color: var(--text-color);
+        padding: 15px 25px;
+        border-radius: var(--border-radius-sm);
+        box-shadow: var(--shadow);
+        z-index: 10000;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        transform: translateY(-20px);
+        border-left: 5px solid var(--primary);
+    }
+    .toast-notification.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        #appBrandNameDisplay {
+           font-size: 1.2rem; /* Make font smaller on mobile */
+        }
+        .main-container {
+            padding: 0 1rem;
+        }
+        .top-menu-bar {
+            padding: 0.5rem 1rem;
+        }
+        #bookmarks-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 420px) {
+        #appBrandNameDisplay {
+           display: none; /* Hide on very small screens to prevent overlap */
+        }
+    }
+
+</style>
+</head>
+
+<body class="light">
+
+    <!-- Top Menu Bar Section -->
+    <header class="top-menu-bar">
+        <div class="top-menu-content">
+            <div class="logo-container">
+                <img id="appLogo" src="https://bucket.mlcdn.com/a/3336/3336910/images/a8001df38225318a48a2732bdffd907b65ad69c9.png" alt="App Logo">
+                <span id="appBrandNameDisplay">
+                   Links <span>Manager</span>
+                </span>
+            </div>
+            <div class="top-menu-actions">
+                <div class="fab" title="Help Center" onclick="showToast('Help center will be available soon!', 'info')"><i class="fa fa-info-circle"></i></div>
+                <div class="fab" id="translationToggle" title="Translate page"><i class="fa fa-globe"></i></div>
+                <div class="fab" id="darkModeToggle" title="Change Theme"><i class="fas fa-moon"></i></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div id="bookmark-tool">
+            <p class="subtitle">Save and organize your favorite links quickly and easily.<br>
+            <strong>Note:</strong> Make sure your link includes <span class="https-badge">https://</span> at the beginning.</p>
+            
+            <div class="action-buttons">
+                <button class="action-button" id="export-pdf">
+                    <i class="fas fa-file-pdf"></i> Export PDF
+                </button>
+                <button class="action-button" id="export-csv">
+                    <i class="fas fa-file-csv"></i> Export CSV
+                </button>
+            </div>
+            
+            <input type="text" id="url-input" placeholder="Enter URL (e.g., https://example.com)">
+            <input type="text" id="tags-input" placeholder="Add Tags (comma separated)">
+            <button id="save-button">Save Bookmark</button>
+            
+            <div class="dropdown">
+                <button class="dropdown-button">Filter by Tag</button>
+                <div id="tags-container" class="dropdown-content"></div>
+            </div>
+            
+            <div id="bookmarks-container"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="social-links">
+            <a href="#" class="social-link" rel="noopener"><span>☑️</span> Checklist Creator</a>
+            <a href="#" class="social-link" rel="noopener"><span>🎯</span> Tasks Manager</a>
+            <a href="#" class="social-link" rel="noopener"><span>🔗</span> Links Manager</a>
+            <a href="#" class="social-link" rel="noopener"><span>🧰</span> Magic Toolbox</a>
+            <a href="mailto:soporte@bebelldigitalsolutions.com" class="social-link" rel="noopener"><span>📨</span> Tech Support</a>
+        </div>
+    </footer>
+    <div class="bebell-footer">
+        <p>
+            Developed with 💖 by  
+            <a href="https://bebelldigitalsolutions.com" class="bebell-link" target="_blank" rel="noopener">
+                Bebell Digital Solutions.
+            </a><br>Copyright © 2024 • All rights reserved.
+        </p>
+    </div>
+
+    <!-- Back to Top Widget -->
+    <div id="back-to-top">
+        <img src="https://bucket.mlcdn.com/a/3336/3336910/images/29840e122b950f88fdca23072015101b427a9112.png" alt="Back to top">
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- DOM Elements ---
+    const saveButton = document.getElementById("save-button");
+    const urlInput = document.getElementById("url-input");
+    const tagsInput = document.getElementById("tags-input");
+    const bookmarksContainer = document.getElementById("bookmarks-container");
+    const tagsContainer = document.getElementById("tags-container");
+    const dropdownButton = document.querySelector(".dropdown-button");
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const translationToggle = document.getElementById("translationToggle");
+    const exportPdfButton = document.getElementById('export-pdf');
+    const exportCsvButton = document.getElementById('export-csv');
+    const backToTopButton = document.getElementById('back-to-top');
+
+    // --- State ---
+    let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    
+    // --- Toast Notification ---
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.textContent = message;
+
+        if (type === 'error') {
+            toast.style.borderLeftColor = '#ef4444'; // Red for error
+        } else {
+            toast.style.borderLeftColor = 'var(--primary)';
+        }
+
+        document.body.appendChild(toast);
+        
+        // Trigger the animation
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+
+        // Hide and remove after 3 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 300);
+        }, 3000);
+    }
+
+    // --- Theme Management ---
+    const applyTheme = (theme) => {
+        const icon = darkModeToggle.querySelector('i');
+        if (theme === 'dark') {
+            document.body.classList.remove('light');
+            document.body.classList.add('dark');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+            darkModeToggle.title = "Switch to Light Mode";
+        } else {
+            document.body.classList.remove('dark');
+            document.body.classList.add('light');
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+            darkModeToggle.title = "Switch to Dark Mode";
+        }
+    };
+
+    darkModeToggle.addEventListener('click', () => {
+        const currentTheme = document.body.classList.contains('dark') ? 'dark' : 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+    });
+
+    // --- Bookmark Functions ---
+    const fetchLinkPreview = async (url) => {
+        const apiKey = "cf897b0182aba8e0a03631fb87448236"; // Note: It's better to use a backend proxy for API keys.
+        try {
+            const response = await fetch(`https://api.linkpreview.net/?key=${apiKey}&q=${encodeURIComponent(url)}`);
+            if (!response.ok) throw new Error('API request failed');
+            const data = await response.json();
+            return data.image || "https://placehold.co/600x338/e2e8f0/4a5568?text=No+Preview";
+        } catch (error) {
+            console.error("Error fetching thumbnail:", error);
+            return "https://placehold.co/600x338/e2e8f0/4a5568?text=Preview+Failed";
+        }
+    };
+
+    const saveBookmark = async () => {
+        const url = urlInput.value.trim();
+        const tags = tagsInput.value.split(",").map(tag => tag.trim()).filter(Boolean);
+
+        if (!url.startsWith('https://') && !url.startsWith('http://')) {
+            showToast("Error! URL must start with https:// or http://", "error");
+            return;
+        }
+
+        if (bookmarks.some(bookmark => bookmark.url === url)) {
+            showToast("This link has already been saved.", "info");
+            return;
+        }
+
+        const thumbnail = await fetchLinkPreview(url);
+        
+        const bookmark = {
+            id: Date.now(),
+            url,
+            thumbnail,
+            tags: tags.length > 0 ? tags : ["untagged"],
+            date: new Date().toISOString() 
+        };
+
+        bookmarks.unshift(bookmark); // Add to the beginning
+        localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+        
+        urlInput.value = "";
+        tagsInput.value = "";
+        
+        displayBookmarks();
+        displayTags();
+        triggerConfetti();
+        showToast("Bookmark saved successfully!");
+    };
+
+    const displayBookmarks = (filteredBookmarks = bookmarks) => {
+        bookmarksContainer.innerHTML = "";
+        filteredBookmarks.forEach(bookmark => {
+            const bookmarkElement = document.createElement("div");
+            bookmarkElement.className = "bookmark";
+            bookmarkElement.innerHTML = `
+                <span class="delete-icon" data-id="${bookmark.id}">×</span>
+                <a href="${bookmark.url}" target="_blank" rel="noopener noreferrer">
+                    <img src="${bookmark.thumbnail}" alt="Preview for ${bookmark.url}" onerror="this.src='https://placehold.co/600x338/e2e8f0/4a5568?text=Image+Error'">
+                    <div class="bookmark-content">
+                        <span class="bookmark-url">${bookmark.url}</span>
+                        <div class="bookmark-meta">
+                            <p><strong>Tags:</strong> ${bookmark.tags.join(", ")}</p>
+                            <p><strong>Date:</strong> ${new Date(bookmark.date).toLocaleString()}</p>
+                        </div>
+                    </div>
+                </a>
+            `;
+            bookmarksContainer.appendChild(bookmarkElement);
+        });
+    };
+
+    const deleteBookmark = (id) => {
+        bookmarks = bookmarks.filter(bookmark => bookmark.id !== id);
+        localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+        displayBookmarks();
+        displayTags();
+    };
+
+    bookmarksContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-icon')) {
+            const id = parseInt(e.target.getAttribute('data-id'), 10);
+            deleteBookmark(id);
+        }
+    });
+
+    // --- Tag Filtering Functions ---
+    const displayTags = () => {
+        tagsContainer.innerHTML = "";
+        const allButton = document.createElement("button");
+        allButton.className = "tag-button";
+        allButton.textContent = "All";
+        allButton.addEventListener("click", () => {
+            displayBookmarks();
+            closeDropdown();
+        });
+        tagsContainer.appendChild(allButton);
+
+        const allTags = [...new Set(bookmarks.flatMap(bookmark => bookmark.tags))];
+        allTags.sort().forEach(tag => {
+            const tagButton = document.createElement("button");
+            tagButton.className = "tag-button";
+            tagButton.textContent = tag;
+            tagButton.addEventListener("click", () => filterByTag(tag));
+            tagsContainer.appendChild(tagButton);
+        });
+    };
+    
+    const filterByTag = (tag) => {
+        const filtered = bookmarks.filter(bookmark => bookmark.tags.includes(tag));
+        displayBookmarks(filtered);
+        closeDropdown();
+    };
+
+    const closeDropdown = () => document.querySelector(".dropdown").classList.remove("active");
+
+    dropdownButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        document.querySelector(".dropdown").classList.toggle("active");
+    });
+
+    // --- Export Functions ---
+    const exportToPDF = () => {
+        if (bookmarks.length === 0) return showToast('No bookmarks to export.', 'info');
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        doc.setFontSize(18);
+        doc.text('My Saved Bookmarks', 14, 15);
+        
+        const tableData = bookmarks.map(b => [
+            b.url,
+            b.tags.join(', '),
+            new Date(b.date).toLocaleString()
+        ]);
+        
+        doc.autoTable({
+            head: [['URL', 'Tags', 'Date']],
+            body: tableData,
+            startY: 25,
+            headStyles: { fillColor: [223, 23, 131] },
+        });
+        
+        doc.save('my-bookmarks.pdf');
+    };
+
+    const exportToCSV = () => {
+        if (bookmarks.length === 0) return showToast('No bookmarks to export.', 'info');
+        
+        let csvContent = "data:text/csv;charset=utf-8,URL,Tags,Date\n";
+        bookmarks.forEach(b => {
+            const row = `"${b.url}","${b.tags.join(', ')}","${new Date(b.date).toLocaleString()}"`;
+            csvContent += row + "\n";
+        });
+        
+        const link = document.createElement("a");
+        link.setAttribute("href", encodeURI(csvContent));
+        link.setAttribute("download", "my-bookmarks.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    // --- Utility and Event Listeners ---
+    const triggerConfetti = () => {
+        if (window.confetti) {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        }
+    };
+
+    saveButton.addEventListener("click", saveBookmark);
+    exportPdfButton.addEventListener('click', exportToPDF);
+    exportCsvButton.addEventListener('click', exportToCSV);
+    translationToggle.addEventListener('click', () => showToast('Translation feature coming soon!', 'info'));
+
+    // Back to top button visibility
+    window.addEventListener("scroll", () => {
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            backToTopButton.style.display = "block";
+        } else {
+            backToTopButton.style.display = "none";
+        }
+    });
+
+    backToTopButton.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Close dropdown if clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.dropdown')) {
+            closeDropdown();
+        }
+    });
+
+    // --- Initial Load ---
+    const initialTheme = localStorage.getItem('theme') || 'light';
+    applyTheme(initialTheme);
+    displayBookmarks();
+    displayTags();
+});
+</script>
+
+</body>
+</html>
+
+
+
+
