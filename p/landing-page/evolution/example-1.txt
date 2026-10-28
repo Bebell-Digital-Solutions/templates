@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>evolution - AI Marketing Masterclass</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            bg: '#F4F7F6',
+                            dark: '#15422D',
+                            accent: '#16A34A',
+                            topbar: '#0D2A1C',
+                            pale: '#E6F0EB'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom styles for details/summary accordion */
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] summary ~ * {
+            animation: sweep .3s ease-in-out;
+        }
+        @keyframes sweep {
+            0%    {opacity: 0; transform: translateY(-10px)}
+            100%  {opacity: 1; transform: translateY(0)}
+        }
+    </style>
+</head>
+<body class="bg-brand-bg font-sans text-brand-dark antialiased">
+
+    <!-- Top Bar -->
+    <div class="bg-brand-topbar text-white/80 py-2 px-4 text-xs font-medium hidden md:block">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex space-x-6">
+                <a href="#" class="flex items-center hover:text-white transition"><i data-lucide="mail" class="w-3 h-3 mr-2"></i> contact@evolution.com</a>
+                <a href="#" class="flex items-center hover:text-white transition"><i data-lucide="phone" class="w-3 h-3 mr-2"></i> +1 (555) 123-4567</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="#" class="hover:text-white transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                <a href="#" class="hover:text-white transition"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                <a href="#" class="hover:text-white transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                <a href="#" class="bg-brand-accent/20 text-brand-accent hover:bg-brand-accent hover:text-white px-3 py-1 rounded-full transition duration-300 ml-4">Request a demo</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="py-6 px-4 md:px-8 absolute w-full z-10 top-0 md:top-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tight text-brand-dark flex items-center gap-1">
+                evolution
+                <span class="w-2 h-2 rounded-full bg-brand-accent mt-1"></span>
+            </a>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-1 text-sm font-medium">
+                    <img src="https://flagcdn.com/w20/us.png" alt="English" class="w-5 h-auto rounded-sm">
+                    <span>EN</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+                <a href="#register" class="bg-brand-accent text-white px-6 py-2.5 rounded-full font-medium hover:bg-green-700 transition duration-300 shadow-md shadow-brand-accent/30 text-sm hidden sm:block">
+                    Reserve my spot
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 md:pt-48 md:pb-32 px-4 relative overflow-hidden">
+        <!-- Decorative bg blur -->
+        <div class="absolute top-20 left-0 w-96 h-96 bg-brand-pale rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+        <div class="absolute top-40 right-0 w-96 h-96 bg-green-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+        
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center relative z-10">
+            <!-- Left Content -->
+            <div class="max-w-2xl">
+                <span class="inline-block bg-brand-pale text-brand-accent font-semibold px-4 py-1.5 rounded-full text-xs mb-6 uppercase tracking-wider">
+                    A practical masterclass...
+                </span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-6 tracking-tight">
+                    Build an AI marketing operation from scratch that <span class="text-brand-accent relative inline-block">runs on its own<svg class="absolute -bottom-2 w-full left-0 text-brand-accent/20" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00017 6.46747C49.9575 1.54359 133.09 -1.63665 197.973 6.46747" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span>, and start earning in 30 minutes.
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-lg leading-relaxed">
+                    A 2-hour live session where we construct a custom automated marketing flow for your business. You leave with an operation running, collecting data, and nurturing leads while you sleep.
+                </p>
+                <div class="flex items-center gap-4 text-sm font-medium text-gray-500">
+                    <div class="flex -space-x-2">
+                        <img class="w-8 h-8 rounded-full border-2 border-brand-bg object-cover" src="https://i.pravatar.cc/100?img=1" alt="">
+                        <img class="w-8 h-8 rounded-full border-2 border-brand-bg object-cover" src="https://i.pravatar.cc/100?img=2" alt="">
+                        <img class="w-8 h-8 rounded-full border-2 border-brand-bg object-cover" src="https://i.pravatar.cc/100?img=3" alt="">
+                    </div>
+                    <span>Join 500+ professionals</span>
+                </div>
+            </div>
+
+            <!-- Right Content (Form Card) -->
+            <div id="register" class="w-full max-w-md mx-auto lg:ml-auto">
+                <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 relative">
+                    <!-- Decorative dot -->
+                    <div class="absolute -top-3 -right-3 w-20 h-20 bg-brand-pale rounded-full -z-10 blur-xl"></div>
+                    
+                    <h3 class="text-2xl font-bold mb-6">Secure your spot</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                            <input type="text" placeholder="John Doe" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" placeholder="john@example.com" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number (Optional)</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-200 bg-gray-50 text-gray-500 text-sm">
+                                    🇺🇸 +1
+                                </span>
+                                <input type="tel" placeholder="(555) 000-0000" class="w-full px-4 py-3 rounded-r-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition">
+                            </div>
+                        </div>
+                        <button type="button" class="w-full bg-brand-accent hover:bg-green-700 text-white font-semibold py-4 rounded-xl shadow-lg shadow-brand-accent/30 transition duration-300 mt-4 flex justify-center items-center gap-2">
+                            Complete my reservation
+                            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+                        <p class="text-center text-xs text-gray-400 mt-4">100% secure. No spam guaranteed.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Comparison Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">You come in without an operation. <span class="text-brand-accent block sm:inline">You leave with one running.</span></h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Avoid spending weeks learning theory. In this live session, we skip the fluff. We open the software, connect the tools, write the prompts, and activate the automations for a real business right in front of you.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
+                <!-- Bad Card -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col justify-center">
+                    <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-6">Typical masterclasses</p>
+                    <ul class="space-y-6">
+                        <li class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mt-0.5">
+                                <i data-lucide="x" class="w-4 h-4 text-red-500"></i>
+                            </div>
+                            <span class="text-gray-600 font-medium">Mostly theory, slides, and talking heads telling you what to do.</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mt-0.5">
+                                <i data-lucide="x" class="w-4 h-4 text-red-500"></i>
+                            </div>
+                            <span class="text-gray-600 font-medium">You take scattered notes that you never look at again.</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mt-0.5">
+                                <i data-lucide="x" class="w-4 h-4 text-red-500"></i>
+                            </div>
+                            <span class="text-gray-600 font-medium">You leave overwhelmed, not knowing where to start.</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mt-0.5">
+                                <i data-lucide="x" class="w-4 h-4 text-red-500"></i>
+                            </div>
+                            <span class="text-gray-600 font-medium">Weeks pass by and you still haven't implemented anything.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Good Card -->
+                <div class="bg-brand-dark text-white rounded-3xl p-8 shadow-xl flex flex-col justify-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-48 h-48 bg-white opacity-5 rounded-bl-full pointer-events-none"></div>
+                    <p class="text-sm font-semibold text-brand-accent uppercase tracking-wider mb-6">The Evolution Approach</p>
+                    <ul class="space-y-6 relative z-10">
+                        <li class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-brand-accent/20 flex items-center justify-center mt-0.5">
+                                <i data-lucide="check" class="w-4 h-4 text-brand-accent"></i>
+                            </div>
+                            <span class="font-medium text-gray-100">100% practical operation being built directly on the screen.</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-brand-accent/20 flex items-center justify-center mt-0.5">
+                                <i data-lucide="check" class="w-4 h-4 text-brand-accent"></i>
+                            </div>
+                            <span class="font-medium text-gray-100">You receive exact templates and prompts to copy.</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-brand-accent/20 flex items-center justify-center mt-0.5">
+                                <i data-lucide="check" class="w-4 h-4 text-brand-accent"></i>
+                            </div>
+                            <span class="font-medium text-gray-100">You follow along and build yours simultaneously.</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-brand-accent/20 flex items-center justify-center mt-0.5">
+                                <i data-lucide="check" class="w-4 h-4 text-brand-accent"></i>
+                            </div>
+                            <span class="font-medium text-gray-100">You log off with a fully functional system ready to capture leads.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Features Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2 block">Our Methodology</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">It is not a class. It is your operation <span class="text-brand-accent block sm:inline">being built in front of you.</span></h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">We do not teach you what a funnel is. We open the tool, write the copy, set up the triggers, and hit 'Publish'.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Feature 1 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-brand-pale rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="bot" class="w-6 h-6 text-brand-dark"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">AI Agent Setup</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">We will configure a custom AI agent tailored to your business knowledge base, capable of answering FAQs and qualifying leads 24/7.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-brand-pale rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="workflow" class="w-6 h-6 text-brand-dark"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Build the Logic Blueprint</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">Map out the exact conversational flow. We'll set up decision trees that route hot leads to booking links and nurture cold leads over time.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-brand-pale rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="database" class="w-6 h-6 text-brand-dark"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">The Data Storage Integration</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">Stop losing contacts in DMs. We'll show you how to automatically push every interaction into a structured CRM or simple Google Sheet.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-brand-pale rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="zap" class="w-6 h-6 text-brand-dark"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Live Testing & Launch</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">Before we finish, we run live test scenarios. You will see the system handle objections, gather info, and trigger the final desired action.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Integrations Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2 block">Omnichannel Ready</span>
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">An operation connected <span class="text-brand-accent">to the channels your customers already use.</span></h2>
+            <p class="text-gray-600 mb-10 max-w-2xl mx-auto">The strategies and systems we build are platform-agnostic. We use tools like Make and Zapier to ensure your AI assistant can communicate wherever your audience lives.</p>
+            
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4">
+                <span class="px-5 py-2.5 bg-white border border-gray-200 rounded-full font-medium text-gray-700 shadow-sm flex items-center gap-2">
+                    <i data-lucide="message-circle" class="w-4 h-4 text-green-500"></i> WhatsApp
+                </span>
+                <span class="px-5 py-2.5 bg-white border border-gray-200 rounded-full font-medium text-gray-700 shadow-sm flex items-center gap-2">
+                    <i data-lucide="instagram" class="w-4 h-4 text-pink-500"></i> Instagram
+                </span>
+                <span class="px-5 py-2.5 bg-white border border-gray-200 rounded-full font-medium text-gray-700 shadow-sm flex items-center gap-2">
+                    <i data-lucide="facebook" class="w-4 h-4 text-blue-500"></i> Facebook Messenger
+                </span>
+                <span class="px-5 py-2.5 bg-white border border-gray-200 rounded-full font-medium text-gray-700 shadow-sm flex items-center gap-2">
+                    <i data-lucide="smartphone" class="w-4 h-4 text-gray-500"></i> SMS
+                </span>
+                <span class="px-5 py-2.5 bg-white border border-gray-200 rounded-full font-medium text-gray-700 shadow-sm flex items-center gap-2">
+                    <i data-lucide="mail" class="w-4 h-4 text-yellow-500"></i> Email
+                </span>
+                <span class="px-5 py-2.5 bg-white border border-gray-200 rounded-full font-medium text-gray-700 shadow-sm flex items-center gap-2">
+                    <i data-lucide="credit-card" class="w-4 h-4 text-indigo-500"></i> Stripe
+                </span>
+                <span class="px-5 py-2.5 bg-white border border-gray-200 rounded-full font-medium text-gray-700 shadow-sm flex items-center gap-2">
+                    <i data-lucide="file-spreadsheet" class="w-4 h-4 text-green-600"></i> Google Sheets
+                </span>
+            </div>
+            <p class="text-xs text-gray-400 mt-8 font-medium">Powered by industry-leading integration platforms designed for scalability.</p>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Audience Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2 block">Who is this for</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Made for those who want to stop studying <span class="text-brand-accent block sm:inline">and start earning.</span></h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-2 h-full bg-brand-accent/20 group-hover:bg-brand-accent transition-colors"></div>
+                    <h3 class="text-2xl font-bold mb-4">For you, the business owner</h3>
+                    <p class="text-gray-600 leading-relaxed">If you have traffic but low conversion, or if you are losing hours answering repetitive questions in DMs. This implementation will act as your best digital salesperson, qualifying leads and booking appointments autonomously so you can focus on delivery.</p>
+                </div>
+                <div class="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-2 h-full bg-brand-dark/20 group-hover:bg-brand-dark transition-colors"></div>
+                    <h3 class="text-2xl font-bold mb-4">For you, the professional</h3>
+                    <p class="text-gray-600 leading-relaxed">If you want to offer high-ticket AI implementation services to clients. Learn the exact architecture we use to build systems that businesses are willing to pay $1,000+ for. Acquire a tangible, in-demand technical skill in one evening.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Speakers Section -->
+    <section class="py-20 px-4">
+    
+        <div class="max-w-3xl mx-auto">
+        
+        
+            <div class="text-center mb-12">
+            
+            
+                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2 block">Your Instructors</span>
+                
+                
+                <h2 class="text-3xl md:text-4xl font-bold">Who will guide you <span class="text-brand-accent">that night.</span></h2>
+                
+                
+            </div>
+
+            <div class="space-y-6">
+            
+            
+                <!-- Speaker 1 -->
+                <div class="bg-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 items-center border border-gray-100 shadow-sm">
+                    <div class="w-24 h-24 flex-shrink-0 bg-brand-dark rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                        EVO
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold mb-1">evolution Core Team</h4>
+                        <p class="text-brand-accent text-sm font-medium mb-3">AI Automation Architects</p>
+                        <p class="text-gray-600 text-sm leading-relaxed">Our team has built and deployed over 50+ custom AI operations for e-commerce, real estate, and service-based businesses. We translate complex tech into simple, money-making workflows. No theoretical fluff, just battle-tested systems.</p>
+                    </div>
+                </div>
+
+
+                <!-- Speaker 2 / Assistant -->
+                <div class="bg-brand-pale rounded-3xl p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 items-center border border-green-100">
+                    <div class="w-24 h-24 flex-shrink-0 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                        <i data-lucide="cpu" class="w-10 h-10 text-brand-accent"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold mb-1">Your personal AI Builder Assistant</h4>
+                        <p class="text-brand-accent text-sm font-medium mb-3">Available 24/7 post-session</p>
+                        <p class="text-gray-600 text-sm leading-relaxed">Gain exclusive access to a custom GPT trained specifically on this masterclass framework. It will assist you in troubleshooting, writing prompts, and expanding your operation long after the live session ends.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+    <!-- Countdown Banner -->
+    <section class="py-10 px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="bg-brand-dark rounded-3xl p-10 md:p-16 text-center shadow-2xl relative overflow-hidden">
+                <!-- Decorative elements -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-brand-accent/20 rounded-full translate-y-1/2 -translate-x-1/4 filter blur-2xl"></div>
+
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-4xl px-20 font-bold text-white mb-4">On August 31, at 7pm, your operation comes to life.</h2>
+                    <p class="text-gray-300 mb-10 text-sm md:text-base max-w-xl mx-auto">Limited seats available to ensure quality support during the live build. Secure your spot before the timer runs out.</p>
+
+                    <!-- Timer -->
+                    <div class="flex justify-center gap-3 md:gap-6 mb-10" id="countdown">
+                        <div class="flex flex-col items-center">
+                            <div class="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center mb-2">
+                                <span class="text-3xl md:text-4xl font-bold text-white" id="days">00</span>
+                            </div>
+                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Days</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center mb-2">
+                                <span class="text-3xl md:text-4xl font-bold text-white" id="hours">00</span>
+                            </div>
+                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Hours</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center mb-2">
+                                <span class="text-3xl md:text-4xl font-bold text-white" id="minutes">00</span>
+                            </div>
+                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Mins</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center mb-2">
+                                <span class="text-3xl md:text-4xl font-bold text-white" id="seconds">00</span>
+                            </div>
+                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Secs</span>
+                        </div>
+                    </div>
+
+                    <a href="#register" class="inline-block bg-brand-accent hover:bg-green-700 text-white font-semibold px-8 py-4 rounded-full shadow-lg shadow-brand-accent/30 transition duration-300">
+                        Join the live masterclass
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- FAQ Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2 block">Common Questions</span>
+                <h2 class="text-3xl md:text-4xl font-bold">What everyone asks <span class="text-brand-accent">before reserving a spot.</span></h2>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <details class="group bg-white rounded-2xl border border-gray-200 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between p-6 font-medium text-brand-dark">
+                        <span class="font-bold">Is this recorded if I can't make it?</span>
+                        <span class="transition group-open:-rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                        Yes, all registered attendees will receive lifetime access to the recording, along with all templates, prompts, and resources shared during the live session. However, attending live allows you to ask questions specific to your business.
+                    </div>
+                </details>
+                
+                <!-- FAQ 2 -->
+                <details class="group bg-white rounded-2xl border border-gray-200 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between p-6 font-medium text-brand-dark">
+                        <span class="font-bold">Do I need to buy expensive software to run this?</span>
+                        <span class="transition group-open:-rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                        The core build utilizes tools that have generous free tiers (like Make.com and basic OpenAI API usage). You can run a significant volume of automations for pennies before needing any paid subscriptions. We focus on lean, cost-effective tech stacks.
+                    </div>
+                </details>
+
+                <!-- FAQ 3 -->
+                <details class="group bg-white rounded-2xl border border-gray-200 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between p-6 font-medium text-brand-dark">
+                        <span class="font-bold">What exactly are we building?</span>
+                        <span class="transition group-open:-rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                        We will build an autonomous AI agent connected to an entry channel (like IG DMs or WhatsApp). It will read user inquiries, reference your custom knowledge base to answer questions, qualify the lead based on your criteria, and push the data to a CRM while providing a booking link to the user.
+                    </div>
+                </details>
+
+                <!-- FAQ 4 -->
+                <details class="group bg-white rounded-2xl border border-gray-200 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between p-6 font-medium text-brand-dark">
+                        <span class="font-bold">Will I really have it running by the end?</span>
+                        <span class="transition group-open:-rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                        Yes. If you follow along step-by-step and have your accounts ready as instructed in the pre-session materials, you will hit 'Publish' and have a live connection by the end of the 2 hours.
+                    </div>
+                </details>
+
+                <!-- FAQ 5 -->
+                <details class="group bg-white rounded-2xl border border-gray-200 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between p-6 font-medium text-brand-dark">
+                        <span class="font-bold">What if I have zero coding experience?</span>
+                        <span class="transition group-open:-rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                        Perfect. This entire operation is built using No-Code/Low-Code visual interfaces. If you can drag and drop, and copy/paste text, you possess all the technical skills required for this masterclass.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <footer class="bg-white py-12 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col items-center">
+            <a href="#" class="text-2xl font-bold tracking-tight text-brand-dark flex items-center gap-1 mb-6">
+                evolution
+                <span class="w-2 h-2 rounded-full bg-brand-accent mt-1"></span>
+            </a>
+            <p class="text-gray-400 text-sm mb-6 text-center max-w-md">Empowering businesses through practical artificial intelligence implementation and automation strategies.</p>
+            <div class="flex gap-6 text-sm font-medium text-gray-500 mb-8">
+                <a href="#" class="hover:text-brand-accent transition">Terms & Conditions</a>
+                <a href="#" class="hover:text-brand-accent transition">Privacy Policy</a>
+                <a href="#" class="hover:text-brand-accent transition">Cookie Policy</a>
+                <a href="#" class="hover:text-brand-accent transition">Contact</a>
+            </div>
+            <p class="text-gray-400 text-xs">© 2024 evolution digital solutions. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Initialize Icons & Countdown Logic -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Countdown Timer Logic
+        // Set target date to a fixed future date for demo purposes (e.g., Aug 31 next year)
+        const currentYear = new Date().getFullYear();
+        let targetDate = new Date(`August 31, ${currentYear} 19:00:00`).getTime();
+        
+        // If the date has passed this year, set it to next year
+        if (new Date().getTime() > targetDate) {
+             targetDate = new Date(`August 31, ${currentYear + 1} 19:00:00`).getTime();
+        }
+
+        const updateTimer = () => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                document.getElementById('days').innerText = "00";
+                document.getElementById('hours').innerText = "00";
+                document.getElementById('minutes').innerText = "00";
+                document.getElementById('seconds').innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Format with leading zeros
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+        };
+
+        // Initial call
+        updateTimer();
+        // Update every second
+        const timerInterval = setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
