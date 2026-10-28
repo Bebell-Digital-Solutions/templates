@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Lead Qualifier: AI Prospect Analysis</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Load required libraries for PDF generation (html2canvas, jsPDF) --><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+    
+    <!-- Favicon -->
+<link rel="icon" href="https://bucket.mlcdn.com/a/3336/3336910/images/71dbdd24ad8ebf75d9a1a1400bfdede02f9e9b44.png">
+
+
+    
+
+    <!-- Use Inter font --><style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        /* New Color Palette and Base Styles */
+        :root {
+            /* Color Palette */
+            --skin-color: #ff5011; /* Orange-Red Accent */
+            --mirage-color: hsl(210, 10%, 23%); /* Dark Gray Background Component */
+            --title-color: hsl(242, 8%, 98%); /* Near White for Titles */
+            --text-color: hsl(242, 8%, 80%); /* Light Gray for Body Text */
+            --body-color: #0d0d0d; /* Deep Black/Very Dark Gray */
+            --box-color: hsl(242, 14%, 12%); /* Slightly lighter than body for cards */
+            --hue-color: 242; /* Used for transparent shadows/colors */
+
+            /* Typography (adapted to Tailwind use) */
+            --body-font: 'Inter', sans-serif;
+            --font-medium: 500;
+            --font-bold: 700;
+            
+            /* UI colors based on new palette */
+            --bg-color-main: var(--body-color);
+            --text-color-primary: var(--title-color);
+            --bg-color-sidebar: var(--body-color);
+            --bg-color-input: #1b1c1d; /* Keeping previous dark input color for contrast with glow */
+            --bg-color-report: var(--box-color);
+            --color-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            --flavia-bg: var(--mirage-color); /* Prospect */
+            --nfc-bg: var(--skin-color); /* Agent/AI */
+            --nfc-text: var(--title-color);
+            --highlight-border: var(--skin-color);
+            --highlight-bg: hsla(0, 100%, 50%, 0.1); /* Transparent red based on skin */
+            --blue-accent: var(--skin-color);
+            --border-color: var(--mirage-color);
+
+            /* Scrollbar/Misc */
+            --scroll-box-color: var(--box-color);
+            --scroll-thumb-color: var(--skin-color);
+            
+            /* New API Key Validation Colors */
+            --api-key-valid-color: #10B981; /* Tailwind green-500 */
+        }
+
+        /* Light mode colors remain defined but are unused by JS for simplicity */
+        .light-mode {
+            --bg-color-main: #f7f9fb;
+            --text-color-primary: #1f2937;
+            --bg-color-sidebar: #ffffff;
+            --bg-color-input: #ffffff;
+            --bg-color-report: #ffffff;
+            --color-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --flavia-bg: #e2e8f0;
+            --nfc-bg: #3b82f6;
+            --nfc-text: white;
+            --highlight-border: #ef4444;
+            --highlight-bg: #fee2e2;
+            --blue-accent: #3b82f6;
+            --border-color: #e5e7eb;
+            --scroll-box-color: #ccc;
+            --scroll-thumb-color: #888;
+        }
+
+        /* --- Base & Scrollbar from user's provided CSS --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--scroll-box-color); }
+        ::-webkit-scrollbar-thumb { background: var(--scroll-thumb-color); border-radius: 4px; }
+        
+        body {
+            font-family: var(--body-font);
+            background-color: var(--body-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Original chat/report styles updated */
+        .chat-bubble { max-width: 85%; padding: 10px 15px; border-radius: 1.5rem; margin-bottom: 8px; position: relative; }
+        .flavia-bubble { background-color: var(--flavia-bg); border-bottom-left-radius: 0.25rem; text-align: left; margin-right: auto; }
+        .nfc-bubble { background-color: var(--nfc-bg); color: var(--nfc-text); border-bottom-right-radius: 0.25rem; text-align: left; margin-left: auto; }
+
+        .highlight-box {
+            border: 2px solid var(--highlight-border);
+            background-color: var(--highlight-bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .score-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+
+
+        /* --- Layout for Sidebar Toggle (Closeable Sidebar) --- */
+        .sidebar {
+            width: 64px; 
+            transition: width 0.3s ease, transform 0.3s ease;
+            position: fixed;
+            z-index: 50;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: var(--body-color);
+        }
+        .sidebar-open {
+            width: 34vw; 
+            max-width: 280px; 
+        }
+
+        /* Content inside the sidebar remains fixed max width */
+        .sidebar-content {
+            width: 280px;
+            padding: 1rem;
+            display: flex; 
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* Main view adaptation to respect sidebar width */
+        .main-content-wrapper {
+            margin-left: 64px; 
+            transition: margin-left 0.3s ease;
+            width: 100%;
+            min-height: 100vh;
+        }
+        .sidebar-open + .main-content-wrapper {
+            margin-left: min(34vw, 280px); 
+        }
+
+        /* NEW: Hide the border-top on the sidebar footer when closed */
+        .sidebar:not(.sidebar-open) .sidebar-footer-border {
+            border-top: none !important;
+        }
+        
+        /* UPDATED: Sidebar border color change */
+        #sidebar {
+            border-right: 1px solid #1b1c1d;
+        }
+
+        /* Centered welcome state (Now centers the whole block vertically and horizontally) */
+        #welcome-view {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            padding-top: 0; 
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        
+        /* New style for the main greeting - Simulating Machina bold font */
+        #welcome-greeting {
+            font-size: 2.5rem; 
+            font-weight: 800; 
+            letter-spacing: -0.05em;
+            line-height: 1.1;
+        }
+
+        /* Report view (fills available space) */
+        #report-view {
+            overflow-y: auto;
+            min-height: 100vh;
+            padding: 4rem 2rem 10rem 2rem; 
+            z-index: 5;
+            position: relative;
+        }
+
+        /* Fixed components for top right */
+        .fixed-top-right {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 30;
+        }
+        
+        /* FIX: Custom CSS for PDF Button Hover */
+        .pdf-button-style:hover {
+            background-color: var(--mirage-color) !important; 
+        }
+        
+        /* FIX: Custom CSS for PDF Button Default Style */
+        .pdf-button-style {
+            background-color: var(--skin-color) !important; 
+            color: white; 
+        }
+
+        /* Floating Input Area (Managed by JS) */
+        #main-input-container {
+            /* Aligned beneath the greeting text */
+            margin-top: 2.5rem; 
+            z-index: 15;
+            transition: all 0.3s ease-out;
+            max-width: 600px;
+            width: 90%;
+            /* In inline state, it's relative and centered by parent #welcome-view */
+            position: relative; 
+            transform: none; 
+        }
+
+        /* Fixed Input State for Report View */
+        #main-input-container.fixed-bottom {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            width: 90%;
+            max-width: 800px; /* Wider input on report view */
+            background: linear-gradient(to top, var(--body-color) 70%, rgba(0, 0, 0, 0.2));
+            padding: 0;
+        }
+
+        /* Glowing animation CSS (Input Field) */
+        @keyframes glowing {
+            0% { 
+                box-shadow: 0 0 5px rgba(255, 80, 17, 0.4), 0 0 10px rgba(255, 80, 17, 0.2); 
+                border-color: rgba(255, 80, 17, 0.5); 
+            }
+            50% { 
+                box-shadow: 0 0 15px var(--skin-color), 0 0 25px rgba(255, 80, 17, 0.8); 
+                border-color: var(--skin-color); 
+            }
+            100% { 
+                box-shadow: 0 0 5px rgba(255, 80, 17, 0.4), 0 0 10px rgba(255, 80, 17, 0.2); 
+                border-color: rgba(255, 80, 17, 0.5); 
+            }
+        }
+
+        /* Sleek, rounded input field (20px radius) */
+        .minimal-input-wrapper {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-color-input);
+            border-radius: 20px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            padding: 0.75rem 1rem; 
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid transparent;
+
+            /* PERMANENT GLOW EFFECT */
+            animation: glowing 3s infinite alternate;
+        }
+
+
+        .minimal-input {
+            flex-grow: 1;
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-color-primary);
+            resize: none;
+            min-height: 2.5rem; /* ~40px */
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+            overflow: hidden; 
+            padding: 0.25rem 0.5rem; 
+        }
+        
+        /* API Key Specific Styling */
+        #api-key-input.api-key-valid {
+            border-color: var(--api-key-valid-color) !important;
+            /* Applying a subtle green box-shadow for the 'glow' effect */
+            box-shadow: 0 0 3px 1px rgba(16, 185, 129, 0.5); 
+        }
+        
+        /* Reset border color when empty (Focus style handles user typing/invalid state) */
+        #api-key-input:not(:focus):not(.api-key-valid) {
+            border-color: var(--mirage-color) !important;
+            box-shadow: none !important;
+        }
+        
+        /* --- Sidebar Logo/Icon Management --- */
+        #sidebar-full-logo { display: block; }
+        /* Hiding this when the sidebar is open, and also completely when the sidebar is collapsed as requested */
+        #sidebar-icon-logo { display: none !important; } 
+
+        .sidebar:not(.sidebar-open) #sidebar-full-logo { display: none; }
+        
+        /* New CSS for the Close Button position (absolute top right of sidebar content) */
+        #sidebar-close-btn {
+            position: absolute;
+            top: 10px; /* 10px from top */
+            right: 10px; /* 10px from right */
+            z-index: 10;
+        }
+        .sidebar.sidebar-open #sidebar-close-btn {
+            display: block; 
+            color: var(--skin-color); 
+        }
+        .sidebar:not(.sidebar-open) #sidebar-close-btn {
+            display: none;
+        }
+        /* Hide logo when sidebar is open to show full logo */
+        .sidebar.sidebar-open #sidebar-icon-logo { display: none !important; }
+
+        /* Collapsed Sidebar Footer Styling */
+        .sidebar:not(.sidebar-open) .sidebar-footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        .sidebar:not(.sidebar-open) .sidebar-footer-content > div {
+            display: none; /* Hide text elements */
+        }
+        .sidebar:not(.sidebar-open) .sidebar-footer-content > img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+
+        /* Hide default Google Translate bar at the top, but allow widget itself */
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0 !important; }
+        .goog-tooltip-bubble { display: none !important; }
+
+        /* Styling for active conversation item */
+        .sidebar-item-active {
+            background-color: var(--skin-color);
+            color: var(--title-color);
+        }
+        .sidebar-item-active p {
+            color: var(--title-color);
+        }
+        
+        /* --- Custom Report Styles (To enforce light theme look) --- */
+        .case-study-report {
+            /* This div simulates the body/wrapper from the case study HTML */
+            background-color: #ffffff; 
+            color: #1f2937;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        .case-study-report .chat-bubble {
+            background-color: #e2e8f0; /* Flavia light gray */
+            color: #1f2937;
+        }
+        .case-study-report .nfc-bubble {
+            background-color: #3b82f6; /* NFC blue */
+            color: white;
+        }
+        .case-study-report h1, .case-study-report h2, .case-study-report h3 {
+            color: #1f2937;
+        }
+        /* Specific coloring for the custom boxes */
+        .case-study-report .report-red-flag-box {
+            background-color: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+        .case-study-report .report-recommendation-box {
+            background-color: #f0fdf4; /* Light green */
+            border-left: 4px solid #16a34a; /* Green */
+        }
+        .case-study-report .report-formula-score {
+            background-color: #e5e7eb; /* Light gray for score row */
+        }
+        .case-study-report .report-score-row-border {
+            border-color: #d1d5db; /* Lighter border for score rows */
+        }
+
+        /* --- Centerpiece Icon Hover Style (Remove Glow) --- */
+        #centerpiece-icon {
+            transition: transform 0.3s ease-in-out; /* Keep transform for lift/grow */
+            border: none; 
+            border-radius: 0.75rem; 
+            box-shadow: none; 
+        }
+        #centerpiece-icon:hover {
+            transform: translateY(-8px) scale(1.05); /* Lift and grow slightly */
+            cursor: pointer;
+            border: none;
+            box-shadow: none; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex antialiased dark-mode">
+
+    <!-- Firebase SDK Imports --><script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query, orderBy, serverTimestamp, deleteDoc, getDocs, writeBatch, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // IMPORTANT: Global variables for Firebase configuration (provided by Canvas environment)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        // Default avatar image (used if none is uploaded)
+        const DEFAULT_AVATAR = "https://ik.imagekit.io/bebell/LeadLens/Picture%20Avatar%20(1).png"; 
+        const LOCAL_STORAGE_KEY = 'geminiLeadQualifierSettings'; 
+
+        let app, db, auth;
+        let globalUserId = null;
+        const APP_VERSION = "V 1.0.1"; // Tool Version Sequence
+
+        // Initialize App State
+        window.appState = {
+            conversations: [],
+            currentConversation: null,
+            settings: { 
+                apiKey: "", 
+                username: "Lead Analyst",
+                profilePictureBase64: DEFAULT_AVATAR // Stores Base64 string or default URL
+            },
+            isAuthReady: false,
+            geminiApiKey: ""
+        };
+
+        setLogLevel('Debug');
+
+        if (firebaseConfig) {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                window.db = db;
+
+                // 1. Authentication Setup
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user) {
+                        try {
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            console.error("Firebase Auth Error:", error);
+                            globalUserId = 'anon-' + (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9));
+                        }
+                    }
+
+                    globalUserId = auth.currentUser?.uid || globalUserId;
+                    window.appState.isAuthReady = true;
+
+                    // 2. Load User Settings (Prioritizes localStorage, then Firestore) and Conversations
+                    if (globalUserId) {
+                        await loadUserSettings();
+                        setupConversationsListener();
+                    }
+                    // Hide loading state once auth and settings are attempted
+                    document.getElementById('loading-state').style.opacity = '0';
+                    setTimeout(() => { document.getElementById('loading-state').style.display = 'none'; }, 300);
+                });
+
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                document.getElementById('loading-state').innerHTML = '<div class="text-red-500 p-4">Error initializing Firebase. Check console for details.</div>';
+            }
+        } else {
+             document.getElementById('loading-state').innerHTML = '<div class="text-yellow-500 p-4">Firebase config not found. Data persistence is disabled. Using browser storage.</div>';
+             
+             // Proceed to main app view even without config, using local storage for settings simulation
+             globalUserId = 'persistence-disabled-user';
+             window.appState.isAuthReady = true;
+             loadUserSettings(); 
+             
+             // Hide loading screen after a short delay so the user can read the message
+             setTimeout(() => {
+                 document.getElementById('loading-state').style.opacity = '0';
+                 setTimeout(() => { document.getElementById('loading-state').style.display = 'none'; }, 300);
+             }, 1000);
+        }
+
+        // Firestore Paths
+        const getUserSettingsDocRef = (uid) => doc(db, `artifacts/${appId}/users/${uid}/settings/user_settings`);
+        const getConversationsCollectionRef = (uid) => collection(db, `artifacts/${appId}/users/${uid}/conversations`);
+
+        // --- Data Loading and Saving Functions ---
+
+        async function loadUserSettings() {
+            let loadedSettings = { ...window.appState.settings };
+            
+            // 1. Try to load from localStorage (Browser persistence)
+            const localSettingsJson = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (localSettingsJson) {
+                try {
+                    const localSettings = JSON.parse(localSettingsJson);
+                    loadedSettings = { ...loadedSettings, ...localSettings };
+                } catch (e) {
+                    console.error("Error parsing localStorage settings:", e);
+                }
+            }
+
+            // 2. If Firebase is active, try to load from Firestore (Higher priority/centralized if available)
+            if (globalUserId && db) {
+                try {
+                    const docRef = getUserSettingsDocRef(globalUserId);
+                    const docSnap = await getDoc(docRef);
+
+                    if (docSnap.exists()) {
+                        const firestoreSettings = docSnap.data();
+                        loadedSettings = { ...loadedSettings, ...firestoreSettings };
+                    }
+                } catch(e) {
+                    console.error("Error loading settings from Firestore:", e);
+                }
+            }
+
+
+            window.appState.settings = {
+                ...loadedSettings,
+                profilePictureBase64: loadedSettings.profilePictureBase64 || DEFAULT_AVATAR
+            };
+
+            // Apply fixed dark theme
+            document.body.classList.remove('dark-mode', 'light-mode');
+            document.body.classList.add('dark-mode');
+            window.appState.geminiApiKey = window.appState.settings.apiKey;
+
+            updateSettingsUI();
+            updateMainViewVisibility();
+        }
+
+        window.saveUserSettings = async () => {
+            const settingsModal = document.getElementById('settings-modal');
+            const apiKeyInput = settingsModal.querySelector('#api-key-input');
+            const apiKey = apiKeyInput.value.trim();
+            const username = settingsModal.querySelector('#username-input').value.trim() || "Lead Analyst";
+            const profilePictureBase64 = window.appState.settings.profilePictureBase64 || DEFAULT_AVATAR;
+
+            const newSettings = { apiKey, username, profilePictureBase64 };
+            let saveSuccess = false;
+            const statusElement = document.getElementById('save-status');
+
+            // 1. Save to localStorage (Backup/Local persistence)
+            try {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newSettings));
+                window.appState.settings = { ...window.appState.settings, ...newSettings };
+                window.appState.geminiApiKey = apiKey;
+                saveSuccess = true;
+            } catch (e) {
+                console.error("Error saving settings to localStorage:", e);
+            }
+            
+            // 2. Save to Firestore (If available)
+            if (globalUserId && db) {
+                try {
+                    const docRef = getUserSettingsDocRef(globalUserId);
+                    await setDoc(docRef, newSettings, { merge: true });
+                } catch (e) {
+                    console.error("Error saving settings to Firestore:", e);
+                }
+            }
+            
+            // 3. Update UI and apply green glow/border
+            if (apiKey.length > 0) {
+                apiKeyInput.classList.add('api-key-valid');
+                statusElement.textContent = 'Settings saved successfully!';
+            } else {
+                apiKeyInput.classList.remove('api-key-valid');
+                statusElement.textContent = 'Settings saved (API Key removed)!';
+            }
+            setTimeout(() => statusElement.textContent = '', 3000);
+
+            updateMainViewVisibility(); 
+            updateSettingsUI();
+        };
+
+        window.handleProfilePictureUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Simple size check (limit to 500KB to prevent oversized Firestore documents)
+            if (file.size > 500 * 1024) {
+                console.error('Image file is too large. Please select an image under 500KB.');
+                document.getElementById('upload-status').textContent = 'Error: Image file is too large (> 500KB).';
+                event.target.value = null; // Reset file input
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64Image = e.target.result;
+                
+                // Update local state and UI immediately (save is handled by explicit button click)
+                window.appState.settings.profilePictureBase64 = base64Image;
+                
+                // Update the avatar previews in the modal and sidebar
+                document.querySelectorAll('.user-avatar-display').forEach(img => {
+                    img.src = base64Image;
+                });
+
+                document.getElementById('upload-status').textContent = 'Image loaded! Click "Save Settings" to confirm.';
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.updateSettingsUI = () => {
+            const settings = window.appState.settings;
+            const settingsModal = document.getElementById('settings-modal');
+            
+            // Update username in modal and sidebar
+            if (settingsModal) {
+                const apiKeyInput = settingsModal.querySelector('#api-key-input');
+                apiKeyInput.value = settings.apiKey;
+                settingsModal.querySelector('#username-input').value = settings.username;
+                
+                // Apply green glow on load if key is present
+                if (settings.apiKey && settings.apiKey.length > 0) {
+                    apiKeyInput.classList.add('api-key-valid');
+                } else {
+                    apiKeyInput.classList.remove('api-key-valid');
+                }
+            }
+            document.getElementById('sidebar-username-display').textContent = settings.username;
+            
+            // Update all avatar images
+            document.querySelectorAll('.user-avatar-display').forEach(img => {
+                img.src = settings.profilePictureBase64 || DEFAULT_AVATAR;
+            });
+        };
+
+        function setupConversationsListener() {
+            if (!globalUserId || !db) return;
+            // NOTE: orderBy should be avoided in production unless indexes are created. Sorting here in JavaScript for MVP simplicity.
+            const q = query(getConversationsCollectionRef(globalUserId)); 
+
+            onSnapshot(q, (snapshot) => {
+                const conversations = [];
+                snapshot.forEach(doc => {
+                    conversations.push({ id: doc.id, ...doc.data() });
+                });
+                // Client-side sort by timestamp (desc)
+                conversations.sort((a, b) => {
+                    const timeA = a.timestamp?.seconds || 0;
+                    const timeB = b.timestamp?.seconds || 0;
+                    return timeB - timeA;
+                });
+                window.appState.conversations = conversations;
+                renderSidebar();
+            }, (error) => {
+                console.error("Error setting up conversations listener:", error);
+            });
+        }
+
+        window.saveConversation = async (conversation) => {
+            if (!globalUserId || !db) return conversation;
+            const conversationsRef = getConversationsCollectionRef(globalUserId);
+
+            try {
+                if (conversation.id) {
+                    const docRef = doc(conversationsRef, conversation.id);
+                    await setDoc(docRef, {
+                        ...conversation,
+                        isSaved: true,
+                        timestamp: serverTimestamp()
+                    }, { merge: true });
+                } else {
+                    const newDoc = await addDoc(conversationsRef, {
+                        ...conversation,
+                        isSaved: true,
+                        timestamp: serverTimestamp()
+                    });
+                    conversation.id = newDoc.id;
+                }
+                // Mark locally as saved
+                window.appState.currentConversation.isSaved = true; 
+                window.updateSaveButtonVisibility();
+
+                return conversation;
+            } catch (e) {
+                console.error("Error saving conversation:", e);
+                return null;
+            }
+        };
+
+        window.deleteConversation = async (id) => {
+            if (!globalUserId || !db) return;
+            try {
+                await deleteDoc(doc(getConversationsCollectionRef(globalUserId), id));
+                if (window.appState.currentConversation?.id === id) {
+                    window.newConversation();
+                }
+            } catch (e) {
+                console.error("Error deleting conversation:", e);
+            }
+        };
+
+        window.eraseAllData = async () => {
+            if (!globalUserId || !db) {
+                console.error('Persistence is disabled.');
+                document.getElementById('erase-status').textContent = 'Error: Persistence is disabled.';
+                return;
+            }
+            
+            // FIX: Replaced confirm() with non-blocking prompt()
+            const result = prompt("To permanently delete ALL saved conversations and settings, type 'DELETE' below:");
+            if (result !== "DELETE") {
+                document.getElementById('erase-status').textContent = 'Deletion canceled.';
+                setTimeout(() => document.getElementById('erase-status').textContent = '', 3000);
+                return;
+            }
+
+            try {
+                const batch = writeBatch(db);
+                const conversationsSnapshot = await getDocs(getConversationsCollectionRef(globalUserId));
+
+                conversationsSnapshot.forEach((doc) => {
+                    batch.delete(doc.ref);
+                });
+                batch.delete(getUserSettingsDocRef(globalUserId));
+
+                await batch.commit();
+
+                // Clear local state
+                window.appState.conversations = [];
+                window.appState.settings = { apiKey: "", username: "Lead Analyst", profilePictureBase64: DEFAULT_AVATAR };
+                window.appState.geminiApiKey = "";
+                document.body.classList.remove('light-mode');
+                document.body.classList.add('dark-mode');
+                window.updateSettingsUI();
+                window.newConversation();
+
+                document.getElementById('erase-status').textContent = 'All data erased successfully!';
+                setTimeout(() => document.getElementById('erase-status').textContent = '', 3000);
+
+            } catch (e) {
+                console.error("Error erasing all data:", e);
+                document.getElementById('erase-status').textContent = 'Error erasing data.';
+            }
+        };
+
+        /**
+         * Function to download the current appState as a JSON file
+         */
+        window.exportConversationHistory = () => {
+            // Exclude database-specific objects before export
+            const exportState = {
+                settings: window.appState.settings,
+                conversations: window.appState.conversations.map(conv => {
+                    // Remove Firebase-specific timestamp object if it exists
+                    const { timestamp, ...rest } = conv;
+                    return rest;
+                }),
+                // Add current conversation if it exists and is not already in the list (e.g., unsaved new report)
+                currentConversation: window.appState.currentConversation?.report && 
+                                             !window.appState.currentConversation.id ? 
+                                             window.appState.currentConversation : null
+            };
+
+            const jsonString = JSON.stringify(exportState, null, 2);
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `GeminiLeadQualifier_Export_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            document.getElementById('export-status').textContent = 'Exported successfully!';
+            setTimeout(() => document.getElementById('export-status').textContent = '', 3000);
+        };
+
+        /**
+         * Function to handle the import of a JSON or text file (restores state)
+         */
+        window.handleImport = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+                const importStatus = document.getElementById('import-status');
+                importStatus.textContent = 'Importing...';
+
+                try {
+                    // Attempt to parse as JSON first (for exported app state)
+                    const importedState = JSON.parse(content);
+
+                    if (importedState.settings && Array.isArray(importedState.conversations)) {
+                        // 1. Restore Settings
+                        window.appState.settings = importedState.settings;
+                        window.appState.geminiApiKey = importedState.settings.apiKey;
+                        
+                        // Save imported settings to localStorage immediately
+                        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(importedState.settings));
+                        updateSettingsUI();
+
+                        // 2. Restore Conversations (Assign temporary local IDs)
+                        window.appState.conversations = importedState.conversations.map(conv => ({
+                            ...conv,
+                            // Assign a local ID for immediate use if Firebase ID is missing
+                            id: conv.id && !conv.id.startsWith('local-') ? conv.id : 'local-' + Math.random().toString(36).substring(2, 9), 
+                            isSaved: false // Mark all imported conversations as unsaved to force a Firebase save if re-enabled
+                        }));
+
+                        // 3. Restore Current Conversation (if present)
+                        if (importedState.currentConversation && importedState.currentConversation.transcript) {
+                            window.appState.currentConversation = importedState.currentConversation;
+                            document.getElementById('main-transcript-input').value = importedState.currentConversation.transcript;
+                        } else if (window.appState.conversations.length > 0) {
+                            // Load the most recent conversation from the imported list
+                            window.loadConversation(window.appState.conversations[0].id);
+                        } else {
+                            window.newConversation();
+                        }
+
+                        // Update UI
+                        renderSidebar();
+                        updateMainViewVisibility();
+                        importStatus.textContent = 'State restored from JSON!';
+                        
+                    } else {
+                        // If JSON is not a state object, treat it as a transcript
+                        throw new Error("Invalid JSON structure, treating as transcript.");
+                    }
+                    
+                } catch (jsonError) {
+                    // If JSON parsing fails or structure is incorrect, treat content as plain transcript
+                    window.newConversation();
+                    document.getElementById('main-transcript-input').value = content;
+                    window.appState.currentConversation.transcript = content;
+                    window.appState.currentConversation.report = null; // Ensure new transcript clears old report
+                    window.updateMainViewVisibility();
+                    
+                    importStatus.textContent = 'File imported as a new transcript!';
+                }
+                setTimeout(() => importStatus.textContent = '', 3000);
+            };
+
+            reader.readAsText(file);
+            // Reset file input to allow importing the same file again
+            event.target.value = ''; 
+        };
+
+        /**
+         * Basic HTML Escape function to prevent XSS from AI output or user transcripts.
+         */
+        function escapeHtml(text) {
+            if (typeof text !== 'string') return text;
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+
+        // --- UI Rendering Functions ---
+
+        window.renderSidebar = () => {
+            const sidebarList = document.getElementById('conversation-list');
+            if (!sidebarList) return;
+
+            sidebarList.innerHTML = '';
+            // Only render list if persistence is enabled (db is available)
+            if (db) {
+                window.appState.conversations.forEach(conv => {
+                    const isActive = window.appState.currentConversation && window.appState.currentConversation.id === conv.id;
+                    const title = conv.title || conv.transcript.substring(0, 30).trim() + '...';
+
+                    const li = document.createElement('li');
+                    li.className = `p-2 my-1 rounded-lg transition duration-150 ease-in-out cursor-pointer flex justify-between items-center ${isActive ? 'sidebar-item-active shadow-md' : 'hover:bg-mirage-color/50'}`;
+                    li.onclick = () => window.loadConversation(conv.id);
+                    li.innerHTML = `
+                        <p class="text-sm font-medium text-title-color truncate">${escapeHtml(title)}</p>
+                        <button class="text-red-400 hover:text-red-600 p-1 rounded-full ${isActive ? 'text-white' : ''}" onclick="event.stopPropagation(); window.deleteConversation('${conv.id}');">
+                            <i class="fas fa-trash-alt text-xs"></i>
+                        </button>
+                    `;
+                    sidebarList.appendChild(li);
+                });
+            } else {
+                sidebarList.innerHTML = `<li class="p-2 text-xs text-text-color opacity-70">Conversation history is disabled.</li>`;
+            }
+        };
+
+        window.loadConversation = (id) => {
+            const conv = window.appState.conversations.find(c => c.id === id);
+            if (conv) {
+                window.appState.currentConversation = { ...conv, isSaved: true };
+                document.getElementById('main-transcript-input').value = conv.transcript || '';
+
+                window.updateMainViewVisibility();
+                if (conv.report) {
+                    document.getElementById('report-content-display').innerHTML = window.generateReportHTML(conv.report, conv.transcript);
+                    window.animateCounter('score-counter-display', conv.report.qualificationScore || 0, 500); // Re-run animation
+                    document.getElementById('report-view').scrollTop = 0;
+                }
+                renderSidebar();
+            }
+        };
+
+        window.newConversation = () => {
+            window.appState.currentConversation = {
+                id: null,
+                title: "New Report",
+                transcript: "",
+                report: null,
+                isSaved: true, // Mark as saved if no report exists yet
+            };
+            document.getElementById('main-transcript-input').value = '';
+            document.getElementById('report-content-display').innerHTML = '';
+            window.updateMainViewVisibility();
+            renderSidebar();
+        };
+        
+        window.toggleSidebar = () => {
+            const sidebar = document.getElementById('sidebar');
+            const mainWrapper = document.getElementById('main-content-wrapper');
+            const toggleOpenButton = document.getElementById('sidebar-toggle-open');
+            const sidebarCloseButton = document.getElementById('sidebar-close-btn');
+            const isCurrentlyOpen = sidebar.classList.contains('sidebar-open');
+
+            if (isCurrentlyOpen) {
+                sidebar.classList.remove('sidebar-open');
+                mainWrapper.classList.remove('sidebar-open-main');
+                toggleOpenButton.classList.remove('hidden');
+                sidebarCloseButton.classList.add('hidden');
+            } else {
+                sidebar.classList.add('sidebar-open');
+                mainWrapper.classList.add('sidebar-open-main');
+                toggleOpenButton.classList.add('hidden');
+                sidebarCloseButton.classList.remove('hidden');
+            }
+        };
+
+
+        window.updateSaveButtonVisibility = () => {
+            const saveButton = document.getElementById('save-report-button');
+            const currentConv = window.appState.currentConversation;
+            
+            if (saveButton) {
+                // Show button if a report exists and it hasn't been saved yet (id is null or isSaved is false)
+                const shouldShow = currentConv && currentConv.report && !currentConv.isSaved && db;
+                saveButton.style.display = shouldShow ? 'block' : 'none';
+            }
+        };
+
+        window.updateMainViewVisibility = () => {
+             const hasReport = window.appState.currentConversation && window.appState.currentConversation.report;
+             const welcomeView = document.getElementById('welcome-view');
+             const reportView = document.getElementById('report-view');
+             const inputContainer = document.getElementById('main-input-container');
+             
+             if (hasReport) {
+                 welcomeView.classList.add('hidden');
+                 reportView.classList.remove('hidden');
+                 inputContainer.classList.add('fixed-bottom'); // Switch to fixed position
+             } else {
+                 welcomeView.classList.remove('hidden');
+                 reportView.classList.add('hidden');
+                 inputContainer.classList.remove('fixed-bottom'); // Switch to inline position
+             }
+
+             window.updateSaveButtonVisibility(); // Update button visibility on view change
+        };
+
+        window.saveCurrentReport = async () => {
+            const currentConv = window.appState.currentConversation;
+            if (!currentConv || !currentConv.report) {
+                console.error('No report has been generated to save.');
+                return;
+            }
+
+            const defaultTitle = `Report - ${currentConv.report.prospectName} (${currentConv.report.finalVerdict}) - ${new Date().toLocaleDateString()}`;
+            
+            // Using prompt instead of confirm() or alert() for UX consistency
+            const customTitle = prompt("Enter a custom title for this report:", defaultTitle);
+
+            if (customTitle === null) {
+                return; // User canceled the prompt
+            }
+            
+            currentConv.title = customTitle.trim() || defaultTitle;
+            
+            document.getElementById('save-report-button').disabled = true;
+            document.getElementById('save-report-button').textContent = 'Saving...';
+            
+            await window.saveConversation(currentConv);
+
+            document.getElementById('save-report-button').textContent = 'Saved!';
+            document.getElementById('save-report-button').disabled = false;
+        };
+
+
+        /**
+         * Function to animate a counter from 0 to a target value.
+         * @param {string} targetId - The ID of the HTML element to update.
+         * @param {number} targetValue - The final value of the counter.
+         * @param {number} duration - The duration of the animation in milliseconds.
+         */
+        window.animateCounter = (targetId, targetValue, duration) => {
+            const obj = document.getElementById(targetId);
+            if (!obj) return;
+            
+            let startTimestamp = null;
+            const startValue = 0;
+
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                
+                const currentValue = Math.floor(progress * (targetValue - startValue) + startValue);
+                obj.innerHTML = currentValue;
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+
+            window.requestAnimationFrame(step);
+        }
+
+        window.generateReportHTML = (report, transcript) => {
+            const { overallScore, finalVerdict, summary, scores, redFlags, prospectName, recommendations } = report;
+            const qualificationScore = Math.round(overallScore * 20); // Scale 1-5 to 0-100
+
+            // Helper to render the transcript with highlighting/styling (simplified for case study)
+            const transcriptToHtml = (text) => {
+                const lines = text.split('\n');
+                let html = '';
+                
+                // Track which quotes from redFlags have been used to avoid duplication or placing flags randomly
+                const usedQuotes = new Set(); 
+
+                lines.forEach((line) => {
+                    const match = line.match(/^(\w+):\s*(.*)/);
+                    
+                    if (match) {
+                        const [full, speaker, content] = match;
+                        // Sanitize speaker and content
+                        const safeSpeaker = escapeHtml(speaker);
+                        const safeContent = escapeHtml(content);
+                        
+                        const speakerClass = safeSpeaker.toLowerCase().includes('agent') || safeSpeaker.toLowerCase().includes('nfc') ? 'nfc-bubble' : 'flavia-bubble';
+                        
+                        html += `
+                            <div class="flex ${speakerClass === 'nfc-bubble' ? 'justify-end' : 'justify-start'}">
+                                <div class="chat-bubble ${speakerClass} text-sm">${safeContent}</div>
+                            </div>
+                        `;
+
+                        // Add red flag boxes after the corresponding quote
+                        // Note: supportingQuote is also from AI, so it needs to be matched against original content carefully. 
+                        // Simple inclusion check is used here.
+                        const flag = redFlags.find(flag => content.includes(flag.supportingQuote) && !usedQuotes.has(flag.supportingQuote));
+                        if (flag) {
+                            usedQuotes.add(flag.supportingQuote);
+                            html += `
+                                <div class="report-red-flag-box p-4 rounded-lg mt-4 mb-4 shadow">
+                                    <p class="font-semibold text-red-800"><i class="fas fa-triangle-exclamation mr-2"></i>RED FLAG: ${escapeHtml(flag.name)}</p>
+                                    <p class="text-sm mt-1">${escapeHtml(flag.comment)}</p>
+                                </div>
+                            `;
+                        }
+                    } else if (line.trim()) {
+                        // Non-speaker lines in the middle
+                        html += `<div class="text-xs text-gray-600 my-1 text-center">${escapeHtml(line)}</div>`;
+                    }
+                });
+                return html;
+            };
+
+            // Helper to get recommendation text (simulating the dynamic output)
+            const getRecommendation = (type) => {
+                const rec = recommendations.find(r => r.type === type);
+                return rec ? escapeHtml(rec.script) : `No specific recommendation script available for ${escapeHtml(type)}.`;
+            };
+            
+            // Helper for the BANT rows
+            const renderBantScoreRow = (key, data, baseScore) => {
+                const isRed = data.score < 3;
+                // Simple proportional score impact for visualization
+                const scoreImpact = Math.round((data.score / 5) * baseScore); 
+                // FIX: Corrected ternary operator structure
+                const impactSign = data.score < 3 ? '-' : '+'; 
+                const impactColor = data.score < 3 ? 'text-red-600' : 'text-green-600';
+                
+                return `
+                    <div class="score-row report-score-row-border" style="border-color: #e5e7eb;">
+                        <span class="w-1/2">${key.charAt(0).toUpperCase() + key.slice(1)}: ${escapeHtml(data.comment)}</span>
+                        <span class="w-1/4 text-center ${impactColor} font-semibold">${impactSign}${Math.abs(scoreImpact)}</span>
+                        <span class="w-1/4 text-center text-gray-700">${data.score}/5</span>
+                    </div>
+                `;
+            };
+
+            return `
+            <div class="max-w-6xl mx-auto case-study-report shadow-xl rounded-xl p-6 md:p-10">
+                <header class="mb-8 border-b pb-4 border-gray-200">
+                    <h1 class="text-3xl font-extrabold text-gray-800">Lead Qualification Report: Prospect Analysis</h1>
+                    <p class="text-xl text-gray-500 mt-2">${escapeHtml(prospectName || 'Unidentified Prospect')} vs. LeadLens AI</p>
+
+                    <!-- Qualification Score Banner with Animation --><div class="mt-6 p-4 bg-red-600 rounded-lg text-white flex items-center justify-between shadow-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-chart-line text-2xl mr-3"></i>
+                            <span class="text-lg font-medium">Qualification Score (${escapeHtml(finalVerdict)})</span>
+                        </div>
+                        <div class="flex items-end">
+                            <span id="score-counter-display" class="text-5xl font-extrabold leading-none">${qualificationScore}</span>
+                            <span class="text-2xl font-semibold ml-1 leading-none">/100</span>
+                        </div>
+                    </div>
+                </header>
+
+                <section class="grid md:grid-cols-3 gap-8 mb-12">
+                    <!-- Overall Summary --><div class="bg-blue-50 p-6 rounded-lg shadow-md border-t-4 border-blue-600 flex flex-col items-start md:col-span-3">
+                        <i class="fas fa-search-dollar text-3xl text-blue-600 mb-3"></i>
+                        <h2 class="text-xl font-semibold mb-2 text-blue-800">Analyst Summary: ${escapeHtml(finalVerdict)}</h2>
+                        <p class="text-gray-600">${escapeHtml(summary)}</p>
+                    </div>
+                </section>
+
+                <!-- BANT Scoring Section --><h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2 border-gray-200"><i class="fas fa-calculator mr-2 text-green-600"></i>BANT Qualification Breakdown</h2>
+
+                <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Qualification Scoring Matrix</h3>
+                    <div class="font-bold text-sm text-gray-700 score-row border-b-2 border-gray-300">
+                        <span class="w-1/2">BANT Factor & Commentary</span>
+                        <span class="w-1/4 text-center">Score Impact</span>
+                        <span class="w-1/4 text-center">AI Score (1-5)</span>
+                    </div>
+
+                    ${renderBantScoreRow('budget', scores.budget, 25)}
+                    ${renderBantScoreRow('authority', scores.authority, 25)}
+                    ${renderBantScoreRow('need', scores.need, 25)}
+                    ${renderBantScoreRow('timeline', scores.timeline, 25)}
+                    
+                    <div class="score-row bg-gray-200 font-extrabold mt-2 rounded-lg">
+                        <span class="w-1/2 text-gray-800">CUMULATIVE SCORE</span>
+                        <span class="w-1/4 text-center text-gray-800"></span>
+                        <span class="w-1/4 text-center text-red-600 font-extrabold">${qualificationScore}/100</span>
+                    </div>
+                </div>
+
+                <!-- Conversation Timeline Section --><h2 class="text-2xl font-bold mt-12 mb-6 text-gray-800 border-b pb-2 border-gray-200">Conversation Timeline & Key Events</h2>
+
+                <div id="timeline-container" class="space-y-6">
+                    <!-- Transcript with embedded red flags -->${transcriptToHtml(transcript)}
+                </div>
+
+                <!-- Recommendations Section --><section class="mt-12 pt-8 border-t border-gray-200">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800"><i class="fas fa-lightbulb mr-2 text-yellow-600"></i>Recommended Scripts</h2>
+                    <p class="mb-6 text-gray-600">Use these scripts for consistent boundary enforcement based on the behavioral patterns identified in this conversation.</p>
+
+                    <!-- Recommendation 1: Free Work --><div class="p-4 report-recommendation-box rounded-lg mb-4 shadow" style="background-color: #fef2f2; border-left-color: #ef4444;">
+                        <p class="font-bold text-red-800 mb-1"><i class="fas fa-hand-holding-dollar mr-2"></i>Pattern: Demanding Free Design/Mock-up (Red Flag)</p>
+                        <p class="font-mono text-sm bg-white p-3 rounded">
+                            **"${getRecommendation('free_work')}"**
+                        </p>
+                    </div>
+
+                    <!-- Recommendation 2: Price Before Data --><div class="p-4 report-recommendation-box rounded-lg mb-4 shadow" style="background-color: #fffbeb; border-left-color: #f59e0b;">
+                        <p class="font-bold text-yellow-800 mb-1"><i class="fas fa-tag mr-2"></i>Pattern: Price Before Qualification Data (Red Flag)</p>
+                        <p class="font-mono text-sm bg-white p-3 rounded">
+                            **"${getRecommendation('price_first')}"**
+                        </p>
+                    </div>
+                    
+                    <!-- Recommendation 3: Nurturing/Process Reminder --><div class="p-4 report-recommendation-box rounded-lg shadow" style="background-color: #f0fdf4; border-left-color: #16a34a;">
+                        <p class="font-bold text-green-800 mb-1"><i class="fas fa-clock mr-2"></i>Pattern: Long Response Gaps / Low Commitment</p>
+                        <p class="font-mono text-sm bg-white p-3 rounded">
+                            **"${getRecommendation('low_commitment')}"**
+                        </p>
+                    </div>
+                </section>
+            </div>
+            `;
+        };
+
+        // --- Core Application Logic (Single Input) ---
+
+        window.handleLeadAnalysis = async () => {
+            const transcript = document.getElementById('main-transcript-input').value.trim();
+            const analyzeButton = document.getElementById('main-analyze-button');
+            const analyzeButtonIcon = document.getElementById('analyze-button-icon'); // Get the SVG element
+            const reportContentDisplay = document.getElementById('report-content-display');
+            const RUN_ICON_URL = "https://bucket.mlcdn.com/a/3336/3336910/images/900217d3be86945033e1ab943412dd93825c9b0c.png";
+
+            if (!transcript) {
+                console.error('Please paste or upload a conversation transcript.');
+                return;
+            }
+
+            if (!window.appState.geminiApiKey) {
+                console.error('Please set your Google Gemini API Key in the Settings modal before analyzing leads.');
+                document.getElementById('settings-modal-wrapper').classList.remove('hidden');
+                return;
+            }
+
+            // Show loading state
+            analyzeButton.disabled = true;
+            analyzeButtonIcon.src = ''; // Clear SVG src
+            analyzeButton.innerHTML = `<i class="fas fa-spinner fa-spin text-xl text-white"></i>`; // Temporary FA spinner
+
+            reportContentDisplay.innerHTML = `<div class="text-center p-10 text-xl" style="color: var(--skin-color)">AI is generating qualification report...</div>`;
+            
+            // Ensure view switches to report view
+            window.updateMainViewVisibility(); 
+
+            const apiKey = window.appState.geminiApiKey;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            const systemPrompt = `You are a sophisticated Lead Qualification Analyst AI. Your task is to analyze the provided chat transcript and generate a comprehensive qualification report structured in JSON format. The analysis must strictly adhere to the BANT framework and include detailed behavioral analysis for generating the final case study report.
+
+            Assign a score from 1 (Low/Missing) to 5 (High/Clear) for each BANT category. You MUST use the exact JSON schema provided.
+
+            1. overallScore: The average of the four BANT scores (rounded to one decimal place).
+            2. finalVerdict: A concise verdict (e.g., "Highly Qualified", "Requires Nurturing", "Time Waster").
+            3. prospectName: Attempt to infer the prospect's name or company name (e.g., "Flavia" or "XYZ Corp"). If unavailable, use "Unidentified Prospect".
+            4. summary: A detailed, professional paragraph explaining the overall lead status and key findings.
+            5. scores: An object containing four keys (budget, authority, need, timeline), each containing:
+                - score: (Integer 1-5) The qualification score.
+                - comment: (String) A brief justification for the score.
+                - supportingQuote: (String) The exact quote from the transcript that best supports the score. If no clear quote exists, use "No clear indication in transcript."
+            6. redFlags: An array of up to 3 critical red flags found in the conversation. Each flag should have a name, a comment, and the exact supportingQuote.
+            7. recommendations: An array of three objects, providing specific, policy-compliant scripts for common sales patterns. Use the exact 'type' keys: 'free_work', 'price_first', and 'low_commitment'.
+
+            EXAMPLE JSON STRUCTURE (Provide scripts in the language of the transcript):
+            "redFlags": [
+                { "name": "FREE MOCK-UP DEMAND", "comment": "Demanded design work before commitment.", "supportingQuote": "Espero por el montaje" }
+            ],
+            "recommendations": [
+                { "type": "free_work", "script": "Aprecio su interés. Nuestros diseños..."},
+                // ... two more
+            ]
+            `;
+
+            const userQuery = `Analyze the following chat transcript for lead qualification based on the BANT framework:\n\n---\n${transcript}\n---`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            overallScore: { type: "NUMBER" },
+                            finalVerdict: { type: "STRING" },
+                            prospectName: { type: "STRING" },
+                            summary: { type: "STRING" },
+                            scores: {
+                                type: "OBJECT",
+                                properties: {
+                                    budget: { type: "OBJECT", properties: { score: { type: "INTEGER" }, comment: { type: "STRING" }, supportingQuote: { type: "STRING" } } },
+                                    authority: { type: "OBJECT", properties: { score: { type: "INTEGER" }, comment: { type: "STRING" }, supportingQuote: { type: "STRING" } } },
+                                    need: { type: "OBJECT", properties: { score: { type: "INTEGER" }, comment: { type: "STRING" }, supportingQuote: { type: "STRING" } } },
+                                    timeline: { type: "OBJECT", properties: { score: { type: "INTEGER" }, comment: { type: "STRING" }, supportingQuote: { type: "STRING" } } },
+                                },
+                            },
+                            redFlags: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: { name: { type: "STRING" }, comment: { type: "STRING" }, supportingQuote: { type: "STRING" } },
+                                }
+                            },
+                            recommendations: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: { type: { type: "STRING" }, script: { type: "STRING" } },
+                                }
+                            },
+                        },
+                        required: ["overallScore", "finalVerdict", "summary", "scores", "redFlags", "recommendations", "prospectName"]
+                    }
+                }
+            };
+
+            let response;
+            for (let i = 0; i < 3; i++) {
+                try {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (response.ok) break;
+                } catch (error) {
+                    console.warn(`Attempt ${i + 1} failed:`, error);
+                }
+                if (i < 2) await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+            }
+
+try {
+    if (!response || !response.ok) {
+        const errorText = await response?.text();
+        console.error("API Error Response:", errorText);
+        throw new Error(`API call failed with status: ${response ? response.status : 'Network Error'}`);
+    }
+
+    const result = await response.json();
+    console.log("Full API Response:", result);
+
+    // Try multiple possible response paths
+    const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text || 
+                     result.text ||
+                     (result.candidates && result.candidates[0] && result.candidates[0].content && 
+                      result.candidates[0].content.parts && result.candidates[0].content.parts[0] && 
+                      result.candidates[0].content.parts[0].text);
+
+    if (!jsonText) {
+        console.error("No JSON text found. Available keys:", Object.keys(result));
+        if (result.candidates && result.candidates[0]) {
+            console.error("Candidate structure:", result.candidates[0]);
+        }
+        throw new Error("Could not extract JSON from AI response");
+    }
+
+    const report = JSON.parse(jsonText);
+
+
+    
+// Try different possible response structures
+const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text || 
+                 result.candidates?.[0]?.content?.parts?.[0]?.text || 
+                 result.text;
+
+if (!jsonText) {
+    console.error("No JSON text found in response. Full response:", result);
+    throw new Error("Received empty or malformed response from AI.");
+}
+
+
+
+    
+
+} catch (error) {
+    console.error("Error processing AI response:", error);
+    reportContentDisplay.innerHTML = `
+        <div class="p-10 text-red-500 text-center">
+            <h3 class="text-xl font-bold mb-4">Analysis Failed</h3>
+            <p>Error: ${error.message}</p>
+            <p class="text-sm mt-4">Check the browser console for detailed error information.</p>
+        </div>
+    `;
+}                
+
+                // Start the score animation immediately
+                const qualificationScore = Math.round(report.overallScore * 20);
+                window.animateCounter('score-counter-display', qualificationScore, 1000);
+
+                let currentConv = window.appState.currentConversation || {
+                    id: null,
+                    title: `Report - ${report.prospectName}`,
+                    transcript: transcript,
+                    report: report,
+                    isSaved: false // NEW: Mark as unsaved
+                };
+                
+                currentConv.report = report;
+                currentConv.transcript = transcript;
+                window.appState.currentConversation = currentConv; // Update local state
+                
+                // IMPORTANT: This injects the new HTML, making the report visible.
+                reportContentDisplay.innerHTML = window.generateReportHTML(report, transcript);
+                document.getElementById('report-view').scrollTop = 0;
+
+            } catch (error) {
+                console.error("Error processing AI response:", error);
+                reportContentDisplay.innerHTML = `<div class="p-10 text-red-500">An error occurred during analysis. Ensure your API Key is valid and the transcript is clear. Details: ${error.message}</div>`;
+            } finally {
+                analyzeButton.disabled = false;
+                // Re-inject the image after loading is complete
+                analyzeButton.innerHTML = `<img id="analyze-button-icon" src="${RUN_ICON_URL}" alt="Analyze" class="w-10 h-10">`;
+                window.updateSaveButtonVisibility(); // Show save button if new report exists
+            }
+        };
+
+        // --- File Upload Handler (Single Input) ---
+        window.handleFileUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const mainInput = document.getElementById('main-transcript-input');
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const text = e.target.result;
+                mainInput.value = text;
+                mainInput.focus();
+            };
+
+            reader.readAsText(file);
+        };
+
+        // --- PDF Download Feature ---
+        window.downloadReportAsPDF = () => {
+            const reportElement = document.getElementById('report-content-display');
+            if (!reportElement || !window.appState.currentConversation?.report) {
+                // FIX: Replaced alert() with console.error()
+                console.error('No report has been generated yet.');
+                return;
+            }
+
+            // Temporarily hide elements that shouldn't be in the PDF
+            const tempHideElements = document.querySelectorAll('.hide-for-pdf');
+            tempHideElements.forEach(el => el.style.display = 'none');
+            
+            html2canvas(reportElement.querySelector('.case-study-report'), { // Target the inner report wrapper
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff', // Ensure white background for PDF
+                windowWidth: reportElement.scrollWidth,
+                windowHeight: reportElement.scrollHeight,
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 210;
+                const pageHeight = 295;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                const title = window.appState.currentConversation.title.replace(/[^a-zA-Z0-9]/g, '_');
+                pdf.save(`${title}_Report.pdf`);
+
+                // Restore hidden elements
+                tempHideElements.forEach(el => el.style.display = '');
+            });
+        };
+
+
+        // Initial setup calls
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set version display
+            document.getElementById('sidebar-version-display').textContent = APP_VERSION;
+            
+            if (!window.appState.currentConversation) {
+                window.newConversation();
+            }
+
+            // Sidebar initial state setup (Always start open)
+            document.getElementById('sidebar').classList.add('sidebar-open');
+            document.getElementById('main-content-wrapper').classList.add('sidebar-open-main');
+
+            // Scroll to top button logic
+            const backToTopButton = document.getElementById('back-to-top');
+            const reportView = document.getElementById('report-view');
+
+            if (reportView && backToTopButton) {
+                reportView.onscroll = function() {
+                    if (!reportView.classList.contains('hidden') && reportView.scrollTop > 300) {
+                        backToTopButton.style.display = "block";
+                    } else {
+                        backToTopButton.style.display = "none";
+                    }
+                };
+            }
+
+            backToTopButton.onclick = function() {
+                reportView.scrollTop = 0;
+            };
+
+            // Enforce dark mode on load
+            document.body.classList.add('dark-mode');
+        });
+
+    </script>
+
+
+    <!-- Loading State --><div id="loading-state" class="fixed inset-0 flex items-center justify-center z-50" style="background-color: var(--body-color)">
+        <div class="p-6 rounded-xl shadow-2xl text-center" style="background-color: var(--box-color)">
+            <i class="fas fa-compass fa-spin text-4xl" style="color: var(--skin-color)"></i>
+            <p class="text-lg font-semibold" style="color: var(--text-color); margin-top: 0.75rem;">Initializing Lead Qualifier...</p>
+        </div>
+    </div>
+
+    <!-- Main Application Container --><div class="flex h-screen w-full">
+
+        <!-- Sidebar (Left) --><aside id="sidebar" class="sidebar bg-body-color border-r border-mirage-color transition-colors duration-300 flex flex-col">
+            <div class="sidebar-content h-full">
+                <!-- Sidebar Header & Logo/Icon --><div class="py-4 border-b px-4 flex flex-col flex-shrink-0 relative" style="border-color: var(--mirage-color)">
+                    
+                    <!-- Close Button (Absolute position: 10px from top and right) --><button id="sidebar-close-btn" class="p-1 rounded-full text-skin-color hover:opacity-80 transition hidden absolute top-[10px] right-[10px] z-10" onclick="window.toggleSidebar()" title="Close Sidebar">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                    
+                    <!-- Full Logo (Open State) --><img id="sidebar-full-logo" src="https://ik.imagekit.io/bebell/LeadLens/logo-horizontal-leadlens.png?updatedAt=1763522577486" alt="Brand Logo" class="w-full h-auto mt-4" style="border-radius: 4px;">
+                    <!-- Icon Logo (Closed State) --><img id="sidebar-icon-logo" src="https://ik.imagekit.io/bebell/LeadLens/icon%20for%20LeadLens.png" alt="Brand Icon" class="w-8 h-8 object-cover hidden">
+                </div>
+
+                <!-- New Chat Button --><div class="my-4 px-4 flex-shrink-0">
+                    <button onclick="window.newConversation()" class="w-full bg-skin-color hover:opacity-90 text-title-color font-semibold py-2 rounded-lg transition duration-150 ease-in-out flex items-center justify-center">
+                        <i class="fas fa-plus mr-2"></i> New Report
+                    </button>
+                </div>
+                
+                <!-- Conversation History List --><div class="flex-1 overflow-y-auto px-4 pr-3">
+                    <ul id="conversation-list" class="space-y-1">
+                        <!-- History items will be rendered here by JS --></ul>
+                </div>
+
+                <!-- Sidebar Footer (Avatar, Username, Version) - Opens Settings Modal --><div class="mt-auto pt-4 border-t px-4 flex-shrink-0 cursor-pointer hover:bg-mirage-color/50 transition duration-150 rounded-t-lg sidebar-footer-border" style="border-color: var(--mirage-color)" onclick="document.getElementById('settings-modal-wrapper').classList.remove('hidden')">
+                    <div class="flex items-center space-x-3 p-2 sidebar-footer-content">
+                        <img id="sidebar-avatar-display" src="https://ik.imagekit.io/bebell/LeadLens/Picture%20Avatar%20(1).png" alt="User Profile" class="w-10 h-10 rounded-full object-cover ring-2 user-avatar-display" style="border-color: var(--skin-color)">
+                        <div>
+                            <p class="text-sm font-semibold text-title-color truncate" id="sidebar-username-display">Lead Analyst</p>
+                            <p class="text-xs" style="color: var(--text-color)" id="sidebar-version-display"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Toggle Button for Collapsed Sidebar (Always positioned relative to the collapsed sidebar width) --><button id="sidebar-toggle-open" class="absolute top-4 left-0 z-50 p-3 rounded-full text-text-color hover:text-skin-color transition hidden" style="background-color: var(--box-color); margin-left: 10px;" onclick="window.toggleSidebar()" title="Open Sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Main Content Area (Right) --><main id="main-content-wrapper" class="main-content-wrapper flex flex-col flex-1 overflow-x-hidden relative" style="background-color: var(--body-color)">
+            
+            <!-- Fixed Top Right Controls (PDF & Save) --><div class="fixed-top-right flex space-x-3 items-center hide-for-pdf">
+                <button id="save-report-button" onclick="window.saveCurrentReport()" class="bg-green-600 hover:bg-green-700 text-title-color font-semibold py-2 px-3 rounded-lg shadow-md transition text-sm hidden">
+                    <i class="fas fa-save mr-1"></i> Save Report
+                </button>
+                <!-- NEW PDF BUTTON STYLING --><button onclick="window.downloadReportAsPDF()" class="pdf-button-style font-semibold w-10 h-10 rounded-full shadow-md transition duration-200 ease-in-out flex items-center justify-center group" title="Download PDF">
+                    <i class="fas fa-file-pdf text-lg text-white group-hover:text-skin-color"></i>
+                </button>
+            </div>
+
+            <!-- 1. Welcome View (Centered Content) --><div id="welcome-view" class="w-full flex-col p-4">
+                <div class="max-w-xl mx-auto flex flex-col items-center w-full">
+                    <!-- Profile Avatar (New Icon) - No border/ring --><div class="mb-4">
+                        <img id="centerpiece-icon"
+                            src="https://ik.imagekit.io/bebell/LeadLens/icon%20for%20LeadLens.png"
+                            alt="AI Avatar"
+                            class="w-28 h-28" 
+                            onmouseover="this.src='https://bucket.mlcdn.com/a/3336/3336910/images/c6a34c2b6c9e37939e4f54113275a717f71b66aa.png';"
+                            onmouseout="this.src='https://ik.imagekit.io/bebell/LeadLens/icon%20for%20LeadLens.png';"
+                        >
+                    </div>
+                    <!-- Greeting (Bolder, fixed text) --><h2 id="welcome-greeting" class="text-title-color text-center" style="font-size: 2.5rem; font-weight: 800; letter-spacing: -0.05em; line-height: 1.1;">Who should we qualify today?</h2>
+                    
+                    <!-- Instructions Beneath Greeting -->
+                    <!-- MODIFIED: Inline style applied to set the color to #525252 -->
+                    <p class="text-text-color mt-3 text-sm text-center max-w-sm" style="color: #525252 !important;">
+                        Paste or upload a chat transcript. Use "Speaker1: text" format for best results.
+                    </p>
+                
+                    <!-- Single Input Container (Centered beneath greeting) --><div id="main-input-container" class="w-full relative">
+                        <div class="minimal-input-wrapper mx-auto max-w-2xl">
+                            <!-- File Upload Option (Icon) - CLOUD-ARROW-UP -->
+                            <label class="cursor-pointer text-text-color hover:text-skin-color transition mr-2 flex items-center" title="Upload Transcript">
+                                <i class="fas fa-cloud-arrow-up text-lg"></i>
+                                <input type="file" id="transcript-file-upload-main" onchange="window.handleFileUpload(event);" class="hidden" accept=".txt,.log,.md">
+                            </label>
+
+                            <!-- Textarea (Sleek Input) --><textarea id="main-transcript-input" rows="1" class="minimal-input" placeholder="Upload or paste transcript here..."></textarea>
+
+                            <!-- Analyze Button (Run Icon) - Custom PNG, twice the size (w-10 h-10) --><button id="main-analyze-button" onclick="window.handleLeadAnalysis()" class="bg-skin-color hover:opacity-90 text-title-color font-bold p-3 ml-2 rounded-full transition duration-150 ease-in-out flex items-center justify-center">
+                                <img id="analyze-button-icon" src="https://bucket.mlcdn.com/a/3336/3336910/images/900217d3be86945033e1ab943412dd93825c9b0c.png" alt="Analyze" class="w-10 h-10">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Report View (Scrollable Content) --><div id="report-view" class="hidden relative p-4 sm:p-8">
+                <div id="report-content-display" class="w-full h-full flex justify-center items-start">
+                    <!-- Report content will be injected here by JS, styled as the case study --></div>
+                    <!-- Back to Top Button --><button id="back-to-top" class="hidden fixed bottom-24 right-8 text-title-color p-3 rounded-full shadow-lg transition duration-300" style="background-color: var(--skin-color)" title="Go to top">
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+            </div>
+
+        </main>
+    </div>
+    
+    <!-- Settings Modal (Hidden by default) --><div id="settings-modal-wrapper" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden" onclick="if(event.target.id === 'settings-modal-wrapper') document.getElementById('settings-modal-wrapper').classList.add('hidden')">
+        <div id="settings-modal" class="rounded-xl shadow-2xl p-6 sm:p-8 w-11/12 max-w-lg transition-all duration-300 transform scale-100 border" style="background-color: var(--box-color); border-color: var(--mirage-color)" onclick="event.stopPropagation()">
+            <h3 class="text-2xl font-bold mb-6 border-b pb-2 text-title-color" style="border-color: var(--mirage-color)">User Settings & API Access</h3>
+
+            <div class="space-y-5">
+                <!-- Profile Section --><div class="flex flex-col space-y-4 pb-4 border-b" style="border-color: var(--mirage-color)">
+                    <div class="flex items-center space-x-4">
+                        <img id="modal-avatar-display" src="https://ik.imagekit.io/bebell/LeadLens/Picture%20Avatar%20(1).png" alt="User Profile" class="w-16 h-16 rounded-full object-cover ring-2 user-avatar-display" style="border-color: var(--skin-color)">
+                        <div class="flex-1">
+                            <label for="username-input" class="block text-sm font-medium text-text-color">Username</label>
+                            <input type="text" id="username-input" placeholder="Your Name" class="mt-1 block w-full p-2 border rounded-md shadow-sm text-title-color" style="background-color: var(--mirage-color); border-color: var(--mirage-color)">
+                        </div>
+                    </div>
+                    
+                    <!-- Avatar Upload --><div>
+                        <label class="block text-sm font-medium text-text-color mb-1">Profile Picture (Max 500KB)</label>
+                        <!-- FIX: Added file:text-black for contrast -->
+                        <input type="file" id="profile-picture-upload" onchange="window.handleProfilePictureUpload(event)" accept="image/png, image/jpeg, image/gif" class="block w-full text-sm text-text-color
+                            file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold
+                            file:bg-skin-color file:text-black hover:file:bg-mirage-color hover:file:text-title-color"
+                        />
+                        <p id="upload-status" class="mt-2 text-xs text-green-500"></p>
+                    </div>
+                </div>
+
+                <!-- API Key Section (BYOK) --><div>
+                    <label for="api-key-input" class="block text-sm font-medium text-text-color mb-2">Gemini API Key (BYOK)</label>
+                    <!-- Updated class to apply default red border and focus styles -->
+                    <input type="password" id="api-key-input" placeholder="Enter your Google Gemini API Key" class="mt-1 block w-full p-2 border border-red-700 rounded-md shadow-sm focus:ring-skin-color focus:border-skin-color text-title-color" style="background-color: var(--mirage-color)">
+                    <p class="mt-2 text-xs text-red-400">Required for AI analysis. You can generate a key at <a href="https://ai.google.dev/gemini-api/docs/api-key" target="_blank" class="text-skin-color hover:underline font-semibold">Google AI Studio</a>.</p>
+                </div>
+
+                <!-- Privacy Notice (New) --><div class="bg-yellow-900/20 p-3 rounded-md border border-yellow-700/50">
+                    <p class="text-xs text-yellow-500 font-semibold mb-1"><i class="fas fa-shield-alt mr-1"></i> Data Privacy Notice</p>
+                    <p class="text-xs text-gray-400">Transcripts are processed by Google Gemini AI. Do not upload transcripts containing sensitive PII (Personally Identifiable Information) such as credit card numbers or medical data.</p>
+                </div>
+
+                <!-- Subscription Settings (Placeholder) --><div>
+                    <label class="block text-sm font-medium text-text-color">Subscription Settings</label>
+                    <p class="mt-1 text-sm text-text-color">Current Plan: Pro Analyst (Mock)</p>
+                    <details class="mt-2 p-2 border rounded-md" style="border-color: var(--mirage-color)">
+                        <summary class="font-medium cursor-pointer text-title-color">Canceling Instructions (PayPal)</summary>
+                        <p class="text-xs mt-2 text-text-color">To cancel your subscription, please follow the instructions on your PayPal account's 'Automatic Payments' section.</p>
+                        <a href="#" class="hover:underline text-xs" style="color: var(--skin-color)" onclick="console.log('Placeholder for PayPal link.')">Go to PayPal Payments</a>
+                    </details>
+                </div>
+                
+                <!-- Data Import/Export (New Section) --><details class="pt-4 border-t" style="border-color: var(--mirage-color)">
+                    <summary class="font-medium cursor-pointer text-title-color text-sm">
+                        <i class="fas fa-file-export mr-2 text-blue-500"></i> Import & Export Data
+                    </summary>
+                    <div class="mt-4 space-y-3">
+                        <!-- Export Button --><button onclick="window.exportConversationHistory()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition">
+                            <i class="fas fa-download mr-2"></i> EXPORT ALL DATA (.json)
+                        </button>
+                        <p id="export-status" class="mt-2 text-center text-sm text-green-500"></p>
+
+                        <!-- Import File Input --><div>
+                            <label for="import-file-input" class="block text-xs font-medium text-text-color mb-1">Restore from File (.json or .txt)</label>
+                            <input type="file" id="import-file-input" onchange="window.handleImport(event)" accept=".json,.txt,.log,.md" class="block w-full text-sm text-text-color
+                                file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold
+                                file:bg-mirage-color file:text-title-color hover:file:bg-skin-color hover:file:text-white"
+                            />
+                            <p id="import-status" class="mt-2 text-center text-sm text-green-500"></p>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Data Management (Wrapped in Details for Safety) --><details class="pt-4 border-t" style="border-color: var(--mirage-color)">
+                    <summary class="font-medium cursor-pointer text-title-color text-sm">
+                        <i class="fas fa-exclamation-triangle mr-2 text-red-500"></i> Advanced Data Management
+                    </summary>
+                    <div class="mt-4">
+                        <button onclick="window.eraseAllData()" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-2 rounded-lg transition">
+                            <i class="fas fa-trash-alt mr-2"></i> ERASE ALL DATA SAVED
+                        </button>
+                        <p id="erase-status" class="mt-2 text-center text-sm text-green-500"></p>
+                    </div>
+                </details>
+
+            </div>
+
+            <!-- Action Buttons --><div class="mt-6 flex justify-end space-x-3">
+                <button onclick="window.saveUserSettings()" class="bg-skin-color hover:opacity-90 text-title-color font-semibold py-2 px-4 rounded-lg transition">Save Settings</button>
+                <button onclick="document.getElementById('settings-modal-wrapper').classList.add('hidden')" class="bg-mirage-color hover:bg-mirage-color/70 text-title-color font-semibold py-2 px-4 rounded-lg transition">Close</button>
+            </div>
+            <p id="save-status" class="mt-2 text-center text-sm text-green-500"></p>
+        </div>
+    </div>
+</body>
+</html>
