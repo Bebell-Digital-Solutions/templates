@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRD Generator | Powered by Html Lab</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- html2pdf for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Google Fonts: Inter (sans) & Fira Code (mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+
+
+   <!-- Favicon -->
+    <link rel="icon" href="https://bucket.mlcdn.com/a/3336/3336910/images/482c28ea15e99fc1a2af6b80cb20f724b9578023.png">
+
+
+
+  
+
+    <!-- Configure Tailwind with custom dev-style palette from logo -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0B0A10', /* Deep space background */
+                        panel: '#13111C', /* Slightly lighter for panels */
+                        inputBg: '#1C1929', /* Input fields */
+                        borderColor: '#2D2844', /* Subtle borders */
+                        brandPurple: '#4A439C', /* Extracted Logo Background */
+                        brandPurpleHover: '#6B62D6',
+                        brandYellow: '#DBFF00', /* Extracted Logo Beaker Yellow */
+                        brandYellowDim: 'rgba(219, 255, 0, 0.1)',
+                        textMain: '#B4ADC9',
+                        textMuted: '#686282',
+                        textWhite: '#F2F0F9',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['"Fira Code"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Dev Style Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0A10; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2D2844; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4A439C; 
+        }
+        
+        .input-transition {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .ai-btn {
+            transition: all 0.2s;
+        }
+        .ai-btn:hover {
+            transform: translateY(-1px);
+            text-shadow: 0 0 8px rgba(219, 255, 0, 0.4);
+        }
+        .ai-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Customize select arrow for dark mode */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23686282'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+        }
+
+        /* Color picker dark mode override */
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: 1px solid #2D2844;
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-dark text-textMain font-sans min-h-screen p-4 md:p-6 selection:bg-brandPurple selection:text-white">
+
+    <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row gap-6 h-auto md:h-[calc(100vh-3rem)]">
+        
+        <!-- LEFT PANEL: Editor Form -->
+        <div class="w-full md:w-[40%] bg-panel rounded-xl border border-borderColor flex flex-col h-[85vh] md:h-full shadow-2xl">
+            <!-- Header -->
+            <div class="p-5 border-b border-borderColor bg-panel rounded-t-xl z-10 shrink-0 flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-mono font-bold text-textWhite flex items-center gap-3 tracking-tight">
+                        <img src="https://bucket.mlcdn.com/a/3336/3336910/images/1bac1d8b1875de0b78e15eea19bff333b8a80502.png" alt="Logo" class="w-6 h-6 object-contain drop-shadow-[0_0_5px_rgba(219,255,0,0.4)]">
+                        PRD_BUILDER.exe
+                    </h1>
+                    <p class="text-xs font-mono text-textMuted mt-1">// initialize document parameters</p>
+                </div>
+            </div>
+            
+            <!-- Form Scroll Area -->
+            <div class="p-5 overflow-y-auto flex-1 space-y-8">
+                
+                <!-- Core Information -->
+                <div class="space-y-4">
+                    <h2 class="text-sm font-mono font-semibold text-brandPurpleHover uppercase flex items-center gap-2">
+                        <i data-lucide="folder-kanban" class="w-4 h-4"></i> Core_Info
+                    </h2>
+                    
+                    <div class="group">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors">projectTitle & Logo</label>
+                            <button onclick="generateAI('title', 'ai-btn-title')" id="ai-btn-title" class="ai-btn text-brandPurpleHover hover:text-brandYellow flex items-center gap-1 text-[10px] font-mono uppercase bg-dark px-2 py-0.5 rounded border border-borderColor">
+                                <i data-lucide="sparkles" class="w-3 h-3"></i> Suggest
+                            </button>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <div class="relative w-10 h-10 shrink-0 group/logo cursor-pointer rounded-lg border border-borderColor bg-inputBg hover:border-brandYellow transition-colors" title="Upload custom project logo">
+                                <input type="file" id="input-logo" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                <div id="logo-preview-container" class="w-full h-full flex items-center justify-center overflow-hidden rounded-lg">
+                                    <i data-lucide="image-plus" class="w-4 h-4 text-textMuted group-hover/logo:text-brandYellow transition-colors"></i>
+                                </div>
+                            </div>
+                            <input type="text" id="input-title" placeholder="e.g., E-commerce Mobile App" class="input-transition flex-1 w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite placeholder-textMuted font-mono text-sm h-10">
+                        </div>
+                    </div>
+
+                    <div class="group">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors">description</label>
+                            <button onclick="generateAI('description', 'ai-btn-desc')" id="ai-btn-desc" class="ai-btn text-brandPurpleHover hover:text-brandYellow flex items-center gap-1 text-[10px] font-mono uppercase bg-dark px-2 py-0.5 rounded border border-borderColor">
+                                <i data-lucide="sparkles" class="w-3 h-3"></i> Suggest
+                            </button>
+                        </div>
+                        <textarea id="input-description" rows="3" placeholder="Initialize project description..." class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite placeholder-textMuted text-sm leading-relaxed"></textarea>
+                    </div>
+
+                    <div class="group">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors">objectives</label>
+                            <button onclick="generateAI('objectives', 'ai-btn-obj')" id="ai-btn-obj" class="ai-btn text-brandPurpleHover hover:text-brandYellow flex items-center gap-1 text-[10px] font-mono uppercase bg-dark px-2 py-0.5 rounded border border-borderColor">
+                                <i data-lucide="sparkles" class="w-3 h-3"></i> Suggest
+                            </button>
+                        </div>
+                        <textarea id="input-objectives" rows="3" placeholder="Define SMART goals..." class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite placeholder-textMuted text-sm leading-relaxed"></textarea>
+                    </div>
+
+                    <div class="group">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors">targetAudience</label>
+                            <button onclick="generateAI('audience', 'ai-btn-aud')" id="ai-btn-aud" class="ai-btn text-brandPurpleHover hover:text-brandYellow flex items-center gap-1 text-[10px] font-mono uppercase bg-dark px-2 py-0.5 rounded border border-borderColor">
+                                <i data-lucide="sparkles" class="w-3 h-3"></i> Suggest
+                            </button>
+                        </div>
+                        <input type="text" id="input-audience" placeholder="e.g., Developers 20-35" class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite placeholder-textMuted text-sm">
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="space-y-4 pt-4 border-t border-borderColor">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-mono font-semibold text-brandPurpleHover uppercase flex items-center gap-2">
+                            <i data-lucide="list-tree" class="w-4 h-4"></i> FeaturesArray
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="generateAIFeature('ai-btn-feat')" id="ai-btn-feat" class="ai-btn text-[10px] font-mono text-brandYellow bg-brandYellowDim border border-brandYellow/30 hover:bg-brandYellow/20 px-2 py-1 rounded uppercase flex items-center gap-1">
+                                <i data-lucide="sparkles" class="w-3 h-3"></i> Suggest
+                            </button>
+                            <button onclick="addFeature()" class="text-[10px] font-mono text-textMain hover:text-white bg-dark px-2 py-1 rounded border border-borderColor hover:border-textMuted transition-colors uppercase flex items-center gap-1">
+                                <i data-lucide="plus" class="w-3 h-3"></i> Push
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <select id="preset-features" onchange="addPresetFeature()" class="input-transition w-full px-3 py-2 bg-dark rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow text-sm text-textMuted font-mono cursor-pointer">
+                            <option value="" disabled selected>-- Select module to import --</option>
+                            <option value="OAuth2 Authentication Flow">OAuth2 Authentication Flow</option>
+                            <option value="RBAC (Role-Based Access Control)">RBAC (Role-Based Access Control)</option>
+                            <option value="Stripe Payment Gateway Integration">Stripe Payment Gateway Integration</option>
+                            <option value="WebSocket Real-time Sync">WebSocket Real-time Sync</option>
+                            <option value="Push Notifications (FCM/APNs)">Push Notifications (FCM/APNs)</option>
+                            <option value="Admin Analytics Dashboard">Admin Analytics Dashboard</option>
+                            <option value="Full-text Search & Filtering">Full-text Search & Filtering</option>
+                            <option value="Data Export (CSV/JSON/PDF)">Data Export (CSV/JSON/PDF)</option>
+                            <option value="RESTful API Endpoints">RESTful API Endpoints</option>
+                        </select>
+                    </div>
+
+                    <div id="features-container" class="space-y-2 mt-2">
+                        <!-- Dynamic features inserted here -->
+                    </div>
+                </div>
+
+                <!-- Technical Architecture -->
+                <div class="space-y-4 pt-4 border-t border-borderColor">
+                    <h2 class="text-sm font-mono font-semibold text-brandPurpleHover uppercase flex items-center gap-2">
+                        <i data-lucide="cpu" class="w-4 h-4"></i> Tech_Stack
+                    </h2>
+
+                    <div class="group">
+                        <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors mb-1.5">platformTarget</label>
+                        <select id="input-platform" class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite text-sm font-mono">
+                            <option value="Web Application">Web Application</option>
+                            <option value="Mobile App (iOS/Android)">Mobile App (iOS/Android)</option>
+                            <option value="Desktop Software">Desktop Software</option>
+                            <option value="Cross-Platform / PWA">Cross-Platform / PWA</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                        <div class="group">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors">frontend</label>
+                                <button onclick="generateAI('frontend', 'ai-btn-front')" id="ai-btn-front" class="ai-btn text-brandPurpleHover hover:text-brandYellow p-0.5 rounded">
+                                    <i data-lucide="sparkles" class="w-3 h-3"></i>
+                                </button>
+                            </div>
+                            <input type="text" id="input-frontend" list="frontends" placeholder="React, Vue..." class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite text-sm font-mono">
+                            <datalist id="frontends">
+                                <option value="React / Next.js">
+                                <option value="Vue / Nuxt.js">
+                                <option value="SvelteKit">
+                                <option value="React Native">
+                                <option value="Flutter">
+                            </datalist>
+                        </div>
+
+                        <div class="group">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors">backend</label>
+                                <button onclick="generateAI('backend', 'ai-btn-back')" id="ai-btn-back" class="ai-btn text-brandPurpleHover hover:text-brandYellow p-0.5 rounded">
+                                    <i data-lucide="sparkles" class="w-3 h-3"></i>
+                                </button>
+                            </div>
+                            <input type="text" id="input-backend" list="backends" placeholder="Node, Supabase..." class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite text-sm font-mono">
+                            <datalist id="backends">
+                                <option value="Node.js / Express">
+                                <option value="Supabase / PostgreSQL">
+                                <option value="Go / Fiber">
+                                <option value="Python / FastAPI">
+                                <option value="Firebase">
+                            </datalist>
+                        </div>
+                    </div>
+
+                    <div class="group">
+                        <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors mb-1.5">infrastructure</label>
+                        <input type="text" id="input-hosting" list="hostings" placeholder="AWS, Vercel..." class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite text-sm font-mono">
+                        <datalist id="hostings">
+                            <option value="Vercel">
+                            <option value="AWS (EC2/RDS)">
+                            <option value="Google Cloud Run">
+                            <option value="DigitalOcean Droplet">
+                            <option value="Docker / Self-hosted">
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- Design Specs -->
+                <div class="space-y-4 pt-4 border-t border-borderColor">
+                    <h2 class="text-sm font-mono font-semibold text-brandPurpleHover uppercase flex items-center gap-2">
+                        <i data-lucide="pen-tool" class="w-4 h-4"></i> Design_Config
+                    </h2>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="group">
+                            <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors mb-1.5">colorPalette</label>
+                            <div class="flex gap-2 items-center bg-inputBg p-1.5 rounded-lg border border-borderColor">
+                                <input type="color" id="input-color-1" value="#0B0A10" class="w-8 h-8 rounded cursor-pointer bg-transparent border-none p-0 outline-none">
+                                <input type="color" id="input-color-2" value="#4A439C" class="w-8 h-8 rounded cursor-pointer bg-transparent border-none p-0 outline-none">
+                                <input type="color" id="input-color-3" value="#DBFF00" class="w-8 h-8 rounded cursor-pointer bg-transparent border-none p-0 outline-none">
+                            </div>
+                        </div>
+                        <div class="group">
+                            <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors mb-1.5">uiTheme</label>
+                            <select id="input-theme" class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite text-sm font-mono">
+                                <option value="Dark Mode (Default)">Dark Mode (Default)</option>
+                                <option value="Light Mode Only">Light Mode Only</option>
+                                <option value="System Preference">System Preference</option>
+                                <option value="High Contrast">High Contrast</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="group">
+                            <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors mb-1.5">iconLibrary</label>
+                            <select id="input-icons" class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow text-textWhite text-sm font-mono">
+                                <option value="Lucide">Lucide Icons</option>
+                                <option value="Phosphor">Phosphor Icons</option>
+                                <option value="Heroicons">Heroicons</option>
+                                <option value="SVG Components">SVG Components</option>
+                            </select>
+                        </div>
+                        <div class="group">
+                            <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors mb-1.5">localization</label>
+                            <select id="input-language" class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow text-textWhite text-sm font-mono">
+                                <option value="en-US">en-US</option>
+                                <option value="en-GB">en-GB</option>
+                                <option value="es-ES">es-ES</option>
+                                <option value="i18n (Multiple)">i18n (Multiple)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Planning -->
+                <div class="space-y-4 pt-4 border-t border-borderColor">
+                    <h2 class="text-sm font-mono font-semibold text-brandPurpleHover uppercase flex items-center gap-2">
+                        <i data-lucide="calendar-clock" class="w-4 h-4"></i> Logistics
+                    </h2>
+                    
+                    <div class="group">
+                        <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors mb-1.5">targetReleaseDate</label>
+                        <input type="date" id="input-date" class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite text-sm font-mono [color-scheme:dark]">
+                    </div>
+
+                    <div class="group">
+                        <label class="block text-xs font-mono text-textMuted group-focus-within:text-brandYellow transition-colors mb-1.5">stakeholders (comma separated)</label>
+                        <input type="text" id="input-stakeholders" placeholder="e.g., Tech Lead, Product Manager" class="input-transition w-full px-3 py-2 bg-inputBg rounded-lg border border-borderColor focus:outline-none focus:border-brandYellow focus:ring-1 focus:ring-brandYellow text-textWhite text-sm font-mono">
+                    </div>
+                </div>
+                
+                <div class="h-4"></div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: Live Preview & Actions -->
+        <div class="w-full md:w-[60%] flex flex-col h-[85vh] md:h-full bg-panel rounded-xl border border-borderColor overflow-hidden shadow-2xl">
+            
+            <!-- Top Toolbar -->
+            <div class="bg-panel border-b border-borderColor p-3 flex items-center justify-between shrink-0 z-10">
+                <div class="flex items-center gap-3">
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-[#FF5F56]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#FFBD2E]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27C93F]"></div>
+                    </div>
+                    <span class="font-mono text-xs text-textMuted ml-2 tracking-widest hidden sm:inline-block">PREVIEW.md</span>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="copyToClipboard()" class="flex items-center justify-center gap-2 px-3 py-1.5 bg-dark text-textWhite hover:text-brandYellow border border-borderColor hover:border-brandYellow rounded text-xs font-mono transition-colors" id="btn-copy">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+                    </button>
+                    <button onclick="downloadPDF()" class="flex items-center justify-center gap-2 px-3 py-1.5 bg-brandYellow text-black hover:brightness-90 rounded font-mono font-bold text-xs transition-colors shadow-[0_0_10px_rgba(219,255,0,0.2)]" id="btn-pdf">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> Export PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Output Preview Area -->
+            <div class="flex-1 overflow-y-auto bg-dark p-6 md:p-10 relative custom-scrollbar">
+                
+                <div id="prd-document" class="bg-panel p-8 md:p-12 border border-borderColor shadow-xl max-w-4xl mx-auto rounded-md text-textMain">
+                    
+                    <!-- Doc Header -->
+                    <div class="border-b-2 border-brandPurple pb-8 mb-8 relative">
+                        <div class="absolute top-0 right-0">
+                            <span class="text-[10px] font-mono text-textMuted px-2 py-1 bg-dark border border-borderColor rounded hover:text-brandYellow hover:border-brandYellow transition-colors cursor-pointer">v1.0.0</span>
+                        </div>
+                        <div class="flex items-center gap-3 sm:gap-4 md:gap-6 pt-2">
+                            <img id="prev-logo" src="https://bucket.mlcdn.com/a/3336/3336910/images/1bac1d8b1875de0b78e15eea19bff333b8a80502.png" alt="Project Logo" class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain rounded drop-shadow-md shrink-0">
+                            <div class="flex flex-col min-w-0 flex-1">
+                                <p class="text-brandPurpleHover font-mono text-[8px] md:text-[10px] font-bold tracking-wider uppercase mb-1 sm:mb-1.5 break-words whitespace-normal leading-tight">// PRODUCT_REQUIREMENTS_DOCUMENT</p>
+                                <h1 id="prev-title" class="text-xl sm:text-3xl md:text-4xl font-mono font-bold text-textWhite leading-tight break-words">Untitled Project</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-10">
+                        
+                        <!-- Description -->
+                        <section>
+                            <h2 class="text-sm font-mono font-bold text-brandYellow uppercase mb-3 border-b border-borderColor pb-2 flex items-center gap-2">
+                                <i data-lucide="hash" class="w-4 h-4 text-brandPurpleHover"></i> Description
+                            </h2>
+                            <p id="prev-description" class="leading-relaxed whitespace-pre-wrap text-textMuted italic text-sm">No description initialized.</p>
+                        </section>
+
+                        <!-- Objectives & Audience Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <section>
+                                <h2 class="text-sm font-mono font-bold text-brandYellow uppercase mb-3 border-b border-borderColor pb-2 flex items-center gap-2">
+                                    <i data-lucide="hash" class="w-4 h-4 text-brandPurpleHover"></i> Objectives
+                                </h2>
+                                <p id="prev-objectives" class="leading-relaxed whitespace-pre-wrap text-textMuted italic text-sm">null</p>
+                            </section>
+                            <section>
+                                <h2 class="text-sm font-mono font-bold text-brandYellow uppercase mb-3 border-b border-borderColor pb-2 flex items-center gap-2">
+                                    <i data-lucide="hash" class="w-4 h-4 text-brandPurpleHover"></i> Target_Audience
+                                </h2>
+                                <p id="prev-audience" class="leading-relaxed text-textMuted italic text-sm">null</p>
+                            </section>
+                        </div>
+
+                        <!-- Features Array -->
+                        <section>
+                            <h2 class="text-sm font-mono font-bold text-brandYellow uppercase mb-3 border-b border-borderColor pb-2 flex items-center gap-2">
+                                <i data-lucide="hash" class="w-4 h-4 text-brandPurpleHover"></i> Key_Features
+                            </h2>
+                            <ul id="prev-features" class="font-mono text-sm space-y-2 pl-2">
+                                <li class="text-textMuted italic">[]</li>
+                            </ul>
+                        </section>
+
+                        <!-- Tech & Design Grid -->
+                        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-dark p-6 rounded-lg border border-borderColor">
+                            
+                            <div>
+                                <h3 class="text-xs font-mono font-bold text-brandPurpleHover uppercase mb-4 tracking-wider">Tech_Architecture</h3>
+                                <div class="space-y-3 font-mono text-sm">
+                                    <div class="flex items-start flex-col gap-1">
+                                        <span class="text-textMuted text-xs">platform:</span>
+                                        <span id="prev-platform" class="text-brandYellow">Web Application</span>
+                                    </div>
+                                    <div class="flex items-start flex-col gap-1">
+                                        <span class="text-textMuted text-xs">frontend:</span>
+                                        <span id="prev-frontend" class="text-textWhite bg-panel border border-borderColor px-2 py-0.5 rounded text-xs">null</span>
+                                    </div>
+                                    <div class="flex items-start flex-col gap-1">
+                                        <span class="text-textMuted text-xs">backend:</span>
+                                        <span id="prev-backend" class="text-textWhite bg-panel border border-borderColor px-2 py-0.5 rounded text-xs">null</span>
+                                    </div>
+                                    <div class="flex items-start flex-col gap-1">
+                                        <span class="text-textMuted text-xs">infra:</span>
+                                        <span id="prev-hosting" class="text-textWhite bg-panel border border-borderColor px-2 py-0.5 rounded text-xs">null</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xs font-mono font-bold text-brandPurpleHover uppercase mb-4 tracking-wider">Design_Specs</h3>
+                                <div class="space-y-3 font-mono text-sm">
+                                    <div class="flex items-start flex-col gap-1">
+                                        <span class="text-textMuted text-xs">theme:</span>
+                                        <span id="prev-theme" class="text-textWhite">Dark Mode (Default)</span>
+                                    </div>
+                                    <div class="flex items-start flex-col gap-1">
+                                        <span class="text-textMuted text-xs">palette:</span>
+                                        <div class="flex gap-2 mt-1" id="prev-palette"></div>
+                                    </div>
+                                    <div class="flex items-start flex-col gap-1 mt-2">
+                                        <span class="text-textMuted text-xs">icons:</span>
+                                        <span id="prev-icons" class="text-textWhite">Lucide</span>
+                                    </div>
+                                    <div class="flex items-start flex-col gap-1">
+                                        <span class="text-textMuted text-xs">locale:</span>
+                                        <span id="prev-language" class="text-textWhite">en-US</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Logistics -->
+                        <section class="border-t border-borderColor pt-8">
+                            <h2 class="text-sm font-mono font-bold text-brandYellow uppercase mb-4 flex items-center gap-2">
+                                <i data-lucide="hash" class="w-4 h-4 text-brandPurpleHover"></i> Project_Logistics
+                            </h2>
+                            
+                            <div class="flex flex-col md:flex-row gap-8 font-mono text-sm">
+                                <div class="flex-1">
+                                    <p class="text-textMuted text-xs mb-1">target_launch</p>
+                                    <p id="prev-date" class="text-textWhite">null</p>
+                                </div>
+                                <div class="flex-[2]">
+                                    <p class="text-textMuted text-xs mb-2">stakeholders</p>
+                                    <ul id="prev-stakeholders" class="space-y-1 border-l-2 border-borderColor pl-3">
+                                        <li class="text-textMuted italic text-xs">null</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="mt-12 text-center border-t border-borderColor pt-6">
+                            <p class="text-[10px] font-mono text-textMuted uppercase tracking-widest mb-2">// END OF DOCUMENT //</p>
+                            <p class="text-[10px] font-mono text-textMuted">Copyright © 2025 • All rights reserved, Powered with 🧪 by Html Lab</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div id="message-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden opacity-0 transition-opacity">
+        <div class="bg-panel border border-borderColor rounded-lg p-5 shadow-2xl flex items-center gap-3 transform scale-95 transition-transform duration-200" id="modal-content">
+            <i id="msg-icon" data-lucide="terminal" class="text-brandYellow w-5 h-5"></i>
+            <p id="message-text" class="font-mono text-sm text-textWhite">System message</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Gemini API Configuration
+        const apiKey = ""; // Injected by environment
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        // State Management
+        let features = ["Auth module (JWT/OAuth2)", "Analytics dashboard view"];
+        const fallbackLogoUrl = 'https://bucket.mlcdn.com/a/3336/3336910/images/1bac1d8b1875de0b78e15eea19bff333b8a80502.png';
+        
+        // DOM Elements
+        const inputs = {
+            title: document.getElementById('input-title'),
+            description: document.getElementById('input-description'),
+            objectives: document.getElementById('input-objectives'),
+            audience: document.getElementById('input-audience'),
+            color1: document.getElementById('input-color-1'),
+            color2: document.getElementById('input-color-2'),
+            color3: document.getElementById('input-color-3'),
+            icons: document.getElementById('input-icons'),
+            language: document.getElementById('input-language'),
+            theme: document.getElementById('input-theme'),
+            platform: document.getElementById('input-platform'),
+            frontend: document.getElementById('input-frontend'),
+            backend: document.getElementById('input-backend'),
+            hosting: document.getElementById('input-hosting'),
+            date: document.getElementById('input-date'),
+            stakeholders: document.getElementById('input-stakeholders'),
+        };
+
+        const prevLogo = document.getElementById('prev-logo');
+        const inputLogo = document.getElementById('input-logo');
+        const logoPreviewContainer = document.getElementById('logo-preview-container');
+
+        const previews = {
+            title: document.getElementById('prev-title'),
+            description: document.getElementById('prev-description'),
+            objectives: document.getElementById('prev-objectives'),
+            audience: document.getElementById('prev-audience'),
+            features: document.getElementById('prev-features'),
+            palette: document.getElementById('prev-palette'),
+            icons: document.getElementById('prev-icons'),
+            language: document.getElementById('prev-language'),
+            theme: document.getElementById('prev-theme'),
+            platform: document.getElementById('prev-platform'),
+            frontend: document.getElementById('prev-frontend'),
+            backend: document.getElementById('prev-backend'),
+            hosting: document.getElementById('prev-hosting'),
+            date: document.getElementById('prev-date'),
+            stakeholders: document.getElementById('prev-stakeholders'),
+        };
+
+        // File Input Handler for Logo
+        inputLogo.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const base64String = event.target.result;
+                    logoPreviewContainer.innerHTML = `<img src="${base64String}" class="w-full h-full object-cover" />`;
+                    prevLogo.src = base64String;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                logoPreviewContainer.innerHTML = `<i data-lucide="image-plus" class="w-4 h-4 text-textMuted group-hover/logo:text-brandYellow transition-colors"></i>`;
+                lucide.createIcons();
+                prevLogo.src = fallbackLogoUrl;
+            }
+        });
+
+        // Event Listeners for Live Preview
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', updatePreview);
+            input.addEventListener('change', updatePreview);
+        });
+
+        // Initialize UI
+        renderFeaturesList();
+        updatePreview();
+
+        // --- AI LOGIC ---
+
+        async function fetchGeminiData(prompt) {
+            const systemPrompt = "You are an expert Software Architect and PM. Provide concise, highly practical, dev-focused responses. Output clean text ONLY. No conversational filler, no markdown formatting like asterisks.";
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    const result = await response.json();
+                    return result.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+                } catch (error) {
+                    if (i === 4) throw error;
+                    await new Promise(res => setTimeout(res, delays[i]));
+                }
+            }
+        }
+
+        async function generateAI(field, btnId) {
+            const btn = document.getElementById(btnId);
+            const originalHTML = btn.innerHTML;
+            
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> RUN...`;
+            btn.disabled = true;
+            lucide.createIcons();
+
+            const ctxTitle = inputs.title.value || "unnamed project";
+            const ctxDesc = inputs.description.value || "digital product";
+            const currentVal = inputs[field].value;
+
+            let prompt = "";
+            switch(field) {
+                case 'title':
+                    prompt = `Suggest a sleek, tech-focused project codename or title for a ${inputs.platform.value}. Current: "${currentVal}". Generate just the string.`;
+                    break;
+                case 'description':
+                    prompt = `Write a concise, technical 2-sentence architectural summary/description for project "${ctxTitle}". Current: "${currentVal}". Improve it.`;
+                    break;
+                case 'objectives':
+                    prompt = `List 2-3 concise, quantifiable technical/business objectives for "${ctxTitle}". Current: "${currentVal}". No bullets, just a short paragraph.`;
+                    break;
+                case 'audience':
+                    prompt = `Define target user demographics concisely for "${ctxTitle}". Current: "${currentVal}".`;
+                    break;
+                case 'frontend':
+                    prompt = `Suggest a modern frontend stack (e.g., React, Tailwind) for a ${inputs.platform.value} named "${ctxTitle}". Return comma-separated string only.`;
+                    break;
+                case 'backend':
+                    prompt = `Suggest a modern backend stack and DB (e.g., Node, PostgreSQL) for "${ctxTitle}". Return comma-separated string only.`;
+                    break;
+            }
+
+            try {
+                const generatedText = await fetchGeminiData(prompt);
+                if (generatedText) {
+                    inputs[field].value = generatedText;
+                    updatePreview();
+                } else {
+                    throw new Error("No output");
+                }
+            } catch (error) {
+                showError("ERR: AI_TIMEOUT");
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        }
+
+        async function generateAIFeature(btnId) {
+            const btn = document.getElementById(btnId);
+            const originalHTML = btn.innerHTML;
+            
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> SYNC...`;
+            btn.disabled = true;
+            lucide.createIcons();
+
+            const ctxTitle = inputs.title.value || "project";
+            const currentFeatures = features.join(", ");
+            const prompt = `Suggest ONE new, technical, highly relevant feature for "${ctxTitle}". Current features: [${currentFeatures}]. Return ONLY the feature string, e.g., "GraphQL API Gateway".`;
+
+            try {
+                const generatedFeature = await fetchGeminiData(prompt);
+                if (generatedFeature) {
+                    features.push(generatedFeature.replace(/^[-*•]\s*/, ''));
+                    renderFeaturesList();
+                }
+            } catch (error) {
+                showError("ERR: FEATURE_GEN_FAILED");
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        }
+
+        // --- CORE LOGIC ---
+
+        function renderFeaturesList() {
+            const container = document.getElementById('features-container');
+            container.innerHTML = '';
+            
+            features.forEach((feat, index) => {
+                const div = document.createElement('div');
+                div.className = 'flex gap-2 group items-center';
+                div.innerHTML = `
+                    <span class="text-brandPurple text-xs font-mono">▸</span>
+                    <input type="text" value="${escapeHtml(feat)}" oninput="updateFeature(${index}, this.value)" placeholder="Enter feature module..." class="input-transition flex-1 min-w-0 px-3 py-1.5 bg-dark rounded border border-borderColor focus:outline-none focus:border-brandYellow text-textWhite font-mono text-sm placeholder-textMuted">
+                    <button onclick="removeFeature(${index})" class="p-1.5 text-textMuted hover:text-red-400 hover:bg-red-400/10 rounded transition-colors" title="Delete module">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+            updatePreview();
+        }
+
+        function addFeature() {
+            features.push("");
+            renderFeaturesList();
+            const inputsList = document.getElementById('features-container').querySelectorAll('input');
+            if(inputsList.length > 0) inputsList[inputsList.length - 1].focus();
+        }
+
+        function addPresetFeature() {
+            const select = document.getElementById('preset-features');
+            if(select.value) {
+                features.push(select.value);
+                select.value = "";
+                renderFeaturesList();
+            }
+        }
+
+        function updateFeature(index, value) {
+            features[index] = value;
+            updatePreview();
+        }
+
+        function removeFeature(index) {
+            features.splice(index, 1);
+            renderFeaturesList();
+        }
+
+        function updatePreview() {
+            // Text fields
+            updateTextField(previews.title, inputs.title.value, 'Untitled Project', true);
+            updateTextField(previews.description, inputs.description.value, 'No description initialized.');
+            updateTextField(previews.objectives, inputs.objectives.value, 'null');
+            updateTextField(previews.audience, inputs.audience.value, 'null');
+            
+            // Features Array
+            if (features.filter(f => f.trim() !== "").length === 0) {
+                previews.features.innerHTML = '<li class="text-textMuted italic text-sm">[]</li>';
+            } else {
+                previews.features.innerHTML = features
+                    .filter(f => f.trim() !== "")
+                    .map(f => `<li class="flex items-start gap-2 text-textWhite"><span class="text-brandPurpleHover select-none">↳</span> ${escapeHtml(f)}</li>`)
+                    .join('');
+            }
+
+            // Design & Config
+            previews.palette.innerHTML = `
+                <div class="w-6 h-6 rounded shadow-sm border border-borderColor" style="background-color: ${inputs.color1.value}" title="${inputs.color1.value}"></div>
+                <div class="w-6 h-6 rounded shadow-sm border border-borderColor" style="background-color: ${inputs.color2.value}" title="${inputs.color2.value}"></div>
+                <div class="w-6 h-6 rounded shadow-sm border border-borderColor" style="background-color: ${inputs.color3.value}" title="${inputs.color3.value}"></div>
+            `;
+            previews.icons.innerText = inputs.icons.value;
+            previews.theme.innerText = inputs.theme.value;
+            previews.language.innerText = inputs.language.value;
+            previews.platform.innerText = inputs.platform.value;
+
+            // Tech Architecture
+            updateTechField(previews.frontend, inputs.frontend.value);
+            updateTechField(previews.backend, inputs.backend.value);
+            updateTechField(previews.hosting, inputs.hosting.value);
+
+            // Logistics
+            if (inputs.date.value) {
+                const dateObj = new Date(inputs.date.value);
+                previews.date.innerText = dateObj.toISOString().split('T')[0]; // YYYY-MM-DD
+                previews.date.className = 'text-textWhite font-mono';
+            } else {
+                previews.date.innerText = 'null';
+                previews.date.className = 'italic text-textMuted font-mono';
+            }
+
+            if (inputs.stakeholders.value.trim() === '') {
+                previews.stakeholders.innerHTML = '<li class="text-textMuted italic text-xs">null</li>';
+            } else {
+                previews.stakeholders.innerHTML = inputs.stakeholders.value
+                    .split(',')
+                    .map(s => s.trim()).filter(s => s.length > 0)
+                    .map(s => `<li class="text-textWhite text-sm"><span class="text-brandYellow mr-2">@</span>${escapeHtml(s)}</li>`).join('');
+            }
+        }
+
+        function updateTextField(element, value, placeholder, isTitle = false) {
+            if (value.trim() === '') {
+                element.innerText = placeholder;
+                element.classList.add('italic', 'text-textMuted');
+                element.classList.remove('text-textWhite', 'text-textMain', 'text-brandYellow');
+            } else {
+                element.innerText = value;
+                element.classList.remove('italic', 'text-textMuted');
+                if (isTitle) {
+                    element.classList.add('text-textWhite');
+                } else {
+                    element.classList.add('text-textMain');
+                }
+            }
+        }
+
+        function updateTechField(element, value) {
+            if (value.trim() === '') {
+                element.innerText = 'null';
+                element.className = 'text-textMuted italic text-xs bg-transparent border border-transparent';
+            } else {
+                element.innerText = value;
+                element.className = 'text-textWhite bg-dark border border-borderColor px-2 py-0.5 rounded text-xs';
+            }
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+
+        function generateMarkdown() {
+            const validFeatures = features.filter(f => f.trim() !== "");
+            const featsText = validFeatures.length > 0 ? validFeatures.map(f => `- ${f}`).join('\n') : '[]';
+            const dateVal = inputs.date.value || 'null';
+
+            return `# PRODUCT REQUIREMENTS DOCUMENT
+## ${inputs.title.value || 'Untitled Project'}
+
+### DESCRIPTION
+> ${inputs.description.value || 'null'}
+
+### OBJECTIVES
+${inputs.objectives.value || 'null'}
+
+### TARGET AUDIENCE
+${inputs.audience.value || 'null'}
+
+### KEY FEATURES
+${featsText}
+
+### DESIGN SPECS
+- Theme: ${inputs.theme.value}
+- Palette: ${inputs.color1.value}, ${inputs.color2.value}, ${inputs.color3.value}
+- Icons: ${inputs.icons.value}
+
+### TECH ARCHITECTURE
+- Platform: ${inputs.platform.value}
+- Locale: ${inputs.language.value}
+- Frontend: ${inputs.frontend.value || 'null'}
+- Backend: ${inputs.backend.value || 'null'}
+- Infra: ${inputs.hosting.value || 'null'}
+
+### LOGISTICS
+- Target Launch: ${dateVal}
+- Stakeholders: ${inputs.stakeholders.value || 'null'}
+`;
+        }
+
+        function copyToClipboard() {
+            const text = generateMarkdown();
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => showMessage("Markdown copied to clipboard", "success")).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; 
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showMessage("Markdown copied to clipboard", "success");
+            } catch (err) {
+                showError("ERR: COPY_FAILED");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function hexToRgb(hex) {
+            let r = 0, g = 0, b = 0;
+            if (hex.length == 4) {
+                r = parseInt(hex[1] + hex[1], 16);
+                g = parseInt(hex[2] + hex[2], 16);
+                b = parseInt(hex[3] + hex[3], 16);
+            } else if (hex.length == 7) {
+                r = parseInt(hex[1] + hex[2], 16);
+                g = parseInt(hex[3] + hex[4], 16);
+                b = parseInt(hex[5] + hex[6], 16);
+            }
+            return `RGB(${r}, ${g}, ${b})`;
+        }
+
+        function downloadPDF() {
+            const titleVal = inputs.title.value || 'Untitled Project';
+            const safeTitle = titleVal.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            
+            const btn = document.getElementById('btn-pdf');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Generating...`;
+            lucide.createIcons();
+            
+            const validFeatures = features.filter(f => f.trim() !== "");
+            const featsHTML = validFeatures.length > 0
+                ? validFeatures.map(f => `<li style="margin-bottom: 6px;">${escapeHtml(f)}</li>`).join('')
+                : '<li style="font-style: italic; color: #666;">None specified</li>';
+
+            const logoSrc = document.getElementById('prev-logo').src;
+            const dateVal = inputs.date.value ? new Date(inputs.date.value).toISOString().split('T')[0] : 'None';
+
+            const c1 = inputs.color1.value || "#0B0A10";
+            const c2 = inputs.color2.value || "#4A439C";
+            const c3 = inputs.color3.value || "#DBFF00";
+
+            // Construct simple text-formatted document string
+            const htmlString = `
+                <div style="font-family: Helvetica, Arial, sans-serif; color: #000; padding: 20px; background: #fff; max-width: 800px; margin: 0 auto;">
+                    
+                    <div style="display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 20px; margin-bottom: 30px;">
+                        <img src="${logoSrc}" style="width: 70px; height: 70px; object-fit: contain; margin-right: 20px; filter: grayscale(100%);" />
+                        <div>
+                            <h3 style="margin: 0 0 5px 0; color: #555; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">Product Requirements Document</h3>
+                            <h1 style="margin: 0; font-size: 28px; font-weight: bold; text-transform: uppercase;">${escapeHtml(titleVal)}</h1>
+                        </div>
+                    </div>
+
+                    <h2 style="font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 25px; margin-bottom: 10px;">1. Description</h2>
+                    <p style="margin: 0 0 15px 0; line-height: 1.6;">${escapeHtml(inputs.description.value || 'None').replace(/\n/g, '<br>')}</p>
+
+                    <h2 style="font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 25px; margin-bottom: 10px;">2. Objectives</h2>
+                    <p style="margin: 0 0 15px 0; line-height: 1.6;">${escapeHtml(inputs.objectives.value || 'None').replace(/\n/g, '<br>')}</p>
+
+                    <h2 style="font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 25px; margin-bottom: 10px;">3. Target Audience</h2>
+                    <p style="margin: 0 0 15px 0; line-height: 1.6;">${escapeHtml(inputs.audience.value || 'None')}</p>
+
+                    <h2 style="font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 25px; margin-bottom: 10px;">4. Key Features</h2>
+                    <ul style="margin: 0 0 15px 0; padding-left: 20px; line-height: 1.6;">
+                        ${featsHTML}
+                    </ul>
+
+                    <h2 style="font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 25px; margin-bottom: 10px;">5. Tech Architecture</h2>
+                    <ul style="margin: 0 0 15px 0; padding-left: 20px; line-height: 1.6;">
+                        <li style="margin-bottom: 5px;"><strong>Platform:</strong> ${escapeHtml(inputs.platform.value)}</li>
+                        <li style="margin-bottom: 5px;"><strong>Frontend:</strong> ${escapeHtml(inputs.frontend.value || 'None')}</li>
+                        <li style="margin-bottom: 5px;"><strong>Backend:</strong> ${escapeHtml(inputs.backend.value || 'None')}</li>
+                        <li style="margin-bottom: 5px;"><strong>Infrastructure:</strong> ${escapeHtml(inputs.hosting.value || 'None')}</li>
+                    </ul>
+
+                    <h2 style="font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 25px; margin-bottom: 10px;">6. Design Specs</h2>
+                    <ul style="margin: 0 0 15px 0; padding-left: 20px; line-height: 1.6;">
+                        <li style="margin-bottom: 5px;"><strong>Theme:</strong> ${escapeHtml(inputs.theme.value)}</li>
+                        <li style="margin-bottom: 5px;"><strong>Color Palette:</strong>
+                            <ul style="margin: 5px 0 0 0; padding-left: 20px;">
+                                <li><strong>Primary:</strong> ${c1} <span style="color:#666;">(${hexToRgb(c1)})</span></li>
+                                <li><strong>Secondary:</strong> ${c2} <span style="color:#666;">(${hexToRgb(c2)})</span></li>
+                                <li><strong>Accent:</strong> ${c3} <span style="color:#666;">(${hexToRgb(c3)})</span></li>
+                            </ul>
+                        </li>
+                        <li style="margin-bottom: 5px;"><strong>Icons:</strong> ${escapeHtml(inputs.icons.value)}</li>
+                        <li style="margin-bottom: 5px;"><strong>Localization:</strong> ${escapeHtml(inputs.language.value)}</li>
+                    </ul>
+
+                    <h2 style="font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 25px; margin-bottom: 10px;">7. Logistics</h2>
+                    <ul style="margin: 0 0 15px 0; padding-left: 20px; line-height: 1.6;">
+                        <li style="margin-bottom: 5px;"><strong>Target Launch Date:</strong> ${dateVal}</li>
+                        <li style="margin-bottom: 5px;"><strong>Stakeholders:</strong> ${escapeHtml(inputs.stakeholders.value || 'None')}</li>
+                    </ul>
+                    
+                    <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #888; border-top: 1px solid #ccc; padding-top: 10px;">
+                        Copyright © 2025 • All rights reserved, Powered with 🧪 by Html Lab
+                    </div>
+                </div>
+            `;
+
+            // Pass HTML string directly instead of an off-screen element
+            html2pdf().set({
+                margin: 0.5,
+                filename: `PRD_${safeTitle}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, logging: false },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            }).from(htmlString).save().then(() => {
+                btn.innerHTML = originalContent;
+                lucide.createIcons();
+                showMessage("PDF export complete", "success");
+            }).catch(err => {
+                btn.innerHTML = originalContent;
+                lucide.createIcons();
+                showError('ERR: PDF_GEN_FAILED');
+            });
+        }
+
+        function showMessage(msg, type = "success") {
+            const modal = document.getElementById('message-modal');
+            const content = document.getElementById('modal-content');
+            const icon = document.getElementById('msg-icon');
+            
+            document.getElementById('message-text').innerText = msg;
+            
+            if (type === "error") {
+                icon.setAttribute("data-lucide", "triangle-alert");
+                icon.className = "text-red-500 w-5 h-5";
+            } else {
+                icon.setAttribute("data-lucide", "check-square");
+                icon.className = "text-brandYellow w-5 h-5";
+            }
+            lucide.createIcons();
+            
+            modal.classList.remove('hidden');
+            void modal.offsetWidth; // trigger reflow
+            
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+
+            setTimeout(() => {
+                modal.classList.add('opacity-0');
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 200);
+            }, 2500);
+        }
+
+        function showError(msg) {
+            showMessage(msg, "error");
+        }
+    </script>
+</body>
+</html>
