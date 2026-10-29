@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pen</title>
+    
+    
+    <style>
+    
+    @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+
+@layer base, presentation, demo, support;
+
+@layer demo {
+  .card {
+    /* fallbacks for browsers without random() */
+    --tilt: 0;
+    --shift-y: 0px;
+
+    /* Progressive enhancement strategy */
+    @supports (opacity: random(0, 1)) {
+      --tilt: random(-3.5, 3.5);
+      --shift-y: random(-6px, 6px);
+    }
+
+    rotate: calc(var(--tilt) * 1deg);
+    translate: 0 var(--shift-y);
+
+    /* Shadow shifts */
+    box-shadow: calc(var(--tilt) * 2px) calc(10px + abs(var(--tilt)) * 1px) 28px
+      oklch(20% 0.02 260 / 0.07);
+    transition:
+      rotate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+      translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 0.4s ease;
+
+    &:hover,
+    &:has(.button:focus-visible) {
+      rotate: 0deg;
+      translate: 0 -10px;
+      z-index: 10;
+      box-shadow:
+        0 20px 44px oklch(20% 0.02 260 / 0.12),
+        0 2px 6px oklch(20% 0.02 260 / 0.04);
+
+      .card-media img {
+        scale: 1.03;
+      }
+
+      .arrow {
+        translate: 4px 0;
+      }
+
+      .button {
+        background: oklch(20% 0.02 260);
+        color: #fff;
+      }
+    }
+
+    &:has(.button:focus-visible) {
+      outline: 2px solid oklch(50% 0.22 350);
+      outline-offset: 4px;
+    }
+  }
+
+  .button {
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      border-radius: inherit;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+
+    &::before,
+    &::after {
+      box-sizing: inherit;
+    }
+  }
+
+  body {
+    min-block-size: 100vh;
+    background: oklch(98% 0.005 260);
+    color: oklch(20% 0.02 260);
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    line-height: 1.5;
+    display: grid;
+    place-items: center;
+    padding: clamp(2rem, 5vw, 5rem);
+  }
+}
+
+@layer presentation {
+  main {
+    inline-size: 100%;
+    max-inline-size: 64rem;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: clamp(2rem, 4vw, 3rem);
+    align-items: center;
+    padding-block: 2rem;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid oklch(92% 0.01 260);
+    display: flex;
+    flex-direction: column;
+
+    .card-media {
+      aspect-ratio: 16/11;
+      border-radius: 4px;
+      overflow: hidden;
+      background: oklch(94% 0.01 260);
+
+      img {
+        inline-size: 100%;
+        block-size: 100%;
+        display: block;
+        object-fit: cover;
+        transition: scale 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+    }
+
+    .card-body {
+      padding: 1.4rem 0.6rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
+      .card-category {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: oklch(52% 0.02 260);
+        display: block;
+        margin-block-end: 0.4rem;
+      }
+
+      .card-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        color: oklch(18% 0.02 260);
+        margin-block-end: 0.5rem;
+      }
+
+      .card-desc {
+        font-size: 0.9rem;
+        color: oklch(45% 0.02 260);
+        line-height: 1.55;
+        margin-block-end: 1.4rem;
+      }
+
+      .card-action {
+        margin-block-start: auto;
+      }
+    }
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    background: oklch(95% 0.01 260);
+    color: oklch(20% 0.02 260);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+
+    .arrow {
+      display: inline-block;
+      transition: translate 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+  }
+}
+
+@layer support {
+  @supports not (opacity: random(0, 1)) {
+    body::before {
+      content: "This demo uses CSS random() (CSS Values Level 5). Your browser does not yet support this feature.";
+      position: fixed;
+      inset-block-end: max(1.25rem, env(safe-area-inset-bottom, 1.25rem));
+      inset-inline: 1rem;
+      margin-inline: auto;
+      inline-size: fit-content;
+      max-inline-size: min(92vw, 42rem);
+      z-index: 1000;
+      padding: 0.65rem 1.25rem;
+      border-radius: 999px;
+      background: oklch(98% 0.01 90 / 0.92);
+      color: oklch(32% 0.03 55);
+      border: 1px solid oklch(38% 0.025 55 / 0.2);
+      box-shadow: 0 4px 20px -2px oklch(0% 0 0 / 0.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-family: system-ui, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      line-height: 1.4;
+      text-align: center;
+      pointer-events: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none;
+    transition: none;
+  }
+}
+
+ </style>   
+    
+    
+    
+    
+  </head>
+  <body>
+    <main>
+    
+    
+    
+      <section class="cards-grid">
+      
+      
+        <article class="card">
+          <figure class="card-media">
+            <img
+              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+              alt=""
+              loading="lazy"
+            />
+          </figure>
+          <div class="card-body">
+            <span class="card-category">Lighting • 2026</span>
+            <h2 class="card-title">Villa Vesterbro</h2>
+            <p class="card-desc">
+              Minimalist modern residence with reflecting pool and warm evening
+              light
+            </p>
+            <div class="card-action">
+              <a href="#villa" class="button">
+                <span>View project</span>
+                <span class="arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </article>
+        
+        
+        
+        
+        <article class="card">
+          <figure class="card-media">
+            <img
+              src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"
+              alt=""
+              loading="lazy"
+            />
+          </figure>
+          <div class="card-body">
+            <span class="card-category">Minimalism • 2026</span>
+            <h2 class="card-title">Studio Lysning</h2>
+            <p class="card-desc">
+              Tranquil sunlit interior space with natural wood chair and soft
+              linen drapery
+            </p>
+            <div class="card-action">
+              <a href="#studio" class="button">
+                <span>View project</span>
+                <span class="arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </article>
+        
+        
+        
+        
+        <article class="card">
+          <figure class="card-media">
+            <img
+              src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80"
+              alt=""
+              loading="lazy"
+            />
+          </figure>
+          <div class="card-body">
+            <span class="card-category">Projects • 2026</span>
+            <h2 class="card-title">Form &amp; Clay</h2>
+            <p class="card-desc">
+              Frame idea for my walls to be done by end of this year.
+            </p>
+            <div class="card-action">
+              <a href="#ceramics" class="button">
+                <span>View project</span>
+                <span class="arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </article>
+        
+        
+      </section>
+      
+      
+      
+      
+      
+      
+      
+    </main>
+    
+    
+    
+    
+    
+  </body>
+</html>
