@@ -98,6 +98,31 @@
     }
     
     
+
+        
+                /* =========================================
+           2. THE WRAPPER (Max-width & Borders)
+           ========================================= */
+        .site-wrapper {
+            max-width: 1600px; /* The defined maximum width */
+            margin: 0 auto;    /* Centers the container */
+            background-color: #ffffff; /* Solid color to hide the dots inside */
+            
+            /* The vertical borders */
+            border-left: 1px solid #41360e;
+            border-right: 1px solid #41360e;
+            
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.02); /* Subtle depth */
+            position: relative;
+        }
+        
+        
+
+
+
+
+
     
     
     
@@ -1101,7 +1126,7 @@
 <body>
 
 
-
+<div site-wrapper>
 
 
   <!-- Header -->
@@ -1911,8 +1936,8 @@
   
   
   
-
-  
+<!-- Close Site wrapper -->
+</div>
 
     <!-- Scripts -->
   <script>
