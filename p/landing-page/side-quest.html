@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Figtree:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    
+    <title>The Side Quest Adoption Center</title>
+    
+    <style>
+    html {
+  --color-background: oklch(0.97 0.008 220);
+  --color-surface: oklch(0.995 0.003 220);
+  --color-text: oklch(0.25 0.035 245);
+  --color-muted: oklch(0.47 0.025 245);
+  --color-line: oklch(0.85 0.015 230);
+  --color-accent: oklch(0.9 0.16 98);
+  --font-family-body: 'Figtree', sans-serif;
+  --font-family-heading: 'Bricolage Grotesque', sans-serif;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --font-size-body: 1rem;
+  background: var(--color-background);
+  color: var(--color-text);
+  scroll-behavior: smooth;
+  scroll-padding-top: 24px;
+  accent-color: var(--color-text);
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--font-family-body); font-size: var(--font-size-body); line-height: 1.5; font-synthesis: none; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; cursor: pointer; color: inherit; }
+a { color: inherit; text-underline-offset: 4px; }
+button, a { touch-action: manipulation; }
+:focus-visible { outline: 3px solid oklch(0.45 0.16 265); outline-offset: 5px; }
+::selection { background: var(--color-accent); color: var(--color-text); }
+[hidden] { display: none !important; }
+svg { display: block; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+h1, h2, h3 { font-family: var(--font-family-heading); margin: 0; line-height: 1.1; text-wrap: balance; }
+p { margin: 0; }
+.wrap { width: min(1184px, calc(100% - 64px)); margin-inline: auto; }
+.site-header { min-height: 104px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: flex; gap: 10px; align-items: center; text-decoration: none; font-family: var(--font-family-heading); font-weight: 800; font-size: 1.5rem; line-height: 1.05; }
+.brand > svg { width: 39px; height: 39px; stroke-width: 4; }
+.brand-sub { display: block; font-family: var(--font-family-body); font-size: 0.56rem; letter-spacing: 0.19em; margin-top: 6px; font-weight: 700; }
+.header-note { color: var(--color-muted); font-size: 0.875rem; }
+.quest-link { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; font-size: 0.875rem; }
+.quest-link > span { background: var(--color-accent); min-width: 25px; height: 25px; border-radius: 50%; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+.quest-link svg { width: 18px; }
+.quest-link:hover { text-decoration: underline; }
+.brand:hover { color: oklch(0.42 0.09 250); }
+.hero { display: grid; grid-template-areas: 'copy art'; grid-template-columns: 1.45fr 1fr; padding: 3em 3.5em; border-radius: 18px; background: var(--color-accent); overflow: hidden; min-height: 410px; }
+.hero-copy { grid-area: copy; position: relative; z-index: 1; }
+.open-sign { display: inline-flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1.7em; }
+.open-sign span { font-size: 1.15rem; }
+h1 { font-size: clamp(2.8rem, 5.1vw, 4.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 0.99; }
+h1 span { position: relative; }
+h1 span::after { content: ''; height: 6px; border-bottom: 2px solid currentColor; border-radius: 50%; position: absolute; bottom: -5px; left: 0; right: 0; transform: rotate(-2deg); }
+.hero p { margin-top: 1.6em; font-size: 1rem; line-height: 1.6; }
+.primary-button { display: inline-flex; align-items: center; gap: 24px; padding: 0.85em 1.25em; background: var(--color-text); color: var(--color-surface); border-radius: 7px; text-decoration: none; font-size: 0.875rem; font-weight: 600; margin-top: 1.8em; transition: background 180ms, transform 180ms; }
+.primary-button svg { width: 18px; height: 18px; }
+.primary-button:hover { background: oklch(0.35 0.05 245); transform: translateY(-2px); }
+.hero-footnote { display: block; font-size: 0.6875rem; margin-top: 1em; }
+.hero-art { grid-area: art; display: flex; flex-direction: column; justify-content: center; align-items: center; transform: rotate(2deg); }
+.hero-drawing { width: 100%; max-width: 390px; height: auto; stroke-width: 0; animation: arrive 650ms cubic-bezier(0.2, 0, 0, 1) both; }
+.hero-drawing text { font-size: 11px; }
+.art-caption { font-size: 0.75rem; transform: rotate(-5deg); margin-top: -0.5em; }
+.ideas-section { padding-top: 3em; }
+.section-heading { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+h2 { font-size: clamp(1.7rem, 2.5vw, 2rem); font-weight: 700; letter-spacing: -0.025em; }
+.section-heading p { margin-top: 0.6em; font-size: 0.9375rem; color: var(--color-muted); }
+.availability { border: 1px solid var(--color-line); padding: 0.5em 0.85em; border-radius: 20px; font-size: 0.75rem; white-space: nowrap; }
+.board-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-block: 1.8em 1.5em; border-bottom: 1px solid var(--color-line); }
+.filters { display: flex; gap: 24px; }
+.filters button { border: 0; border-bottom: 2px solid transparent; background: none; padding: 0.6em 0 0.9em; font-size: 0.8125rem; font-weight: 600; color: var(--color-muted); }
+.filters button[aria-pressed='true'] { border-bottom-color: var(--color-text); color: var(--color-text); }
+.filters button:hover { color: var(--color-text); border-bottom-color: var(--color-muted); }
+.filters span { display: inline-block; font-variant-numeric: tabular-nums; margin-left: 6px; background: oklch(0.91 0.013 230); padding: 0 0.5em; border-radius: 4px; font-size: 0.6875rem; }
+.tiny-note { font-size: 0.6875rem; color: var(--color-muted); }
+.ideas-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.idea-card { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.idea-art { position: relative; height: 147px; background: var(--idea-color); display: grid; place-items: center; border-bottom: 1px solid var(--color-line); }
+.idea-art > svg { width: 135px; height: 117px; stroke-width: 2; transition: transform 220ms; }
+.idea-card:hover .idea-art > svg { transform: rotate(-4deg) translateY(-3px); }
+.idea-id { position: absolute; left: 16px; top: 14px; font-size: 0.625rem; letter-spacing: 0.06em; font-weight: 600; }
+.idea-tag { position: absolute; bottom: 12px; right: 12px; padding: 0.3em 0.65em; background: var(--color-surface); border: 1px solid var(--color-text); border-radius: 20px; font-size: 0.625rem; font-weight: 600; }
+.card-content { display: flex; flex-direction: column; flex: 1; padding: 1.35em; }
+h3 { font-size: 1.375rem; font-weight: 700; letter-spacing: -0.02em; }
+.idea-description { color: var(--color-muted); font-size: 0.875rem; margin-top: 0.65em; min-height: 3em; }
+.idea-facts { margin-block: 1.4em 1.25em; font-size: 0.75rem; }
+.fact-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.fact-row + .fact-row { margin-top: 0.7em; }
+.fact-row dt { color: var(--color-muted); }
+.fact-row dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.repo-meter { display: block; height: 4px; border-radius: 8px; background: oklch(0.91 0.012 230); margin-top: 10px; overflow: hidden; }
+.repo-meter span { display: block; width: var(--likelihood); height: 100%; background: var(--color-text); border-radius: inherit; }
+.adopt-button { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--color-text); border-radius: 6px; padding: 0.65em 0.85em; background: transparent; font-size: 0.8125rem; font-weight: 600; margin-top: auto; transition: background 180ms, color 180ms; }
+.adopt-button svg { width: 18px; height: 18px; }
+.adopt-button:hover { background: var(--color-text); color: var(--color-surface); }
+.adopt-button[aria-pressed='true'] { background: var(--color-accent); color: var(--color-text); }
+.adopt-button[aria-pressed='true']:hover { background: oklch(0.84 0.15 98); }
+.empty-state { padding: 3em 1em; text-align: center; color: var(--color-muted); }
+.status { font-size: 0.875rem; margin-top: 1em; min-height: 1.5em; color: var(--color-muted); }
+.closing-note { padding-block: 2em 2.75em; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; font-size: 0.8125rem; text-align: center; }
+.closing-note svg { width: 18px; height: 18px; }
+.closing-note > span { color: var(--color-muted); }
+footer { border-top: 1px solid var(--color-line); padding-block: 1.8em; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 0.6875rem; color: var(--color-muted); }
+@keyframes arrive { from { transform: translateY(12px) rotate(-6deg); } to { transform: translateY(0) rotate(0); } }
+@media (min-width: 1400px) { .hero { padding-block: 3.5em; } }
+@media (max-width: 960px) {
+  .header-note, .tiny-note { display: none; }
+  .hero { padding: 2.5em; grid-template-columns: 1.4fr 1fr; }
+  .hero p { font-size: 0.9375rem; }
+  .desktop-break { display: none; }
+  .ideas-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .wrap { width: calc(100% - 32px); }
+  .site-header { min-height: 86px; gap: 12px; }
+  .brand { font-size: 1.2rem; }
+  .brand > svg { width: 30px; height: 30px; }
+  .brand-sub { font-size: 0.45rem; }
+  .quest-link { font-size: 0.75rem; gap: 6px; }
+  .quest-link > svg { display: none; }
+  .hero { grid-template-areas: 'copy' 'art'; grid-template-columns: 1fr; padding: 1.75em; }
+  h1 { font-size: clamp(2.7rem, 10vw, 3.8rem); }
+  .open-sign { font-size: 0.6875rem; margin-bottom: 1.5em; }
+  .hero-art { max-width: 260px; width: 100%; justify-self: center; margin-top: 12px; }
+  .art-caption { font-size: 0.625rem; }
+  .hero-footnote { font-size: 0.625rem; }
+  .section-heading { align-items: flex-start; flex-direction: column; gap: 16px; }
+  .ideas-section { padding-top: 2.25em; }
+  .availability { font-size: 0.6875rem; }
+  .ideas-grid { grid-template-columns: 1fr; gap: 20px; }
+  .filters { gap: 20px; }
+  .filters button { font-size: 0.75rem; }
+  .idea-art { height: 160px; }
+  .idea-description { min-height: auto; }
+  footer { flex-direction: column; gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+    
+    </style>
+  </head>
+  <body>
+  
+  
+  
+    <header class="site-header wrap">
+      
+      <a class="brand" href="./index.html" aria-label="Side Quest home">
+      
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3v34M3 20h34M8 8l24 24M8 32 32 8"/></svg>
+      
+      <span>side quest<span class="brand-sub">ADOPTION CENTER</span>
+      </span>
+      </a>
+      
+      <span class="header-note">Good ideas. Questionable timing.</span>
+      
+      
+      <a class="quest-link" href="#ideas">Your side quests <span id="adopted-count">0</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>
+      </a>
+      
+    </header>
+    
+    
+    
+    
+
+    <main class="wrap">
+    
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <span class="open-sign"><span aria-hidden="true">✳</span> Open for irresponsible decisions</span>
+          <h1 id="hero-title">Your next<br>little <span>distraction.</span></h1>
+          <p>Adopt an idea you have absolutely no time for.<br class="desktop-break"> Give it a home. Or at least a new GitHub repository.</p>
+          <a class="primary-button" href="#ideas">Meet the side quests <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-6-6 6 6 6-6"/></svg></a>
+          <span class="hero-footnote">No experience required. Free time not included.</span>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg class="hero-drawing" viewBox="0 0 400 350" fill="none">
+            <path d="M44 283c-35-42-3-148 74-190 87-47 200-6 222 64 30 98-97 173-189 149" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 7"/>
+            <path d="m57 86 7-17 7 17 17 7-17 7-7 17-7-17-17-7zM333 255l5-13 5 13 13 5-13 5-5 13-5-13-13-5z" fill="currentColor"/>
+            <g transform="rotate(-10 190 175)" stroke="currentColor" stroke-width="3" stroke-linejoin="round">
+              <path d="M100 109h160l28 31v126H100z" fill="oklch(0.98 0.015 100)"/>
+              <path d="M260 109v32h28"/>
+              <path d="m135 169-17 15 17 15m91-30 17 15-17 15m-38-35-13 40" stroke-linecap="round"/>
+              <path d="M151 223q30 30 60 0" stroke-linecap="round"/>
+              <path d="m119 266-9 27m140-27 12 27M100 209l-30 11m218-11 28-15" stroke-linecap="round"/>
+            </g>
+            <g transform="rotate(12 280 94)"><rect x="232" y="62" width="102" height="51" rx="25" fill="oklch(0.78 0.12 295)" stroke="currentColor" stroke-width="2"/><path d="M251 86c-6-10 8-15 12-5 6-10 19-4 12 5l-12 11z" fill="currentColor"/><text x="279" y="92" fill="currentColor" font-family="Figtree, sans-serif" font-size="15" font-weight="700">adopt me</text></g>
+            <path d="m299 35 5 15m14-9-8 12m22 6-17 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="art-caption">a small idea with big “what if” energy</span>
+        </div>
+      </section>
+      
+      
+      
+      
+
+      <section class="ideas-section" id="ideas" aria-labelledby="ideas-title">
+        <div class="section-heading"><div><h2 id="ideas-title">Looking for a good home.</h2><p>Six perfectly good ways to avoid your actual to-do list.</p></div><span class="availability" id="availability">6 ideas, zero obligations</span></div>
+        <div class="board-toolbar"><div class="filters" role="group" aria-label="Filter ideas"><button type="button" data-filter="all" aria-pressed="true">All side quests <span>6</span></button><button type="button" data-filter="adopted" aria-pressed="false">My adopted ideas <span id="filter-count">0</span></button></div><span class="tiny-note">Made with ambition. Not a business plan.</span></div>
+        <div class="ideas-grid" id="ideas-grid"></div>
+        <p class="empty-state" id="empty-state" hidden>No side quests yet. Find an idea that speaks to your wildly optimistic schedule.</p>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </section>
+      
+      
+      
+      
+      <aside class="closing-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z"/></svg><p>Remember: adopting an idea is not a legally binding commitment to finish it.</p><span>We checked. Sort of.</span></aside>
+    </main>
+    
+    
+    
+    
+    <footer class="wrap"><span>© 2026 Side Quest Adoption Center</span><span>Every abandoned project started with a little excitement.</span><span>A very unserious demo.</span></footer>
+    
+    
+    
+    
+    <script src="./script.js"></script>
+    
+    
+    <script>
+    const adaptedIdeas = [
+  {
+    id: 'SQ-001',
+    name: 'The Overengineered To-Do App',
+    description: 'A productivity app to avoid doing the things on your productivity app.',
+    estimatedCost: '$24 / month',
+    repositoryLikelihood: 99,
+    temperament: 'Thinks it’s a startup',
+    color: 'oklch(0.9 0.055 245)',
+    illustration: 'todo'
+  },
+  {
+    id: 'SQ-002',
+    name: 'A Plant With an API',
+    description: 'Your monstera needs water. Naturally, it should send a webhook.',
+    estimatedCost: '$85 + one plant',
+    repositoryLikelihood: 94,
+    temperament: 'Needs regular attention',
+    color: 'oklch(0.9 0.075 155)',
+    illustration: 'plant'
+  },
+  {
+    id: 'SQ-003',
+    name: 'The Niche Newsletter',
+    description: 'Weekly deep dives into something eleven people care deeply about.',
+    estimatedCost: '$0 + every Sunday',
+    repositoryLikelihood: 62,
+    temperament: 'Very vocal',
+    color: 'oklch(0.92 0.065 60)',
+    illustration: 'letter'
+  },
+  {
+    id: 'SQ-004',
+    name: 'Yet Another Indie Game',
+    description: 'A cozy little farming game. With crafting. And multiplayer. And lore.',
+    estimatedCost: '$150 + your evenings',
+    repositoryLikelihood: 98,
+    temperament: 'Prone to scope creep',
+    color: 'oklch(0.9 0.065 300)',
+    illustration: 'game'
+  },
+  {
+    id: 'SQ-005',
+    name: 'The Personal Website Rebuild',
+    description: 'This time, the tech stack will finally capture your personality.',
+    estimatedCost: '$12 / year (again)',
+    repositoryLikelihood: 100,
+    temperament: 'Never quite finished',
+    color: 'oklch(0.93 0.1 100)',
+    illustration: 'website'
+  },
+  {
+    id: 'SQ-006',
+    name: 'A Bot That Judges Your Coffee',
+    description: 'Computer vision meets your $6 latte. It has some strong opinions.',
+    estimatedCost: '$40 + API credits',
+    repositoryLikelihood: 87,
+    temperament: 'A little opinionated',
+    color: 'oklch(0.9 0.065 25)',
+    illustration: 'coffee'
+  }
+];
+
+const illustrations = {
+  todo: '<g transform="rotate(-8 65 60)"><rect x="35" y="17" width="65" height="86" rx="6" fill="var(--color-surface)"/><rect x="53" y="12" width="29" height="12" rx="4" fill="var(--idea-color)"/><path d="m46 41 4 4 7-9m7 5h23M46 60h10m8 0h23M46 77h10m8 0h16"/><path d="M52 90q10 8 20 0"/></g><path d="m23 30-6-6m94 61 7 2m-8-59 5-6"/>',
+  plant: '<path d="M48 77h42l-6 30H54z" fill="var(--color-surface)"/><path d="M69 77V39M69 61C40 65 35 45 37 37c20-1 31 9 32 24ZM69 47c-1-21 12-31 29-29 1 18-9 30-29 29Z" fill="var(--color-surface)"/><path d="m43 44 26 17m0-14 22-21M60 88v2m17-2v2m-13 7q5 4 10 0M20 63l-8 7 8 7m94-14 8 7-8 7"/>',
+  letter: '<g transform="rotate(7 68 60)"><path d="M25 44h85v57H25z" fill="var(--color-surface)"/><path d="m25 44 42 33 43-33M25 101l30-33m55 33L80 68"/><path d="M39 54V18h58v36L67 77Z" fill="var(--color-surface)"/><path d="M49 31h37M49 41h37M49 51h19"/><circle cx="78" cy="58" r="1"/><circle cx="58" cy="58" r="1"/><path d="M62 65q6 4 12 0"/></g>',
+  game: '<path d="M40 39h57c13 0 20 16 23 38 3 21-11 23-24 5H43C30 100 16 98 19 77c3-22 8-38 21-38Z" fill="var(--color-surface)"/><path d="M44 51v23M33 62h23M63 39V28h20V17"/><circle cx="96" cy="55" r="4"/><circle cx="105" cy="69" r="4"/><path d="M65 67q5 5 10 0m-11-10v2m12-2v2m-55-31-4-5m98 8 4-6"/>',
+  website: '<g transform="rotate(-5 68 60)"><rect x="17" y="24" width="104" height="73" rx="5" fill="var(--color-surface)"/><path d="M17 40h104M26 32h1m7 0h1m7 0h1M32 54h30m-30 9h41m-41 9h24"/><rect x="83" y="52" width="23" height="25" rx="3" fill="var(--idea-color)"/><path d="m85 88 12 23 3-11 11-4Z" fill="var(--color-surface)"/></g><path d="m19 14-5-5m102 7 5-7"/>',
+  coffee: '<path d="M36 42h61v35c0 18-12 28-30 28S36 95 36 77Z" fill="var(--color-surface)"/><path d="M97 48h6c24 0 21 34-6 32M31 107h72M49 30c-10-11 10-13 0-23m18 23c-10-11 10-13 0-23m18 23c-10-11 10-13 0-23M48 63l12 4m14 0 12-4m-33 7v2m27-2v2M60 87q7-8 14 0"/>'
+};
+const heart = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z"/></svg>';
+const check = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>';
+const adopted = new Set();
+let activeFilter = 'all';
+const grid = document.querySelector('#ideas-grid');
+const status = document.querySelector('#status');
+
+function renderIdeas() {
+  const visibleIdeas = adaptedIdeas.filter(idea => activeFilter === 'all' || adopted.has(idea.id));
+  grid.innerHTML = visibleIdeas.map(idea => {
+    const isAdopted = adopted.has(idea.id);
+    return `<article class="idea-card" style="--idea-color: ${idea.color}" aria-labelledby="title-${idea.id}">
+      <div class="idea-art"><span class="idea-id">${idea.id}</span><svg viewBox="0 0 140 120" aria-hidden="true">${illustrations[idea.illustration]}</svg><span class="idea-tag">${idea.temperament}</span></div>
+      <div class="card-content"><h3 id="title-${idea.id}">${idea.name}</h3><p class="idea-description">${idea.description}</p>
+      <dl class="idea-facts"><div class="fact-row"><dt>Estimated cost</dt><dd>${idea.estimatedCost}</dd></div><div class="fact-row"><dt>Becomes another GitHub repo</dt><dd>${idea.repositoryLikelihood}%</dd></div><div class="repo-meter" aria-hidden="true" style="--likelihood: ${idea.repositoryLikelihood}%"><span></span></div></dl>
+      <button class="adopt-button" type="button" data-adopt="${idea.id}" aria-pressed="${isAdopted}" aria-label="${isAdopted ? 'Release' : 'Adopt'} ${idea.name}"><span>${isAdopted ? 'Adopted! (release idea)' : 'Adopt this idea'}</span>${isAdopted ? check : heart}</button></div>
+    </article>`;
+  }).join('');
+  document.querySelector('#empty-state').hidden = visibleIdeas.length !== 0;
+  document.querySelector('#adopted-count').textContent = adopted.size;
+  document.querySelector('#filter-count').textContent = adopted.size;
+  const remaining = adaptedIdeas.length - adopted.size;
+  document.querySelector('#availability').textContent = remaining === 0 ? 'Everyone found a home!' : `${remaining} ${remaining === 1 ? 'idea' : 'ideas'}, zero obligations`;
+}
+
+// Adoptions stay in memory on this page; nothing is transmitted or stored.
+grid.addEventListener('click', event => {
+  const button = event.target.closest('[data-adopt]');
+  if (!button) return;
+  const id = button.dataset.adopt;
+  const idea = adaptedIdeas.find(item => item.id === id);
+  if (adopted.has(id)) {
+    adopted.delete(id);
+    status.textContent = `${idea.name} is looking for a home again. No hard feelings.`;
+  } else {
+    adopted.add(id);
+    status.textContent = `${idea.name} is yours! Your actual to-do list will understand.`;
+  }
+  renderIdeas();
+  const nextFocus = grid.querySelector(`[data-adopt="${id}"]`) || grid.querySelector('[data-adopt]') || document.querySelector('[data-filter="all"]');
+  nextFocus.focus({ preventScroll: true });
+});
+
+document.querySelectorAll('[data-filter]').forEach(button => {
+  button.addEventListener('click', () => {
+    activeFilter = button.dataset.filter;
+    document.querySelectorAll('[data-filter]').forEach(filterButton => {
+      filterButton.setAttribute('aria-pressed', String(filterButton === button));
+    });
+    status.textContent = '';
+    renderIdeas();
+  });
+});
+
+renderIdeas();
+
+    
+    </script>
+    
+  </body>
+</html>
