@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scroll Based Velocity – plain HTML/CSS/JS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0a0a0a;
+      color: #f5f5f5;
+      min-height: 300vh; /* give the page something to scroll */
+      padding: 4rem 0;
+    }
+
+    /* ---------- section wrapper ---------- */
+    .velocity-section {
+      position: relative;
+      width: 100%;
+      margin: 4rem 0;
+    }
+
+    /* ---------- one parallax row ---------- */
+    .parallax {
+      overflow: hidden;
+      white-space: nowrap;
+      display: flex;
+      flex-wrap: nowrap;
+      width: 100%;
+    }
+
+    /* the moving track */
+    .parallax-track {
+      display: flex;
+      white-space: nowrap;
+      will-change: transform;
+      /* transform set inline by JS */
+    }
+
+    .parallax-track > span {
+      display: block;
+      margin-right: 2.5rem; /* mr-10 */
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .parallax-track > span:last-child {
+      margin-right: 2.5rem;
+    }
+
+    /* color variants */
+    .velocity-row-a .parallax-track > span {
+      color: #a855f7;
+    }
+    .velocity-row-b .parallax-track > span {
+      color: #22d3ee;
+    }
+
+    /* heading */
+    .demo-heading {
+      text-align: center;
+      padding: 2rem;
+      font-size: 1rem;
+      color: #888;
+      font-family: ui-monospace, monospace;
+    }
+    .demo-heading strong {
+      color: #fff;
+      display: block;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-family: system-ui, sans-serif;
+    }
+
+    /* spacer so you can scroll */
+    .spacer {
+      height: 120vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-family: ui-monospace, monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="demo-heading">
+    <strong>Scroll up and down</strong>
+    rows accelerate and reverse direction based on scroll velocity
+  </div>
+
+  <div class="velocity-section" id="velocity-1"></div>
+
+  <div class="spacer">↓ scroll ↓</div>
+
+  <div class="velocity-section" id="velocity-2"></div>
+
+  <div class="spacer">↑ scroll ↑</div>
+
+  <script>
+    (function() {
+      // -------------------------------------------------------------
+      // 1. MATH HELPERS
+      // -------------------------------------------------------------
+      /**
+       * Wrap a value into [min, max) — mirrors framer-motion's wrap().
+       */
+      function wrap(min, max, v) {
+        const range = max - min;
+        const mod = (((v - min) % range) + range) % range;
+        return mod + min;
+      }
+
+      /** Clamp a number into a range. */
+      function clamp(v, min, max) {
+        return Math.max(min, Math.min(max, v));
+      }
+
+      // -------------------------------------------------------------
+      // 2. SPRING (single dimension) — smooths a value toward a target
+      //    using stiffness + damping, mirroring framer-motion's
+      //    useSpring for a single motion value.
+      // -------------------------------------------------------------
+      class Spring {
+        constructor(initial = 0, { stiffness = 400, damping = 50 } = {}) {
+          this.value = initial;
+          this.target = initial;
+          this.velocity = 0;
+          this.stiffness = stiffness;
+          this.damping = damping;
+        }
+        set(target) {
+          this.target = target;
+        }
+        /** Advance the spring by `dt` seconds. Returns the new value. */
+        step(dt) {
+          // clamped dt so a long frame (tab switch) doesn't explode
+          dt = Math.min(dt, 0.064);
+          const force = (this.target - this.value) * this.stiffness;
+          const damper = this.velocity * this.damping;
+          const acceleration = force - damper;
+          this.velocity += acceleration * dt;
+          this.value += this.velocity * dt;
+          return this.value;
+        }
+      }
+
+      // -------------------------------------------------------------
+      // 3. VELOCITY TRACKER — keeps a short history of scrollY and
+      //    returns instantaneous velocity (px / second).
+      //    Mirrors framer-motion's useVelocity(scrollY).
+      // -------------------------------------------------------------
+      class VelocityTracker {
+        constructor() {
+          this.samples = []; // { t, v }
+          this.maxSamples = 8;
+          this.current = 0;
+        }
+        add(value, time) {
+          this.samples.push({ t: time, v: value });
+          if (this.samples.length > this.maxSamples) this.samples.shift();
+
+          if (this.samples.length < 2) {
+            this.current = 0;
+            return;
+          }
+          const first = this.samples[0];
+          const last = this.samples[this.samples.length - 1];
+          const dt = (last.t - first.t) / 1000; // seconds
+          if (dt <= 0) {
+            this.current = 0;
+            return;
+          }
+          this.current = (last.v - first.v) / dt;
+        }
+        get() {
+          return this.current;
+        }
+      }
+
+      // -------------------------------------------------------------
+      // 4. PARALLAX ROW — the core "ParallaxText" equivalent
+      // -------------------------------------------------------------
+      /**
+       * Creates a parallax row.
+       *
+       * @param {object} opts
+       * @param {string} opts.text          - the text to repeat
+       * @param {number} opts.baseVelocity  - px/sec base speed (negative flips)
+       * @param {string} [opts.className]   - extra class on the moving track
+       * @param {HTMLElement} [opts.container] - scroll container (defaults to window)
+       * @param {HTMLElement} opts.parentEl - element to mount into
+       */
+      function createParallaxRow(opts) {
+        const {
+          text,
+          baseVelocity = 100,
+          className = '',
+          container = null,
+          parentEl,
+        } = opts;
+
+        // --- DOM ---
+        const overflowEl = document.createElement('div');
+        overflowEl.className = 'parallax';
+
+        const track = document.createElement('div');
+        track.className = ['parallax-track', className].filter(Boolean).join(' ');
+
+        const REPEAT = 8;
+        for (let i = 0; i < REPEAT; i++) {
+          const span = document.createElement('span');
+          span.textContent = text;
+          track.appendChild(span);
+        }
+
+        overflowEl.appendChild(track);
+        parentEl.appendChild(overflowEl);
+
+        // --- state ---
+        // baseX is the "raw" position, in % units (matches original code).
+        // The rendered x is wrap(-12.5, 0, baseX).
+        let baseX = 0;
+
+        // directionFactor starts at 1 (like useRef(1))
+        let directionFactor = 1;
+
+        // track total elapsed time so we can compute delta between frames
+        let lastTime = null;
+
+        // scroll velocity tracking
+        const velocityTracker = new VelocityTracker();
+        // smooth the velocity (mirrors useSpring(scrollVelocity))
+        const smoothVelocity = new Spring(0, { stiffness: 400, damping: 50 });
+        let lastScrollY = getScrollY();
+        let lastScrollTime = performance.now();
+
+        // helper: current scroll position of the container (or window)
+        function getScrollY() {
+          if (container) return container.scrollTop;
+          return window.scrollY || window.pageYOffset || 0;
+        }
+
+        // -------------------------------------------------------------
+        // Animation loop
+        // -------------------------------------------------------------
+        let rafId = null;
+        let running = true;
+
+        function frame(now) {
+          if (!running) return;
+
+          // --- delta in seconds (useAnimationFrame equivalent) ---
+          if (lastTime === null) lastTime = now;
+          const deltaMs = now - lastTime;
+          lastTime = now;
+          const delta = deltaMs / 1000;
+
+          // --- update scroll velocity ---
+          const scrollY = getScrollY();
+          if (now - lastScrollTime > 16) { // ~60fps sampling
+            velocityTracker.add(scrollY, now);
+            lastScrollTime = now;
+          }
+
+          // smooth the raw velocity
+          smoothVelocity.set(velocityTracker.get());
+          smoothVelocity.step(delta);
+
+          // velocityFactor = map(smoothVelocity, [0,1000], [0,5], clamp:false)
+          //   negative velocity -> negative factor (scroll up)
+          //   0 -> 0, 1000 -> 5, beyond 1000 keeps going (no clamp)
+          const smoothedVel = smoothVelocity.value;
+          const velocityFactor = (smoothedVel / 1000) * 5;
+
+          // --- direction: flip based on velocity sign ---
+          if (velocityFactor < 0) {
+            directionFactor = -1;
+          } else if (velocityFactor > 0) {
+            directionFactor = 1;
+          }
+
+          // --- move baseX ---
+          // moveBy = directionFactor * baseVelocity * delta
+          let moveBy = directionFactor * baseVelocity * delta;
+
+          // moveBy += directionFactor * moveBy * velocityFactor
+          // (note: uses the *current* velocityFactor, matching original)
+          moveBy += directionFactor * moveBy * velocityFactor;
+
+          baseX += moveBy;
+
+          // --- wrap and apply ---
+          const wrapped = wrap(-12.5, 0, baseX);
+          track.style.transform = `translate3d(${wrapped}%, 0, 0)`;
+
+          lastScrollY = scrollY;
+          rafId = requestAnimationFrame(frame);
+        }
+
+        rafId = requestAnimationFrame(frame);
+
+        // --- cleanup handle ---
+        return {
+          destroy() {
+            running = false;
+            if (rafId) cancelAnimationFrame(rafId);
+            if (overflowEl.parentNode) overflowEl.parentNode.removeChild(overflowEl);
+          },
+        };
+      }
+
+      // -------------------------------------------------------------
+      // 5. SCROLL-BASED VELOCITY — two opposing rows per section
+      // -------------------------------------------------------------
+      /**
+       * Mounts a ScrollBasedVelocity section into `parentEl`.
+       *
+       * @param {object} opts
+       * @param {string} opts.text
+       * @param {number} [opts.default_velocity=5]
+       * @param {string} [opts.className]
+       * @param {HTMLElement} [opts.container] - scroll container
+       * @param {HTMLElement} parentEl
+       */
+      function mountScrollBasedVelocity(opts) {
+        const {
+          text,
+          default_velocity = 5,
+          className = '',
+          container = null,
+          parentEl,
+        } = opts;
+
+        const section = document.createElement('section');
+        section.className = 'velocity-section';
+
+        const rowA = document.createElement('div');
+        rowA.className = 'velocity-row-a';
+        const rowB = document.createElement('div');
+        rowB.className = 'velocity-row-b';
+
+        section.appendChild(rowA);
+        section.appendChild(rowB);
+        parentEl.appendChild(section);
+
+        const rowAInstance = createParallaxRow({
+          text,
+          baseVelocity: default_velocity,
+          className,
+          container,
+          parentEl: rowA,
+        });
+
+        const rowBInstance = createParallaxRow({
+          text,
+          baseVelocity: -default_velocity,
+          className,
+          container,
+          parentEl: rowB,
+        });
+
+        return {
+          destroy() {
+            rowAInstance.destroy();
+            rowBInstance.destroy();
+            if (section.parentNode) section.parentNode.removeChild(section);
+          },
+        };
+      }
+
+      // -------------------------------------------------------------
+      // 6. DEMO
+      // -------------------------------------------------------------
+      const sampleText = 'SCROLL VELOCITY · ';
+
+      // Section 1 — attached to the window
+      const s1 = document.getElementById('velocity-1');
+      if (s1) {
+        mountScrollBasedVelocity({
+          text: sampleText,
+          default_velocity: 5,
+          parentEl: s1,
+        });
+      }
+
+      // Section 2 — another, different speed for variety
+      const s2 = document.getElementById('velocity-2');
+      if (s2) {
+        mountScrollBasedVelocity({
+          text: 'FRAMER MOTION · ',
+          default_velocity: 8,
+          parentEl: s2,
+        });
+      }
+
+      console.log('ScrollBasedVelocity component (plain JS) mounted.');
+    })();
+  </script>
+</body>
+</html>
