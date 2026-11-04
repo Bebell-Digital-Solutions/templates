@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GAP3 Services — Physics Card</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --bg-page: #001a1a;
+      --card-bg-1: #003a3a;
+      --card-bg-2: #002828;
+      --text: #eafff8;
+      --muted: #a9cec7;
+      --accent: #14c38e;
+      --line: rgba(255, 255, 255, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--bg-page);
+      font-family: 'Manrope', sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      padding: 40px 16px;
+    }
+
+    /* ============================================================
+       CARD
+       ============================================================ */
+    .physics-card {
+      position: relative;
+      width: 100%;
+      max-width: 920px;
+      min-height: 480px;
+      height: 480px;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 25% 15%, rgba(20, 195, 142, 0.12), transparent 55%),
+        radial-gradient(circle at 80% 85%, rgba(8, 145, 178, 0.12), transparent 55%),
+        linear-gradient(180deg, var(--card-bg-1) 0%, var(--card-bg-2) 100%);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.05) inset,
+        0 40px 80px -30px rgba(0, 0, 0, 0.7);
+      isolation: isolate;
+    }
+
+    /* ============================================================
+       BACKGROUND LAYER — physics canvas
+       ============================================================ */
+    .physics-card__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      touch-action: none;
+    }
+
+    .physics-card__bg canvas {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Softer vignette — keeps edges calm, keeps center legible,
+       never fully blocks the tags */
+    .physics-card__bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(
+          ellipse at center,
+          rgba(0, 28, 28, 0.10) 0%,
+          rgba(0, 28, 28, 0.30) 55%,
+          rgba(0, 28, 28, 0.70) 100%
+        );
+      z-index: 1;
+    }
+
+    /* ============================================================
+       FOREGROUND LAYER — text + CTAs, centered, NO panel
+       ============================================================ */
+    .physics-card__content {
+      position: relative;
+      z-index: 2;
+      min-height: 580px;
+      height: 580px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: top;
+      margin-top: 48px;
+      margin-bottom: 0;
+      text-align: center;
+      padding: 48px 32px;
+      pointer-events: none;
+    }
+
+    .physics-card__content > * {
+      pointer-events: auto;
+    }
+
+    /* Wrapper for the text/CTA stack — just for max-width,
+       NO background, NO blur, NO border */
+    .physics-card__panel {
+      position: relative;
+      max-width: 660px;
+      pointer-events: none;
+    }
+
+    .physics-card__panel > * {
+      pointer-events: auto;
+    }
+
+    /* ---------- Text ---------- */
+    .physics-card__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+    }
+
+    .physics-card__eyebrow::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(20, 195, 142, 0.22);
+    }
+
+    .physics-card__title {
+      margin: 0 0 12px;
+      font-size: clamp(24px, 3.6vw, 34px);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      text-wrap: balance;
+      /* Layered text-shadow to keep the title legible over chips,
+         without darkening the whole area */
+      text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.65),
+        0 6px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .physics-card__description {
+      margin: 0 auto;
+      max-width: 46ch;
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--muted);
+      text-wrap: pretty;
+      text-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.7),
+        0 4px 16px rgba(0, 0, 0, 0.45);
+    }
+
+    /* ---------- CTA row ---------- */
+    .physics-card__ctas {
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition:
+        transform 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .btn--primary {
+      background: var(--accent);
+      color: #002828;
+      box-shadow: 0 10px 24px -10px rgba(20, 195, 142, 0.7);
+    }
+
+    .btn--primary:hover {
+      background: #1ad69b;
+      box-shadow: 0 14px 30px -10px rgba(20, 195, 142, 0.85);
+    }
+
+    /* Secondary button: needs to be visible over chips,
+       so it keeps a solid fill (this is a button, not a backdrop) */
+    .btn--secondary {
+      background: rgba(0, 40, 40, 0.85);
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .btn--secondary:hover {
+      background: rgba(0, 40, 40, 0.95);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* ---------- Hint ---------- */
+    .physics-card__hint {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(234, 255, 248, 0.55);
+      pointer-events: none;
+      user-select: none;
+      z-index: 2;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    /* ---------- Mobile ---------- */
+    @media (max-width: 520px) {
+      .physics-card { min-height: 520px; border-radius: 22px; }
+      .physics-card__content { min-height: 520px; padding: 32px 20px; }
+      .physics-card__description { font-size: 13.5px; }
+      .physics-card__ctas { flex-direction: column; width: 100%; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+  <article class="physics-card" aria-labelledby="pc-title">
+
+    <!-- Background physics canvas -->
+    <div class="physics-card__bg" id="stage" aria-hidden="true"></div>
+    
+
+    <!-- Foreground content (centered, no panel background) -->
+    <div class="physics-card__content">
+      <div class="physics-card__panel">
+        <span class="physics-card__eyebrow">What we do</span>
+
+        <h2 class="physics-card__title" id="pc-title">
+          Every service, tossed into one place.
+        </h2>
+
+        <p class="physics-card__description">
+          Drag any chip to play. It’s a tiny physics playground of the things we
+          actually ship — from WordPress to WooCommerce, Webflow to React.
+        </p>
+
+        <div class="physics-card__ctas">
+          <a href="#services" class="btn btn--primary">
+            Explore services
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#contact" class="btn btn--secondary">
+            Get a quote
+            <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 6l8 7 8-7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <span class="physics-card__hint"></span>
+    
+    
+  </article>
+  
+  
+  
+  
+  
+  
+  
+  
+
+  <!-- Matter.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+
+  <script>
+    document.fonts.ready.then(init);
+
+    function init() {
+      const { Engine, Render, World, Bodies, Mouse, MouseConstraint, Events, Body } = Matter;
+
+      const stage = document.getElementById('stage');
+      const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+      function stageSize() {
+        const rect = stage.getBoundingClientRect();
+        return {
+          width: Math.max(1, Math.floor(rect.width)),
+          height: Math.max(1, Math.floor(rect.height))
+        };
+      }
+
+      let { width, height } = stageSize();
+
+      /* ---------- Engine ---------- */
+      const engine = Engine.create();
+      engine.gravity.y = 1;
+      const world = engine.world;
+
+      /* ---------- Render ---------- */
+      const render = Render.create({
+        element: stage,
+        engine,
+        options: {
+          width,
+          height,
+          wireframes: false,
+          background: 'transparent',
+          pixelRatio: DPR
+        }
+      });
+
+      Render.run(render);
+      Engine.run(engine);
+
+      /* ---------- Walls ---------- */
+      const wallT = 100;
+      const wallOpts = { isStatic: true, render: { visible: false } };
+      let walls = [];
+
+      function buildWalls() {
+        World.remove(world, walls);
+        walls = [
+          Bodies.rectangle(width / 2, height + wallT / 2, width * 2, wallT, wallOpts),
+          Bodies.rectangle(width / 2, -wallT / 2, width * 2, wallT, wallOpts),
+          Bodies.rectangle(-wallT / 2, height / 2, wallT, height * 2, wallOpts),
+          Bodies.rectangle(width + wallT / 2, height / 2, wallT, height * 2, wallOpts)
+        ];
+        World.add(world, walls);
+      }
+
+      buildWalls();
+
+      /* ---------- Data ---------- */
+      const services = [
+        "WordPress Development", "WooCommerce Stores", "Elementor Customization",
+        "ACF Integrations", "Shopify Development", "SEO Optimization",
+        "Speed Performance", "Figma to Code", "UI/UX Design",
+        "React Development", "Email Marketing", "Digital Strategy",
+        "Local SEO", "Zoho CRM", "Webflow Projects"
+      ];
+
+      const tagColors = [
+        "#14c38e", "#0f766e", "#1e293b", "#065f46",
+        "#0369a1", "#047857", "#374151", "#0891b2"
+      ];
+
+      /* ---------- Build chips ---------- */
+      const shapes = [];
+      const measureCanvas = document.createElement('canvas');
+      const measureCtx = measureCanvas.getContext('2d');
+
+      services.forEach((text, index) => {
+        const fontSize = Math.floor(Math.random() * 8) + 12; // 12–19px
+        measureCtx.font = `700 ${fontSize}px Manrope`;
+        const textWidth = measureCtx.measureText(text).width;
+
+        const paddingX = 24;
+        const paddingY = 14;
+
+        const rectWidth = Math.ceil(textWidth + paddingX);
+        const rectHeight = Math.ceil(fontSize + paddingY);
+
+        const body = Bodies.rectangle(
+          width * (0.1 + Math.random() * 0.8),
+          Math.random() * height * 0.4,
+          rectWidth,
+          rectHeight,
+          {
+            restitution: 0.75,
+            friction: 0.4,
+            frictionAir: 0.02,
+            chamfer: { radius: 9 }
+          }
+        );
+
+        body.serviceText = text;
+        body.color = tagColors[index % tagColors.length];
+        body.fontSize = fontSize;
+        body.rectWidth = rectWidth;
+        body.rectHeight = rectHeight;
+
+        shapes.push(body);
+      });
+
+      World.add(world, shapes);
+
+      /* ---------- Drag ---------- */
+      const mouse = Mouse.create(render.canvas);
+      mouse.pixelRatio = DPR;
+
+      const mouseConstraint = MouseConstraint.create(engine, {
+        mouse,
+        constraint: { stiffness: 0.2, render: { visible: false } }
+      });
+      World.add(world, mouseConstraint);
+
+      render.canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+
+      /* ---------- Draw chips ---------- */
+      Events.on(render, 'afterRender', () => {
+        const ctx = render.context;
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+        shapes.forEach((body) => {
+          const { x, y } = body.position;
+          const { rectWidth: w, rectHeight: h, fontSize, color, serviceText } = body;
+          const radius = 9;
+
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(body.angle);
+
+          ctx.fillStyle = color;
+          ctx.shadowColor = 'rgba(0,0,0,0.35)';
+          ctx.shadowBlur = 6;
+          ctx.shadowOffsetY = 2;
+
+          ctx.beginPath();
+          ctx.moveTo(-w / 2 + radius, -h / 2);
+          ctx.lineTo(w / 2 - radius, -h / 2);
+          ctx.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + radius);
+          ctx.lineTo(w / 2, h / 2 - radius);
+          ctx.quadraticCurveTo(w / 2, h / 2, w / 2 - radius, h / 2);
+          ctx.lineTo(-w / 2 + radius, h / 2);
+          ctx.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - radius);
+          ctx.lineTo(-w / 2, -h / 2 + radius);
+          ctx.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + radius, -h / 2);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetY = 0;
+
+          ctx.font = `700 ${fontSize}px Manrope`;
+          ctx.fillStyle = '#ffffff';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(serviceText, 0, 0);
+
+          ctx.restore();
+        });
+      });
+
+      /* ---------- Resize ---------- */
+      let resizeTimer = null;
+
+      function handleResize() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          const next = stageSize();
+          if (next.width === width && next.height === height) return;
+
+          width = next.width;
+          height = next.height;
+
+          render.options.width = width;
+          render.options.height = height;
+          render.canvas.width = width * DPR;
+          render.canvas.height = height * DPR;
+          render.canvas.style.width = '100%';
+          render.canvas.style.height = '100%';
+
+          buildWalls();
+
+          const pad = 40;
+          shapes.forEach((body) => {
+            const p = body.position;
+            const nx = Math.min(Math.max(p.x, pad), width - pad);
+            const ny = Math.min(Math.max(p.y, pad), height - pad);
+            if (nx !== p.x || ny !== p.y) {
+              Body.setPosition(body, { x: nx, y: ny });
+              Body.setVelocity(body, { x: 0, y: 0 });
+            }
+          });
+        }, 120);
+      }
+
+      if ('ResizeObserver' in window) {
+        new ResizeObserver(handleResize).observe(stage);
+      } else {
+        window.addEventListener('resize', handleResize);
+      }
+      window.addEventListener('resize', handleResize);
+    }
+  </script>
+</body>
+</html>
