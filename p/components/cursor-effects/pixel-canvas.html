@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pixel Canvas – plain HTML/CSS/JS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0a0a0a;
+      color: #f5f5f5;
+      overflow: hidden;
+    }
+
+    /* ---------- full-screen canvas container ---------- */
+    .pixel-canvas {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      /* optional subtle backdrop so the trail is visible on empty space */
+      background: radial-gradient(circle at 50% 50%, #121212 0%, #050505 100%);
+    }
+
+    .pixel-canvas canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ---------- demo controls ---------- */
+    .controls {
+      position: fixed;
+      top: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.5rem;
+      z-index: 20;
+      font-family: ui-monospace, monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .controls button {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ccc;
+      padding: 0.5rem 0.9rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      backdrop-filter: blur(8px);
+    }
+
+    .controls button:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    .controls button.active {
+      background: rgba(167, 139, 250, 0.25);
+      border-color: rgba(167, 139, 250, 0.6);
+      color: #e9d5ff;
+    }
+
+    .hint {
+      position: fixed;
+      inset: auto 0 1.5rem 0;
+      text-align: center;
+      font-family: ui-monospace, monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #555;
+      pointer-events: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls" id="controls"></div>
+
+  <div class="pixel-canvas" id="pixel-root"></div>
+
+  <div class="hint">Move your cursor across the canvas</div>
+
+  <script>
+    (function() {
+      // -------------------------------------------------------------
+      // 1. COLOR HELPERS
+      // -------------------------------------------------------------
+      function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result
+          ? {
+              r: parseInt(result[1], 16),
+              g: parseInt(result[2], 16),
+              b: parseInt(result[3], 16),
+            }
+          : null;
+      }
+
+      function lerpColor(color1, color2, t) {
+        const c1 = hexToRgb(color1);
+        const c2 = hexToRgb(color2);
+        if (!c1 || !c2) return color1;
+
+        const r = Math.round(c1.r + (c2.r - c1.r) * t);
+        const g = Math.round(c1.g + (c2.g - c1.g) * t);
+        const b = Math.round(c1.b + (c2.b - c1.b) * t);
+        return `rgb(${r}, ${g}, ${b})`;
+      }
+
+      // -------------------------------------------------------------
+      // 2. PIXEL CANVAS COMPONENT
+      // -------------------------------------------------------------
+      /**
+       * @param {object} opts
+       * @param {number}   [opts.gap=6]         - cell size in px
+       * @param {number}   [opts.speed=0.02]    - decay speed (higher = faster fade)
+       * @param {string[]} [opts.colors]        - palette
+       * @param {boolean}  [opts.noFocus=false] - disable mouse tracking
+       * @param {'default'|'trail'|'glow'} [opts.variant='default']
+       * @param {HTMLElement} opts.parentEl
+       */
+      function createPixelCanvas(opts) {
+        const {
+          gap = 6,
+          speed = 0.02,
+          colors = ['#e879f9', '#a78bfa', '#38bdf8', '#22d3ee'],
+          noFocus = false,
+          variant = 'default',
+          parentEl,
+        } = opts;
+
+        // ---- DOM ----
+        const container = document.createElement('div');
+        container.className = 'pixel-canvas';
+
+        const canvas = document.createElement('canvas');
+        canvas.style.display = 'block';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+
+        container.appendChild(canvas);
+        parentEl.appendChild(container);
+
+        const ctx = canvas.getContext('2d', { alpha: true });
+        if (!ctx) {
+          console.error('PixelCanvas: 2D context unavailable');
+          return { destroy() {} };
+        }
+
+        // ---- State (closure vars, mirroring React refs) ----
+        const pixelSize = Math.max(gap, 4);
+        let cols = 0;
+        let rows = 0;
+        let pixels = [];        // 2D array of Pixel objects
+        const mouse = { x: -1000, y: -1000 };
+        let rafId = null;
+        let lastTime = 0;
+        let running = true;
+
+        // ---- Color sampling ----
+        function getColorFromIntensity(intensity, phase) {
+          if (colors.length === 0) return '#ffffff';
+          if (colors.length === 1) return colors[0];
+
+          const t = (phase + intensity) % 1;
+          const index = Math.floor(t * (colors.length - 1));
+          const nextIndex = Math.min(index + 1, colors.length - 1);
+          const localT = (t * (colors.length - 1)) % 1;
+
+          const color1 = colors[index];
+          const color2 = colors[nextIndex];
+
+          if (!color1) return '#ffffff';
+          if (!color2) return color1;
+
+          return lerpColor(color1, color2, localT);
+        }
+
+        // ---- Initialize grid (also handles resize) ----
+        function initPixels() {
+          const rect = container.getBoundingClientRect();
+          const dpr = window.devicePixelRatio || 1;
+
+          canvas.width = Math.max(1, rect.width * dpr);
+          canvas.height = Math.max(1, rect.height * dpr);
+          canvas.style.width = `${rect.width}px`;
+          canvas.style.height = `${rect.height}px`;
+
+          // Reset transform before scaling (important on resize)
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.scale(dpr, dpr);
+
+          cols = Math.ceil(rect.width / pixelSize);
+          rows = Math.ceil(rect.height / pixelSize);
+
+          const newPixels = [];
+          for (let i = 0; i < cols; i++) {
+            const row = [];
+            for (let j = 0; j < rows; j++) {
+              const existing = pixels[i] && pixels[i][j];
+              row.push({
+                x: i * pixelSize,
+                y: j * pixelSize,
+                size: pixelSize - 1,
+                intensity: existing ? existing.intensity : 0,
+                targetIntensity: 0,
+                colorPhase: Math.random(),
+              });
+            }
+            newPixels.push(row);
+          }
+          pixels = newPixels;
+        }
+
+        // ---- Draw loop ----
+        function draw(timestamp) {
+          if (!running) return;
+
+          const deltaTime = timestamp - lastTime;
+          lastTime = timestamp;
+
+          const rect = container.getBoundingClientRect();
+          ctx.clearRect(0, 0, rect.width, rect.height);
+
+          const mouseX = mouse.x;
+          const mouseY = mouse.y;
+
+          // Variant-specific parameters
+          const radius = variant === 'glow' ? 120 : 80;
+          const glowPasses = variant === 'glow' ? 2 : 1;
+
+          for (let i = 0; i < cols; i++) {
+            const col = pixels[i];
+            if (!col) continue;
+
+            for (let j = 0; j < rows; j++) {
+              const pixel = col[j];
+              if (!pixel) continue;
+
+              // Distance from mouse to pixel center
+              const centerX = pixel.x + pixel.size / 2;
+              const centerY = pixel.y + pixel.size / 2;
+              const dx = mouseX - centerX;
+              const dy = mouseY - centerY;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+
+              // Target intensity with smooth falloff
+              if (distance < radius) {
+                const falloff = 1 - distance / radius;
+                pixel.targetIntensity = Math.pow(falloff, 1.5);
+              } else {
+                pixel.targetIntensity = 0;
+              }
+
+              // Quick light-up, slow decay
+              const lerpSpeed = pixel.targetIntensity > pixel.intensity ? 0.3 : speed;
+              pixel.intensity += (pixel.targetIntensity - pixel.intensity) * lerpSpeed;
+
+              // Slow color shimmer
+              pixel.colorPhase = (pixel.colorPhase + 0.001 * (deltaTime / 16)) % 1;
+
+              // Draw if visible
+              if (pixel.intensity > 0.01) {
+                const color = getColorFromIntensity(pixel.intensity, pixel.colorPhase);
+
+                // Glow pass
+                if (variant === 'glow' && pixel.intensity > 0.2) {
+                  for (let g = glowPasses; g > 0; g--) {
+                    const glowSize = pixel.size + g * 4;
+                    const glowOffset = (glowSize - pixel.size) / 2;
+                    ctx.globalAlpha = (pixel.intensity * 0.15) / g;
+                    ctx.fillStyle = color;
+                    ctx.fillRect(
+                      pixel.x - glowOffset,
+                      pixel.y - glowOffset,
+                      glowSize,
+                      glowSize
+                    );
+                  }
+                }
+
+                // Main pixel
+                ctx.globalAlpha = pixel.intensity * 0.9;
+                ctx.fillStyle = color;
+
+                if (variant === 'trail') {
+                  const cornerRadius = pixel.size * 0.3;
+                  ctx.beginPath();
+                  // roundRect may not exist on very old browsers; fallback
+                  if (typeof ctx.roundRect === 'function') {
+                    ctx.roundRect(pixel.x, pixel.y, pixel.size, pixel.size, cornerRadius);
+                  } else {
+                    // manual rounded rect fallback
+                    const x = pixel.x;
+                    const y = pixel.y;
+                    const w = pixel.size;
+                    const h = pixel.size;
+                    const r = Math.min(cornerRadius, w / 2, h / 2);
+                    ctx.moveTo(x + r, y);
+                    ctx.arcTo(x + w, y, x + w, y + h, r);
+                    ctx.arcTo(x + w, y + h, x, y + h, r);
+                    ctx.arcTo(x, y + h, x, y, r);
+                    ctx.arcTo(x, y, x + w, y, r);
+                    ctx.closePath();
+                  }
+                  ctx.fill();
+                } else {
+                  ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size);
+                }
+              }
+            }
+          }
+
+          ctx.globalAlpha = 1;
+          rafId = requestAnimationFrame(draw);
+        }
+
+        // ---- Mouse / touch handlers ----
+        function onMouseMove(e) {
+          const rect = canvas.getBoundingClientRect();
+          mouse.x = e.clientX - rect.left;
+          mouse.y = e.clientY - rect.top;
+        }
+
+        function onMouseLeave() {
+          mouse.x = -1000;
+          mouse.y = -1000;
+        }
+
+        function onTouchMove(e) {
+          if (e.touches.length > 0) {
+            const touch = e.touches[0];
+            if (touch) {
+              const rect = canvas.getBoundingClientRect();
+              mouse.x = touch.clientX - rect.left;
+              mouse.y = touch.clientY - rect.top;
+            }
+          }
+        }
+
+        function onTouchEnd() {
+          mouse.x = -1000;
+          mouse.y = -1000;
+        }
+
+        // ---- Wire up ----
+        initPixels();
+        lastTime = performance.now();
+        rafId = requestAnimationFrame(draw);
+
+        window.addEventListener('resize', initPixels);
+
+        if (!noFocus) {
+          container.addEventListener('mousemove', onMouseMove);
+          container.addEventListener('mouseleave', onMouseLeave);
+          container.addEventListener('touchmove', onTouchMove, { passive: true });
+          container.addEventListener('touchend', onTouchEnd);
+        }
+
+        // ---- Cleanup ----
+        return {
+          destroy() {
+            running = false;
+            if (rafId) cancelAnimationFrame(rafId);
+            window.removeEventListener('resize', initPixels);
+            container.removeEventListener('mousemove', onMouseMove);
+            container.removeEventListener('mouseleave', onMouseLeave);
+            container.removeEventListener('touchmove', onTouchMove);
+            container.removeEventListener('touchend', onTouchEnd);
+            if (container.parentNode) container.parentNode.removeChild(container);
+          },
+        };
+      }
+
+      // -------------------------------------------------------------
+      // 3. DEMO — mount a canvas + variant switcher
+      // -------------------------------------------------------------
+      const root = document.getElementById('pixel-root');
+      const controls = document.getElementById('controls');
+
+      // Current config — kept in a mutable object so the switcher can
+      // destroy and rebuild the canvas with new variant/colors.
+      let current = null;
+
+      const presets = {
+        default: {
+          gap: 6,
+          speed: 0.02,
+          variant: 'default',
+          colors: ['#e879f9', '#a78bfa', '#38bdf8', '#22d3ee'],
+        },
+        trail: {
+          gap: 10,
+          speed: 0.015,
+          variant: 'trail',
+          colors: ['#f472b6', '#fb923c', '#facc15'],
+        },
+        glow: {
+          gap: 5,
+          speed: 0.025,
+          variant: 'glow',
+          colors: ['#22d3ee', '#a78bfa', '#f472b6'],
+        },
+      };
+
+      function mount(presetName) {
+        if (current) current.destroy();
+        const preset = presets[presetName];
+        current = createPixelCanvas({
+          gap: preset.gap,
+          speed: preset.speed,
+          colors: preset.colors,
+          variant: preset.variant,
+          noFocus: false,
+          parentEl: root,
+        });
+
+        // Update active button
+        [...controls.querySelectorAll('button')].forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.preset === presetName);
+        });
+      }
+
+      // Build control buttons
+      Object.keys(presets).forEach((name) => {
+        const btn = document.createElement('button');
+        btn.textContent = name;
+        btn.dataset.preset = name;
+        btn.addEventListener('click', () => mount(name));
+        controls.appendChild(btn);
+      });
+
+      // Initial mount
+      mount('default');
+
+      // Expose for console tinkering
+      window.__pixelCanvas = {
+        mount,
+        destroy: () => current && current.destroy(),
+      };
+
+      console.log('PixelCanvas component (plain JS) mounted.');
+    })();
+  </script>
+</body>
+</html>
