@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Trail – plain HTML/CSS/JS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0d0d0d;
+      color: #f5f5f5;
+      overflow: hidden; /* keep the trail area full-screen */
+    }
+
+    /* ---------- trail container ---------- */
+    .image-trail {
+      position: relative;
+      isolation: isolate;
+      z-index: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+
+      /* CSS custom properties set from JS config */
+      --image-width: 200px;
+      --image-height: 200px;
+
+      /* a subtle dotted grid so you can see the area */
+      background-image: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.06) 1px,
+        transparent 1px
+      );
+      background-size: 24px 24px;
+    }
+
+    /* ---------- each trail image ---------- */
+    .image-trail img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: var(--image-width);
+      height: var(--image-height);
+      object-fit: cover;
+      opacity: 0;
+      pointer-events: none;
+      will-change: transform, opacity;
+      user-select: none;
+      -webkit-user-drag: none;
+      border-radius: 4px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ---------- hint overlay ---------- */
+    .hint {
+      position: fixed;
+      inset: auto 0 2rem 0;
+      text-align: center;
+      font-family: ui-monospace, monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #666;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .hint strong {
+      display: block;
+      color: #aaa;
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- full-screen trail container, images injected by JS -->
+  <div class="image-trail" id="trail-root"></div>
+
+  <div class="hint">
+    <strong>Move your cursor</strong>
+    images follow the mouse
+  </div>
+
+  <script>
+    (function() {
+      // -------------------------------------------------------------
+      // 1. TINY EASING LIBRARY  (subset of GSAP's power/expo/quint)
+      //    Each function maps t ∈ [0,1] → eased t ∈ [0,1].
+      // -------------------------------------------------------------
+      const Ease = {
+        // Power1.easeOut  (quadratic out)
+        power1Out: (t) => 1 - (1 - t) * (1 - t),
+        // Power1.easeInOut (quadratic in-out)
+        power1InOut: (t) =>
+          t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2,
+        // Expo.easeOut
+        expoOut: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+        // Quint.easeInOut
+        quintInOut: (t) =>
+          t < 0.5
+            ? 16 * t * t * t * t * t
+            : 1 - Math.pow(-2 * t + 2, 5) / 2,
+      };
+
+      // -------------------------------------------------------------
+      // 2. LERP
+      // -------------------------------------------------------------
+      const lerp = (a, b, n) => (1 - n) * a + n * b;
+
+      // -------------------------------------------------------------
+      // 3. TWEEN ENGINE
+      //    A minimal GSAP-like tween system. Each tween is a set of
+      //    "tracks" (property → from/to) plus its own duration, delay,
+      //    easing, and an onUpdate callback. The global ticker advances
+      //    them every frame. This mirrors the timeline used in the
+      //    original React component:
+      //
+      //      gsap.timeline()
+      //        .set(img, { startAt:{opacity:0}, opacity:1, zIndex, x, y })
+      //        .to(img, { duration, ease: Expo.easeOut, x, y })
+      //        .to(img, { duration:1, ease: Power1.easeOut, opacity:0 }, offset)
+      //        .to(img, { duration:1, ease: Quint.easeInOut, y:'+=...' }, offset)
+      //
+      //    We rebuild that as a small chain of tweens.
+      // -------------------------------------------------------------
+      class Tween {
+        constructor(target, props, opts = {}) {
+          this.target = target;
+          this.props = props; // { x: number, y: number, opacity: number, ... }
+          this.duration = (opts.duration ?? 0.5) * 1000; // ms
+          this.delay = (opts.delay ?? 0) * 1000; // ms
+          this.ease = opts.ease ?? ((t) => t);
+          this.onComplete = opts.onComplete;
+          this.startedAt = null;
+          this.finished = false;
+          this.from = {};
+          for (const key in props) {
+            this.from[key] = target[key] ?? 0;
+          }
+        }
+
+        /** Start the clock (called by the ticker on first frame). */
+        start(now) {
+          this.startedAt = now + this.delay;
+        }
+
+        /** Advance the tween. Returns true when finished. */
+        tick(now) {
+          if (this.finished) return true;
+          if (this.startedAt === null) this.start(now);
+          if (now < this.startedAt) return false;
+
+          const elapsed = now - this.startedAt;
+          const rawT = this.duration <= 0 ? 1 : Math.min(elapsed / this.duration, 1);
+          const t = this.ease(rawT);
+
+          for (const key in this.props) {
+            this.target[key] = this.from[key] + (this.props[key] - this.from[key]) * t;
+          }
+
+          if (rawT >= 1) {
+            this.finished = true;
+            if (this.onComplete) this.onComplete();
+          }
+          return this.finished;
+        }
+      }
+
+      const TweenEngine = {
+        tweens: [],
+        running: false,
+        rafId: null,
+        add(tween) {
+          this.tweens.push(tween);
+          if (!this.running) this.start();
+        },
+        start() {
+          if (this.running) return;
+          this.running = true;
+          const loop = (now) => {
+            // prune finished tweens
+            this.tweens = this.tweens.filter((tw) => !tw.tick(now));
+            if (this.tweens.length === 0) {
+              this.running = false;
+              this.rafId = null;
+              return;
+            }
+            this.rafId = requestAnimationFrame(loop);
+          };
+          this.rafId = requestAnimationFrame(loop);
+        },
+        /** Kill all tweens touching a specific target. */
+        killOf(target) {
+          this.tweens = this.tweens.filter((tw) => tw.target !== target);
+        },
+        /** Apply a set of properties immediately (gsap.set equivalent). */
+        set(target, props) {
+          for (const key in props) {
+            target[key] = props[key];
+          }
+        },
+      };
+
+      // -------------------------------------------------------------
+      // 4. IMAGE TRAIL COMPONENT
+      // -------------------------------------------------------------
+      /**
+       * @param {object} opts
+       * @param {string[]} opts.images       - image URLs
+       * @param {number}   [opts.imageWidth]  - px
+       * @param {number}   [opts.imageHeight] - px
+       * @param {number}   [opts.threshold]   - px distance before new image spawns
+       * @param {number}   [opts.duration]    - seconds per trail animation
+       * @param {HTMLElement} opts.parentEl
+       */
+      function createImageTrail(opts) {
+        const {
+          images = [],
+          imageWidth = 200,
+          imageHeight = 200,
+          threshold = 50,
+          duration = 1.6,
+          parentEl,
+        } = opts;
+
+        // ---- DOM ----
+        const container = document.createElement('div');
+        container.className = 'image-trail';
+        container.style.setProperty('--image-width', `${imageWidth}px`);
+        container.style.setProperty('--image-height', `${imageHeight}px`);
+
+        const imageEls = [];
+        images.forEach((url, index) => {
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = `trail element ${index + 1}`;
+          img.draggable = false;
+          container.appendChild(img);
+          imageEls.push(img);
+        });
+
+        parentEl.appendChild(container);
+
+        // ---- State (all closure vars, matching the React refs) ----
+        const mousePos = { x: 0, y: 0 };
+        const cacheMousePos = { x: 0, y: 0 };
+        const lastMousePos = { x: 0, y: 0 };
+        const parentSize = { width: 0, height: 0 };
+
+        let zIndexVal = 1;
+        let imgPosition = 0;
+        let running = true;
+        let rafId = null;
+        let lastFrameTime = null;
+
+        // ---- Helpers ----
+        function calcParentSize() {
+          const rect = container.getBoundingClientRect();
+          parentSize.width = rect.width;
+          parentSize.height = rect.height;
+        }
+
+        function getMouseDistance() {
+          const dx = mousePos.x - lastMousePos.x;
+          const dy = mousePos.y - lastMousePos.y;
+          return Math.hypot(dx, dy);
+        }
+
+        function handleMouseMove(e) {
+          const rect = container.getBoundingClientRect();
+          mousePos.x = e.clientX - rect.left;
+          mousePos.y = e.clientY - rect.top;
+        }
+
+        // ---- The trail's core animation ----
+        // Mirrors the original `showNextImage()` timeline.
+        function showNextImage() {
+          const img = imageEls[imgPosition];
+          if (!img) return;
+
+          const rect = img.getBoundingClientRect();
+
+          // kill any in-flight tweens on this image
+          TweenEngine.killOf(img);
+
+          // Starting x/y: centered on the smoothed cursor
+          const startX = cacheMousePos.x - rect.width / 2;
+          const startY = cacheMousePos.y - rect.height / 2;
+
+          // End x/y: centered on the actual cursor
+          const endX = mousePos.x - rect.width / 2;
+          const endY = mousePos.y - rect.height / 2;
+
+          // The "fade-in + slide" phase:
+          //   .set(img, { startAt:{opacity:0}, opacity:1, zIndex, x:startX, y:startY })
+          //   .to(img, { duration, ease: Expo.easeOut, x:endX, y:endY })
+          // We model this as: opacity 0→1 over 1/6 of duration (snap in),
+          // x/y from start→end over the full duration.
+          TweenEngine.set(img, {
+            opacity: 0,
+            zIndex: String(zIndexVal++),
+            left: '0px',
+            top: '0px',
+          });
+          img.style.opacity = '0';
+          img.style.zIndex = String(zIndexVal);
+
+          // Use transform for x/y so we don't fight layout.
+          // We keep a separate state object for the tween engine.
+          const state = {
+            x: startX,
+            y: startY,
+            opacity: 0,
+          };
+          // Write initial state to element
+          applyTransform(img, state.x, state.y);
+          img.style.opacity = '0';
+
+          // Phase 1: fade in quickly + slide toward the current cursor.
+          // Framer/GSAP timeline: opacity 1 in the first ~0.1s,
+          // x/y over the full `duration` with Expo.easeOut.
+          const slide = new Tween(
+            state,
+            { x: endX, y: endY },
+            {
+              duration,
+              ease: Ease.expoOut,
+            }
+          );
+          // opacity is its own tween (faster)
+          const fadeIn = new Tween(state, { opacity: 1 }, { duration: 0.12 });
+          // on every tick, push state → DOM
+          slide.onUpdate = () => applyTransform(img, state.x, state.y);
+          fadeIn.onUpdate = () => {
+            img.style.opacity = String(state.opacity);
+          };
+          // We need per-tick updates, so patch tick to call onUpdate
+          patchTweenWithOnUpdate(slide);
+          patchTweenWithOnUpdate(fadeIn);
+
+          TweenEngine.add(slide);
+          TweenEngine.add(fadeIn);
+
+          // Phase 2 (offset = duration - 1 > 0 ? duration - 1 : 0.4):
+          //   fade opacity 1→0 with Power1.easeOut
+          //   y += (parentHeight + rect.height / 2) with Quint.easeInOut
+          const offset = duration - 1 > 0 ? duration - 1 : 0.4;
+
+          const finalY = endY + (parentSize.height + rect.height / 2);
+          const fadeOutAndDrop = new Tween(
+            state,
+            { opacity: 0, y: finalY },
+            {
+              duration: 1,
+              delay: offset,
+              ease: (t) => {
+                // We need two different eases per-property, but the tween
+                // engine uses one ease per tween. So we split into two
+                // tweens sharing the same state object, each with its own
+                // ease — that matches the original timeline where the
+                // fadeOut uses Power1 and the drop uses Quint.
+                return t;
+              },
+            }
+          );
+          // Split into two tweens for correctness:
+          const fadeOut = new Tween(
+            state,
+            { opacity: 0 },
+            { duration: 1, delay: offset, ease: Ease.power1Out }
+          );
+          const drop = new Tween(
+            state,
+            { y: finalY },
+            { duration: 1, delay: offset, ease: Ease.quintInOut }
+          );
+
+          fadeOut.onUpdate = () => {
+            img.style.opacity = String(state.opacity);
+          };
+          drop.onUpdate = () => {
+            applyTransform(img, state.x, state.y);
+          };
+          patchTweenWithOnUpdate(fadeOut);
+          patchTweenWithOnUpdate(drop);
+
+          TweenEngine.add(fadeOut);
+          TweenEngine.add(drop);
+        }
+
+        // Write x/y to the element via transform (GPU-friendly)
+        function applyTransform(img, x, y) {
+          img.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        }
+
+        // Small shim so a Tween can call an onUpdate callback each tick
+        function patchTweenWithOnUpdate(tw) {
+          const originalTick = tw.tick.bind(tw);
+          tw.tick = function(now) {
+            const wasFinished = tw.finished;
+            const finished = originalTick(now);
+            if (!wasFinished && tw.onUpdate) tw.onUpdate();
+            return finished;
+          };
+        }
+
+        // ---- Main requestAnimationFrame loop ----
+        // Mirrors the original `renderImages()` recursion.
+        function renderImages(now) {
+          if (!running) return;
+
+          if (lastFrameTime === null) lastFrameTime = now;
+          lastFrameTime = now;
+
+          const distance = getMouseDistance();
+
+          // Smooth the cached cursor position (lerp 0.1)
+          cacheMousePos.x = lerp(cacheMousePos.x, mousePos.x, 0.1);
+          cacheMousePos.y = lerp(cacheMousePos.y, mousePos.y, 0.1);
+
+          if (distance > threshold) {
+            showNextImage();
+            zIndexVal += 1;
+            imgPosition = (imgPosition + 1) % imageEls.length;
+            lastMousePos.x = mousePos.x;
+            lastMousePos.y = mousePos.y;
+          }
+
+          rafId = requestAnimationFrame(renderImages);
+        }
+
+        // ---- Init ----
+        calcParentSize();
+        lastMousePos.x = mousePos.x;
+        lastMousePos.y = mousePos.y;
+
+        // prime the cache so the first image doesn't fly in from (0,0)
+        cacheMousePos.x = mousePos.x;
+        cacheMousePos.y = mousePos.y;
+
+        // listeners
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('resize', calcParentSize);
+
+        // start loop
+        rafId = requestAnimationFrame(renderImages);
+
+        // touch support — move the "mouse" to the touch point
+        function handleTouchMove(e) {
+          if (!e.touches[0]) return;
+          const rect = container.getBoundingClientRect();
+          mousePos.x = e.touches[0].clientX - rect.left;
+          mousePos.y = e.touches[0].clientY - rect.top;
+        }
+        window.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+        // ---- Cleanup ----
+        return {
+          destroy() {
+            running = false;
+            if (rafId) cancelAnimationFrame(rafId);
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('resize', calcParentSize);
+            window.removeEventListener('touchmove', handleTouchMove);
+            imageEls.forEach((img) => TweenEngine.killOf(img));
+            if (container.parentNode) container.parentNode.removeChild(container);
+          },
+        };
+      }
+
+      // -------------------------------------------------------------
+      // 5. DEMO
+      // -------------------------------------------------------------
+      // Use picsum.photos so it works offline-ish (cached) and has no
+      // CORS issues. 10 images for a nice trail rotation.
+      const demoImages = Array.from({ length: 10 }, (_, i) =>
+        `https://picsum.photos/seed/trail${i + 1}/400/400`
+      );
+
+      const root = document.getElementById('trail-root');
+      const trail = createImageTrail({
+        images: demoImages,
+        imageWidth: 200,
+        imageHeight: 200,
+        threshold: 50,
+        duration: 1.6,
+        parentEl: root,
+      });
+
+      // expose for console tinkering
+      window.__imageTrail = trail;
+      console.log('ImageTrail component (plain JS) mounted.');
+    })();
+  </script>
+</body>
+</html>
