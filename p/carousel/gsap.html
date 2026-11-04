@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Team | 3D GSAP Carousel</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  
+  
+  <style>
+  
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #070707;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+
+
+.about-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 8rem;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  pointer-events: none;
+  white-space: nowrap;
+  color: #fff;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.05);
+  z-index: 999;
+}
+
+
+
+
+.carousel-container {
+  width: 100%;
+  max-width: 1200px;
+  height: 450px;
+  position: relative;
+  perspective: 1200px;
+  z-index: 2;
+}
+
+
+
+.carousel-track {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.card {
+  position: absolute;
+  width: 280px;
+  height: 380px;
+  background: #111;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  will-change: transform, filter, opacity;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Info Section */
+.member-info {
+  text-align: center;
+  margin-top: 40px;
+  z-index: 2;/
+  will-change: opacity, transform; 
+}
+
+.member-name {
+  font-family: 'Bebas Neue', sans-serif;
+  color: #ffffff;
+  font-size: 3.5rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 5px;
+}
+
+.member-role {
+  color: #888888;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* Navigation & Pagination */
+.dots {
+  display: flex;
+  gap: 12px;
+  margin-top: 40px;
+  z-index: 2;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.dot.active {
+  background: #ffffff;
+  transform: scale(1.5);
+}
+
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 3rem;
+  border: none;
+  cursor: pointer;
+  z-index: 20;
+  transition: color 0.3s ease;
+}
+
+.nav-arrow:hover {
+  color: #ffffff;
+}
+
+.nav-arrow.left { left: 5%; }
+.nav-arrow.right { right: 5%; }
+
+@media (max-width: 768px) {
+  .card {
+    width: 220px;
+    height: 300px;
+  }
+}
+  
+  
+  </style>
+</head>
+<body>
+
+  <h1 class="about-title">OUR TEAM</h1>
+
+
+
+  <div class="carousel-container">
+    <button class="nav-arrow left">‹</button>
+    <div class="carousel-track">
+      <div class="card"><img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&fit=crop" draggable="false" alt="Team 1"></div>
+      <div class="card"><img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=800&fit=crop" draggable="false" alt="Team 2"></div>
+      <div class="card"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&fit=crop" draggable="false" alt="Team 3"></div>
+      <div class="card"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&fit=crop" draggable="false" alt="Team 4"></div>
+      <div class="card"><img src="https://images.unsplash.com/photo-1655249481446-25d575f1c054?w=800&fit=crop" draggable="false" alt="Team 5"></div>
+      <div class="card"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&fit=crop" draggable="false" alt="Team 6"></div>
+    </div>
+    <button class="nav-arrow right">›</button>
+  </div>
+
+
+
+  
+
+  <div class="dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+
+    
+    <div class="member-info">
+    <h2 class="member-name">Emily Kim</h2>
+    <p class="member-role">Founder</p>
+  </div>
+
+  
+
+  <script src="script.js"></script>
+  
+  
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+  const teamMembers = [
+    { name: "Emily Kim", role: "Founder" },
+    { name: "Michael Steward", role: "Creative Director" },
+    { name: "Emma Rodriguez", role: "Lead Developer" },
+    { name: "Julia Gimmel", role: "UX Designer" },
+    { name: "Lisa Anderson", role: "Marketing Manager" },
+    { name: "James Wilson", role: "Product Manager" }
+  ];
+
+  const cards = document.querySelectorAll(".card");
+  const dots = document.querySelectorAll(".dot");
+  const memberName = document.querySelector(".member-name");
+  const memberRole = document.querySelector(".member-role");
+  
+  let currentIndex = 0;
+  let isAnimating = false;
+
+  function updateCarousel(newIndex) {
+    if (isAnimating) return;
+    isAnimating = true;
+
+   
+    currentIndex = (newIndex + cards.length) % cards.length;
+
+    // Check if mobile to tighten the spacing
+    const isMobile = window.innerWidth <= 768;
+    const xGap1 = isMobile ? 140 : 220;
+    const xGap2 = isMobile ? 240 : 400;
+
+    cards.forEach((card, i) => {
+      let offset = i - currentIndex;
+      if (offset > Math.floor(cards.length / 2)) offset -= cards.length;
+      if (offset < -Math.floor(cards.length / 2)) offset += cards.length;
+
+      let x = 0, z = 0, scale = 1, opacity = 1, grayscale = 100;
+      let zIndex = 10 - Math.abs(offset); 
+
+      // The mapping logic
+      if (offset === 0) {
+        scale = 1.1; 
+        grayscale = 0; 
+      } else if (offset === 1) {
+        x = xGap1; z = -100; scale = 0.9; opacity = 0.9;
+      } else if (offset === -1) {
+        x = -xGap1; z = -100; scale = 0.9; opacity = 0.9;
+      } else if (offset === 2) {
+        x = xGap2; z = -300; scale = 0.8; opacity = 0.7;
+      } else if (offset === -2) {
+        x = -xGap2; z = -300; scale = 0.8; opacity = 0.7;
+      } else {
+        x = offset > 0 ? 500 : -500; z = -400; scale = 0.5; opacity = 0;
+      }
+
+      gsap.set(card, { zIndex: zIndex });
+
+      // GSAP animate the 3D geometry
+      gsap.to(card, {
+        x: x,
+        z: z,
+        scale: scale,
+        opacity: opacity,
+        filter: `grayscale(${grayscale}%)`,
+        duration: 0.8,
+        ease: "power3.out"
+      });
+    });
+
+    // Animate the text smoothly
+    gsap.to(".member-info", {
+      opacity: 0,
+      y: 10,
+      duration: 0.3,
+      onComplete: () => {
+        memberName.textContent = teamMembers[currentIndex].name;
+        memberRole.textContent = teamMembers[currentIndex].role;
+        gsap.to(".member-info", { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+      }
+    });
+
+    // Update active dot
+    dots.forEach((dot, i) => dot.classList.toggle("active", i === currentIndex));
+
+    setTimeout(() => { isAnimating = false; }, 800);
+  }
+
+  // --- EVENT LISTENERS ---
+
+  document.querySelector(".nav-arrow.left").addEventListener("click", () => updateCarousel(currentIndex - 1));
+  document.querySelector(".nav-arrow.right").addEventListener("click", () => updateCarousel(currentIndex + 1));
+  
+  dots.forEach((dot, i) => dot.addEventListener("click", () => updateCarousel(i)));
+  cards.forEach((card, i) => card.addEventListener("click", () => updateCarousel(i)));
+
+  // Keyboard navigation
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") updateCarousel(currentIndex - 1);
+    if (e.key === "ArrowRight") updateCarousel(currentIndex + 1);
+  });
+
+  // Smooth Swipe Logic
+  let touchStartX = 0;
+  document.addEventListener("touchstart", (e) => touchStartX = e.changedTouches[0].screenX);
+  document.addEventListener("touchend", (e) => {
+    const touchEndX = e.changedTouches[0].screenX;
+    if (touchStartX - touchEndX > 50) updateCarousel(currentIndex + 1);
+    if (touchEndX - touchStartX > 50) updateCarousel(currentIndex - 1);
+  });
+
+  // Initialize
+  updateCarousel(0);
+});
+</script>
+  
+  
+  
+  
+  
+</body>
+</html>
