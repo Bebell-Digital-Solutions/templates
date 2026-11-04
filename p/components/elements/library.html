@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Newsletter Bookshelf</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #fbfbfa;
+      color: #171717;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { background: #111112; color: #f5f5f3; }
+    }
+    .shelf-section {
+      position: relative;
+      width: 100%;
+      height: 620px;
+      overflow: hidden;
+      background: #fbfbfa;
+      --shelf-accent: #4040ff;
+    }
+    @media (prefers-color-scheme: dark) {
+      .shelf-section { background: #111112; }
+    }
+    .shelf-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      outline: none;
+      touch-action: pan-y;
+      cursor: grab;
+    }
+    .shelf-stage:active { cursor: grabbing; }
+    .shelf-stage:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--shelf-accent);
+    }
+    .shelf-stage canvas { display: block; width: 100%; height: 100%; }
+
+    .shelf-tooltip {
+      position: absolute;
+      z-index: 20;
+      max-width: 300px;
+      pointer-events: none;
+      transform: translate(-50%, calc(-100% - 16px));
+      white-space: nowrap;
+      border-radius: 6px;
+      background: #171717;
+      padding: 8px 12px;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      line-height: 1.4;
+      color: #fff;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,.3);
+      transition: opacity 0.15s;
+      opacity: 0;
+    }
+    .shelf-tooltip.visible { opacity: 1; }
+    .shelf-tooltip .tt-date {
+      display: block;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .shelf-hint {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      pointer-events: none;
+      z-index: 10;
+      text-align: center;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="shelf-section" id="shelf-root">
+    <div class="shelf-hint">drag to scroll · click a book to focus · arrows to navigate</div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+    // =============================================================
+    // DATA
+    // =============================================================
+    const PALETTE = [
+      '#0b1e4b','#16277a','#2233b8','#4040ff','#6b7bff','#9fb0ff',
+      '#dce4ff','#faf7ee','#efe8d4','#f4f2ec','#25252a','#3a3a40',
+    ];
+
+    const titles = [
+      'The systems issue','A field guide to good taste','The small team advantage',
+      'Notes on building in public','A better creative workflow','The useful AI playbook',
+      'Designing for momentum','The quiet automation stack','How ideas become products',
+      "The founder's operating manual",'A week of useful experiments','The leverage edition',
+      'What we learned shipping early','Tools worth keeping','The case for fewer meetings',
+      'A practical guide to agents','Making software feel human','The compounding details',
+      'Build the smallest useful thing','The creative director in your pocket',
+      'Signals from the frontier','A calmer way to move fast','The prototype-first company',
+      'Workflows that actually stick','The one-person studio','Notes from a strange future',
+      'The high-agency handbook','A new interface for work','The craft issue','Ideas with a pulse',
+      'The independent builder','A map for the next chapter',
+    ];
+
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC',
+    });
+
+    const items = titles.map((title, i) => ({
+      id: `edition-${titles.length - i}`,
+      title,
+      date: fmt.format(new Date(Date.UTC(2026, 6, 31 - i * 7, 12))).toUpperCase(),
+    }));
+
+    const brand = 'The Brief';
+
+    // =============================================================
+    // SEEDED RANDOM
+    // =============================================================
+    function hash(s) {
+      let v = 2166136261;
+      for (let i = 0; i < s.length; i++) {
+        v ^= s.charCodeAt(i);
+        v = Math.imul(v, 16777619);
+      }
+      return v >>> 0;
+    }
+    function seeded(seed) {
+      let v = seed >>> 0;
+      return () => {
+        v += 0x6d2b79f5;
+        let n = v;
+        n = Math.imul(n ^ (n >>> 15), n | 1);
+        n ^= n + Math.imul(n ^ (n >>> 7), n | 61);
+        return ((n ^ (n >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function luminance(hex) {
+      const c = parseInt(hex.slice(1), 16);
+      const ch = (v) => {
+        const n = v / 255;
+        return n <= 0.03928 ? n / 12.92 : Math.pow((n + 0.055) / 1.055, 2.4);
+      };
+      return ch((c >> 16) & 255) * 0.2126 + ch((c >> 8) & 255) * 0.7152 + ch(c & 255) * 0.0722;
+    }
+
+    // =============================================================
+    // LAYOUT
+    // =============================================================
+    function deriveLayout(list) {
+      let cursor = 0;
+      return list.map((item) => {
+        const r = seeded(hash(item.id));
+        const fallback = PALETTE[Math.floor(r() * PALETTE.length)];
+        const width = 0.34 + r() * 0.3;
+        const bookHeight = 3.65 + (r() * 2 - 1) * 0.22;
+        const color = item.color || fallback;
+        const foil = item.foil || (luminance(color) < 0.5 ? '#f2ead8' : '#3030ff');
+        if (r() < 0.14) cursor += 0.2;
+        const x = cursor + width / 2;
+        cursor += width + 0.065;
+        return {
+          ...item, x, width, bookHeight,
+          depth: bookHeight * 0.67,
+          motif: Math.floor(r() * 8),
+          color, foil,
+        };
+      });
+    }
+
+    const books = deriveLayout(items);
+
+    // =============================================================
+    // TEXTURE HELPERS
+    // =============================================================
+    function addNoise(ctx, w, h, seed) {
+      const img = ctx.getImageData(0, 0, w, h);
+      const r = seeded(seed);
+      for (let i = 0; i < img.data.length; i += 4) {
+        const n = (r() - 0.5) * 5;
+        img.data[i]   = Math.max(0, Math.min(255, img.data[i]   + n));
+        img.data[i+1] = Math.max(0, Math.min(255, img.data[i+1] + n));
+        img.data[i+2] = Math.max(0, Math.min(255, img.data[i+2] + n));
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+
+    function drawWeave(ctx, w, h, seed) {
+      const r = seeded(seed);
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.globalCompositeOperation = 'multiply';
+      for (let x = 0.5; x < w; x += 3) {
+        ctx.strokeStyle = `rgba(18,16,14,${0.03 + r() * 0.035})`;
+        ctx.lineWidth = 0.35 + r() * 0.3;
+        ctx.beginPath();
+        ctx.moveTo(x + (r() - 0.5) * 0.5, 0);
+        ctx.lineTo(x + (r() - 0.5) * 0.5, h);
+        ctx.stroke();
+      }
+      ctx.globalCompositeOperation = 'screen';
+      for (let y = 0.5; y < h; y += 3) {
+        ctx.strokeStyle = `rgba(255,248,232,${0.035 + r() * 0.03})`;
+        ctx.lineWidth = 0.3 + r() * 0.25;
+        ctx.beginPath();
+        ctx.moveTo(0, y + (r() - 0.5) * 0.5);
+        ctx.lineTo(w, y + (r() - 0.5) * 0.5);
+        ctx.stroke();
+      }
+      ctx.globalCompositeOperation = 'overlay';
+      for (let i = 0; i < Math.floor((w * h) / 850); i++) {
+        const x = r() * w, y = r() * h, len = 3 + r() * 13;
+        ctx.strokeStyle = `rgba(255,255,255,${0.035 + r() * 0.055})`;
+        ctx.lineWidth = 0.35 + r() * 0.4;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + (r() - 0.5) * 2, y + len);
+        ctx.stroke();
+      }
+      ctx.globalCompositeOperation = 'source-over';
+      const edge = ctx.createLinearGradient(0, 0, w, 0);
+      edge.addColorStop(0, 'rgba(0,0,0,.16)');
+      edge.addColorStop(0.045, 'rgba(0,0,0,.025)');
+      edge.addColorStop(0.5, 'rgba(255,255,255,.025)');
+      edge.addColorStop(0.955, 'rgba(0,0,0,.025)');
+      edge.addColorStop(1, 'rgba(0,0,0,.18)');
+      ctx.fillStyle = edge;
+      ctx.fillRect(0, 0, w, h);
+      ctx.restore();
+    }
+
+    function drawMotif(ctx, motif, x, y, size, color) {
+      ctx.save();
+      ctx.translate(x + size / 2, y + size / 2);
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = Math.max(2, size * 0.035);
+      if (motif === 0) {
+        for (let i = -2; i <= 2; i++) {
+          ctx.beginPath();
+          ctx.arc(0, 0, size * (0.12 + i * 0.035), 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      } else if (motif === 1) {
+        ctx.rotate(Math.PI / 4);
+        for (let i = -1; i <= 1; i++) {
+          ctx.strokeRect(-size * (0.24 + i * 0.055), -size * (0.24 + i * 0.055), size * (0.48 + i * 0.11), size * (0.48 + i * 0.11));
+        }
+      } else if (motif === 2) {
+        for (let i = 0; i < 6; i++) {
+          ctx.rotate(Math.PI / 3);
+          ctx.beginPath();
+          ctx.roundRect(-size * 0.045, -size * 0.36, size * 0.09, size * 0.28, size * 0.04);
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(0, 0, size * 0.11, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (motif === 3) {
+        ctx.beginPath();
+        for (let i = 0; i < 12; i++) {
+          const r = i % 2 ? size * 0.17 : size * 0.35;
+          const a = -Math.PI / 2 + (i * Math.PI) / 6;
+          const px = Math.cos(a) * r, py = Math.sin(a) * r;
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      } else if (motif === 4) {
+        for (let rr = -2; rr <= 2; rr++) {
+          for (let cc = -2; cc <= 2; cc++) {
+            if ((rr + cc) % 2 === 0) {
+              ctx.beginPath();
+              ctx.arc(cc * size * 0.13, rr * size * 0.13, size * 0.035, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+      } else if (motif === 5) {
+        for (let i = -2; i <= 2; i++) {
+          ctx.beginPath();
+          ctx.moveTo(-size * 0.34, i * size * 0.12);
+          ctx.bezierCurveTo(-size * 0.12, i * size * 0.12 - size * 0.11, size * 0.12, i * size * 0.12 + size * 0.11, size * 0.34, i * size * 0.12);
+          ctx.stroke();
+        }
+      } else if (motif === 6) {
+        ctx.beginPath();
+        ctx.moveTo(0, -size * 0.37);
+        ctx.lineTo(size * 0.34, size * 0.28);
+        ctx.lineTo(-size * 0.34, size * 0.28);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(0, size * 0.02, size * 0.11, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.rotate(Math.PI / 4);
+        ctx.fillRect(-size * 0.035, -size * 0.36, size * 0.07, size * 0.72);
+        ctx.fillRect(-size * 0.36, -size * 0.035, size * 0.72, size * 0.07);
+        ctx.beginPath();
+        ctx.arc(0, 0, size * 0.25, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function paperTexture(book) {
+      const c = document.createElement('canvas');
+      c.width = 192; c.height = 768;
+      const ctx = c.getContext('2d');
+      const r = seeded(hash(book.id + '-paper'));
+
+      ctx.fillStyle = '#eee9dc';
+      ctx.fillRect(0, 0, c.width, c.height);
+      addNoise(ctx, c.width, c.height, hash(book.id + '-paper-noise'));
+
+      for (let y = 0.5; y < c.height; y += 2) {
+        const warm = Math.floor(116 + r() * 35);
+        ctx.strokeStyle = `rgba(${warm},${warm - 6},${warm - 17},${0.09 + r() * 0.1})`;
+        ctx.lineWidth = r() > 0.94 ? 1 : 0.42;
+        ctx.beginPath();
+        ctx.moveTo((r() - 0.5) * 4, y);
+        ctx.bezierCurveTo(c.width * 0.33, y + (r() - 0.5) * 0.8, c.width * 0.66, y + (r() - 0.5) * 0.8, c.width + (r() - 0.5) * 4, y);
+        ctx.stroke();
+      }
+      for (let x = 0.5; x < c.width; x += 4) {
+        ctx.strokeStyle = `rgba(124,103,72,${0.025 + r() * 0.04})`;
+        ctx.lineWidth = 0.35;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x + (r() - 0.5) * 1.5, c.height);
+        ctx.stroke();
+      }
+      for (let i = 0; i < 170; i++) {
+        ctx.fillStyle = `rgba(112,91,59,${0.025 + r() * 0.055})`;
+        ctx.fillRect(r() * c.width, r() * c.height, 0.5 + r() * 1.2, 0.5 + r() * 2.5);
+      }
+      const edge = ctx.createLinearGradient(0, 0, c.width, 0);
+      edge.addColorStop(0, 'rgba(96,72,42,.2)');
+      edge.addColorStop(0.08, 'rgba(138,112,72,.035)');
+      edge.addColorStop(0.5, 'rgba(255,255,255,.16)');
+      edge.addColorStop(0.92, 'rgba(138,112,72,.035)');
+      edge.addColorStop(1, 'rgba(96,72,42,.18)');
+      ctx.fillStyle = edge;
+      ctx.fillRect(0, 0, c.width, c.height);
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 8;
+      return tex;
+    }
+
+    function coverTexture(book, face) {
+      const c = document.createElement('canvas');
+      c.width = face === 'cover' ? 512 : 112;
+      c.height = 768;
+      const ctx = c.getContext('2d');
+
+      ctx.fillStyle = book.color;
+      ctx.fillRect(0, 0, c.width, c.height);
+      addNoise(ctx, c.width, c.height, hash(book.id + '-' + face + '-noise'));
+      drawWeave(ctx, c.width, c.height, hash(book.id + '-' + face + '-weave'));
+
+      ctx.fillStyle = book.foil;
+      ctx.strokeStyle = book.foil;
+      ctx.textBaseline = 'top';
+      ctx.shadowColor = 'rgba(0,0,0,.3)';
+      ctx.shadowBlur = 1.4;
+      ctx.shadowOffsetX = 0.8;
+      ctx.shadowOffsetY = 1.1;
+
+      if (face === 'cover') {
+        const margin = 58;
+        ctx.font = '500 21px ui-monospace, monospace';
+        ctx.fillText(book.date, margin, 58);
+
+        ctx.font = '700 54px Georgia, serif';
+        const words = book.title.split(/\s+/);
+        const lines = [];
+        let line = '';
+        for (const w of words) {
+          const next = line ? line + ' ' + w : w;
+          if (ctx.measureText(next).width < c.width - margin * 2 || !line) line = next;
+          else { lines.push(line); line = w; }
+        }
+        if (line) lines.push(line);
+        lines.slice(0, 5).forEach((t, i) => ctx.fillText(t, margin, 180 + i * 61));
+        ctx.fillRect(margin, 180 + Math.min(lines.length, 5) * 61 + 24, 92, 5);
+        drawMotif(ctx, book.motif, 316, 510, 130, book.foil);
+        ctx.font = '700 19px ui-monospace, monospace';
+        ctx.fillText(brand.toUpperCase(), margin, 690);
+      } else {
+        const grad = ctx.createLinearGradient(0, 0, c.width, 0);
+        grad.addColorStop(0, 'rgba(0,0,0,.28)');
+        grad.addColorStop(0.18, 'rgba(0,0,0,0)');
+        grad.addColorStop(0.82, 'rgba(0,0,0,0)');
+        grad.addColorStop(1, 'rgba(0,0,0,.28)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.fillStyle = book.foil;
+        ctx.fillRect(22, 26, c.width - 44, 3);
+        ctx.fillRect(22, 704, c.width - 44, 3);
+        ctx.save();
+        ctx.translate(c.width / 2, 58);
+        ctx.rotate(Math.PI / 2);
+        ctx.font = '700 37px Georgia, serif';
+        const title = book.title.length > 36 ? book.title.slice(0, 34) + '…' : book.title;
+        ctx.fillText(title, 0, 13);
+        ctx.restore();
+        drawMotif(ctx, book.motif, 29, 625, 54, book.foil);
+      }
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 8;
+      return tex;
+    }
+
+    // =============================================================
+    // EASING
+    // =============================================================
+    function bezierCoord(t, p1, p2) {
+      const inv = 1 - t;
+      return 3 * inv * inv * t * p1 + 3 * inv * t * t * p2 + t * t * t;
+    }
+    function easeSmoothOut(progress) {
+      let t = progress;
+      for (let i = 0; i < 5; i++) {
+        const x = bezierCoord(t, 0.22, 0.36);
+        const inv = 1 - t;
+        const slope = 3 * inv * inv * 0.22 + 6 * inv * t * (0.36 - 0.22) + 3 * t * t * (1 - 0.36);
+        if (Math.abs(slope) < 0.0001) break;
+        t = THREE.MathUtils.clamp(t - (x - progress) / slope, 0, 1);
+      }
+      return bezierCoord(t, 1, 1);
+    }
+    function easeInOutCubic(p) {
+      return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+    }
+    function damp(cur, tgt, speed, dt) {
+      return THREE.MathUtils.lerp(cur, tgt, 1 - Math.exp(-speed * dt));
+    }
+
+    // =============================================================
+    // SCENE SETUP
+    // =============================================================
+    const BOOK_ENTER = 520;
+    const BOOK_EXIT = 400;
+
+    const root = document.getElementById('shelf-root');
+    const stage = document.createElement('div');
+    stage.className = 'shelf-stage';
+    stage.tabIndex = 0;
+    stage.setAttribute('role', 'region');
+    stage.setAttribute('aria-label', `Interactive archive with ${books.length} editions`);
+    root.appendChild(stage);
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'shelf-tooltip';
+    tooltip.innerHTML = '<span class="tt-title"></span><span class="tt-date"></span>';
+    stage.appendChild(tooltip);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 60);
+    camera.position.set(0, 2.65, 10);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    stage.appendChild(renderer.domElement);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 1.5));
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xd7dce8, 1.2));
+    const dir = new THREE.DirectionalLight(0xffffff, 2.2);
+    dir.position.set(5, 8, 7);
+    scene.add(dir);
+
+    // ---- Build books ----
+    const bookGroups = [];
+    books.forEach((book, i) => {
+      const group = new THREE.Group();
+
+      const coverTex = coverTexture(book, 'cover');
+      const spineTex = coverTexture(book, 'spine');
+      const paperTex = paperTexture(book);
+
+      const geo = new RoundedBoxGeometry(book.width, book.bookHeight, book.depth, 2, Math.min(book.width, 0.09));
+
+      // RoundedBoxGeometry face order: +x, -x, +y, -y, +z, -z
+      const mats = [
+        new THREE.MeshStandardMaterial({ map: spineTex, roughness: 0.8, metalness: 0.015, bumpMap: spineTex, bumpScale: 0.007 }),           // +x
+        new THREE.MeshStandardMaterial({ map: paperTex, color: 0xf1eadc, roughness: 0.93, bumpMap: paperTex, bumpScale: 0.008 }),           // -x
+        new THREE.MeshStandardMaterial({ map: paperTex, color: 0xece3d3, roughness: 0.96, bumpMap: paperTex, bumpScale: 0.006 }),           // +y
+        new THREE.MeshStandardMaterial({ map: paperTex, color: 0xf3eadc, roughness: 0.94, bumpMap: paperTex, bumpScale: 0.007 }),           // -y
+        new THREE.MeshStandardMaterial({ map: coverTex, roughness: 0.8, metalness: 0.015, bumpMap: coverTex, bumpScale: 0.007 }),           // +z
+        new THREE.MeshStandardMaterial({ map: paperTex, color: 0xece3d3, roughness: 0.96, bumpMap: paperTex, bumpScale: 0.006 }),           // -z
+      ];
+
+      const mesh = new THREE.Mesh(geo, mats);
+      group.add(mesh);
+
+      group.position.set(book.x, book.bookHeight / 2, 0);
+
+      group.userData = {
+        book, index: i,
+        hovered: false,
+        selected: false,
+        focusFlight: null,
+        exitFlight: null,
+        selectedAt: 0,
+        wasSelected: false,
+        baseX: book.x,
+        baseY: book.bookHeight / 2,
+        baseZ: 0,
+      };
+
+      scene.add(group);
+      bookGroups.push(group);
+    });
+
+    // ---- Resize ----
+    let stageWidth = 1000, stageHeight = 620;
+    function resize() {
+      const rect = stage.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      stageWidth = rect.width;
+      stageHeight = rect.height;
+      camera.aspect = rect.width / rect.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(rect.width, rect.height, false);
+    }
+    new ResizeObserver(resize).observe(stage);
+    resize();
+
+    // =============================================================
+    // CAMERA / STATE
+    // =============================================================
+    const cameraX = { current: 0 };
+    const orbit = { yaw: 0, pitch: 0 };
+
+    let hoveredIndex = null;
+    let selectedIndex = null;
+    let currentIndex = 0;
+    let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function getBounds() {
+      const last = books[books.length - 1].x;
+      const aspect = stageWidth / Math.max(420, 620);
+      const visibleSpan = 2 * 10 * Math.tan((35 * Math.PI) / 360) * aspect;
+      const inset = visibleSpan * 0.31;
+      const min = Math.min(last / 2, books[0].x + inset);
+      const max = Math.max(last / 2, last - inset);
+      if (max <= min) return { min: last / 2, max: last / 2, visibleSpan };
+      return { min, max, visibleSpan };
+    }
+
+    function nearestBook(x) {
+      let best = 0, bestD = Infinity;
+      books.forEach((b, i) => {
+        const d = Math.abs(b.x - x);
+        if (d < bestD) { best = i; bestD = d; }
+      });
+      return best;
+    }
+
+    function moveCamera(next) {
+      const b = getBounds();
+      cameraX.current = THREE.MathUtils.clamp(next, b.min, b.max);
+      currentIndex = nearestBook(cameraX.current);
+    }
+
+    // Initialize camera at left edge
+    cameraX.current = getBounds().min;
+    currentIndex = nearestBook(cameraX.current);
+
+    function setHovered(i) {
+      hoveredIndex = i;
+      if (i !== null && selectedIndex === null) {
+        const b = books[i];
+        tooltip.querySelector('.tt-title').textContent = b.title;
+        tooltip.querySelector('.tt-date').textContent = b.date;
+        tooltip.classList.add('visible');
+        stage.style.cursor = 'pointer';
+      } else {
+        tooltip.classList.remove('visible');
+        stage.style.cursor = '';
+      }
+      bookGroups.forEach((g) => { g.userData.hovered = g.userData.index === i && selectedIndex === null; });
+    }
+
+    function setSelected(i) {
+      selectedIndex = i;
+      const now = performance.now();
+      bookGroups.forEach((g) => {
+        const was = g.userData.wasSelected;
+        const is = g.userData.index === i;
+        g.userData.selected = is;
+        if (is && !was) {
+          g.userData.selectedAt = now;
+          g.userData.focusFlight = {
+            startedAt: now,
+            position: g.position.clone(),
+            rotation: g.rotation.clone(),
+            scale: g.scale.x,
+          };
+          g.userData.exitFlight = null;
+        } else if (!is && was) {
+          g.userData.exitFlight = {
+            startedAt: now,
+            position: g.position.clone(),
+            rotation: g.rotation.clone(),
+            scale: g.scale.x,
+          };
+          g.userData.focusFlight = null;
+        }
+        g.userData.wasSelected = is;
+        g.traverse((c) => { if (c.isMesh) c.renderOrder = is ? 20 : 0; });
+      });
+      // Clear tooltip when something is selected
+      if (i !== null) {
+        tooltip.classList.remove('visible');
+        stage.style.cursor = '';
+      }
+    }
+
+    function presentBook(i) {
+      moveCamera(books[i].x);
+      orbit.yaw = 0;
+      orbit.pitch = 0;
+      setHovered(null);
+      setSelected(i);
+    }
+
+    function close() {
+      setSelected(null);
+      orbit.yaw = 0;
+      orbit.pitch = 0;
+      stage.focus({ preventScroll: true });
+    }
+
+    function selectBook(i) {
+      if (suppressClick) return;
+      if (selectedIndex === i) { close(); return; }
+      if (selectedIndex !== null) {
+        // transition to a different book
+        pendingSelection = i;
+        moveCamera(books[i].x);
+        setHovered(null);
+        setSelected(null);
+        orbit.yaw = 0;
+        orbit.pitch = 0;
+        if (switchTimer !== null) clearTimeout(switchTimer);
+        switchTimer = setTimeout(() => {
+          const next = pendingSelection;
+          pendingSelection = null;
+          switchTimer = null;
+          if (next !== null) presentBook(next);
+        }, reducedMotion ? 0 : BOOK_EXIT);
+        return;
+      }
+      if (switchTimer !== null) { pendingSelection = i; return; }
+      presentBook(i);
+    }
+
+    // =============================================================
+    // POINTER / KEYBOARD
+    // =============================================================
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+
+    let gesture = null;
+    let suppressClick = false;
+    let switchTimer = null;
+    let pendingSelection = null;
+
+    function pointerToNDC(clientX, clientY) {
+      const r = stage.getBoundingClientRect();
+      pointer.x = ((clientX - r.left) / r.width) * 2 - 1;
+      pointer.y = -((clientY - r.top) / r.height) * 2 + 1;
+    }
+
+    function pickBook(clientX, clientY) {
+      pointerToNDC(clientX, clientY);
+      raycaster.setFromCamera(pointer, camera);
+      const meshes = bookGroups.map((g) => g.children[0]);
+      const hits = raycaster.intersectObjects(meshes, false);
+      if (hits.length === 0) return null;
+      const mesh = hits[0].object;
+      const group = mesh.parent;
+      return group.userData.index;
+    }
+
+    stage.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('button, a')) return;
+      gesture = {
+        mode: 'pending',
+        x: e.clientX, y: e.clientY,
+        startX: e.clientX,
+        startedAt: performance.now(),
+      };
+    });
+
+    stage.addEventListener('pointermove', (e) => {
+      const r = stage.getBoundingClientRect();
+      tooltip.style.left = (e.clientX - r.left) + 'px';
+      tooltip.style.top = (e.clientY - r.top) + 'px';
+
+      // hover detection only when no gesture is active
+      if (!gesture && selectedIndex === null) {
+        const idx = pickBook(e.clientX, e.clientY);
+        if (idx !== hoveredIndex) setHovered(idx);
+      }
+
+      if (!gesture) return;
+      const dx = e.clientX - gesture.x;
+      const dy = e.clientY - gesture.y;
+
+      if (gesture.mode === 'pending' && Math.hypot(e.clientX - gesture.startX, dy) > 7) {
+        gesture.mode = selectedIndex === null ? 'drag' : 'orbit';
+        suppressClick = true;
+        stage.setPointerCapture(e.pointerId);
+        setHovered(null);
+      }
+      if (gesture.mode === 'drag') {
+        moveCamera(cameraX.current - dx * 0.0085);
+      } else if (gesture.mode === 'orbit') {
+        orbit.yaw = THREE.MathUtils.clamp(orbit.yaw + dx * 0.006, -0.62, 0.62);
+        orbit.pitch = THREE.MathUtils.clamp(orbit.pitch + dy * 0.004, -0.28, 0.28);
+      }
+      gesture.x = e.clientX;
+      gesture.y = e.clientY;
+    });
+
+    stage.addEventListener('pointerup', (e) => {
+      if (stage.hasPointerCapture(e.pointerId)) stage.releasePointerCapture(e.pointerId);
+      const wasClick = gesture && gesture.mode === 'pending' && !suppressClick;
+      gesture = null;
+      if (wasClick) {
+        const idx = pickBook(e.clientX, e.clientY);
+        if (idx !== null) selectBook(idx);
+        else if (selectedIndex !== null) close();
+      }
+      setTimeout(() => { suppressClick = false; }, 0);
+    });
+
+    stage.addEventListener('pointerleave', () => {
+      gesture = null;
+      setHovered(null);
+    });
+
+    stage.addEventListener('wheel', (e) => {
+      if (selectedIndex !== null) return;
+      const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      if (horizontal || e.shiftKey) {
+        e.preventDefault();
+        moveCamera(cameraX.current + (horizontal ? e.deltaX : e.deltaY) * 0.012);
+      }
+    }, { passive: false });
+
+    stage.addEventListener('keydown', (e) => {
+      const b = getBounds();
+      if (e.key === 'Escape' && selectedIndex !== null) {
+        e.preventDefault();
+        close();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        if (selectedIndex !== null) {
+          const next = THREE.MathUtils.clamp(selectedIndex + 1, 0, books.length - 1);
+          if (next !== selectedIndex) selectBook(next);
+        } else {
+          moveCamera(cameraX.current + b.visibleSpan * 0.23);
+        }
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (selectedIndex !== null) {
+          const next = THREE.MathUtils.clamp(selectedIndex - 1, 0, books.length - 1);
+          if (next !== selectedIndex) selectBook(next);
+        } else {
+          moveCamera(cameraX.current - b.visibleSpan * 0.23);
+        }
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (selectedIndex === null) selectBook(currentIndex);
+        else close();
+      }
+    });
+
+    // =============================================================
+    // ANIMATION LOOP
+    // =============================================================
+    let lastTime = performance.now();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const now = performance.now();
+      const dt = Math.min(0.064, (now - lastTime) / 1000);
+      lastTime = now;
+
+      // camera follow
+      camera.position.x = damp(camera.position.x, cameraX.current, 8, dt);
+      camera.lookAt(camera.position.x, 1.88, 0);
+
+      // per-book animation
+      bookGroups.forEach((g) => {
+        const ud = g.userData;
+        const book = ud.book;
+        const selected = ud.selected;
+        const hovered = ud.hovered;
+
+        const motion = reducedMotion ? 1000 : selected ? 7 : 11;
+        const selectedFor = (now - ud.selectedAt) / 1000;
+        const autoYaw = selected && !reducedMotion ? Math.sin(selectedFor * 0.85) * 0.3 : 0;
+        const autoPitch = selected && !reducedMotion ? Math.sin(selectedFor * 0.55) * 0.04 : 0;
+
+        const targetX = selected ? cameraX.current : book.x;
+        const targetY = selected ? 2.06 : book.bookHeight / 2 + (hovered ? 0.25 : 0);
+        const targetZ = selected ? 1.8 : hovered ? 0.22 : 0;
+        const targetScale = selected ? 0.96 : 1;
+        const targetRotY = selected ? -Math.PI / 2 + orbit.yaw + autoYaw : 0;
+        const targetRotX = selected ? orbit.pitch + autoPitch : 0;
+
+        if (selected && ud.focusFlight) {
+          const flight = ud.focusFlight;
+          const progress = reducedMotion ? 1 : Math.min(1, (now - flight.startedAt) / BOOK_ENTER);
+          const depthProgress = easeSmoothOut(progress);
+          const travelProgress = easeSmoothOut(THREE.MathUtils.clamp((progress - 0.06) / 0.94, 0, 1));
+          const turnProgress = easeInOutCubic(progress);
+          const depthArc = Math.sin(Math.PI * progress) * 0.12;
+
+          g.position.set(
+            THREE.MathUtils.lerp(flight.position.x, targetX, travelProgress),
+            THREE.MathUtils.lerp(flight.position.y, targetY, travelProgress),
+            THREE.MathUtils.lerp(flight.position.z, targetZ, depthProgress) + depthArc
+          );
+          g.rotation.x = THREE.MathUtils.lerp(flight.rotation.x, targetRotX, turnProgress);
+          g.rotation.y = THREE.MathUtils.lerp(flight.rotation.y, targetRotY, turnProgress);
+          g.rotation.z = THREE.MathUtils.lerp(flight.rotation.z, 0, turnProgress);
+          g.scale.setScalar(THREE.MathUtils.lerp(flight.scale, targetScale, turnProgress));
+          if (progress >= 1) ud.focusFlight = null;
+        } else if (!selected && ud.exitFlight) {
+          const flight = ud.exitFlight;
+          const progress = reducedMotion ? 1 : Math.min(1, (now - flight.startedAt) / BOOK_EXIT);
+          const alignProgress = easeSmoothOut(progress);
+          const slotProgress = easeSmoothOut(THREE.MathUtils.clamp((progress - 0.3) / 0.7, 0, 1));
+
+          g.position.set(
+            THREE.MathUtils.lerp(flight.position.x, book.x, alignProgress),
+            THREE.MathUtils.lerp(flight.position.y, book.bookHeight / 2, alignProgress),
+            THREE.MathUtils.lerp(flight.position.z, 0, slotProgress)
+          );
+          g.rotation.x = THREE.MathUtils.lerp(flight.rotation.x, 0, alignProgress);
+          g.rotation.y = THREE.MathUtils.lerp(flight.rotation.y, 0, alignProgress);
+          g.rotation.z = THREE.MathUtils.lerp(flight.rotation.z, 0, alignProgress);
+          g.scale.setScalar(THREE.MathUtils.lerp(flight.scale, 1, alignProgress));
+          if (progress >= 1) ud.exitFlight = null;
+        } else {
+          g.position.x = damp(g.position.x, targetX, motion, dt);
+          g.position.y = damp(g.position.y, targetY, motion, dt);
+          g.position.z = damp(g.position.z, targetZ, motion, dt);
+          g.rotation.y = damp(g.rotation.y, targetRotY, motion, dt);
+          g.rotation.x = damp(g.rotation.x, targetRotX, motion, dt);
+          const s = damp(g.scale.x, targetScale, motion, dt);
+          g.scale.setScalar(s);
+        }
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    console.log('Bookshelf mounted:', books.length, 'books');
+  </script>
+</body>
+</html>
