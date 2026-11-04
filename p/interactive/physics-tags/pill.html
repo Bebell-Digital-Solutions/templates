@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GAP3 — Footer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --bg-page: #001a1a;
+      --card-bg-1: #003a3a;
+      --card-bg-2: #002828;
+      --text: #eafff8;
+      --muted: #a9cec7;
+      --accent: #14c38e;
+      --line: rgba(255, 255, 255, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--bg-page);
+      font-family: 'Manrope', sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .demo-spacer {
+      height: 50vh;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    
+    
+    
+
+    /* ============================================================
+       FOOTER — same structure as the working card
+       ============================================================ */
+    .physics-footer {
+      position: relative;
+      width: 100%;
+      min-height: 440px;
+      max-height: 540px;
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 25% 15%, rgba(20, 195, 142, 0.12), transparent 55%),
+        radial-gradient(circle at 80% 85%, rgba(8, 145, 178, 0.12), transparent 55%),
+        linear-gradient(180deg, var(--card-bg-1) 0%, var(--card-bg-2) 100%);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.05) inset,
+        0 40px 80px -30px rgba(0, 0, 0, 0.7);
+      isolation: isolate;
+    }
+    
+    
+    
+
+    /* ---------- BACKGROUND LAYER — physics canvas ---------- */
+    .physics-footer__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      touch-action: none;
+    }
+
+    .physics-footer__bg canvas {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .physics-footer__bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(
+          ellipse at center,
+          rgba(0, 28, 28, 0.10) 0%,
+          rgba(0, 28, 28, 0.30) 55%,
+          rgba(0, 28, 28, 0.70) 100%
+        );
+      z-index: 1;
+    }
+    
+    
+    
+
+    /* ---------- FOREGROUND — content, pointer-events: none ---------- */
+    .physics-footer__content {
+      position: relative;
+      z-index: 2;
+      width: min(1200px, calc(100% - 64px));
+      margin-inline: auto;
+      padding: 72px 0 0;
+      min-height: 640px;
+      display: flex;
+      flex-direction: column;
+      pointer-events: none;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+
+
+
+    /* ---- Brand (interactive) ---- */
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 340px;
+      pointer-events: auto;
+    }
+
+    .footer-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .footer-logo__mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #0891b2);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 8px 24px -8px rgba(20, 195, 142, 0.7);
+      flex-shrink: 0;
+    }
+
+    .footer-logo__mark svg {
+      width: 22px; height: 22px;
+      stroke: #002828; fill: none;
+      stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .footer-brand__desc {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--muted);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .footer-social a {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: grid; place-items: center;
+      background: rgba(0, 40, 40, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      color: var(--text);
+      text-decoration: none;
+      transition: background 160ms, border-color 160ms, transform 160ms;
+    }
+
+    .footer-social a:hover {
+      background: rgba(20, 195, 142, 0.18);
+      border-color: rgba(20, 195, 142, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .footer-social a:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .footer-social svg {
+      width: 18px; height: 18px;
+      stroke: currentColor; fill: none;
+      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .footer-social .icon-fill { fill: currentColor; stroke: none; }
+    
+    
+    
+    
+
+    /* ---- Menu columns (interactive) ---- */
+    .footer-menu { pointer-events: auto; }
+
+    .footer-menu__title {
+      margin: 0 0 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .footer-menu__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-menu__list a {
+      display: inline-block;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+      transition: color 160ms, transform 160ms;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .footer-menu__list a:hover {
+      color: var(--text);
+      transform: translateX(3px);
+    }
+
+    .footer-menu__list a:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+
+
+
+
+
+
+    /* ---- Playground strip — reserved space at the bottom ---- */
+    .footer-playground {
+      flex: 1;
+      min-height: 260px;
+      height: 260px;
+      position: relative;
+      pointer-events: none;
+    }
+    
+    
+
+    .footer-playground__hint {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(234, 255, 248, 0.55);
+      pointer-events: none;
+      user-select: none;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+    }
+
+
+
+
+
+    /* ---------- Mobile ---------- */
+    @media (max-width: 960px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .footer-brand { max-width: none; }
+      .physics-footer__content { width: calc(100% - 48px); padding-top: 56px; }
+    }
+
+    @media (max-width: 600px) {
+      .physics-footer { min-height: 860px; }
+      .physics-footer__content {
+        width: calc(100% - 32px);
+        padding-top: 48px;
+        min-height: 860px;
+      }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+      .footer-brand { grid-column: 1 / -1; margin-bottom: 8px; }
+      .footer-menu__title { margin-bottom: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+
+  <div class="demo-spacer">↑ page content above</div>
+  
+  
+  
+  
+  
+  
+  
+  
+
+  <footer class="physics-footer" role="contentinfo">
+
+    <!-- Background physics canvas (SAME as the working card) -->
+    <div class="physics-footer__bg" id="stage" aria-hidden="true"></div>
+
+    <!-- Foreground content (pointer-events: none, children re-enable) -->
+    <div class="physics-footer__content">
+
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="/" class="footer-logo" aria-label="GAP3 home">
+            <span class="footer-logo__mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 12h16M12 4v16"/></svg>
+            </span>
+            <span>GAP3</span>
+          </a>
+
+          <p class="footer-brand__desc">
+            We build the fast, focused, pixel-perfect web — WordPress,
+            WooCommerce, Webflow, React, and everything in between.
+            Big ideas, small details, shipped on time.
+          </p>
+
+          <div class="footer-social" aria-label="Social media">
+            <a href="#" aria-label="X (Twitter)">
+              <svg viewBox="0 0 24 24" class="icon-fill"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" aria-label="GitHub">
+              <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>
+            <a href="#" aria-label="Dribbble">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+            </a>
+          </div>
+        </div>
+        
+        
+        
+
+        <nav class="footer-menu" aria-labelledby="menu-services">
+          <h3 class="footer-menu__title" id="menu-services">Services</h3>
+          <ul class="footer-menu__list">
+            <li><a href="#">WordPress Development</a></li>
+            <li><a href="#">WooCommerce</a></li>
+            <li><a href="#">Webflow Projects</a></li>
+            <li><a href="#">React Development</a></li>
+            <li><a href="#">SEO Optimization</a></li>
+          </ul>
+        </nav>
+        
+        
+        
+
+        <nav class="footer-menu" aria-labelledby="menu-company">
+          <h3 class="footer-menu__title" id="menu-company">Company</h3>
+          <ul class="footer-menu__list">
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Our process</a></li>
+            <li><a href="#">Case studies</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </nav>
+        
+        
+        
+
+        <nav class="footer-menu" aria-labelledby="menu-resources">
+          <h3 class="footer-menu__title" id="menu-resources">Resources</h3>
+          <ul class="footer-menu__list">
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Guides</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Settings</a></li>
+          </ul>
+        </nav>
+        
+
+      </div>
+      
+      
+      
+
+      <div class="footer-playground" aria-hidden="true">
+        <span class="footer-playground__hint">.</span>
+      </div>
+      
+      
+
+    </div>
+  </footer>
+  
+  
+  
+  
+  
+  
+
+  <!-- Matter.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  
+  
+
+  <script>
+    document.fonts.ready.then(init);
+
+    function init() {
+      const { Engine, Render, World, Bodies, Mouse, MouseConstraint, Events, Body } = Matter;
+
+      const stage = document.getElementById('stage');
+      const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+      function stageSize() {
+        const rect = stage.getBoundingClientRect();
+        return {
+          width: Math.max(1, Math.floor(rect.width)),
+          height: Math.max(1, Math.floor(rect.height))
+        };
+      }
+
+      let { width, height } = stageSize();
+
+      /* ---------- Engine ---------- */
+      const engine = Engine.create();
+      engine.gravity.y = 1;
+      const world = engine.world;
+
+      /* ---------- Render ---------- */
+      const render = Render.create({
+        element: stage,
+        engine,
+        options: {
+          width,
+          height,
+          wireframes: false,
+          background: 'transparent',
+          pixelRatio: DPR
+        }
+      });
+
+      Render.run(render);
+      Engine.run(engine);
+
+      /* ---------- Walls ---------- */
+      const wallT = 100;
+      const wallOpts = { isStatic: true, render: { visible: false } };
+      let walls = [];
+
+      function buildWalls() {
+        World.remove(world, walls);
+        walls = [
+          Bodies.rectangle(width / 2, height + wallT / 2, width * 2, wallT, wallOpts),
+          Bodies.rectangle(width / 2, -wallT / 2, width * 2, wallT, wallOpts),
+          Bodies.rectangle(-wallT / 2, height / 2, wallT, height * 2, wallOpts),
+          Bodies.rectangle(width + wallT / 2, height / 2, wallT, height * 2, wallOpts)
+        ];
+        World.add(world, walls);
+      }
+
+      buildWalls();
+
+      /* ---------- Data ---------- */
+      const services = [
+        "WordPress Development",
+        "WooCommerce Stores",
+        "Elementor Customization",
+        "ACF Integrations",
+        "Shopify Development",
+        "SEO Optimization",
+        "Speed Performance",
+        "Figma to Code",
+        "UI/UX Design",
+        "React Development",
+        "Email Marketing",
+        "Digital Strategy",
+        "Local SEO",
+        "Zoho CRM",
+        "Webflow Projects"
+      ];
+
+      const tagColors = [
+        "#14c38e", 
+        "#0f766e", 
+        "#1e293b", 
+        "#065f46",
+        "#0369a1", 
+        "#047857", 
+        "#374151", 
+        "#0891b2"
+      ];
+      
+      
+
+      /* ---------- Build chips (same as working card) ---------- */
+      const shapes = [];
+      const measureCanvas = document.createElement('canvas');
+      const measureCtx = measureCanvas.getContext('2d');
+
+      services.forEach((text, index) => {
+  const fontSize = Math.floor(Math.random() * 8) + 12; // 12–19px
+  measureCtx.font = `700 ${fontSize}px Manrope`;
+  const textWidth = measureCtx.measureText(text).width;
+
+  // 💊 Pill shape → vertical padding determines the pill's "roundness"
+  const paddingX = 30;   // horizontal inner space
+  const paddingY = 20;   // vertical inner space
+
+  const rectWidth = Math.ceil(textWidth + paddingX * 2);  // ×2 for both sides
+  const rectHeight = Math.ceil(fontSize + paddingY * 2);  // ×2 for both sides
+  const radius = rectHeight / 2;                           // pill = half height
+
+  const body = Bodies.rectangle(
+    width * (0.1 + Math.random() * 0.8),
+    Math.random() * height * 0.4,
+    rectWidth,
+    rectHeight,
+    {
+      restitution: 0.75,
+      friction: 0.4,
+      frictionAir: 0.02,
+      // Match collision outline to the visual pill
+      chamfer: { radius }
+    }
+  );
+
+  body.serviceText = text;
+  body.color = tagColors[index % tagColors.length];
+  body.fontSize = fontSize;
+  body.rectWidth = rectWidth;
+  body.rectHeight = rectHeight;
+  body.radius = radius;
+
+  shapes.push(body);
+});
+
+      World.add(world, shapes);
+
+      /* ---------- Drag (canvas is at z-index 0, content at z-index 2
+         with pointer-events: none — so pointer falls through to canvas) ---------- */
+      const mouse = Mouse.create(render.canvas);
+      mouse.pixelRatio = DPR;
+
+      const mouseConstraint = MouseConstraint.create(engine, {
+        mouse,
+        constraint: { stiffness: 0.2, render: { visible: false } }
+      });
+      World.add(world, mouseConstraint);
+
+      render.canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+      
+      
+      
+
+      /* ---------- Draw chips ---------- */
+      Events.on(render, 'afterRender', () => {
+        const ctx = render.context;
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+        shapes.forEach((body) => {
+  const { x, y } = body.position;
+  const { rectWidth: w, rectHeight: h, fontSize, color, serviceText } = body;
+  const radius = h / 2; 
+  const left = -w / 2;
+const right = w / 2;
+const top = -h / 2;
+const bottom = h / 2;
+// ← pill
+
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(body.angle);
+
+  ctx.fillStyle = color;
+  ctx.shadowColor = 'rgba(0,0,0,0.35)';
+  ctx.shadowBlur = 6;
+  ctx.shadowOffsetY = 2;
+
+  ctx.beginPath();
+// top edge (straight)
+ctx.moveTo(left + radius, top);
+ctx.lineTo(right - radius, top);
+// right cap (semicircle, clockwise)
+ctx.arc(right - radius, 0, radius, -Math.PI / 2, Math.PI / 2, false);
+// bottom edge (straight)
+ctx.lineTo(left + radius, bottom);
+// left cap (semicircle, clockwise)
+ctx.arc(left + radius, 0, radius, Math.PI / 2, (3 * Math.PI) / 2, false);
+ctx.closePath();
+ctx.fill();
+
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetY = 0;
+
+  ctx.font = `700 ${fontSize}px Manrope`;
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(serviceText, 0, 0);
+
+  ctx.restore();
+});
+   });   
+      
+      
+
+      /* ---------- Resize ---------- */
+      let resizeTimer = null;
+
+      function handleResize() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          const next = stageSize();
+          if (next.width === width && next.height === height) return;
+
+          width = next.width;
+          height = next.height;
+
+          render.options.width = width;
+          render.options.height = height;
+          render.canvas.width = width * DPR;
+          render.canvas.height = height * DPR;
+          render.canvas.style.width = '100%';
+          render.canvas.style.height = '100%';
+
+          buildWalls();
+
+          const pad = 40;
+          shapes.forEach((body) => {
+            const p = body.position;
+            const nx = Math.min(Math.max(p.x, pad), width - pad);
+            const ny = Math.min(Math.max(p.y, pad), height - pad);
+            if (nx !== p.x || ny !== p.y) {
+              Body.setPosition(body, { x: nx, y: ny });
+              Body.setVelocity(body, { x: 0, y: 0 });
+            }
+          });
+        }, 120);
+      }
+
+      if ('ResizeObserver' in window) {
+        new ResizeObserver(handleResize).observe(stage);
+      } else {
+        window.addEventListener('resize', handleResize);
+      }
+      window.addEventListener('resize', handleResize);
+    }
+    
+    
+    
+  </script>
+</body>
+</html>
