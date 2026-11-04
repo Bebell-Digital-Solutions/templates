@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music Player – plain HTML/CSS/JS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #f4f4f5;
+      color: #18181b;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      html, body { background: #0a0a0a; color: #f5f5f5; }
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    /* ================================================================
+       PLAYER WRAPPER
+       ================================================================ */
+    .music-player {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* hidden audio / iframe */
+    .music-player audio,
+    .music-player iframe {
+      display: none;
+    }
+
+    /* ================================================================
+       THE RECORD + TONEARM (clickable area)
+       ================================================================ */
+    .player-stage {
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      width: 16rem;   /* 64 = h-64 */
+      height: 16rem;  /* 64 = w-64 */
+    }
+    @media (min-width: 768px) {
+      .player-stage {
+        width: 20rem;   /* md:h-80 / md:w-80 */
+        height: 20rem;
+      }
+    }
+
+    /* ---------- TONEARM ---------- */
+    .tonearm {
+      position: absolute;
+      z-index: 20;
+      top: -5%;
+      right: -10%;
+      width: 60%;
+      height: 15%;
+      transform-origin: top right;
+      pointer-events: none;
+      transform: rotate(10deg);
+      transition: transform 0.5s ease-in-out;
+    }
+    @media (min-width: 640px) {
+      .tonearm {
+        top: -8%;
+        right: -15%;
+      }
+    }
+    /* playing state — rotate outward */
+    .tonearm.playing {
+      transform: rotate(-20deg);
+    }
+
+    /* base (big circle at the pivot) */
+    .tonearm-base {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 9999px;
+      background: #a1a1aa; /* zinc-400 */
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,.1);
+      transform: translate(50%, -50%);
+      border: 4px solid #e4e4e7; /* zinc-200 */
+      z-index: 10;
+    }
+    @media (min-width: 768px) {
+      .tonearm-base { width: 2.5rem; height: 2.5rem; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .tonearm-base {
+        background: #52525b; /* zinc-600 */
+        border-color: #27272a; /* zinc-800 */
+      }
+    }
+
+    /* the stick */
+    .tonearm-stick {
+      position: absolute;
+      top: 0;
+      right: 10px;
+      width: 90%;
+      height: 0.5rem;
+      background: #a1a1aa;
+      border-radius: 9999px;
+      transform-origin: right center;
+      transform: rotate(-12deg);
+      box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    @media (min-width: 640px) {
+      .tonearm-stick { right: 15px; }
+    }
+    @media (min-width: 768px) {
+      .tonearm-stick { height: 0.75rem; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .tonearm-stick { background: #71717a; /* zinc-500 */ }
+    }
+
+    /* needle (small circle at the stick's free end) */
+    .tonearm-needle {
+      width: 1rem;
+      height: 1rem;
+      background: #27272a; /* zinc-800 */
+      border-radius: 9999px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,.1);
+      transform: translateX(-50%);
+      flex-shrink: 0;
+    }
+    @media (min-width: 768px) {
+      .tonearm-needle { width: 1.25rem; height: 1.25rem; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .tonearm-needle { background: #d4d4d8; /* zinc-300 */ }
+    }
+
+    /* ---------- RECORD ---------- */
+    .record {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 9999px;
+      border: 4px solid rgba(0,0,0,0.1);
+      box-shadow:
+        0 20px 25px -5px rgba(0,0,0,.3),
+        0 10px 10px -5px rgba(0,0,0,.3);
+      overflow: hidden;
+      background: #000;
+      /* spin animation */
+      animation: spin 4s linear infinite;
+      animation-play-state: paused;
+    }
+    @media (min-width: 640px) {
+      .record { border-width: 8px; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .record { border-color: rgba(255,255,255,0.1); }
+    }
+    .record.playing {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .record { animation: none; }
+    }
+
+    /* album cover behind the grooves */
+    .record-cover {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.9;
+    }
+
+    /* grooves — radial dark rings */
+    .record-grooves {
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      border: 1px solid rgba(0,0,0,0.2);
+      background: radial-gradient(
+        circle,
+        transparent 20%, rgba(0,0,0,0.4) 21%, transparent 22%,
+        transparent 35%, rgba(0,0,0,0.5) 36%, transparent 37%,
+        transparent 50%, rgba(0,0,0,0.3) 51%, transparent 52%,
+        transparent 65%, rgba(0,0,0,0.6) 66%, transparent 67%,
+        transparent 80%, rgba(0,0,0,0.4) 81%, transparent 82%
+      );
+    }
+
+    /* glare / shine */
+    .record-glare {
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      pointer-events: none;
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.4) 0%,
+        transparent 40%,
+        transparent 60%,
+        rgba(255,255,255,0.2) 100%
+      );
+    }
+
+    /* center label + hole */
+    .record-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 33.3333%;
+      height: 33.3333%;
+      border-radius: 9999px;
+      background: #18181b; /* zinc-900 */
+      border: 1px solid #3f3f46; /* zinc-700 */
+      box-shadow: inset 0 2px 4px rgba(0,0,0,.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .record-hole {
+      width: 0.75rem;
+      height: 0.75rem;
+      background: #d4d4d8; /* zinc-300 */
+      border-radius: 9999px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,.3);
+      border: 1px solid rgba(0,0,0,.4);
+    }
+    @media (min-width: 768px) {
+      .record-hole { width: 1rem; height: 1rem; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .record-hole { background: #52525b; }
+    }
+
+    /* ================================================================
+       CONTROL PANEL (extra UI — title, progress, buttons)
+       ================================================================ */
+    .player-panel {
+      margin-top: 2rem;
+      width: 100%;
+      max-width: 22rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .track-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .track-artist {
+      font-size: 0.8rem;
+      color: #71717a;
+      font-family: ui-monospace, monospace;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    @media (prefers-color-scheme: dark) {
+      .track-artist { color: #a1a1aa; }
+    }
+
+    .progress-wrap {
+      width: 100%;
+      height: 4px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+    @media (prefers-color-scheme: dark) {
+      .progress-wrap { background: rgba(255,255,255,0.1); }
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #18181b;
+      border-radius: 9999px;
+      transition: width 0.1s linear;
+    }
+    @media (prefers-color-scheme: dark) {
+      .progress-fill { background: #f5f5f5; }
+    }
+
+    .time-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: ui-monospace, monospace;
+      font-size: 0.7rem;
+      color: #71717a;
+    }
+    @media (prefers-color-scheme: dark) {
+      .time-row { color: #a1a1aa; }
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .ctrl-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 9999px;
+      border: none;
+      background: rgba(0,0,0,0.06);
+      color: #18181b;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .ctrl-btn:hover { background: rgba(0,0,0,0.1); }
+    .ctrl-btn:active { transform: scale(0.95); }
+    .ctrl-btn:focus-visible { outline: 2px solid #7c3aed; outline-offset: 2px; }
+    @media (prefers-color-scheme: dark) {
+      .ctrl-btn { background: rgba(255,255,255,0.08); color: #f5f5f5; }
+      .ctrl-btn:hover { background: rgba(255,255,255,0.14); }
+    }
+
+    .ctrl-btn.play-btn {
+      width: 3.5rem;
+      height: 3.5rem;
+      background: #18181b;
+      color: #fff;
+    }
+    .ctrl-btn.play-btn:hover { background: #27272a; }
+    @media (prefers-color-scheme: dark) {
+      .ctrl-btn.play-btn { background: #f5f5f5; color: #18181b; }
+      .ctrl-btn.play-btn:hover { background: #e4e4e7; }
+    }
+
+    .ctrl-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      fill: currentColor;
+    }
+    .ctrl-btn.play-btn svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    /* hint */
+    .hint {
+      position: fixed;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: ui-monospace, monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #a1a1aa;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+  
+
+  <div class="music-player" id="player-root"></div>
+
+  <div class="hint">Click the record to play / pause</div>
+
+
+
+
+
+
+
+
+  
+
+  <script>
+    (function() {
+      // =============================================================
+      // 1. CONFIG
+      // =============================================================
+      const config = {
+        // audio source — works with mp3/ogg/wav or a YouTube URL
+        src: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3',
+        // optional: cover art
+        coverArt: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=800&q=80&auto=format&fit=crop',
+        autoPlay: false,
+        title: 'Lofi Study',
+        artist: 'Pixabay',
+      };
+
+      const root = document.getElementById('player-root');
+
+      // =============================================================
+      // 2. EXTRACT YOUTUBE ID (if any)
+      // =============================================================
+      function getYoutubeId(url) {
+        if (!url) return null;
+        const match = url.match(
+          /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/
+        );
+        return match ? match[1] : null;
+      }
+
+      const youtubeId = getYoutubeId(config.src);
+
+      // =============================================================
+      // 3. STATE
+      // =============================================================
+      let isPlaying = config.autoPlay;
+      let audio = null;
+      let iframe = null;
+
+      // =============================================================
+      // 4. BUILD DOM
+      // =============================================================
+      // ---- media element (audio OR youtube iframe) ----
+      if (youtubeId) {
+        iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&autoplay=${config.autoPlay ? 1 : 0}&controls=0`;
+        iframe.allow = 'autoplay';
+        iframe.style.display = 'none';
+        root.appendChild(iframe);
+      } else {
+        audio = document.createElement('audio');
+        audio.src = config.src;
+        audio.style.display = 'none';
+        root.appendChild(audio);
+
+        audio.addEventListener('ended', () => setPlaying(false));
+
+        // Update progress bar as the audio plays
+        audio.addEventListener('timeupdate', () => {
+          if (!audio.duration) return;
+          const pct = (audio.currentTime / audio.duration) * 100;
+          progressFill.style.width = pct + '%';
+          currentTimeEl.textContent = formatTime(audio.currentTime);
+        });
+        audio.addEventListener('loadedmetadata', () => {
+          durationEl.textContent = formatTime(audio.duration);
+        });
+      }
+
+      // ---- stage (record + tonearm, clickable) ----
+      const stage = document.createElement('div');
+      stage.className = 'player-stage';
+      stage.title = isPlaying ? 'Pause' : 'Play';
+
+      // ---- tonearm ----
+      const tonearm = document.createElement('div');
+      tonearm.className = 'tonearm';
+      tonearm.innerHTML = `
+        <div class="tonearm-base"></div>
+        <div class="tonearm-stick">
+          <div class="tonearm-needle"></div>
+        </div>
+      `;
+      stage.appendChild(tonearm);
+
+      // ---- record ----
+      const record = document.createElement('div');
+      record.className = 'record';
+      record.innerHTML = `
+        <div class="record-cover" style="background-image: url('${config.coverArt}');"></div>
+        <div class="record-grooves"></div>
+        <div class="record-glare"></div>
+        <div class="record-center">
+          <div class="record-hole"></div>
+        </div>
+      `;
+      stage.appendChild(record);
+      root.appendChild(stage);
+
+      // ---- panel: title, progress, controls ----
+      const panel = document.createElement('div');
+      panel.className = 'player-panel';
+      panel.innerHTML = `
+        <div>
+          <div class="track-title">${config.title}</div>
+          <div class="track-artist">${config.artist}</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="time-row">
+          <span class="time-current">0:00</span>
+          <span class="time-duration">0:00</span>
+        </div>
+        <div class="controls">
+          <button class="ctrl-btn skip-back" aria-label="Back 10 seconds">
+            <svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+          </button>
+          <button class="ctrl-btn play-btn" aria-label="Play">
+            <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button class="ctrl-btn skip-forward" aria-label="Forward 10 seconds">
+            <svg viewBox="0 0 24 24"><path d="M13 6v12l8.5-6L13 6zm-1 6L3.5 6v12L12 12z"/></svg>
+          </button>
+        </div>
+      `;
+      root.appendChild(panel);
+
+      // Grab references
+      const progressFill = panel.querySelector('.progress-fill');
+      const currentTimeEl = panel.querySelector('.time-current');
+      const durationEl = panel.querySelector('.time-duration');
+      const playBtn = panel.querySelector('.play-btn');
+      const iconPlay = playBtn.querySelector('.icon-play');
+      const iconPause = playBtn.querySelector('.icon-pause');
+      const skipBack = panel.querySelector('.skip-back');
+      const skipForward = panel.querySelector('.skip-forward');
+      const progressWrap = panel.querySelector('.progress-wrap');
+
+      // =============================================================
+      // 5. HELPERS
+      // =============================================================
+      function formatTime(seconds) {
+        if (!isFinite(seconds) || seconds < 0) return '0:00';
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        return m + ':' + (s < 10 ? '0' : '') + s;
+      }
+
+      function postYoutubeCommand(func) {
+        if (!iframe || !iframe.contentWindow) return;
+        iframe.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func, args: [] }),
+          '*'
+        );
+      }
+
+      function setPlaying(playing) {
+        isPlaying = playing;
+
+        // tonearm rotation
+        tonearm.classList.toggle('playing', playing);
+
+        // record spin
+        record.classList.toggle('playing', playing);
+
+        // play / pause icons
+        iconPlay.style.display = playing ? 'none' : '';
+        iconPause.style.display = playing ? '' : 'none';
+
+        // labels
+        stage.title = playing ? 'Pause' : 'Play';
+        playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+
+        // media control
+        if (youtubeId) {
+          postYoutubeCommand(playing ? 'playVideo' : 'pauseVideo');
+        } else if (audio) {
+          if (playing) {
+            audio.play().catch(() => {
+              // Autoplay was blocked — revert UI
+              setPlaying(false);
+            });
+          } else {
+            audio.pause();
+          }
+        }
+      }
+
+      function togglePlay() {
+        setPlaying(!isPlaying);
+      }
+
+      // =============================================================
+      // 6. WIRE UP EVENTS
+      // =============================================================
+      stage.addEventListener('click', togglePlay);
+      playBtn.addEventListener('click', togglePlay);
+
+      skipBack.addEventListener('click', () => {
+        if (audio && isFinite(audio.currentTime)) {
+          audio.currentTime = Math.max(0, audio.currentTime - 10);
+        }
+      });
+
+      skipForward.addEventListener('click', () => {
+        if (audio && isFinite(audio.currentTime) && isFinite(audio.duration)) {
+          audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+        }
+      });
+
+      // Click on progress bar to seek
+      progressWrap.addEventListener('click', (e) => {
+        if (!audio || !isFinite(audio.duration)) return;
+        const rect = progressWrap.getBoundingClientRect();
+        const pct = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = Math.max(0, Math.min(audio.duration, pct * audio.duration));
+      });
+
+      // =============================================================
+      // 7. INITIAL STATE
+      // =============================================================
+      // Apply the initial state without triggering playback side effects
+      // (setPlaying would call play() — we only want the visual state)
+      tonearm.classList.toggle('playing', isPlaying);
+      record.classList.toggle('playing', isPlaying);
+      iconPlay.style.display = isPlaying ? 'none' : '';
+      iconPause.style.display = isPlaying ? '' : 'none';
+      stage.title = isPlaying ? 'Pause' : 'Play';
+      playBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
+
+      // If autoplay was requested, kick it off (browser may block until interaction)
+      if (config.autoPlay) {
+        // defer so the audio element is fully in the DOM
+        requestAnimationFrame(() => setPlaying(true));
+      }
+
+      console.log('MusicPlayer mounted');
+    })();
+  </script>
+</body>
+</html>
