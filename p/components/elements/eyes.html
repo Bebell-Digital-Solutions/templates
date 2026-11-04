@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eye Tracking – plain HTML/CSS/JS</title>
+  <style>
+    /* ---------- global reset & base ---------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* ---------- container for eyes ---------- */
+    .eye-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px; /* default gap, overwritten by JS */
+      flex-wrap: wrap;
+    }
+
+    /* ---------- single eye wrapper ---------- */
+    .eye {
+      position: relative;
+      overflow: hidden;
+      border-radius: 50%;
+      transition: transform 0.1s ease-in-out;
+      will-change: transform;
+    }
+
+    /* ---------- iris (and pupil + reflections inside) ---------- */
+    .iris {
+      position: absolute;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform;
+      transition: transform 0.05s linear; /* smooth spring-like follow */
+    }
+
+    /* ---------- pupil ---------- */
+    .pupil {
+      position: absolute;
+      border-radius: 50%;
+      transition: transform 0.25s ease-out;
+      will-change: transform;
+    }
+
+    /* ---------- reflection glints ---------- */
+    .reflection-primary,
+    .reflection-secondary {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* ---------- eyelids / shadows ---------- */
+    .eyelid-top,
+    .eyelid-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      pointer-events: none;
+      border-radius: 50% / 100% 100% 0 0; /* top curve */
+    }
+    .eyelid-bottom {
+      border-radius: 50% / 0 0 100% 100%;
+    }
+
+    /* ---------- cyber scanline ---------- */
+    .scanline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #00d4ff44, transparent);
+      pointer-events: none;
+      animation: scanMove 3s linear infinite;
+    }
+    @keyframes scanMove {
+      0%   { top: 0; }
+      50%  { top: 100%; }
+      100% { top: 0; }
+    }
+
+    /* ---------- idle animation (subtle motion) ---------- */
+    /* we do it via JS moving the mouse refs, not CSS */
+
+    /* ---------- placeholder before mount (avoids flash) ---------- */
+    .placeholder-eye {
+      border-radius: 50%;
+      background: #2a2a2a;
+      width: 120px;
+      height: 102px; /* 0.85 aspect */
+    }
+
+    /* ---------- utility ---------- */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+
+
+  
+  <!-- container will be filled by JS -->
+  <div id="eye-root" class="eye-container"></div>
+
+
+
+
+
+
+
+
+  
+
+  <script>
+    (function() {
+      // -------------------------------------------------------------
+      // CONFIGURATION (matches the React component's defaults)
+      // -------------------------------------------------------------
+      const config = {
+        className: '',           // additional classes on container
+        eyeSize: 120,
+        gap: 40,
+        irisColor: '#4A6741',
+        irisColorSecondary: '#6B8F62',
+        pupilColor: '#0a0a0a',
+        scleraColor: '#F5F0EB',
+        pupilRange: 0.7,
+        showReflection: true,
+        showIrisDetail: true,
+        idleAnimation: true,
+        blinkInterval: 4000,
+        eyeCount: 2,
+        variant: 'realistic',    // 'realistic', 'cartoon', 'minimal', 'cyber'
+        reactivePupil: true,
+        showEyelids: true
+      };
+
+      // For cyber variant, override some defaults if they are the original defaults
+      const resolvedIrisColor = config.variant === 'cyber'
+        ? (config.irisColor === '#4A6741' ? '#00d4ff' : config.irisColor)
+        : config.irisColor;
+      const resolvedIrisSecondary = config.variant === 'cyber'
+        ? (config.irisColorSecondary === '#6B8F62' ? '#0088ff' : config.irisColorSecondary)
+        : config.irisColorSecondary;
+      const resolvedPupilColor = config.variant === 'cyber'
+        ? (config.pupilColor === '#0a0a0a' ? '#001122' : config.pupilColor)
+        : config.pupilColor;
+      const resolvedScleraColor = config.variant === 'cyber'
+        ? (config.scleraColor === '#F5F0EB' ? '#0a0a1a' : config.scleraColor)
+        : config.scleraColor;
+
+      // -------------------------------------------------------------
+      // GLOBAL MOUSE / TOUCH STATE (like mouseX, mouseY refs)
+      // -------------------------------------------------------------
+      const mouseX = { current: window.innerWidth / 2 };
+      const mouseY = { current: window.innerHeight / 2 };
+
+      // -------------------------------------------------------------
+      // SETUP GLOBAL LISTENERS
+      // -------------------------------------------------------------
+      window.addEventListener('mousemove', (e) => {
+        mouseX.current = e.clientX;
+        mouseY.current = e.clientY;
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (e.touches[0]) {
+          mouseX.current = e.touches[0].clientX;
+          mouseY.current = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      // -------------------------------------------------------------
+      // IDLE ANIMATION (subtle random movement when mouse is still)
+      // -------------------------------------------------------------
+      let idleIntervalId = null;
+      let idleTimeoutId = null;
+      let lastX = mouseX.current;
+      let lastY = mouseY.current;
+
+      function startIdleCheck() {
+        if (!config.idleAnimation) return;
+        idleTimeoutId = setInterval(() => {
+          if (mouseX.current === lastX && mouseY.current === lastY) {
+            // start micro-movements
+            if (!idleIntervalId) {
+              idleIntervalId = setInterval(() => {
+                const curX = mouseX.current;
+                const curY = mouseY.current;
+                mouseX.current = curX + (Math.random() - 0.5) * 30;
+                mouseY.current = curY + (Math.random() - 0.5) * 30;
+                setTimeout(() => {
+                  mouseX.current = curX;
+                  mouseY.current = curY;
+                }, 500);
+              }, 2000);
+            }
+          } else {
+            // if movement detected, stop idle micro movements
+            if (idleIntervalId) {
+              clearInterval(idleIntervalId);
+              idleIntervalId = null;
+            }
+          }
+          lastX = mouseX.current;
+          lastY = mouseY.current;
+        }, 3000);
+      }
+
+      // start idle after mount
+      setTimeout(startIdleCheck, 100);
+
+      // -------------------------------------------------------------
+      // EYE COMPONENT (pure JS function that returns DOM element)
+      // -------------------------------------------------------------
+      function createEye(index) {
+        // --- derive sizes ---
+        const eyeSize = config.eyeSize;
+        const eyeAspect = config.variant === 'cartoon' ? 1 : 0.85;
+        const eyeWidth = eyeSize;
+        const eyeHeight = eyeSize * eyeAspect;
+
+        const irisSize = eyeSize * 0.45;
+        const pupilSize = irisSize * 0.5;
+        const maxOffset = (eyeSize / 2 - irisSize / 2) * config.pupilRange;
+
+        // --- colors ---
+        const irisColor = resolvedIrisColor;
+        const irisColorSecondary = resolvedIrisSecondary;
+        const pupilColor = resolvedPupilColor;
+        const scleraColor = resolvedScleraColor;
+
+        // --- sclera background / shadows per variant ---
+        let scleraGradient = scleraColor;
+        let scleraBoxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+        if (config.variant === 'realistic') {
+          scleraGradient = `radial-gradient(circle at 35% 35%, ${scleraColor} 0%, ${scleraColor}ee 60%, ${scleraColor}cc 100%)`;
+          scleraBoxShadow = 'inset 0 2px 8px rgba(0,0,0,0.15), inset 0 -1px 4px rgba(0,0,0,0.05), 0 4px 20px rgba(0,0,0,0.1)';
+        } else if (config.variant === 'cyber') {
+          scleraGradient = `radial-gradient(circle at 50% 50%, #0a0a1a 0%, #111128 100%)`;
+          scleraBoxShadow = 'inset 0 0 30px rgba(0,200,255,0.1), 0 0 20px rgba(0,200,255,0.15)';
+        } else if (config.variant === 'cartoon') {
+          scleraBoxShadow = 'inset 0 4px 12px rgba(0,0,0,0.1), 0 6px 24px rgba(0,0,0,0.15)';
+        }
+
+        // --- iris background / shadow per variant ---
+        let irisBg = `radial-gradient(circle at 40% 40%, ${irisColorSecondary}, ${irisColor} 60%, ${irisColor}dd 100%)`;
+        let irisBoxShadow = 'inset 0 1px 4px rgba(0,0,0,0.2)';
+        if (config.variant === 'cyber') {
+          irisBg = `conic-gradient(from 0deg, ${irisColor}, ${irisColorSecondary}, ${irisColor})`;
+          irisBoxShadow = `0 0 15px ${irisColor}66, inset 0 0 10px ${irisColor}33`;
+        } else if (config.variant === 'realistic') {
+          irisBoxShadow = `inset 0 2px 6px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1)`;
+        }
+
+        // --- pupil background ---
+        let pupilBg = pupilColor;
+        let pupilBoxShadow = 'none';
+        if (config.variant === 'cyber') {
+          pupilBg = `radial-gradient(circle, ${pupilColor} 40%, transparent 100%)`;
+          pupilBoxShadow = `0 0 10px ${irisColor}88`;
+        }
+
+        // --- create eye container ---
+        const eyeEl = document.createElement('div');
+        eyeEl.className = 'eye';
+        eyeEl.style.width = eyeWidth + 'px';
+        eyeEl.style.height = eyeHeight + 'px';
+        eyeEl.style.borderRadius = '50%';
+        eyeEl.style.background = scleraGradient;
+        eyeEl.style.boxShadow = scleraBoxShadow;
+        if (config.variant === 'cyber') {
+          eyeEl.style.border = '1px solid rgba(0,200,255,0.3)';
+        }
+
+        // --- blood vessels (realistic variant) ---
+        if (config.variant === 'realistic') {
+          const vessels = document.createElement('div');
+          vessels.style.position = 'absolute';
+          vessels.style.inset = '0';
+          vessels.style.overflow = 'hidden';
+          vessels.style.borderRadius = '50%';
+          vessels.style.opacity = '0.07';
+          for (let i = 0; i < 6; i++) {
+            const v = document.createElement('div');
+            v.style.position = 'absolute';
+            v.style.width = '1px';
+            v.style.height = eyeSize * 0.4 + 'px';
+            v.style.left = (20 + i * 12) + '%';
+            v.style.top = (10 + (i % 3) * 15) + '%';
+            v.style.transform = `rotate(${-30 + i * 20}deg)`;
+            v.style.background = '#ef4444'; // red-500
+            v.style.opacity = String(0.3 + Math.random() * 0.4);
+            vessels.appendChild(v);
+          }
+          eyeEl.appendChild(vessels);
+        }
+
+        // --- IRIS (contains pupil, detail, reflection) ---
+        const irisEl = document.createElement('div');
+        irisEl.className = 'iris';
+        irisEl.style.width = irisSize + 'px';
+        irisEl.style.height = irisSize + 'px';
+        irisEl.style.left = (eyeWidth / 2 - irisSize / 2) + 'px';
+        irisEl.style.top = (eyeHeight / 2 - irisSize / 2) + 'px';
+        irisEl.style.background = irisBg;
+        irisEl.style.boxShadow = irisBoxShadow;
+        // will be moved via JS (transform)
+
+        // --- iris detail pattern (inside iris) ---
+        if (config.showIrisDetail) {
+          const detailWrap = document.createElement('div');
+          detailWrap.style.position = 'absolute';
+          detailWrap.style.inset = '0';
+          detailWrap.style.borderRadius = '50%';
+          detailWrap.style.overflow = 'hidden';
+          // rotation will be updated via JS (irisRotation)
+          detailWrap.className = 'iris-detail';
+
+          if (config.variant === 'cyber') {
+            // inner dashed circle
+            const c1 = document.createElement('div');
+            c1.style.position = 'absolute';
+            c1.style.inset = '15%';
+            c1.style.borderRadius = '50%';
+            c1.style.border = '1px dashed ' + irisColor;
+            c1.style.opacity = '0.4';
+            detailWrap.appendChild(c1);
+
+            const c2 = document.createElement('div');
+            c2.style.position = 'absolute';
+            c2.style.inset = '30%';
+            c2.style.borderRadius = '50%';
+            c2.style.border = '1px solid ' + irisColorSecondary;
+            c2.style.opacity = '0.3';
+            detailWrap.appendChild(c2);
+
+            // radial lines
+            for (let i = 0; i < 8; i++) {
+              const line = document.createElement('div');
+              line.style.position = 'absolute';
+              line.style.left = '50%';
+              line.style.top = '50%';
+              line.style.width = irisSize * 0.45 + 'px';
+              line.style.height = '1px';
+              line.style.background = irisColor;
+              line.style.transformOrigin = 'left center';
+              line.style.transform = `rotate(${i * 45}deg)`;
+              line.style.opacity = '0.25';
+              detailWrap.appendChild(line);
+            }
+          } else {
+            // realistic iris fibers
+            for (let i = 0; i < 24; i++) {
+              const fiber = document.createElement('div');
+              fiber.style.position = 'absolute';
+              fiber.style.left = '50%';
+              fiber.style.top = '50%';
+              fiber.style.width = irisSize * 0.45 + 'px';
+              fiber.style.height = '1px';
+              fiber.style.background = `linear-gradient(to right, transparent 20%, ${irisColor}44 50%, transparent 80%)`;
+              fiber.style.transformOrigin = 'left center';
+              fiber.style.transform = `rotate(${i * 15}deg)`;
+              fiber.style.opacity = String(0.3 + (i % 3) * 0.15);
+              detailWrap.appendChild(fiber);
+            }
+            const innerRing = document.createElement('div');
+            innerRing.style.position = 'absolute';
+            innerRing.style.inset = '20%';
+            innerRing.style.borderRadius = '50%';
+            innerRing.style.border = `1px solid ${irisColor}33`;
+            detailWrap.appendChild(innerRing);
+          }
+          irisEl.appendChild(detailWrap);
+        }
+
+        // --- PUPIL ---
+        const pupilEl = document.createElement('div');
+        pupilEl.className = 'pupil';
+        pupilEl.style.width = pupilSize + 'px';
+        pupilEl.style.height = pupilSize + 'px';
+        pupilEl.style.left = (irisSize / 2 - pupilSize / 2) + 'px';
+        pupilEl.style.top = (irisSize / 2 - pupilSize / 2) + 'px';
+        pupilEl.style.background = pupilBg;
+        pupilEl.style.boxShadow = pupilBoxShadow;
+        // pupil scale will be set via JS
+        irisEl.appendChild(pupilEl);
+
+        // --- REFLECTIONS ---
+        if (config.showReflection) {
+          const ref1 = document.createElement('div');
+          ref1.className = 'reflection-primary';
+          ref1.style.width = (pupilSize * 0.35) + 'px';
+          ref1.style.height = (pupilSize * 0.35) + 'px';
+          ref1.style.left = (irisSize * 0.3) + 'px';
+          ref1.style.top = (irisSize * 0.25) + 'px';
+          if (config.variant === 'cyber') {
+            ref1.style.background = 'radial-gradient(circle, rgba(0,255,255,0.9), transparent)';
+          } else {
+            ref1.style.background = 'radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,255,255,0.6))';
+          }
+          ref1.style.filter = 'blur(0.5px)';
+          irisEl.appendChild(ref1);
+
+          const ref2 = document.createElement('div');
+          ref2.className = 'reflection-secondary';
+          ref2.style.width = (pupilSize * 0.15) + 'px';
+          ref2.style.height = (pupilSize * 0.15) + 'px';
+          ref2.style.left = (irisSize * 0.58) + 'px';
+          ref2.style.top = (irisSize * 0.6) + 'px';
+          if (config.variant === 'cyber') {
+            ref2.style.background = 'rgba(0,255,255,0.5)';
+          } else {
+            ref2.style.background = 'rgba(255,255,255,0.7)';
+          }
+          irisEl.appendChild(ref2);
+        }
+
+        eyeEl.appendChild(irisEl);
+
+        // --- EYELIDS / SHADOWS ---
+        if (config.showEyelids && config.variant !== 'minimal') {
+          const topLid = document.createElement('div');
+          topLid.className = 'eyelid-top';
+          topLid.style.height = (eyeHeight * 0.35) + 'px';
+          topLid.style.top = '0';
+          if (config.variant === 'cyber') {
+            topLid.style.background = 'linear-gradient(to bottom, rgba(0,10,30,0.6) 0%, transparent 100%)';
+          } else {
+            topLid.style.background = 'linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, transparent 100%)';
+          }
+          eyeEl.appendChild(topLid);
+
+          const bottomLid = document.createElement('div');
+          bottomLid.className = 'eyelid-bottom';
+          bottomLid.style.height = (eyeHeight * 0.2) + 'px';
+          bottomLid.style.bottom = '0';
+          if (config.variant === 'cyber') {
+            bottomLid.style.background = 'linear-gradient(to top, rgba(0,10,30,0.4) 0%, transparent 100%)';
+          } else {
+            bottomLid.style.background = 'linear-gradient(to top, rgba(0,0,0,0.04) 0%, transparent 100%)';
+          }
+          eyeEl.appendChild(bottomLid);
+        }
+
+        // --- CYBER SCANLINE ---
+        if (config.variant === 'cyber') {
+          const scan = document.createElement('div');
+          scan.className = 'scanline';
+          eyeEl.appendChild(scan);
+        }
+
+        // --- store references for animation ---
+        eyeEl._irisEl = irisEl;
+        eyeEl._pupilEl = pupilEl;
+        eyeEl._detailEl = irisEl.querySelector('.iris-detail');
+        eyeEl._blinkInterval = config.blinkInterval;
+        eyeEl._index = index;
+
+        // --- attach eye-specific animation logic (mouse follow, blink, pupil scale) ---
+        attachEyeAnimation(eyeEl, {
+          eyeSize,
+          irisSize,
+          pupilSize,
+          maxOffset,
+          pupilRange: config.pupilRange,
+          reactivePupil: config.reactivePupil,
+          variant: config.variant,
+          irisColor,
+          irisColorSecondary,
+          pupilColor
+        });
+
+        return eyeEl;
+      }
+
+      // -------------------------------------------------------------
+      // ANIMATION LOGIC PER EYE (mouse follow, blink, pupil scale)
+      // -------------------------------------------------------------
+      function attachEyeAnimation(eyeEl, params) {
+        const { eyeSize, irisSize, pupilSize, maxOffset, reactivePupil, variant, irisColor } = params;
+
+        const irisEl = eyeEl._irisEl;
+        const pupilEl = eyeEl._pupilEl;
+        const detailEl = eyeEl._detailEl;
+
+        // --- blink state ---
+        let isBlinking = false;
+        let blinkTimeout = null;
+        let blinkIntervalId = null;
+
+        function startBlinkLoop() {
+          if (config.blinkInterval <= 0) return;
+          const blink = () => {
+            isBlinking = true;
+            eyeEl.style.transform = 'scaleY(0.05)';
+            setTimeout(() => {
+              isBlinking = false;
+              eyeEl.style.transform = 'scaleY(1)';
+            }, 150);
+          };
+          // random offset per eye
+          const randomOffset = Math.random() * 200;
+          setTimeout(() => {
+            blink();
+            blinkIntervalId = setInterval(blink, config.blinkInterval + Math.random() * 1000);
+          }, randomOffset);
+        }
+        startBlinkLoop();
+
+        // --- mouse follow loop (requestAnimationFrame) ---
+        let animFrame;
+        let pupilScale = 1;
+
+        function update() {
+          if (!eyeEl.isConnected) {
+            animFrame = requestAnimationFrame(update);
+            return;
+          }
+
+          const rect = eyeEl.getBoundingClientRect();
+          const eyeCenterX = rect.left + rect.width / 2;
+          const eyeCenterY = rect.top + rect.height / 2;
+
+          const dx = mouseX.current - eyeCenterX;
+          const dy = mouseY.current - eyeCenterY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const angle = Math.atan2(dy, dx);
+
+          const clampedDistance = Math.min(distance, maxOffset * 3);
+          const normalizedDistance = clampedDistance / (maxOffset * 3);
+          const offset = normalizedDistance * maxOffset;
+
+          const offsetX = Math.cos(angle) * offset;
+          const offsetY = Math.sin(angle) * offset;
+
+          // apply transform to iris (pupil moves with iris)
+          irisEl.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+
+          // iris detail rotation (optional, mimic rotation)
+          if (detailEl) {
+            const rot = (offsetX / maxOffset) * 15; // -15..15 deg
+            detailEl.style.transform = `rotate(${rot}deg)`;
+          }
+
+          // reactive pupil dilation
+          if (reactivePupil && pupilEl) {
+            const proximityScale = distance < 200
+              ? 1.3 - (distance / 200) * 0.3
+              : 0.85 + (Math.min(distance, 800) / 800) * 0.15;
+            pupilScale = proximityScale;
+            pupilEl.style.transform = `scale(${pupilScale})`;
+          } else if (pupilEl) {
+            pupilEl.style.transform = 'scale(1)';
+          }
+
+          animFrame = requestAnimationFrame(update);
+        }
+
+        animFrame = requestAnimationFrame(update);
+
+        // cleanup on removal (optional, but good practice)
+        eyeEl._cleanup = () => {
+          cancelAnimationFrame(animFrame);
+          if (blinkIntervalId) clearInterval(blinkIntervalId);
+          if (blinkTimeout) clearTimeout(blinkTimeout);
+        };
+      }
+
+      // -------------------------------------------------------------
+      // BUILD THE WHOLE UI (mount eyes)
+      // -------------------------------------------------------------
+      function mountEyes() {
+        const root = document.getElementById('eye-root');
+        if (!root) return;
+
+        // Apply container class & gap
+        root.className = 'eye-container';
+        if (config.className) {
+          config.className.split(' ').forEach(cls => {
+            if (cls) root.classList.add(cls);
+          });
+        }
+        root.style.gap = config.gap + 'px';
+
+        // Clear any placeholder
+        root.innerHTML = '';
+
+        // Create and append each eye
+        for (let i = 0; i < config.eyeCount; i++) {
+          const eyeEl = createEye(i);
+          root.appendChild(eyeEl);
+        }
+      }
+
+      // -------------------------------------------------------------
+      // INIT (simulate isMounted)
+      // -------------------------------------------------------------
+      // The original React component shows placeholders before mount.
+      // Here we just mount immediately. Could add a small delay if needed.
+      mountEyes();
+
+      // Optional: re-mount if eyeCount etc changes? Not needed for static demo.
+
+      // Expose cleanup (if needed)
+      window.__eyeCleanup = function() {
+        const root = document.getElementById('eye-root');
+        if (root) {
+          root.querySelectorAll('.eye').forEach(eye => {
+            if (eye._cleanup) eye._cleanup();
+          });
+          root.innerHTML = '';
+        }
+        if (idleTimeoutId) clearInterval(idleTimeoutId);
+        if (idleIntervalId) clearInterval(idleIntervalId);
+      };
+
+      // For demonstration, log that eyes are mounted.
+      console.log('EyeTracking component (plain JS) mounted.');
+    })();
+  </script>
+</body>
+</html>
