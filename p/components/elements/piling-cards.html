@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case Study Flip Stack – plain HTML/CSS/JS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #eeeae2;
+      color: #29251f;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ================================================================
+       HERO SECTION
+       ================================================================ */
+    .hero {
+      position: relative;
+      height: 82vh;
+      min-height: 640px;
+      overflow: hidden;
+      padding: 0 20px;
+    }
+    @media (min-width: 640px) {
+      .hero { padding: 0 40px; }
+    }
+
+    .hero-hint {
+      position: absolute;
+      left: 0; right: 0;
+      top: clamp(110px, 16vh, 165px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(14px, 2.5vw, 32px);
+      font-size: clamp(26px, 3.5vw, 52px);
+      font-weight: 500;
+      letter-spacing: -0.055em;
+    }
+    .hero-hint .arrow {
+      display: inline-block;
+      animation: bob 1.4s ease-in-out infinite;
+    }
+    .hero-hint .arrow:nth-child(3) {
+      animation-delay: 0.18s;
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-hint .arrow { animation: none; }
+    }
+
+    .hero-title-wrap {
+      position: absolute;
+      left: 20px; right: 20px;
+      top: clamp(330px, 43vh, 440px);
+      display: flex;
+      justify-content: center;
+    }
+    @media (min-width: 640px) {
+      .hero-title-wrap { left: 40px; right: 40px; }
+    }
+
+    .hero-title {
+      max-width: 18ch;
+      text-align: center;
+      font-size: clamp(42px, 5.5vw, 82px);
+      font-weight: 600;
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+      color: #a94808;
+    }
+
+    /* ================================================================
+       FLIP STACK
+       ================================================================ */
+    .flip-scroll-area {
+      position: relative;
+      /* height set inline by JS: (n + 1) * 100vh */
+    }
+
+    .flip-sticky {
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      height: 100vh;
+      padding: 32px clamp(14px, 4vw, 64px);
+    }
+
+    .flip-stage {
+      position: relative;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 860px;
+      aspect-ratio: 3 / 4;
+      perspective: 800px;
+    }
+    @media (min-width: 640px) {
+      .flip-stage { aspect-ratio: 1.76 / 1; }
+    }
+
+    /* ---- card outer (the thing that flips away) ---- */
+    .flip-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      aspect-ratio: 3 / 4;
+      will-change: transform, opacity;
+      transform-origin: 50% 50%;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+    @media (min-width: 640px) {
+      .flip-card { aspect-ratio: 1.76 / 1; }
+    }
+
+    /* ---- card inner (the coloured panel) ---- */
+    .flip-card-inner {
+      display: grid;
+      height: 100%;
+      overflow: hidden;
+      border-radius: clamp(18px, 2vw, 30px);
+      box-shadow: 0 16px 50px rgba(20, 17, 10, 0.18);
+      transform-origin: 50% 100%;
+      will-change: transform;
+    }
+    @media (min-width: 640px) {
+      .flip-card-inner {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+    }
+
+    /* ---- left column ---- */
+    .flip-card-left {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: clamp(24px, 3vw, 48px);
+    }
+    @media (min-width: 768px) {
+      .flip-card-left {
+        padding-right: clamp(22px, 3vw, 48px);
+      }
+    }
+
+    .flip-card-number {
+      font-size: clamp(24px, 2.5vw, 36px);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.06em;
+    }
+
+    .flip-card-body {
+      margin-top: auto;
+      max-width: 46rem;
+      padding-top: 32px;
+    }
+
+    .flip-card-eyebrow {
+      margin-bottom: clamp(10px, 1.5vw, 22px);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      opacity: 0.7;
+    }
+    @media (min-width: 640px) {
+      .flip-card-eyebrow { font-size: 12px; }
+    }
+
+    .flip-card-title {
+      max-width: 16ch;
+      font-size: clamp(28px, 3.25vw, 48px);
+      font-weight: 600;
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+      text-wrap: balance;
+    }
+
+    .flip-card-desc {
+      margin-top: clamp(16px, 1.8vw, 24px);
+      max-width: 42rem;
+      font-size: clamp(13px, 1.1vw, 16px);
+      line-height: 1.5;
+      opacity: 0.82;
+    }
+
+    /* ---- right column (image) ---- */
+    .flip-card-right {
+      position: relative;
+      margin: clamp(10px, 1.2vw, 18px);
+      min-height: 180px;
+      overflow: hidden;
+      border-radius: clamp(12px, 1.4vw, 22px);
+    }
+    @media (min-width: 640px) {
+      .flip-card-right {
+        margin-left: 0;
+      }
+    }
+
+    .flip-card-right img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .flip-card-right::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top right, rgba(0,0,0,0.2), transparent 40%, rgba(255,255,255,0.1));
+      pointer-events: none;
+    }
+
+    /* ================================================================
+       END SECTION
+       ================================================================ */
+    .end-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 120vh;
+      padding: 0 20px;
+    }
+    @media (min-width: 640px) {
+      .end-section { padding: 0 40px; }
+    }
+
+    .end-label {
+      text-align: center;
+      font-size: clamp(54px, 9vw, 144px);
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -0.07em;
+      color: #29251f;
+    }
+  </style>
+</head>
+<body>
+
+  <main id="flip-root"></main>
+
+  <script>
+    (function() {
+      // =============================================================
+      // 1. DATA
+      // =============================================================
+      const DEFAULT_ITEMS = [
+        {
+          eyebrow: 'Fintech',
+          title: 'Boosted conversion by 42% with a product-led redesign',
+          description:
+            'We restructured the onboarding flow and clarified the value proposition, helping the platform turn more visitors into activated users.',
+          image:
+            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1400&q=90&auto=format&fit=crop',
+          imageAlt: 'Portrait framed by tropical greenery',
+          background: '#a94808',
+          foreground: '#fff7ed',
+        },
+        {
+          eyebrow: 'Hospitality',
+          title: 'A slower digital experience for a faster-growing retreat',
+          description:
+            'A cinematic booking journey brings the landscape forward, simplifies room selection, and gives every stay a stronger sense of place.',
+          image:
+            'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1400&q=90&auto=format&fit=crop',
+          imageAlt: 'A person overlooking a mountain landscape',
+          background: '#067b8f',
+          foreground: '#ecfeff',
+        },
+        {
+          eyebrow: 'Culture',
+          title: 'Turning a living archive into something you can wander through',
+          description:
+            'We paired bold editorial typography with an intuitive collection system, making decades of work feel immediate, playful, and alive.',
+          image:
+            'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=1400&q=90&auto=format&fit=crop',
+          imageAlt: 'Colorful artwork in a contemporary gallery',
+          background: '#ba075f',
+          foreground: '#fff1f7',
+        },
+        {
+          eyebrow: 'Climate',
+          title: 'Making complex energy data feel clear enough to act on',
+          description:
+            'An approachable visual system turns live infrastructure data into useful decisions for operators, partners, and the communities they serve.',
+          image:
+            'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1400&q=90&auto=format&fit=crop',
+          imageAlt: 'Wind turbines across a green landscape',
+          background: '#3322a8',
+          foreground: '#f3f1ff',
+        },
+      ];
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // =============================================================
+      // 2. BUILD THE DOM (hero + stack + end)
+      // =============================================================
+      const root = document.getElementById('flip-root');
+
+      // ---- HERO ----
+      const hero = document.createElement('section');
+      hero.className = 'hero';
+      hero.innerHTML = `
+        <div class="hero-hint">
+          <span class="arrow" aria-hidden="true">↓</span>
+          <span>Scroll Down</span>
+          <span class="arrow" aria-hidden="true">↓</span>
+        </div>
+        <div class="hero-title-wrap">
+          <h1 class="hero-title">Design That Delivers.</h1>
+        </div>
+      `;
+      root.appendChild(hero);
+
+      // ---- FLIP SCROLL AREA ----
+      const items = DEFAULT_ITEMS;
+      const total = items.length;
+
+      const scrollArea = document.createElement('div');
+      scrollArea.className = 'flip-scroll-area';
+      // Height = (n + 1) * 100vh — extra vh gives room for the final flip
+      scrollArea.style.height = `${(total + 1) * 100}vh`;
+
+      const sticky = document.createElement('div');
+      sticky.className = 'flip-sticky';
+
+      const stage = document.createElement('div');
+      stage.className = 'flip-stage';
+
+      scrollArea.appendChild(sticky);
+      sticky.appendChild(stage);
+      root.appendChild(scrollArea);
+
+      // ---- BUILD CARDS (in reverse so z-index ordering is natural) ----
+      // Each card gets a reference to its DOM elements + per-card motion state.
+      const cards = [];
+
+      // We iterate in reverse because the original does `[...safeItems].reverse()`
+      // so the last item is rendered first in DOM and the first item is on top.
+      for (let reverseIndex = 0; reverseIndex < total; reverseIndex++) {
+        const index = total - reverseIndex - 1;
+        const item = items[index];
+
+        const card = document.createElement('article');
+        card.className = 'flip-card';
+        card.style.zIndex = String(total - index);
+
+        const inner = document.createElement('div');
+        inner.className = 'flip-card-inner';
+        inner.style.backgroundColor = item.background;
+        inner.style.color = item.foreground || 'white';
+
+        // Left column
+        const left = document.createElement('div');
+        left.className = 'flip-card-left';
+        left.innerHTML = `
+          <div>
+            <span class="flip-card-number">${String(index + 1).padStart(2, '0')}</span>
+          </div>
+          <div class="flip-card-body">
+            <p class="flip-card-eyebrow">${item.eyebrow}</p>
+            <h2 class="flip-card-title">${item.title}</h2>
+            <p class="flip-card-desc">${item.description}</p>
+          </div>
+        `;
+
+        // Right column (image)
+        const right = document.createElement('div');
+        right.className = 'flip-card-right';
+        const img = document.createElement('img');
+        img.src = item.image;
+        img.alt = item.imageAlt;
+        img.loading = index < 2 ? 'eager' : 'lazy';
+        img.draggable = false;
+        right.appendChild(img);
+
+        inner.appendChild(left);
+        inner.appendChild(right);
+        card.appendChild(inner);
+        stage.appendChild(card);
+
+        // Store references
+        cards.push({
+          index,
+          item,
+          card,
+          inner,
+          // Derived values used by the animation loop
+          // (matching the original FlipCard calculations)
+          segment: 1 / Math.max(total, 1),
+          start: index * (1 / Math.max(total, 1)),
+          end: Math.min(index * (1 / Math.max(total, 1)) + 1 / Math.max(total, 1), 1),
+          entryStart: Math.max(0, index * (1 / Math.max(total, 1)) - 1 / Math.max(total, 1)),
+          entryEnd: 0, // computed below
+          stackedCardGap: Math.min(24, 72 / Math.max(total - 1, 1)),
+          restingOffset: Math.min(index * 12, 34),
+          restingScale: 1 - Math.min(index * 0.012, 0.035),
+          // Current motion state (animated each frame)
+          state: {
+            yPercent: 0,        // the exitYPercent
+            stackOffsetPx: 0,   // the exitStackOffset
+            rotateX: 0,
+            opacity: 1,
+            entryScale: 1,
+            entryY: 0,
+          },
+        });
+      }
+
+      // Compute entryEnd (needs start, entryStart, segment)
+      cards.forEach((c) => {
+        c.entryEnd = c.index === 0
+          ? 0.0001
+          : Math.min(c.start, c.entryStart + c.segment * 0.7);
+      });
+
+      // ---- END SECTION ----
+      const endSection = document.createElement('section');
+      endSection.className = 'end-section';
+      endSection.innerHTML = `<p class="end-label">The End</p>`;
+      root.appendChild(endSection);
+
+      // =============================================================
+      // 3. SCROLL → PROGRESS (with spring smoothing)
+      // =============================================================
+      // The original uses useScroll({ target, offset: ["start start", "end end"] })
+      // then a spring on top. We do the same manually.
+      //
+      // progress = clamp((scrollY - top) / (height - viewport), 0, 1)
+
+      function getScrollProgress() {
+        const rect = scrollArea.getBoundingClientRect();
+        // "start start" means: when the top of the target hits the top of viewport
+        // "end end"   means: when the bottom of the target hits the bottom of viewport
+        const top = rect.top + window.scrollY;
+        const height = rect.height;
+        const viewportH = window.innerHeight;
+        const scrollY = window.scrollY;
+        const denom = height - viewportH;
+        if (denom <= 0) return 0;
+        const raw = (scrollY - top) / denom;
+        return Math.max(0, Math.min(1, raw));
+      }
+
+      // Spring integrator for the scroll progress (matches
+      // useSpring(scrollYProgress, { stiffness: 120, damping: 22, mass: 0.8 }))
+      const spring = {
+        value: 0,
+        target: 0,
+        velocity: 0,
+        stiffness: 120,
+        damping: 22,
+        mass: 0.8,
+      };
+
+      function stepSpring(dt) {
+        // Clamp dt so a tab-switch doesn't blow up the integrator.
+        dt = Math.min(dt, 0.064);
+        const force = (spring.target - spring.value) * spring.stiffness;
+        const damper = spring.velocity * spring.damping;
+        const accel = (force - damper) / spring.mass;
+        spring.velocity += accel * dt;
+        spring.value += spring.velocity * dt;
+        // restDelta
+        if (Math.abs(spring.target - spring.value) < 0.0005 && Math.abs(spring.velocity) < 0.0005) {
+          spring.value = spring.target;
+          spring.velocity = 0;
+        }
+      }
+
+      // =============================================================
+      // 4. EASING + HELPERS (match framer-motion defaults)
+      // =============================================================
+      const lerp = (a, b, t) => a + (b - a) * t;
+
+      // Default tween in Framer Motion is a spring; we approximate
+      // with a simple linear interpolation over the spring value
+      // (the spring is already smoothing the input).
+      function mapRange(v, inMin, inMax, outMin, outMax) {
+        if (inMax === inMin) return outMin;
+        const t = (v - inMin) / (inMax - inMin);
+        const clamped = Math.max(0, Math.min(1, t));
+        return outMin + (outMax - outMin) * clamped;
+      }
+
+      // The useTransform in the original clamps by default. We do the same.
+
+      // =============================================================
+      // 5. APPLY CARD STYLES FROM PROGRESS
+      // =============================================================
+      function applyCards(progress) {
+        cards.forEach((c) => {
+          const s = c.state;
+
+          // --- exitYPercent: progress [exitStart, exitEnd] → [0, -118] ---
+          const exitStart = c.start;
+          const exitEnd = c.end;
+          s.yPercent = reduceMotion
+            ? 0
+            : mapRange(progress, exitStart, exitEnd, 0, -118);
+
+          // --- exitStackOffset: progress [exitStart, exitEnd] → [0, stackedCardGap * index] ---
+          // (In the original this is `stackedOffset = index * stackedCardGap`)
+          const stackedOffset = c.index * c.stackedCardGap;
+          s.stackOffsetPx = reduceMotion
+            ? 0
+            : mapRange(progress, exitStart, exitEnd, 0, stackedOffset);
+
+          // --- rotateX: progress [exitStart, exitEnd] → [0, 22] ---
+          s.rotateX = reduceMotion
+            ? 0
+            : mapRange(progress, exitStart, exitEnd, 0, 22);
+
+          // --- opacity: progress [exitStart, exitEnd] → [1, 1] (stays visible) ---
+          // The original explicitly keeps opacity at 1 during exit.
+          s.opacity = 1;
+
+          // --- entryScale: progress [entryStart, entryEnd] → [restingScale, 1] for index > 0; [1, 1] for index 0 ---
+          if (c.index === 0) {
+            s.entryScale = 1;
+          } else {
+            s.entryScale = mapRange(progress, c.entryStart, c.entryEnd, c.restingScale, 1);
+          }
+
+          // --- entryY: progress [entryStart, entryEnd] → [restingOffset, 0] for index > 0; [0, 0] for index 0 ---
+          if (c.index === 0) {
+            s.entryY = 0;
+          } else {
+            s.entryY = mapRange(progress, c.entryStart, c.entryEnd, c.restingOffset, 0);
+          }
+
+          // --- write to DOM ---
+          // Outer card: translateY(calc(yPercent% + stackOffsetPx)) + rotateX + opacity
+          c.card.style.transform =
+            `translateY(calc(${s.yPercent}% + ${s.stackOffsetPx}px)) ` +
+            `rotateX(${s.rotateX}deg)`;
+          c.card.style.opacity = String(s.opacity);
+
+          // Inner card: translateY + scale (transformOrigin is 50% 100%)
+          c.inner.style.transform =
+            `translateY(${s.entryY}px) scale(${s.entryScale})`;
+        });
+      }
+
+      // =============================================================
+      // 6. RENDER LOOP
+      // =============================================================
+      let lastTime = performance.now();
+
+      function tick(now) {
+        requestAnimationFrame(tick);
+        const dt = Math.min(0.064, (now - lastTime) / 1000);
+        lastTime = now;
+
+        // Read the raw scroll progress
+        const raw = getScrollProgress();
+
+        // Feed it into the spring
+        spring.target = raw;
+        stepSpring(dt);
+
+        // Apply to cards
+        applyCards(spring.value);
+      }
+
+      // Prime the spring at the current scroll position so the first frame
+      // doesn't animate from 0 → current.
+      spring.value = getScrollProgress();
+      spring.target = spring.value;
+
+      requestAnimationFrame(tick);
+
+      // Recompute on resize (heights change)
+      window.addEventListener('resize', () => {
+        // Nothing to rebuild; the animation loop re-reads getBoundingClientRect
+        // every frame, so sizes are handled automatically.
+      });
+
+      console.log('CaseStudyFlipStack mounted:', total, 'cards');
+    })();
+  </script>
+</body>
+</html>
