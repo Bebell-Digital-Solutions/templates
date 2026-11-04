@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Annotated Text – hover to reveal</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f8f8;
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 2rem;
+    }
+    .demo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      max-width: 600px;
+      width: 100%;
+    }
+    .demo-item { display: flex; flex-direction: column; gap: 0.35rem; }
+    .demo-item p {
+      font-size: 1.5rem;
+      line-height: 1.5;
+      color: #1a1a1a;
+    }
+    .demo-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+      font-family: ui-monospace, monospace;
+    }
+
+    /* wrapper */
+    .annotated {
+      position: relative;
+      display: inline-block;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .annotated.padded    { padding: 0 0.4em; }
+    .annotated.padded-sm { padding: 0 0.35em; }
+    .annotated.padded-xs { padding: 0 0.25em; }
+
+    /* decoration base */
+    .decoration {
+      pointer-events: none;
+      position: absolute;
+    }
+    .decoration svg { display: block; width: 100%; height: 100%; }
+    .decoration svg path { vector-effect: non-scaling-stroke; }
+
+    /* per-variant positioning */
+    .decoration-wavy            { bottom: -0.4em;  left: -2%;   height: 0.7em;  width: 104%; }
+    .decoration-underline       { bottom: -0.32em; left: -1%;   height: 0.5em;  width: 102%; }
+    .decoration-doubleUnderline { bottom: -0.5em;  left: -1%;   height: 0.7em;  width: 102%; }
+    .decoration-dottedUnderline { bottom: -0.35em; left: -1%;   height: 0.55em; width: 102%; display: block; }
+    .decoration-line            { bottom: -0.18em; left: -1%;   height: 2px;    width: 102%; display: block; border-radius: 9999px; background: currentColor; }
+    .decoration-arrow           { bottom: -0.45em; left: -1%;   height: 0.8em;  width: 106%; }
+    .decoration-highlight       { inset-inline: -4%; bottom: -0.08em; z-index: 0; height: 1.15em; width: 108%; }
+    .decoration-circle          { top: -0.6em; bottom: -0.6em; left: -0.55em; right: -0.55em; height: calc(100% + 1.2em); width: calc(100% + 1.1em); }
+    .decoration-box             { top: -0.4em; bottom: -0.4em; left: -0.4em;   right: -0.4em;  height: calc(100% + 0.8em); width: calc(100% + 0.8em); }
+    .decoration-bracket         { top: -0.25em; bottom: -0.25em; left: -0.15em; height: calc(100% + 0.5em); width: calc(100% + 0.3em); }
+    .decoration-strikethrough   { top: 50%; left: -1%; height: 0.5em;  width: 102%; transform: translateY(-50%); z-index: 1;   }
+    .decoration-crossOut        { top: 50%; left: -2%; height: 1.4em;  width: 104%; transform: translateY(-50%); z-index: 1;  }
+
+    /* highlight text sits above the mark */
+    .annotated .text-above { position: relative; z-index: 10; }
+    .annotated .svg-behind { z-index: 0; }
+
+    /* default colors */
+    .color-wavy            { color: #a855f7; }
+    .color-underline       { color: #a855f7; }
+    .color-doubleUnderline { color: #059669; }
+    .color-dottedUnderline { color: #737373; }
+    .color-line            { color: #737373; }
+    .color-arrow           { color: #2563eb; }
+    .color-highlight       { color: rgba(253, 224, 71, 0.6); }
+    .color-circle          { color: #0891b2; }
+    .color-box             { color: #ea580c; }
+    .color-bracket         { color: #737373; }
+    .color-strikethrough   { color: #ef4444; }
+    .color-crossOut        { color: #ef4444; }
+
+    @media (prefers-color-scheme: dark) {
+      body { background: #111; }
+      .demo-item p { color: #eee; }
+      .color-wavy            { color: #d8b4fe; }
+      .color-underline       { color: #c084fc; }
+      .color-doubleUnderline { color: #34d399; }
+      .color-dottedUnderline { color: #a3a3a3; }
+      .color-arrow           { color: #60a5fa; }
+      .color-circle          { color: #a5f3fc; }
+      .color-box             { color: #fb923c; }
+      .color-strikethrough   { color: #f87171; }
+      .color-crossOut        { color: #f87171; }
+    }
+
+    /* dotted underline background */
+    .dotted-pattern {
+      background-image: radial-gradient(circle, currentColor 1.5px, transparent 1.5px);
+      background-size: 0.5em 100%;
+      background-position: 0 100%;
+      background-repeat: repeat-x;
+    }
+
+    /* -----------------------------------------------------------
+       REVEAL ON HOVER / FOCUS
+       ----------------------------------------------------------- */
+    .annotated .decoration {
+      /* default: hidden state */
+      transition:
+        clip-path 0.45s cubic-bezier(0.22, 0.61, 0.36, 1),
+        opacity   0.35s ease;
+    }
+
+    /* SVG strokes: hidden via dash offset */
+    .annotated .decoration path[data-annotation-drawing="stroke"] {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      opacity: 0;
+      transition:
+        stroke-dashoffset 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
+        opacity 0.15s ease 0.05s;
+    }
+
+    /* reveal-type (clip path) — dotted underline, line, highlight */
+    .annotated .decoration[data-annotation-drawing="reveal"],
+    .annotated .decoration path[data-annotation-drawing="reveal"] {
+      clip-path: inset(0 100% 0 0);
+    }
+
+    /* hover / focus: show */
+    .annotated:hover .decoration path[data-annotation-drawing="stroke"],
+    .annotated:focus-visible .decoration path[data-annotation-drawing="stroke"] {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    .annotated:hover .decoration[data-annotation-drawing="reveal"],
+    .annotated:focus-visible .decoration[data-annotation-drawing="reveal"],
+    .annotated:hover .decoration path[data-annotation-drawing="reveal"],
+    .annotated:focus-visible .decoration path[data-annotation-drawing="reveal"] {
+      clip-path: inset(0 0 0 0);
+    }
+
+    /* optional: keep it visible once tapped on touch devices */
+    .annotated[data-revealed="true"] .decoration path[data-annotation-drawing="stroke"] {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    .annotated[data-revealed="true"] .decoration[data-annotation-drawing="reveal"],
+    .annotated[data-revealed="true"] .decoration path[data-annotation-drawing="reveal"] {
+      clip-path: inset(0 0 0 0);
+    }
+
+    /* reduced motion: show instantly, no transition */
+    @media (prefers-reduced-motion: reduce) {
+      .annotated .decoration,
+      .annotated .decoration path {
+        transition: none !important;
+      }
+      .annotated .decoration path[data-annotation-drawing="stroke"] {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+      .annotated .decoration[data-annotation-drawing="reveal"],
+      .annotated .decoration path[data-annotation-drawing="reveal"] {
+        clip-path: inset(0 0 0 0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+
+  <div class="demo-grid" id="demo-root"></div>
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      // ---------- path helpers (unchanged) ----------
+      function createRandom(seed) {
+        let state = seed >>> 0;
+        return () => { state = (state * 1664525 + 1013904223) >>> 0; return state / 4294967296; };
+      }
+      const shake  = (rand, a) => (rand() - 0.5) * 2 * a;
+      const round  = (v) => Math.round(v * 100) / 100;
+
+      function trace(points, close = false) {
+        const [first, ...rest] = points;
+        if (!first) return "";
+        let d = `M${round(first.x)},${round(first.y)}`;
+        rest.forEach((anchor, i) => {
+          const next = rest[i + 1];
+          if (!next) { d += ` L${round(anchor.x)},${round(anchor.y)}`; return; }
+          d += ` Q${round(anchor.x)},${round(anchor.y)} ${round((anchor.x + next.x) / 2)},${round((anchor.y + next.y) / 2)}`;
+        });
+        return close ? `${d} Z` : d;
+      }
+      function stroke(from, to, { sag = 0, wobble = 0.55, steps = 12 }, rand) {
+        const pts = [];
+        for (let i = 0; i <= steps; i++) {
+          const t = i / steps;
+          const loose = (i === 0 || i === steps) ? 0 : 1;
+          pts.push({
+            x: from.x + (to.x - from.x) * t + shake(rand, wobble) * loose,
+            y: from.y + (to.y - from.y) * t + Math.sin(t * Math.PI) * sag + shake(rand, wobble) * loose,
+          });
+        }
+        return pts;
+      }
+      function wave(from, to, { amplitude, cycles, wobble = 0.35 }, rand) {
+        const steps = Math.round(cycles * 4);
+        const pts = [];
+        for (let i = 0; i <= steps; i++) {
+          const t = i / steps;
+          pts.push({
+            x: from.x + (to.x - from.x) * t,
+            y: from.y + (to.y - from.y) * t + Math.sin(t * cycles * Math.PI * 2) * amplitude + shake(rand, wobble),
+          });
+        }
+        return pts;
+      }
+      function arc(center, { rx, ry }, { from, to }, { wobble = 0.03, steps = 28 }, rand) {
+        const pts = [];
+        for (let i = 0; i <= steps; i++) {
+          const t = i / steps;
+          const angle = ((from + (to - from) * t) * Math.PI) / 180;
+          const drift = 1 + shake(rand, wobble);
+          pts.push({ x: center.x + Math.cos(angle) * rx * drift, y: center.y + Math.sin(angle) * ry * drift });
+        }
+        return pts;
+      }
+
+      // ---------- stroke builders (unchanged) ----------
+      const wavyStrokes = () => { const r = createRandom(17); return [{ d: trace(wave({x:2,y:7},{x:138,y:7},{amplitude:3,cycles:9},r)), width: 2.2 }]; };
+      const underlineStrokes = () => { const r = createRandom(23); return [{ d: trace(stroke({x:3,y:6},{x:137,y:5},{sag:-2},r)) }]; };
+      const doubleUnderlineStrokes = () => { const r = createRandom(41); return [
+        { d: trace(stroke({x:3,y:5},{x:137,y:4},{sag:-2},r)) },
+        { d: trace(stroke({x:5,y:12},{x:135,y:11},{sag:-1.2},r)), width: 1.8, opacity: 0.75 },
+      ]; };
+      const strikethroughStrokes = () => { const r = createRandom(59); return [{ d: trace(stroke({x:3,y:5},{x:137,y:5},{sag:1.2},r)) }]; };
+      const crossOutStrokes = () => { const r = createRandom(73); return [
+        { d: trace(stroke({x:4,y:32},{x:136,y:8},{sag:-4,wobble:1},r)) },
+        { d: trace(stroke({x:6,y:10},{x:134,y:30},{sag:4,wobble:1},r)), width: 2, opacity: 0.7 },
+      ]; };
+      const arrowStrokes = () => { const r = createRandom(89); return [
+        { d: trace(stroke({x:3,y:7},{x:140,y:8},{sag:-2.5},r)) },
+        { d: trace([{x:132,y:3},{x:142,y:8},{x:131,y:13}]) },
+      ]; };
+      const circleStrokes = () => { const r = createRandom(101); return [
+        { d: trace(arc({x:110,y:32},{rx:100,ry:27},{from:150,to:520},{wobble:0.035},r)), width: 3 },
+        { d: trace(arc({x:110,y:32},{rx:95,ry:24},{from:165,to:480},{wobble:0.03},r)), width: 1.5, opacity: 0.55 },
+      ]; };
+      const boxStrokes = () => { const r = createRandom(127);
+        const tl={x:12,y:10}, tr={x:188,y:10}, br={x:188,y:54}, bl={x:12,y:54};
+        return [{ d: trace([
+          ...stroke(tl,tr,{sag:-3,steps:8},r), ...stroke(tr,br,{steps:4},r),
+          ...stroke(br,bl,{sag:3,steps:8},r),  ...stroke(bl,tl,{steps:4},r),
+        ], true), width: 2.6 }]; };
+      const bracketStrokes = () => { const r = createRandom(149); return [
+        { d: trace(arc({x:30,y:30},{rx:24,ry:34},{from:130,to:230},{steps:14},r)), width: 2.6 },
+        { d: trace(arc({x:130,y:30},{rx:24,ry:34},{from:50,to:-50},{steps:14},r)), width: 2.6 },
+      ]; };
+      const highlightStrokes = () => { const r = createRandom(163); return [{ d: trace([
+        ...stroke({x:5,y:6},{x:165,y:5},{sag:-2,steps:10},r),
+        ...stroke({x:165,y:5},{x:165,y:21},{steps:3},r),
+        ...stroke({x:165,y:21},{x:5,y:22},{sag:2,steps:10},r),
+        ...stroke({x:5,y:22},{x:5,y:6},{steps:3},r),
+      ], true), fill: true }]; };
+
+      // ---------- mark definitions ----------
+      const marks = {
+        wavy:            { wrapper:'annotated',               decorationClass:'decoration-wavy',            colorClass:'color-wavy',            viewBox:'0 0 140 14', strokes: wavyStrokes() },
+        underline:       { wrapper:'annotated',               decorationClass:'decoration-underline',       colorClass:'color-underline',       viewBox:'0 0 140 10', strokes: underlineStrokes() },
+        doubleUnderline: { wrapper:'annotated',               decorationClass:'decoration-doubleUnderline', colorClass:'color-doubleUnderline', viewBox:'0 0 140 16', strokes: doubleUnderlineStrokes() },
+        dottedUnderline: { wrapper:'annotated',               decorationClass:'decoration-dottedUnderline', colorClass:'color-dottedUnderline', cssClass:'dotted-pattern' },
+        line:            { wrapper:'annotated',               decorationClass:'decoration-line',            colorClass:'color-line',
+         cssClass: 'line-fill',  },
+        arrow:           { wrapper:'annotated',               decorationClass:'decoration-arrow',           colorClass:'color-arrow',           viewBox:'0 0 150 18', strokes: arrowStrokes() },
+        highlight:       { wrapper:'annotated',               decorationClass:'decoration-highlight',       colorClass:'color-highlight',       viewBox:'0 0 170 26', strokes: highlightStrokes(), behindText: true },
+        circle:          { wrapper:'annotated padded-xs',     decorationClass:'decoration-circle',          colorClass:'color-circle',          viewBox:'0 0 220 64', strokes: circleStrokes() },
+        box:             { wrapper:'annotated padded',        decorationClass:'decoration-box',             colorClass:'color-box',             viewBox:'0 0 200 64', strokes: boxStrokes() },
+        bracket:         { wrapper:'annotated padded-sm',     decorationClass:'decoration-bracket',         colorClass:'color-bracket',         viewBox:'0 0 160 60', strokes: bracketStrokes() },
+        strikethrough:   { wrapper:'annotated',               decorationClass:'decoration-strikethrough',   colorClass:'color-strikethrough',   viewBox:'0 0 140 10', strokes: strikethroughStrokes() },
+        crossOut:        { wrapper:'annotated',               decorationClass:'decoration-crossOut',        colorClass:'color-crossOut',        viewBox:'0 0 140 40', strokes: crossOutStrokes() },
+      };
+
+      // ---------- build one annotated element ----------
+      function createAnnotatedText(text, variant, options = {}) {
+        const mark = marks[variant];
+        if (!mark) throw new Error('Unknown variant: ' + variant);
+        const { colorClass = mark.colorClass, extraWrapperClass = '' } = options;
+
+        const wrapper = document.createElement('span');
+        wrapper.className = [mark.wrapper, extraWrapperClass].filter(Boolean).join(' ');
+        wrapper.tabIndex = 0; // keyboard focusable for :focus-visible
+        wrapper.setAttribute('role', 'text');
+
+        if (mark.behindText) {
+          const span = document.createElement('span');
+          span.className = 'text-above';
+          span.textContent = text;
+          wrapper.appendChild(span);
+        } else {
+          wrapper.textContent = text;
+        }
+
+        const deco = document.createElement('span');
+        deco.className = ['decoration', mark.decorationClass, colorClass].join(' ');
+        deco.setAttribute('aria-hidden', 'true');
+
+        if (mark.cssClass) {
+          deco.classList.add(mark.cssClass);
+          deco.setAttribute('data-annotation-drawing', 'reveal');
+          wrapper.appendChild(deco);
+        } else if (mark.strokes) {
+          if (mark.behindText) deco.classList.add('svg-behind');
+          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svg.setAttribute('viewBox', mark.viewBox);
+          svg.setAttribute('fill', 'none');
+          svg.setAttribute('preserveAspectRatio', 'none');
+          svg.setAttribute('aria-hidden', 'true');
+
+          mark.strokes.forEach((line) => {
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', line.d);
+            path.setAttribute('pathLength', '1');
+            path.setAttribute('data-annotation-drawing', line.fill ? 'reveal' : 'stroke');
+            path.setAttribute('fill', line.fill ? 'currentColor' : 'none');
+            path.setAttribute('stroke', line.fill ? 'none' : 'currentColor');
+            if (!line.fill) path.setAttribute('stroke-width', String(line.width ?? 2.4));
+            path.setAttribute('stroke-linecap', 'round');
+            path.setAttribute('stroke-linejoin', 'round');
+            if (line.opacity != null) path.setAttribute('opacity', String(line.opacity));
+            svg.appendChild(path);
+          });
+          deco.appendChild(svg);
+          wrapper.appendChild(deco);
+        }
+
+        // touch: tap toggles a persistent reveal
+        wrapper.addEventListener('pointerup', (e) => {
+          // only for touch-like pointers, and avoid interfering with clicks
+          if (e.pointerType !== 'touch') return;
+          const now = wrapper.getAttribute('data-revealed') === 'true';
+          wrapper.setAttribute('data-revealed', now ? 'false' : 'true');
+        });
+
+        return wrapper;
+      }
+
+      // ---------- demo ----------
+      const root = document.getElementById('demo-root');
+      const variants = [
+        ['wavy', 'wavy'],
+        ['underline', 'underline'],
+        ['doubleUnderline', 'double underline'],
+        ['dottedUnderline', 'dotted underline'],
+        ['line', 'line'],
+        ['arrow', 'arrow'],
+        ['highlight', 'highlight'],
+        ['circle', 'circle'],
+        ['box', 'box'],
+        ['bracket', 'bracket'],
+        ['strikethrough', 'strikethrough'],
+        ['crossOut', 'cross out'],
+      ];
+
+      variants.forEach(([variant, text]) => {
+        const item = document.createElement('div');
+        item.className = 'demo-item';
+
+        const label = document.createElement('div');
+        label.className = 'demo-label';
+        label.textContent = variant;
+
+        const p = document.createElement('p');
+        p.appendChild(createAnnotatedText(text, variant));
+
+        item.append(label, p);
+        root.appendChild(item);
+      });
+
+      console.log('AnnotatedText hover demo mounted.');
+    })();
+  </script>
+</body>
+</html>
