@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 – Pixel Trail</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #050505;
+      color: #f5f5f5;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* ---------- full-screen trail container ---------- */
+    .pixel-trail {
+      position: fixed;
+      inset: 0;
+      isolation: isolate;
+      overflow: hidden;
+      touch-action: pan-y;
+      cursor: crosshair;
+      outline: none;
+      background: #0a0a0a;
+    }
+    .pixel-trail:focus-visible {
+      box-shadow: inset 0 0 0 2px #7c3aed;
+    }
+
+    /* hidden source image — only drawn to canvas */
+    .pixel-trail img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    /* canvas fills the container */
+    .pixel-trail canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      display: block;
+    }
+
+    /* ---------- the "404" overlay ---------- */
+    .four-oh-four {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      pointer-events: none;
+      text-align: center;
+      user-select: none;
+    }
+
+    .four-oh-four .digits {
+      font-size: clamp(6rem, 28vw, 22rem);
+      font-weight: 800;
+      line-height: 0.85;
+      letter-spacing: -0.06em;
+      color: #ffffff;
+      /* subtle glow so it reads against the photo */
+      text-shadow:
+        0 0 40px rgba(0, 0, 0, 0.55),
+        0 0 120px rgba(0, 0, 0, 0.35);
+      /* soft outline to keep it legible on light photos */
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+      mix-blend-mode: difference;
+    }
+
+    .four-oh-four .message {
+      margin-top: clamp(1rem, 2.5vw, 2rem);
+      font-family: ui-monospace, monospace;
+      font-size: clamp(0.7rem, 1.1vw, 0.95rem);
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.72);
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    .four-oh-four .message a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+      padding-bottom: 1px;
+      pointer-events: auto;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .four-oh-four .message a:hover {
+      color: #fff;
+      border-color: #fff;
+    }
+
+    /* subtle vignette so the edges of the photo don't distract */
+    .vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse at center,
+        transparent 35%,
+        rgba(0, 0, 0, 0.35) 100%
+      );
+    }
+
+    /* hint in the corner */
+    .hint {
+      position: fixed;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      font-family: ui-monospace, monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pixel-trail" id="trail-root"></div>
+
+  <div class="vignette"></div>
+
+  <div class="four-oh-four">
+    <div class="digits">404</div>
+    <div class="message">
+      Page not found &nbsp;·&nbsp; <a href="/">Return home</a>
+    </div>
+  </div>
+
+  <div class="hint">move your cursor to reveal the image</div>
+  
+  
+  
+  
+
+  <script>
+    (function() {
+      // =============================================================
+      // 1. CONFIG
+      // =============================================================
+      const config = {
+        // source image revealed by the pixel trail
+        src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=2400&q=90&auto=format&fit=crop',
+        alt: 'Mountain landscape behind a pixel trail',
+        pixelSize: 40,       // square size in px
+        radius: 70,          // satellite spawn radius
+        fadeDuration: 900,   // ms to fade a trail pixel
+        maxPixels: 110,      // cap on trail pixels
+        initialPixels: 28,   // ambient pixels shown on load
+      };
+
+      const root = document.getElementById('trail-root');
+
+      // =============================================================
+      // 2. BUILD DOM
+      // =============================================================
+      const img = document.createElement('img');
+      img.src = config.src;
+      img.alt = config.alt;
+      img.draggable = false;
+      root.appendChild(img);
+
+      const canvas = document.createElement('canvas');
+      canvas.setAttribute('aria-hidden', 'true');
+      root.appendChild(canvas);
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        console.error('PixelImageTrail: 2D context unavailable');
+        return;
+      }
+
+      // =============================================================
+      // 3. STATE
+      // =============================================================
+      const size = Math.max(12, config.pixelSize);
+      const pixels = new Map();     // key: "col:row" → { column, row, touchedAt, ambient }
+      const hoveredKeys = new Set();
+
+      let width = 0;
+      let height = 0;
+      let frame = 0;
+      let pointerInside = false;
+      let lastColumn = null;
+      let lastRow = null;
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // =============================================================
+      // 4. SEED AMBIENT PIXELS
+      // =============================================================
+      function seedPixels() {
+        const columns = Math.max(1, Math.ceil(width / size));
+        const rows = Math.max(1, Math.ceil(height / size));
+        const count = Math.min(config.initialPixels, columns * rows);
+        const now = performance.now();
+
+        for (let i = 0; i < count; i++) {
+          const column = Math.floor(Math.random() * columns);
+          const row = Math.floor(Math.random() * rows);
+          pixels.set(`${column}:${row}`, {
+            column,
+            row,
+            touchedAt: now,
+            ambient: true,
+          });
+        }
+      }
+
+      // =============================================================
+      // 5. RESIZE
+      // =============================================================
+      function resize() {
+        cancelAnimationFrame(frame);
+
+        const rect = root.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        width = rect.width;
+        height = rect.height;
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+
+        // Reset then scale — important so repeated resizes don't compound
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        pixels.clear();
+        seedPixels();
+        ctx.clearRect(0, 0, width, height);
+        frame = requestAnimationFrame(draw);
+      }
+
+      // =============================================================
+      // 6. DRAW ONE PIXEL (image crop)
+      // =============================================================
+      function drawPixel(pixel, opacity) {
+        if (!img.complete || !img.naturalWidth || !img.naturalHeight) return;
+
+        const x = pixel.column * size;
+        const y = pixel.row * size;
+
+        // object-fit: cover math
+        const coverScale = Math.max(width / img.naturalWidth, height / img.naturalHeight);
+        const renderedWidth = img.naturalWidth * coverScale;
+        const renderedHeight = img.naturalHeight * coverScale;
+        const offsetX = (width - renderedWidth) / 2;
+        const offsetY = (height - renderedHeight) / 2;
+
+        ctx.globalAlpha = opacity;
+        ctx.drawImage(
+          img,
+          (x - offsetX) / coverScale,
+          (y - offsetY) / coverScale,
+          size / coverScale,
+          size / coverScale,
+          x,
+          y,
+          size,
+          size,
+        );
+      }
+
+      // =============================================================
+      // 7. MAIN DRAW LOOP
+      // =============================================================
+      function draw(now) {
+        frame = 0;
+        ctx.clearRect(0, 0, width, height);
+
+        let hasActiveTrail = false;
+
+        for (const [key, pixel] of pixels) {
+          if (pointerInside && hoveredKeys.has(key)) {
+            pixel.touchedAt = now;
+          }
+
+          let opacity;
+          if (pixel.ambient) {
+            opacity = pointerInside && hoveredKeys.has(key) ? 1 : 0.58;
+          } else if (reducedMotion) {
+            opacity = pointerInside ? 1 : 0;
+          } else {
+            const age = now - pixel.touchedAt;
+            opacity = Math.max(0, 1 - age / Math.max(120, config.fadeDuration));
+            if (opacity > 0) hasActiveTrail = true;
+          }
+
+          if (opacity <= 0) {
+            pixels.delete(key);
+            continue;
+          }
+
+          const eased = opacity * opacity * (3 - 2 * opacity);
+          drawPixel(pixel, eased);
+        }
+
+        ctx.globalAlpha = 1;
+
+        if (!reducedMotion && hasActiveTrail) {
+          frame = requestAnimationFrame(draw);
+        }
+      }
+
+      function requestDraw() {
+        if (!frame) frame = requestAnimationFrame(draw);
+      }
+
+      // =============================================================
+      // 8. TRAIL MANAGEMENT
+      // =============================================================
+      function trimTrail() {
+        const limit = Math.max(1, config.maxPixels);
+        const trailPixels = [...pixels.entries()].filter(([, p]) => !p.ambient);
+        if (trailPixels.length <= limit) return;
+
+        trailPixels.sort((a, b) => a[1].touchedAt - b[1].touchedAt);
+        const excess = trailPixels.length - limit;
+        for (let i = 0; i < excess; i++) {
+          const entry = trailPixels[i];
+          if (entry) pixels.delete(entry[0]);
+        }
+      }
+
+      function setTrailPixel(key, column, row, touchedAt) {
+        if (pixels.get(key)?.ambient) return;
+        pixels.set(key, { column, row, touchedAt, ambient: false });
+      }
+
+      // =============================================================
+      // 9. PAINT AT POINTER POSITION
+      // =============================================================
+      function paintAt(clientX, clientY) {
+        const rect = root.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        const centerColumn = Math.floor(x / size);
+        const centerRow = Math.floor(y / size);
+
+        if (reducedMotion) {
+          for (const [key, pixel] of pixels) {
+            if (!pixel.ambient) pixels.delete(key);
+          }
+        }
+
+        const now = performance.now();
+        hoveredKeys.clear();
+
+        // Bresenham-style line from previous to current cell
+        const fromColumn = lastColumn !== null ? lastColumn : centerColumn;
+        const fromRow = lastRow !== null ? lastRow : centerRow;
+        const columnDistance = centerColumn - fromColumn;
+        const rowDistance = centerRow - fromRow;
+        const steps = Math.max(1, Math.abs(columnDistance), Math.abs(rowDistance));
+
+        for (let step = 0; step <= steps; step++) {
+          const t = step / steps;
+          const column = Math.round(fromColumn + columnDistance * t);
+          const row = Math.round(fromRow + rowDistance * t);
+          setTrailPixel(`${column}:${row}`, column, row, now);
+        }
+
+        // 2×2 cluster around the pointer
+        const xDir = (x % size) > size / 2 ? 1 : -1;
+        const yDir = (y % size) > size / 2 ? 1 : -1;
+        const cluster = [
+          [centerColumn, centerRow],
+          [centerColumn + xDir, centerRow],
+          [centerColumn, centerRow + yDir],
+          [centerColumn + xDir, centerRow + yDir],
+        ];
+
+        for (const [column, row] of cluster) {
+          if (column < 0 || row < 0 || column * size >= width || row * size >= height) continue;
+          const key = `${column}:${row}`;
+          hoveredKeys.add(key);
+          setTrailPixel(key, column, row, now);
+        }
+
+        // Occasional satellite spark
+        const moved = lastColumn !== centerColumn || lastRow !== centerRow;
+        if (moved && !reducedMotion && Math.random() < 0.34) {
+          const spread = Math.max(1, Math.floor(config.radius / size));
+          const distance = 1 + Math.floor(Math.random() * spread);
+          const horizontalMotion = Math.abs(columnDistance) >= Math.abs(rowDistance);
+          const column = centerColumn + (horizontalMotion ? 0 : (Math.random() < 0.5 ? -distance : distance));
+          const row = centerRow + (horizontalMotion ? (Math.random() < 0.5 ? -distance : distance) : 0);
+
+          if (column >= 0 && row >= 0 && column * size < width && row * size < height) {
+            setTrailPixel(
+              `${column}:${row}`,
+              column,
+              row,
+              now - config.fadeDuration * 0.18,
+            );
+          }
+        }
+
+        lastColumn = centerColumn;
+        lastRow = centerRow;
+
+        trimTrail();
+        requestDraw();
+      }
+
+      // =============================================================
+      // 10. EVENTS
+      // =============================================================
+      function onPointerEnter(e) {
+        pointerInside = true;
+        paintAt(e.clientX, e.clientY);
+      }
+
+      function onPointerMove(e) {
+        pointerInside = true;
+        paintAt(e.clientX, e.clientY);
+      }
+
+      function onPointerLeave() {
+        pointerInside = false;
+        hoveredKeys.clear();
+        lastColumn = null;
+        lastRow = null;
+        if (reducedMotion) {
+          for (const [key, pixel] of pixels) {
+            if (!pixel.ambient) pixels.delete(key);
+          }
+          requestDraw();
+        }
+      }
+
+      function onFocusIn() {
+        const rect = root.getBoundingClientRect();
+        pointerInside = true;
+        paintAt(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      }
+
+      function onFocusOut(e) {
+        if (!root.contains(e.relatedTarget)) {
+          onPointerLeave();
+        }
+      }
+
+      // =============================================================
+      // 11. INIT
+      // =============================================================
+      root.tabIndex = 0;
+      root.setAttribute('role', 'img');
+      root.setAttribute('aria-label', config.alt);
+
+      if (img.complete) {
+        resize();
+      } else {
+        img.addEventListener('load', () => resize(), { once: true });
+        img.addEventListener('error', () => {
+          console.error('PixelImageTrail: failed to load image', config.src);
+          resize();
+        }, { once: true });
+      }
+
+      const ro = new ResizeObserver(() => resize());
+      ro.observe(root);
+
+      root.addEventListener('pointerenter', onPointerEnter);
+      root.addEventListener('pointermove', onPointerMove);
+      root.addEventListener('pointerleave', onPointerLeave);
+      root.addEventListener('focusin', onFocusIn);
+      root.addEventListener('focusout', onFocusOut);
+
+      window.__pixelTrail = {
+        destroy() {
+          cancelAnimationFrame(frame);
+          ro.disconnect();
+          root.removeEventListener('pointerenter', onPointerEnter);
+          root.removeEventListener('pointermove', onPointerMove);
+          root.removeEventListener('pointerleave', onPointerLeave);
+          root.removeEventListener('focusin', onFocusIn);
+          root.removeEventListener('focusout', onFocusOut);
+        },
+      };
+
+      console.log('404 PixelTrail mounted');
+    })();
+  </script>
+</body>
+</html>
