@@ -1,5 +1,5 @@
   <div align="center">
-  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/screenshots/webdesign-resources-banner.png" alt="Banner" width="100%" />
+  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/screenshots/dark-saas-banner.webp" alt="Banner" width="100%" />
   </div>
   
 **Github**: https://github.com/PaulleDemon/awesome-landing-pages
