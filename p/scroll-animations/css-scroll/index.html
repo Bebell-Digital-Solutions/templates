@@ -76,6 +76,12 @@
 	<div aria-hidden="true" class="progress"></div><!-- Aviso visible solo en navegadores sin soporte (ver @supports en el CSS) -->
 	<p class="notice" role="note"><span class="i18n-es">Tu navegador aún no soporta <code>animation-timeline</code>. Ábrela en Chrome, Edge o Safari 26+ para ver las animaciones.</span><span class="i18n-en">Your browser doesn't support <code>animation-timeline</code> yet. Open this in Chrome, Edge or Safari 26+ to see the animations.</span></p>
 	<main>
+
+
+
+
+
+		
 		<!-- 1. HERO · animation-timeline: scroll(root) -->
 		<header class="hero">
 			<div aria-hidden="true" class="orb orb--violet"></div>
@@ -93,14 +99,50 @@
 			</div>
 			<p aria-hidden="true" class="hero__hint"><span class="i18n-es">Scroll ↓</span><span class="i18n-en">Scroll ↓</span></p>
 		</header>
+
+
+
+
+
+
+		
     <!-- 2. TEXTO PALABRA A PALABRA · view-timeline con nombre (--words) -->
 		<section aria-labelledby="reveal-title" class="reveal">
 			<div class="reveal__sticky">
 				<code class="tag">view-timeline: --words</code> 
+				
         <!-- --i = índice de cada palabra; desplaza su tramo de animación -->
-				<h2 class="reveal__text" id="reveal-title"><span class="word" style="--i: 0">La</span> <span class="word" style="--i: 1">IA</span> <span class="word" style="--i: 2">ya</span> <span class="word" style="--i: 3">genera</span> <span class="word" style="--i: 4">el</span> <span class="word word--accent" style="--i: 5">efecto</span> <span class="word word--accent" style="--i: 6">wow.</span> <span class="word" style="--i: 7">El</span> <span class="word" style="--i: 8">criterio</span> <span class="word" style="--i: 9">sigue</span> <span class="word" style="--i: 10">siendo</span> <span class="word word--accent" style="--i: 11">tuyo.</span></h2>
+<h2 class="reveal__text" id="reveal-title">
+  <span class="i18n-es">
+    <span class="word" style="--i: 0">La</span> <span class="word" style="--i: 1">IA</span> <span class="word" style="--i: 2">ya</span> <span class="word" style="--i: 3">genera</span> <span class="word" style="--i: 4">el</span> <span class="word word--accent" style="--i: 5">efecto</span> <span class="word word--accent" style="--i: 6">wow.</span> <span class="word" style="--i: 7">El</span> <span class="word" style="--i: 8">criterio</span> <span class="word" style="--i: 9">sigue</span> <span class="word" style="--i: 10">siendo</span> <span class="word word--accent" style="--i: 11">tuyo.</span>
+  </span>
+  <span class="i18n-en">
+    <span class="word" style="--i: 0">AI</span> <span class="word" style="--i: 1">already</span> <span class="word" style="--i: 2">generates</span> <span class="word" style="--i: 3">the</span> <span class="word word--accent" style="--i: 4">wow</span> <span class="word word--accent" style="--i: 5">effect.</span> <span class="word" style="--i: 6">The</span> <span class="word" style="--i: 7">judgment</span> <span class="word" style="--i: 8">is</span> <span class="word" style="--i: 9">still</span> <span class="word word--accent" style="--i: 10">yours.</span>
+  </span>
+</h2>
+			
 			</div>
 		</section>
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+		
     <!-- 3. TARJETAS · animation-timeline: view() -->
 		<section aria-labelledby="stack-title" class="stack">
 			<h2 class="section-label" id="stack-title"><span class="i18n-es">El stack en 2026</span><span class="i18n-en">The stack in 2026</span></h2>
@@ -128,6 +170,19 @@
 				</li>
 			</ol>
 		</section>
+
+
+
+
+
+
+
+
+
+
+
+
+		
     <!-- 4. SCROLL HORIZONTAL FIJADO · position: sticky + view-timeline (--hz) -->
 		<section aria-labelledby="hz-title" class="horizontal">
 			<div class="horizontal__sticky">
@@ -181,6 +236,16 @@
 				</div>
 			</div>
 		</section>
+
+
+
+
+
+
+
+
+
+		
     <!-- 5. CIERRE · animation-timeline: view() -->
 		<footer class="outro">
 			<div class="outro__content">
@@ -200,12 +265,26 @@
 		</footer>
 	</main>
 
+
+
+
+
+
+	
+
 	<!-- Translation button -->
 	<button type="button" class="lang-switch" id="langSwitch" aria-label="Switch to English / Cambiar a inglés">
 		<span class="lang-switch__flag" aria-hidden="true">🌐</span>
 		<span id="langSwitchText">EN</span>
 	</button>
 
+
+
+
+
+
+
+	
 	<script>
 		(function() {
 			const body = document.body;
