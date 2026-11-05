@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypernatural - Footer Reveal Template</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for clean typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#1A00FF', // The vibrant blue from the video
+                            green: '#4BFF4B' // The neon green button color
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth scrolling for anchor links if needed */
+        html { scroll-behavior: smooth; }
+        
+        /* Optional: Add a subtle shadow to the bottom of the curtain for depth */
+        .curtain-shadow {
+            box-shadow: 0 20px 40px -20px rgba(0,0,0,0.3);
+        }
+        
+        /* Pattern for the dotted effect seen in the video */
+        .dot-pattern {
+            background-image: radial-gradient(black 30%, transparent 35%);
+            background-size: 12px 12px;
+            background-position: 0 0, 6px 6px;
+        }
+
+        /* Styling for the dotted text at the bottom */
+        .text-dotted {
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            background-color: black;
+            background-image: radial-gradient(black 30%, transparent 35%);
+            background-size: 8px 8px;
+            /* Ensure fallback for non-supporting browsers */
+            @supports not (-webkit-background-clip: text) {
+                color: black;
+                background: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 antialiased overflow-x-hidden">
+
+
+    <!-- ======================================================
+      THE CURTAIN (MAIN CONTENT)
+      This wrapper holds all your normal page content. 
+      The crucial parts for the effect are:
+      1. bg-white (or any solid color to hide what's behind)
+      2. relative z-10 (to sit on top of the fixed reveal section)
+      3. mb-[100vh] (pushes the document height down by exactly the size of the reveal section, allowing you to scroll past the actual end of this container)
+      =================================================== -->
+      
+      
+    <div class="relative z-10 bg-white mb-[100vh] curtain-shadow rounded-b-[3rem] transition-shadow duration-300">
+        
+        <!-- Navigation -->
+        <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 22H22L12 2Z" fill="black"/>
+                        <circle cx="12" cy="12" r="4" fill="white"/>
+                    </svg>
+                    <span class="text-xl font-bold tracking-tight">Hypernatural</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-8">
+                    <div class="group relative cursor-pointer flex items-center gap-1 font-medium text-sm">
+                        Solutions
+                        <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <a href="#" class="font-medium text-sm hover:opacity-70 transition-opacity">Pricing</a>
+                    <button class="bg-brand-green text-black px-6 py-2 rounded-full font-semibold text-sm hover:scale-105 transition-transform">
+                        Sign Up
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button (Icon only for template) -->
+                <div class="md:hidden cursor-pointer">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </div>
+            </div>
+        </nav>
+
+
+
+
+
+
+
+
+        <!-- Hero Section -->
+        <section class="min-h-[80vh] flex flex-col items-center justify-center text-center px-4 pt-20 pb-32">
+        
+        
+            <h1 class="text-6xl md:text-8xl font-black tracking-tighter leading-none mb-6">
+                story to<span class="relative inline-block">
+                </span> life.
+            </h1>
+  
+            <p class="text-xl md:text-2xl font-medium text-gray-600 mb-10 max-w-2xl">
+                Bring your story to life today with Hypernatural's AI video editor
+            </p>
+            
+            
+            <button class="bg-brand-green text-black text-lg px-8 py-4 rounded-full font-bold hover:scale-105 transition-transform shadow-lg shadow-brand-green/20">
+                Sign up for free
+            </button>
+ 
+        </section>
+
+
+
+
+
+
+
+
+
+
+        <!-- Dummy Content to allow scrolling -->
+        <section class="py-24 bg-gray-50 border-y border-gray-100">
+            <div class="max-w-4xl mx-auto text-center px-4">
+                <div class="inline-block p-4 bg-gray-200 rounded-2xl mb-6">
+                    <svg class="w-12 h-12 text-gray-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Keep scrolling down</h2>
+                <p class="text-gray-500 text-lg">Scroll past the footer to see the sticky reveal effect in action. This space is just filler to simulate a full webpage.</p>
+            </div>
+        </section>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <section class="min-h-[40vh] bg-white"></section>
+
+
+
+
+
+
+
+
+        <!-- Standard Footer (The one that scrolls away) -->
+        <footer class="bg-white border-t border-gray-200 pt-20 pb-24 px-8 md:px-16 rounded-b-[2.5rem]">
+            <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-10 text-sm">
+                
+                <!-- Column 1 -->
+                <div class="flex flex-col gap-4">
+                    <h4 class="text-gray-400 font-semibold mb-2 uppercase tracking-wider text-xs">Company</h4>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Pricing</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">About us</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Terms of use</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Contact</a>
+                </div>
+
+                <!-- Column 2 -->
+                <div class="flex flex-col gap-4">
+                    <h4 class="text-gray-400 font-semibold mb-2 uppercase tracking-wider text-xs">Community</h4>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Help center</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Affiliates</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Blog</a>
+                </div>
+
+                <!-- Column 3 -->
+                <div class="flex flex-col gap-4">
+                    <h4 class="text-gray-400 font-semibold mb-2 uppercase tracking-wider text-xs">Solutions</h4>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Customer Stories</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Video Marketing</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Advertising</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">DTC</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">CPG</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Food & Bev</a>
+                </div>
+
+                <!-- Column 4 -->
+                <div class="flex flex-col gap-4">
+                    <h4 class="text-gray-400 font-semibold mb-2 uppercase tracking-wider text-xs">Uses</h4>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Writers</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Influencers</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Entrepreneurs</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Storyboard</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Podcasters</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Families</a>
+                </div>
+
+                <!-- Column 5 -->
+                <div class="flex flex-col gap-4">
+                    <h4 class="text-gray-400 font-semibold mb-2 uppercase tracking-wider text-xs">Features</h4>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Text-to-Video</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">AI Models</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Characters</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Products</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Brand</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">AI Narration</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">AI Captions</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">AI B-Roll</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">AI Video Editor</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">AI Animation Generator</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Script to Video</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">Custom Styles</a>
+                    <a href="#" class="hover:text-brand-blue transition-colors">MCP</a>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+                <div class="flex items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 22H22L12 2Z" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="4" fill="white"/>
+                    </svg>
+                    
+                    <span>Hypernatural</span>
+                </div>
+                <div>© 2026 Hypernatural Systems, Inc.</div>
+            </div>
+        </footer>
+    </div>
+    <!-- END OF CURTAIN WRAPPER -->
+
+
+
+
+
+
+
+
+
+
+    <!-- 
+      =======================================================================
+      THE REVEAL SECTION (BRAND & MASCOT)
+      This is fixed to the bottom of the screen. It stays still while the 
+      white content above scrolls up to uncover it.
+      =======================================================================
+    -->
+    <div class="fixed bottom-0 left-0 w-full h-screen z-0 bg-brand-blue flex flex-col items-center justify-between py-12 px-4 overflow-hidden selection:bg-white selection:text-brand-blue">
+        
+        <!-- Top Brand Name -->
+        <h2 class="text-[12vw] font-black text-black leading-[0.8] tracking-tighter w-full text-center mt-8">
+            Hypernatural
+        </h2>
+
+        <!-- Mascot Container -->
+        <!-- The animate-float class makes it bob up and down gently -->
+        <div class="flex-1 w-full max-w-2xl flex items-center justify-center relative animate-float">
+            
+            <!-- Mascot Image: Update the 'src' attribute with your own image file -->
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/b26017fe658778a7c7b33f753c8044bee1b856f8.png" 
+                 alt="Brand Mascot" 
+                 class="w-full max-h-[40vh] object-contain drop-shadow-2xl" />
+            
+        </div>
+
+        <!-- Bottom Brand Name (Dotted effect) -->
+        <h2 class="text-[12vw] font-black leading-[0.8] tracking-widest w-full text-center mb-8 text-dotted">
+            Hypernatural
+        </h2>
+        
+    </div>
+
+</body>
+</html>
