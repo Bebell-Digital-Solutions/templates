@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="https://i.postimg.cc/LXkGGm9H/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+    
+ <style>   
+    
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Turret+Road:wght@200;300;400;500;700;800&display=swap');
+
+:root {
+    --united-nations-blue: hsl(214, 56%, 58%);
+    --bright-navy-blue: hsl(214, 57%, 51%);
+    --spanish-gray: hsl(0, 0%, 60%);
+    --black-coral: hsl(225, 8%, 42%);
+    --oxford-blue: hsl(208, 97%, 12%);
+    --yale-blue: hsl(214, 72%, 33%);
+    --blue-ncs: hsl(197, 100%, 36%);
+    --gunmetal: hsl(206, 34%, 20%);
+    --gainsboro: hsl(0, 0%, 88%);
+    --cultured: hsl(0, 0%, 98%);
+    --white: hsl(0, 0%, 100%);
+    --black: hsl(0, 0%, 0%);
+    --onyx: hsl(0, 0%, 25%);
+    --jet: hsl(0, 0%, 20%);
+
+    --ff-poppins: "Poppins", sans-serif;
+    --ff-montserrat: "Montserrat", sans-serif;
+    --ff-turret: "Turret Road", sans-serif;
+
+    --fs-1: calc(20px + 3.5vw);
+    --fs-2: calc(18px + 1.6vw);
+    --fs-3: calc(16px + 0.45vw);
+    --fs-4: 15px;
+    --fs-5: 14px;
+    --fs-6: 13px;
+    --fs-7: 12px;
+    --fs-8: 11px;
+
+    --fw-500: 500;
+    --fw-600: 600;
+    --fw-700: 700;
+    --fw-800: 800;
+
+    --transition: 0.25s ease-in-out;
+
+    --section-padding: 60px;
+
+    --radius-15: 15px;
+    --radius-25: 25px;
+}
+
+
+
+
+/* General  */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+
+li { list-style: none; }
+
+
+
+a, img, span, input, label, button, ion-icon { display: block; }
+
+
+
+    a { text-decoration: none; }
+    
+    
+    
+    input, button { background: none; border: none; font: inherit; }
+    
+    
+    
+    button { cursor: pointer; }
+    
+    
+    
+    input { width: 100%; }
+    
+    
+    ion-icon { pointer-events: none; }
+    
+    
+    
+html { font-family: var(--ff-poppins); scroll-behavior: smooth; }
+
+
+body { background: var(--white); }
+
+
+
+.container { padding-inline: 15px; }
+
+
+
+.btn { color: var(--white); text-transform: uppercase; font-size: var(--fs-5); border-radius: 100px; padding: 8px 18px; border: 2px solid transparent; transition: var(--transition); }
+
+
+
+.btn-primary { background: var(--bright-navy-blue); border-color: var(--bright-navy-blue); }
+
+
+
+    .btn-primary:is(:hover, :focus) { background: var(--yale-blue); border-color: var(--yale-blue); }
+.btn-secondary { border-color: var(--white); }
+
+
+    .btn-secondary:is(:hover, :focus) { background: hsla(0, 0%, 100%, .1); }
+    
+    
+.h1, .h2, .h3 { font-weight: var(--fw-800); font-family: var(--ff-montserrat); text-transform: uppercase; }
+
+
+
+    .h1 { color: var(--white); font-size: var(--fs-1); }
+    
+    
+    
+    .h2, .h3 { color: var(--gunmetal); }
+    
+    
+        .h2 { font-size: var(--fs-2); }
+        
+        
+        .h3 { font-size: var(--fs-3); font-weight: var(--fw-700); }
+        
+        
+.section-subtitle { color: var(--bright-navy-blue); font-size: var(--fs-5); text-transform: uppercase; font-family: var(--ff-montserrat); margin-bottom: 8px; }
+
+
+.section-title { 
+margin-bottom: 15px; 
+}
+
+
+.section-text { 
+color: var(--black-coral); 
+margin-bottom: 30px; }
+
+
+.card-text { 
+color: var(--black-coral); 
+font-size: var(--fs-5); }
+
+
+
+
+/* Header */
+
+header { position: absolute; top: 0; left: 0; width: 100%; padding-top: 61px; z-index: 4;  }
+
+
+
+.header-top { position: absolute; top: 0; left: 0; width: 100%; transition: var(--transition); border-bottom: 1px solid hsla(0, 0%, 100%, .1); padding-block: 15px; z-index: 1; }
+
+
+
+    .header.active .header-top { position: fixed; background: var(--gunmetal); }
+    
+    
+    
+    .header-top .container { display: grid; grid-template-columns: repeat(3, 1fr); justify-items: flex-start; align-items: center; }
+    
+    
+    
+    .header-top .logo { margin-inline: auto; }
+    
+    
+        .header-top .logo img { max-width: 100px; }
+        
+        
+.helpline-box .wrapper { display: none; }
+
+
+.helpline-box ion-icon { background: var(--bright-navy-blue); padding: 6px; border-radius: 50%; color: var(--white); }
+
+
+
+    .helpline-box .icon-box ion-icon { --ionicon-stroke-width: 40px; }
+    
+    
+.header-btn-group { justify-self: flex-end; display: flex; align-items: center; gap: 10px; color: var(--white); }
+
+
+.search-btn, .nav-open-btn { font-size: 30px; color: inherit; }
+
+
+    .search-btn { 
+    font-size: 20px; 
+    }
+    
+    
+.header-bottom { border-bottom: 1px solid hsla(0, 0%, 100%, .1); }
+
+
+    .header-bottom .container { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding-block: 15px; }
+    
+    
+.social-list { 
+display: flex; 
+align-items: center; 
+gap: 5px; }
+
+
+.social-link { color: var(--white); padding: 8px; border: 1px solid hsla(0, 0%, 100%, .3); border-radius: 50%; font-size: 15px; transition: var(--transition); }
+
+
+    .social-link:is(:hover, :focus) { background: hsla(0, 0%, 100%, .2); }
+    
+    
+.header .btn { 
+--padding: 4px 20px; 
+}
+
+
+.header .navbar { position: fixed; top: 0; right: -300px; width: 100%; max-width: 300px; height: 100%; background: var(--white); visibility: hidden; pointer-events: none; transition: .15s ease-in; z-index: 3; }
+
+
+    .navbar.active { right: 0; visibility: visible; pointer-events: all; transition: .25s ease-out; }
+    
+    
+.navbar-top { display: flex; justify-content: space-between; align-items: center; padding: 40px 15px; }
+
+
+    .navbar-top .logo img { width: 150px; }
+    
+    
+.nav-close-btn { font-size: 20px; color: var(--bright-navy-blue); }
+    .nav-close-btn ion-icon { --ionicon-stroke-width: 80px; }
+    
+    
+.navbar-list { border-top: 1px solid hsla(0, 0%, 0%, .1); } 
+
+
+    .navbar-list li { border-bottom: 1px solid hsla(0, 0%, 0%, .1); }
+    
+    
+.navbar-link { padding: 15px 20px; color: var(--jet); font-weight: var(--fw-500); font-size: var(--fs-4); transition: var(--transition); text-transform: capitalize; }
+
+
+    .navbar-link:is(:hover, :focus) { color: var(--bright-navy-blue); }
+    
+    
+.overlay { 
+position: fixed; inset: 0; 
+background: var(--black); 
+opacity: 0; 
+pointer-events: none; 
+z-index: 2; 
+transition: var(--transition); 
+}
+
+
+    .overlay.active { opacity: .7; pointer-events: all; }
+
+
+
+
+/* Hero */
+
+.hero {
+    background-image: url('https://i.postimg.cc/D0c2FLPM/hero-banner.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-color: hsla(0, 0%, 0%, .7);
+    background-blend-mode: overlay;
+    display: grid;
+    place-items: center;
+    min-height: 600px;
+    text-align: center;
+    padding-top: 125px;
+}
+
+
+.hero-title { 
+margin-bottom: 20px; 
+}
+
+
+.hero-text { 
+color: var(--white); 
+font-size: var(--fs-5); 
+margin-bottom: 40px; }
+
+
+.btn-group { 
+display: flex; 
+flex-wrap: wrap; 
+justify-content: center; 
+align-items: center; 
+gap: 10px; }
+
+
+
+
+/* Tour Search */
+
+.tour-search { 
+background: var(--bright-navy-blue); 
+padding-block: var(--section-padding); }
+
+
+.tour-search-form .input-label { 
+color: var(--white); 
+font-size: var(--fs-4); 
+margin-left: 20px; 
+margin-bottom: 10px; 
+}
+
+
+.tour-search-form .input-field { 
+background: var(--white); 
+padding: 10px 15px; 
+font-size: var(--fs-5); 
+border-radius: 50px; 
+}
+
+
+    .tour-search-form .input-field::placeholder { 
+    color: var(--spanish-gray); 
+    }
+    
+    
+    .tour-search-form .input-field.input-field::-webkit-datetime-edit { 
+    color: var(--spanish-gray); 
+    text-transform: uppercase; 
+    }
+    
+    
+.tour-search-form .input-wrapper { 
+margin-bottom: 15px; 
+}
+
+
+.tour-search .btn { 
+width: 100%; 
+--border-width: 1px; 
+font-weight: var(--fw-600); 
+margin-top: 35px; 
+}
+
+
+
+/* Popular */
+
+.popular { padding-block: var(--section-padding); }
+.popular-list, .popular-list > li:not(:last-child) { margin-bottom: 30px; }
+
+
+.popular-card { position: relative; overflow: hidden; border-radius: var(--radius-25); height: 430px; }
+    .popular-card .card-img { height: 100%; }
+    
+    
+        .popular-card .card-img img { width: 100%; height: 100%; object-fit: cover; }
+        
+        
+    .popular-card .card-content { position: absolute; bottom: 20px; left: 20px; right: 20px; background: var(--white); border-radius: var(--radius-25); padding: 20px; }
+    
+    
+    .popular-card .card-rating { 
+        background: var(--bright-navy-blue); 
+        color: var(--white); 
+        position: absolute; 
+        top: 0; 
+        right: 25px; 
+        display: flex; 
+        align-items: center; 
+        gap: 1px; 
+        transform: translateY(-50%);
+        padding: 6px 10px; 
+        border-radius: 20px; 
+        font-size: 14px; 
+    }
+    
+    
+    .popular-card .card-subtitle { color: var(--blue-ncs); font-size: var(--fs-6); text-transform: uppercase; margin-bottom: 8px; }
+    
+    
+    .popular-card .card-title { margin-bottom: 5px; }
+    
+    
+        .popular-card :is(.card-subtitle, .card-title) > a { color: inherit; }
+        
+        
+.popular .btn { margin-inline: auto; }
+
+/* Package */
+
+.package { padding-block: var(--section-padding); }
+
+
+.package-list { margin-bottom: 40px; }
+    .package-list > li:not(:last-child) { margin-bottom: 30px; }
+    
+    
+.package-card { background: var(--cultured); overflow: hidden; border-radius: 15px; }
+
+
+    .package-card .card-banner { height: 250px; }
+    
+    
+        .package-card .card-banner img { width: 100%; height: 100%; object-fit: cover; }
+        
+        
+    .package-card .card-content { padding: 30px 20px; }
+    
+    
+    .package-card .card-title { line-height: 1.6; margin-bottom: 20px; }
+    
+    
+    .package-card .card-price { background: var(--united-nations-blue); color: var(--white); padding: 25px 20px; text-align: center; }
+    
+    
+        .package-card .card-price .wrapper { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 5px 15px; margin-bottom: 10px; }
+        
+        
+    .package-card .card-rating { display: flex; justify-content: center; align-items: center; gap: 1px; font-size: 14px; }
+    
+    
+        .package-card .card-rating ion-icon:last-child { color: hsl(0, 0%, 80%); }
+        
+        
+    .package-card .price { font-size: var(--fs-2); font-family: var(--ff-montserrat); font-weight: var(--fw-800); margin-bottom: 20px; }
+        .package-card .price span { font-size: var(--fs-7); font-weight: initial; }
+        
+        
+.card-meta-list { 
+    background: var(--white); 
+    max-width: max-content; 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 8px;
+    box-shadow: 0 0 5px hsla(0, 0%, 0%, .15);
+    border-radius: 50px;
+    margin-top: 10px; 
+}
+
+
+.card-meta-time { position: relative; }
+    .card-meta-item:not(:last-child)::after { content: ''; position: absolute; top: 4px; right: -1px; bottom: 4px; width: 1px; background: hsla(0, 0%, 0%, .3); }
+    
+    
+.meta-box { display: flex; justify-content: center; align-items: center; gap: 5px; padding-inline: 9px; color: var(--black-coral); font-size: var(--fs-8); }
+
+
+    .meta-box > ion-icon { color: var(--bright-navy-blue); font-size: 13px; }
+    
+    
+    .package .btn { margin-inline: auto; }
+    
+    
+
+/* Gallery */
+
+.gallery { padding-block: var(--section-padding); }
+
+
+.gallery-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+
+.gallery-image { width: 100%; height: 100%; border-radius: var(--radius-15); overflow: hidden; }
+
+
+.gallery-item:nth-child(3) { grid-area: 1 / 2 / 3 / 3; }
+
+
+    .gallery-image img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+    
+    
+
+/* CTA */
+
+.cta { background: var(--bright-navy-blue); padding-block: var(--section-padding); }
+
+
+    .cta :is(.section-subtitle, .section-title, .section-text) { color: var(--white); }
+    
+    
+    .cta .section-text { font-size: var(--fs-5); }
+    
+    
+    .cta .btn { margin-inline: auto; }
+
+
+
+
+
+
+/* Footer */
+
+.footer-top { 
+background: var(--gunmetal); 
+padding-block: var(--section-padding); 
+olor: var(--gainsboro); 
+}
+
+
+.footer-brand { 
+margin-bottom: 30px; 
+}
+
+
+    .footer-brand img { 
+    width: 180px; 
+    }
+    
+    
+    .footer-brand .logo { 
+    margin-bottom: 20px; 
+    }
+    
+    
+.footer-text { 
+font-size: var(--fs-5); 
+line-height: 1.7; 
+color: #fff;
+}
+
+
+.footer-contact { margin-bottom: 30px; }
+
+
+.contact-title { 
+position: relative; 
+font-family: var(--ff-montserrat); 
+font-weight: var(--fw-500); 
+margin-bottom: 30px; 
+color: #fff;
+}
+
+
+    .contact-title::after { 
+    content: ''; 
+    position: absolute; 
+    bottom: -10px; 
+    left: 0; 
+    width: 50px; 
+    height: 2px; 
+    background: var(--bright-navy-blue); 
+    }
+    
+    
+.contact-text { 
+font-size: var(--fs-5); 
+margin-bottom: 15px; 
+max-width: 200px; 
+color: #fff;
+}
+
+
+.contact-item { 
+display: flex; 
+justify-content: flex-start; 
+align-items: center; 
+gap: 10px; 
+margin-bottom: 10px; 
+}
+
+
+    .contact-item ion-icon { 
+    --ionicon-stroke-width: 40px; 
+    color: var(--bright-navy-blue);
+    }
+    
+    
+.contact-link, address { 
+font-style: normal; 
+color: var(--gainsboro); 
+font-size: var(--fs-5); 
+}
+
+
+    .contact-link:is(:hover, :focus) { 
+    color: var(--white); }
+    
+    
+.form-text { 
+font-size: var(--fs-5); 
+margin-bottom: 20px; 
+color: #fff;
+}
+
+
+.footer-form .input-field { 
+background: var(--white); 
+font-size: var(--fs-5); 
+padding: 15px 20px; 
+border-radius: 100px; 
+margin-bottom: 10px; 
+}
+
+
+.footer-form .btn { 
+width: 100%; 
+}
+
+
+.footer-bottom { 
+--gunmetal: hsl(205, 36%, 17%); 
+background: var(--gunmetal); 
+padding-block: 20px; 
+text-align: center; 
+}
+
+
+.copyright { 
+color: var(--gainsboro); 
+font-size: var(--fs-5); 
+margin-bottom: 10px; 
+} 
+
+
+
+    .copyright a { 
+    color: inherit; 
+    display: inline-block; 
+    font-family: var(--ff-turret); 
+    } 
+    
+    
+        .copyright a:is(:hover, :focus) { color: var(--white); }
+        
+        
+.footer-bottom-list { display: flex; align-items: center; justify-content: center; gap: 21px; }
+
+
+    .footer-bottom-list > li { position: relative; }
+    
+    
+        .footer-bottom-list > li:not(:last-child)::after { content: ''; position: absolute; top: 3px; right: -10px; bottom: 3px; width: 1px; background: hsla(0, 0%, 100%, .12); }
+        
+        
+.footer-bottom-link { color: var(--gainsboro); font-size: var(--fs-7); transition: var(--transition); }
+
+
+    .footer-bottom-link:is(:hover, :focus) { color: var(--white); }
+    
+    
+    
+
+.go-top {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    background: var(--bright-navy-blue);
+    color: var(--white);
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px hsla(0, 0%, 0%, .5);
+    opacity: 0;
+    transform: translateY(10px);
+    visibility: hidden;
+    transition: var(--transition);
+}
+    .go-top.active { opacity: .8; transform: translateY(0); visibility: visible; }
+    .go-top:is(:hover, :focus) { opacity: 1; }
+
+
+
+
+
+
+
+/* Media Queries */
+
+@media (min-width: 580px) {
+    .container { 
+    max-width: 580px; 
+    margin-inline: auto; }
+    
+    
+    .btn { 
+    --fs-5: 16px; 
+    padding: 12px 30px; 
+    }
+    
+
+    section:not(.cta) :is(.section-subtitle, .section-title, .section-text) { 
+    text-align: center; 
+    }
+    
+    
+        .section-text { 
+        margin-bottom: 40px; 
+        }
+        
+        
+    .card-text { 
+    --fs-5: 15px; 
+    }
+
+    .header { 
+    padding-top: 83px; 
+    }
+    
+    
+    .helpline-box .icon-box { 
+    padding: 14px; 
+    }
+    
+    
+    .header-top .logo img { 
+    max-width: unset; 
+    }
+    
+    
+    .search-btn { 
+    font-size: 30px; 
+    }
+    
+    
+    .nav-open-btn { 
+    font-size: 40px; 
+    }
+    
+    
+        .header .btn { 
+        --fs-5: 14px; 
+        padding: 6px 20px; 
+        }
+        
+        
+
+    .hero { 
+    min-height: 800px; 
+    padding-top: 85px; 
+    }
+    
+    
+    .hero-text { 
+    --fs-5: 15px; 
+    }
+    
+    
+    .btn-group { 
+    gap: 20px; 
+    }
+    
+    
+    
+
+    .tour-search-form { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    align-items: flex-end; 
+    gap: 15px; 
+    }
+    
+    
+    
+        .tour-search-form .input-wrapper { 
+        margin-bottom: 0; 
+        }
+        
+        
+        
+        .tour-search-form .input-field { 
+        padding: 16px 20px; 
+        }
+        
+        
+    .tour-search .btn { 
+    grid-column: span 2; 
+    margin-top: 20px; 
+    }
+    
+    
+
+    .popular-card .card-content { 
+    right: auto; 
+    } 
+    
+    
+
+    .footer .container { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px; 
+    }
+    
+    
+    .footer-form { 
+    grid-column: span 2; 
+    }
+    
+    
+    .footer-bottom { 
+    text-align: left; 
+    }
+    
+    
+    .copyright { 
+    margin-bottom: 0; 
+    }
+    
+    
+    .footer-bottom-list { 
+    justify-content: flex-end; 
+    }
+}
+
+
+
+
+@media (min-width: 768px) {
+    :root {
+        --fs-5: 15px;
+    }
+
+    .container { max-width: 800px; }
+    
+    
+    .section-text { max-width: 600px; margin-inline: auto; }
+    
+    
+    .helpline-box { display: flex; justify-content: flex-start; align-items: center; gap: 10px; }
+    
+    
+        .helpline-box .wrapper { display: block; color: var(--white); font-size: var(--fs-6); }
+        
+        
+    .social-list { gap: 10px; }
+
+    .popular-list { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
+    
+    
+        .popular-list > li:not(:last-child) { margin-bottom: 0; }
+        
+        
+    .popular-card .card-content { right: 20px; }
+    
+
+    .package-list { margin-bottom: 50px; }
+    
+        .package-list > li:not(:last-child) { margin-bottom: 40px; }
+        
+        
+    .package-card { display: grid; grid-template-columns: 1.3fr 1.5fr 1fr; }
+        .package-card .card-banner { height: 100%; }
+        
+        
+        .package-card .card-content { padding: 40px; }
+        
+        
+        .package-card .card-price { display: grid; place-content: center; }
+        
+        
+            .package-card .card-price .wrapper { margin-bottom: 15px; }
+
+    .gallery { padding-bottom: calc(var(--section-padding * 2)); }
+    
+    
+    .gallery-list { grid-template-columns: repeat(3 , 1fr); }
+    
+    
+    .gallery-image { border-radius: var(--radius-25); }
+
+    .cta .container { display: flex; justify-content: space-between; align-items: center; }
+    
+    
+    .cta-content { width: calc(100% - 225px); }
+    
+    
+    .cta .section-text { margin-inline: 0; }
+    
+    
+    .cta .btn { margin-inline: 0; }
+
+    .form-wrapper { display: flex; justify-content: flex-start; align-items: center; gap: 20px; }
+    
+    
+    .footer-form .input-field { margin-bottom: 0; }
+    
+    
+    .footer-form .btn { width: max-content; }
+}
+
+
+
+@media (min-width: 992px) {
+    .container { max-width: 1050px; }
+
+    .header.active .header-top { position: unset; background: unset; }
+    .nav-open-btn, .navbar-top { display: none; }
+    .header-bottom { border-bottom: none; }
+    .header.active .header-bottom { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        background: var(--white); 
+        color: var(--onyx); 
+        box-shadow: 0 2px 5px hsla(0, 0%, 0%, .08); 
+        transition: var(--transition); 
+    }
+    .header-bottom .container { padding-block: 0; }
+    .header .navbar { all: unset; }
+    .navbar-list { border-top: none; display: flex; justify-content: center; align-items: center; }
+        .navbar-list li { border-bottom: none; }
+    .navbar-link { color: var(--white); --fs-4: 16px; font-weight: unset; text-transform: uppercase; padding: 20px 15px; }
+        .header.active .navbar-link { color: var(--onyx); }
+            .header.active .navbar-link:is(:hover, :focus) { color: var(--bright-navy-blue); }
+        .header.active .social-link { color: var(--onyx); border-color: hsla(0, 0%, 0%, .15); }
+    .overlay { display: none; }
+
+    .hero .container { max-width: 740px; }
+
+    .tour-search-form { grid-template-columns: repeat(5, 1fr); }
+    .tour-search .btn { padding: 15px; grid-column: unset; margin-top: 0; }
+
+    .popular-list { grid-template-columns: repeat(3, 1fr); }
+
+    .meta-list { --fs-8: 13px; }
+    .meta-box > ion-icon { font-size: 15px; }
+
+    .cta .section-title { max-width: 25ch; }
+
+    .footer-top .container { grid-template-columns: repeat(3, 1fr); gap: 50px; }
+    .footer-form { grid-column: unset; }
+    .form-wrapper { flex-direction: column; }
+    .footer-form .btn { width: 100%; }
+} 
+
+@media (min-width: 1200px) {
+    :root { --section-padding: 100px; }
+    .container { max-width: 1180px; }
+}
+
+    </style>
+    
+</head>
+<body id="top">
+
+
+    <header class="header" data-header>
+    
+        <div class="overlay " data-overlay></div>
+
+        <div class="header-top">
+            <div class="container">
+                <a href="tel:+11234567890" class="helpline-box">
+                    <div class="icon-box">
+                        <ion-icon name="call-outline"></ion-icon>
+                    </div>
+
+                    <div class="wrapper">
+                        <p class="helpline-title">For Further Inquiries: </p>
+                        <p class="helpline-number">+1 (123) 456 7890</p>
+                    </div>
+                </a>
+
+                <a href="#" class="logo">
+                    <img src="https://i.postimg.cc/zvgHq2QX/logo.png" alt="Tourly Logo">
+                </a>
+
+                <div class="header-btn-group">
+                    <button class="search-btn" aria-label="Search">
+                        <ion-icon name="search"></ion-icon>
+                    </button>
+
+                    <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
+                        <ion-icon name="menu-outline"></ion-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-bottom">
+            <div class="container">
+                <ul class="social-list">
+                    <li>
+                        <a href="#" class="social-link">
+                            <ion-icon name="logo-facebook"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="social-link">
+                            <ion-icon name="logo-instagram"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="social-link">
+                            <ion-icon name="logo-youtube"></ion-icon>
+                        </a>
+                    </li>
+                </ul>
+
+                <nav class="navbar " data-navbar>
+                    <div class="navbar-top">
+                        <a href="#" class="logo">
+                            <img src="https://i.postimg.cc/hvcfT8PK/logo-blue.png" alt="Tourly Logo">
+                        </a>
+
+                        <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
+                            <ion-icon name="close-outline"></ion-icon>
+                        </button>
+                    </div>
+
+                    <ul class="navbar-list">
+                        <li><a href="#home" class="navbar-link" data-nav-link>Home</a></li>
+                        <li><a href="#" class="navbar-link" data-nav-link>About us</a></li>
+                        <li><a href="#destination" class="navbar-link" data-nav-link>Destinations</a></li>
+                        <li><a href="#package" class="navbar-link" data-nav-link>Packages</a></li>
+                        <li><a href="#gallery" class="navbar-link" data-nav-link>Gallery</a></li>
+                        <li><a href="#contact" class="navbar-link" data-nav-link>Contact us</a></li>
+                    </ul>
+                </nav>
+
+                <button class="btn btn-primary">Book Now</button>
+            </div>
+        </div>
+    </header>
+
+
+
+
+
+    <main>
+        <article>
+            <section class="hero" id="home">
+                <div class="container">
+                    <h2 class="h1 hero-title">Journey to Explore World</h2>
+
+                    <p class="hero-text">Your passport to adventure awaits! Embark on a Journey to Explore World, where every step reveals a new story. Discover amazing experiences, embrace diverse cultures, and create memories that will last a lifetime</p>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary">Learn More</button>
+                        <button class="btn btn-secondary">Book Now</button>
+                    </div>
+                </div>
+            </section>
+            
+            
+            
+            
+            
+            
+
+            <section class="tour-search">
+                <div class="container">
+                    <form action="" class="tour-search-form">
+                        <div class="input-wrapper">
+                            <label for="destination" class="input-label">Search Destination</label>
+                            <input type="text" name="destination" id="destination" required placeholder="Enter Destination" class="input-field">
+                        </div>
+
+                        <div class="input-wrapper">
+                            <label for="people" class="input-label">Number of People</label>
+                            <input type="number" name="people" id="people" required placeholder="Enter Number of People" class="input-field">
+                        </div>
+
+                        <div class="input-wrapper">
+                            <label for="checkin" class="input-label">Check-in Date</label>
+                            <input type="date" name="checkin" id="checkin" required class="input-field">
+                        </div>
+
+                        <div class="input-wrapper">
+                            <label for="checkout" class="input-label">Check-out Date</label>
+                            <input type="date" name="checkout" id="checkout" required class="input-field">
+                        </div>
+
+                        <button type="submit" class="btn btn-secondary">Inquire Now</button>
+                    </form>
+                </div>
+            </section>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+            <section class="popular" id="destination">
+                <div class="container">
+                    <p class="section-subtitle">Uncover Place</p>
+
+                    <h2 class="h2 section-title">Popular Destination</h2>
+
+                    <p class="section-text">The world is a tapestry of breathtaking landscapes, vibrant cultures, and untold stories. Step outside your comfort zone, challenge your perspectives, and embrace the unknown</p>
+
+                    <ul class="popular-list">
+                        <li>
+                            <div class="popular-card">
+                                <figure class="card-img">
+                                    <img src="https://i.postimg.cc/fRNkQ8MC/popular-1.jpg" alt="San Miguel, Italy" loading="lazy">
+                                </figure>
+
+                                <div class="card-content">
+                                    <div class="card-rating">
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+
+                                    </div>
+                                    
+                                    <p class="card-subtitle"><a href="#">Italy</a></p>
+                                    <h3 class="h3 card-title"><a href="#">San Miguel</a></h3>
+                                    <p class="card-text">Embark in one of the islands in the Venetian Lagoon, known as a place of peace and remembrance</p>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="popular-card">
+                                <figure class="card-img">
+                                    <img src="https://i.postimg.cc/Nj9DZffm/popular-2.jpg" alt="Burj Khalifa, Dubai" loading="lazy">
+                                </figure>
+
+                                <div class="card-content">
+                                    <div class="card-rating">
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                    </div>
+
+                                    <p class="card-subtitle"><a href="#">Dubai</a></p>
+                                    <h3 class="h3 card-title"><a href="#">Burj Khalifa</a></h3>
+                                    <p class="card-text">Discover the iconic skyscraper in Dubai, that holds the title of the world's tallest building</p>
+                                </div>
+                                
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="popular-card">
+                                <figure class="card-img">
+                                    <img src="https://i.postimg.cc/Hkwcrf6F/popular-3.jpg" alt="Kyoto Temple, Japan" loading="lazy">
+                                </figure>
+
+                                <div class="card-content">
+                                    <div class="card-rating">
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                        <ion-icon name="star"></ion-icon>
+                                    </div>
+
+                                    <p class="card-subtitle"><a href="#">Japan</a></p>
+                                    <h3 class="h3 card-title"><a href="#">Kyoto Temple</a></h3>
+                                    <p class="card-text">Discover the unique histories and characteristics of stunning temples around Kyoto</p>
+                                </div>
+        
+                            </div>
+                        </li>
+                    </ul>
+
+                    <button class="btn btn-primary">More Destination</button>
+                </div>
+            </section>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+            <section class="package" id="package">
+                <div class="container">
+                    <p class="section-subtitle">Popular Packages</p>
+                    <h2 class="h2 section-title">Checkout Our Packages</h2>
+                    <p class="section-text">See What Everyone's Talking About! Dive into our collection of Popular Packages</p>
+
+                    <ul class="package-list">
+                        <li>
+                            <div class="package-card">
+                                <figure class="card-banner">
+                                    <img src="https://i.postimg.cc/kMytXrhZ/packege-1.jpg" alt="Experience the great holiday on beach" loading="lazy">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h3 card-title">Experience the great holiday on beach</h3>
+
+                                    <p class="card-text">Turquoise waters, golden sands, and pure relaxation. Experience the great beach holiday of your dreams</p>
+
+                                    <ul class="card-meta-list">
+                                        <li class="card-meta-item">
+                                            <div class="meta-box">
+                                                <ion-icon name="time"></ion-icon>
+
+                                                <p class="text">7D / 6N</p>
+                                            </div>
+                                        </li>
+
+                                        <li class="card-meta-item">
+                                            <div class="meta-box">
+                                                <ion-icon name="people"></ion-icon>
+
+                                                <p class="text">Max People: 10</p>
+                                            </div>
+                                        </li>
+
+                                        <li class="card-meta-item">
+                                            <div class="meta-box">
+                                                <ion-icon name="location"></ion-icon>
+
+                                                <p class="text">Malaysia</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </div>
+
+                                <div class="card-price">
+                                    <div class="wrapper">
+                                        <p class="reviews">(25 Reviews)</p>
+
+                                        <div class="card-rating">
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                        </div>
+                                    </div>
+
+                                    <p class="price">$1025 <span>/per person</span></p>
+                                    <button class="btn btn-secondary">Book Now</button>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="package-card">
+                                <figure class="card-banner">
+                                    <img src="https://i.postimg.cc/5ySDr51P/packege-2.jpg" alt="Summer Holiday to the Oxolotan River" loading="lazy">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h3 card-title">Summer Holiday to the Oxolotan River</h3>
+
+                                    <p class="card-text">Discover emerald waters, lush rainforests, and the vibrant life of the Oxolotan River</p>
+
+                                    <ul class="card-meta-list">
+                                        <li class="card-meta-item">
+                                            <div class="meta-box">
+                                                <ion-icon name="time"></ion-icon>
+
+                                                <p class="text">7D / 6N</p>
+                                            </div>
+                                        </li>
+
+                                        <li class="card-meta-item">
+                                            <div class="meta-box">
+                                                <ion-icon name="people"></ion-icon>
+
+                                                <p class="text">Max People: 10</p>
+                                            </div>
+                                        </li>
+
+                                        <li class="card-meta-item">
+                                            <div class="meta-box">
+                                                <ion-icon name="location"></ion-icon>
+
+                                                <p class="text">Mexico</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </div>
+
+                                <div class="card-price">
+                                    <div class="wrapper">
+                                        <p class="reviews">(20 Reviews)</p>
+
+                                        <div class="card-rating">
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                        </div>
+                                    </div>
+
+                                    <p class="price">$1325<span>/per person</span></p>
+                                    <button class="btn btn-secondary">Book Now</button>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="package-card">
+                                <figure class="card-banner">
+                                    <img src="https://i.postimg.cc/Y9WJkKNy/packege-3.jpg" loading="lazy">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h3 card-title">Santorini Island's Weekend Vacation</h3>
+
+                                    <p class="card-text">Discover white-washed villages, cascading down volcanic cliffs, overlooking the Aegean's endless blue</p>
+
+                                    <ul class="card-meta-list">
+                                        <li class="card-meta-item">
+                                            <div class="meta-box">
+                                                <ion-icon name="time"></ion-icon>
+
+                                                <p class="text">7d / 6N</p>
+                                            </div>
+                                        </li>
+
+                                        <li class="card-meta-item">
+                                            <div class="meta-box">
+                                                <ion-icon name="people"></ion-icon>
+
+                                                <p class="text">Max People: 10</p>
+                                            </div>
+                                        </li>
+
+                                        <li class="card-meta-item">
+                                            <div class="meta-box">
+                                                <ion-icon name="location"></ion-icon>
+
+                                                <p class="text">Greece</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </div>
+
+                                <div class="card-price">
+                                    <div class="wrapper">
+                                        <p class="reviews">(40 Reviews)</p>
+
+                                        <div class="card-rating">
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                            <ion-icon name="star"></ion-icon>
+                                        </div>
+                                    </div>
+
+                                    <p class="price">$2200<span>/per person</span></p>
+                                    <button class="btn btn-secondary">Book Now</button>
+                                </div>
+                            </div>
+                        </li>
+                        
+                    </ul>
+
+                    <button class="btn btn-primary">View All Packages</button>
+                </div>
+            </section>
+
+            <section class="gallery" id="gallery">
+                <div class="container">
+                    <p class="section-subtitle">Photo Gallery</p>
+                    <h2 class="h2 section-title">Photo's from travellers</h2>
+
+                    <p class="section-text">Imagine a world painted with vibrant hues, captured not by professional lenses, but by the eyes of passionate explorers. Browse through the gallery and let your imagination take flight</p>
+
+                    <ul class="gallery-list">
+                        <li class="gallery-item">
+                            <figure class="gallery-image">
+                                <img src="https://i.postimg.cc/6qfpc2mw/gallery-1.jpg" alt="gallery image">
+                            </figure>
+                        </li>
+
+                        <li class="gallery-item">
+                            <figure class="gallery-image">
+                                <img src="https://i.postimg.cc/yY7ddjDN/gallery-2.jpg" alt="gallery image">
+                            </figure>
+                        </li>
+
+                        <li class="gallery-item">
+                            <figure class="gallery-image">
+                                <img src="https://i.postimg.cc/PrKq8DDQ/gallery-3.jpg" alt="gallery image">
+                            </figure>
+                        </li>
+
+                        <li class="gallery-item">
+                            <figure class="gallery-image">
+                                <img src="https://i.postimg.cc/13j5vZJg/gallery-4.jpg" alt="gallery image">
+                            </figure>
+                        </li>
+
+                        <li class="gallery-item">
+                            <figure class="gallery-image">
+                                <img src="https://i.postimg.cc/XvBNhDzs/gallery-5.jpg" alt="gallery image">
+                            </figure>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+            <section class="cta" id="contact">
+                <div class="container">
+                    <div class="cta-content">
+                        <p class="section-subtitle">Get booking today</p>
+                        <h2 class="h2 section-title">Check these and much more future tours!</h2>
+                        <p class="section-text">Get ready for adventure! Stay tuned for upcoming tours, promising unforgettable experiences and unique destinations</p>
+                        
+                    </div>
+
+                    <button class="btn btn-secondary">Contact us!</button>
+                </div>
+            </section>
+            
+            
+            
+            
+        </article>
+    </main>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-brand">
+                    <a href="#" class="logo"><img src="https://i.postimg.cc/hvcfT8PK/logo-blue.png" alt="Tourly logo"></a>
+
+                    <p class="footer-text">Your passport to adventure awaits!</p>
+                </div>
+
+                <div class="footer-contact">
+                    <h4 class="contact-title">Contact Us</h4>
+                    <p class="contact-text">Feel free to contact us!</p>
+
+                    <ul>
+                        <li class="contact-item">
+                            <ion-icon name="call-outline"></ion-icon>
+                            <a href="tel:+01123456790" class="contact-link">+01 (123) 456 7890</a>
+                        </li>
+
+                        <li class="contact-item">
+                            <ion-icon name="mail-outline"></ion-icon>
+                            <a href="mailto:info.tourly.com" class="contact-link">info.tourly.com</a>
+                        </li>
+
+                        <li class="contact-item">
+                            <ion-icon name="location-outline"></ion-icon>
+                            <address>3145 Koontz, California</address>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-form">
+                    <p class="form-text">Subscribe to our newsletter for more update & news!!</p>
+
+                    <form action="#" class="form-wrapper">
+                        <input type="email" name="email" class="input-field" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-secondary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <p class="copyright">&copy; 2025 <a href="https://codepen.io/leonam-silva-de-souza" target="_blank">ULTRA CODE </a>. All rights reserved</p>
+
+                <ul class="footer-bottom-list">
+                    <li><a href="#" class="footer-bottom-link">Privacy Policy</a></li>
+                    <li><a href="#" class="footer-bottom-link">Terms & Conditions</a></li>
+                    <li><a href="#" class="footer-bottom-link">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#top" class="go-top " data-go-top>
+        <ion-icon name="chevron-up-outline"></ion-icon>
+    </a>
+
+
+
+
+
+    <script src="main.js"></script>
+
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    
+    
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+ <script>   
+    
+    'use strict';
+
+// Activating Overlay and Mobile Menu
+
+const overlay = document.querySelector('[data-overlay]');
+const navOpenBtn = document.querySelector('[data-nav-open-btn]');
+const navbar = document.querySelector('[data-navbar]');
+const navCloseBtn = document.querySelector('[data-nav-close-btn]');
+const navLinks = document.querySelectorAll('[data-nav-link]');
+
+const navElemArr = [navOpenBtn, navCloseBtn, overlay];
+
+const navToggleEvent = function (elem) {
+    for(let i = 0; i < elem.length; i++){
+        elem[i].addEventListener('click', function () {
+            navbar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        })
+    }
+}
+
+navToggleEvent(navElemArr);
+navToggleEvent(navLinks);
+
+// Header Sticky and go top
+
+const header = document.querySelector('[data-header]');
+const goTopBtn = document.querySelector('[data-go-top]');
+
+window.addEventListener('scroll', function() {
+    if(window.scrollY >= 200) {
+        header.classList.add('active');
+        goTopBtn.classList.add('active');
+    }else{
+        header.classList.remove('active');
+        goTopBtn.classList.remove('active');
+    }
+})
+    
+    
+    
+    
+</script>    
+    
+</body>
+</html>
