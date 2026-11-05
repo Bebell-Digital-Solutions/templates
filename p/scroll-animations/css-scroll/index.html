@@ -176,35 +176,7 @@
 					</article>
 				</li>
 				
-				
-				<li>
-					<article class="card">
-						<span aria-hidden="true" class="card__num">01</span>
-						<h3 class="card__title"><span class="i18n-es">GSAP, 100% gratis</span><span class="i18n-en">GSAP, 100% free</span></h3>
-						<p><span class="i18n-es">Todos los plugins, también para uso comercial. Y skills oficiales para que tu agente use bien ScrollTrigger.</span><span class="i18n-en">All plugins, including commercial use. Plus official skills so your agent uses ScrollTrigger well.</span></p><code class="tag">greensock/gsap-skills</code>
-					</article>
-				</li>
-
-
-				
-				<li>
-					<article class="card">
-						<span aria-hidden="true" class="card__num">02</span>
-						<h3 class="card__title"><span class="i18n-es">Scroll en CSS nativo</span><span class="i18n-en">Native CSS scroll</span></h3>
-						<p><span class="i18n-es">Chrome, Edge y Safari 26. Progreso, parallax y revelados sin JavaScript.</span><span class="i18n-en">Chrome, Edge and Safari 26. Progress, parallax and reveals without JavaScript.</span></p><code class="tag">animation-timeline: view()</code>
-					</article>
-				</li>
-
-				
-				<li>
-					<article class="card card--new">
-						<span class="badge"><span class="i18n-es">Nuevo</span><span class="i18n-en">New</span></span> <span aria-hidden="true" class="card__num">03</span>
-						<h3 class="card__title">animation-trigger</h3>
-						<p><span class="i18n-es">Chrome 146: el scroll dispara la animación y esta avanza con el tiempo. Alternativa nativa a IntersectionObserver.</span><span class="i18n-en">Chrome 146: scroll triggers the animation and it advances over time. A native alternative to IntersectionObserver.</span></p><code class="tag">scroll-triggered ≠ scroll-driven</code>
-					</article>
-				</li>
-
-				
+								
 			</ol>
 		</section>
 
@@ -230,6 +202,8 @@
 					<em>horizontal movement.</em></span></h2>
 				</div>
 				<ol class="track">
+
+					
 					<li class="panel panel--violet">
 						<span class="panel__step"><span class="i18n-es">Paso 1</span><span class="i18n-en">Step 1</span></span>
 						<h3 class="panel__title"><span class="i18n-es">Define el<br>
@@ -239,6 +213,8 @@
   view-timeline: --hz block;
 }</code></pre>
 					</li>
+
+					
 					<li class="panel panel--coral">
 						<span class="panel__step"><span class="i18n-es">Paso 2</span><span class="i18n-en">Step 2</span></span>
 						<h3 class="panel__title"><span class="i18n-es">Vincula la<br>
@@ -249,6 +225,8 @@
   animation-timeline: --hz;
 }</code></pre>
 					</li>
+
+					
 					<li class="panel panel--lime">
 						<span class="panel__step"><span class="i18n-es">Paso 3</span><span class="i18n-en">Step 3</span></span>
 						<h3 class="panel__title"><span class="i18n-es">Mejora<br>
@@ -257,6 +235,8 @@
 						<pre><code>@supports (animation-timeline:
   scroll()) { /* … */ }</code></pre>
 					</li>
+
+					
 					<li class="panel panel--sky">
 						<span class="panel__step"><span class="i18n-es">Paso 4</span><span class="i18n-en">Step 4</span></span>
 						<h3 class="panel__title"><span class="i18n-es">Accesibilidad<br>
@@ -267,6 +247,52 @@
   animation: none;
 }</code></pre>
 					</li>
+
+					<li class="panel panel--violet">
+						<span class="panel__step"><span class="i18n-es">Paso 5</span><span class="i18n-en">Step 5</span></span>
+						<h3 class="panel__title"><span class="i18n-es">Demo<br>
+						timeline</span><span class="i18n-en">Demo<br>
+						timeline</span></h3>
+						<pre><code>.horizontal {
+  view-timeline: --hz block;
+}</code></pre>
+					</li>
+
+					
+					<li class="panel panel--coral">
+						<span class="panel__step"><span class="i18n-es">Paso 6</span><span class="i18n-en">Step 6</span></span>
+						<h3 class="panel__title"><span class="i18n-es">Demo<br>
+						animación</span><span class="i18n-en">Demo<br>
+						animation</span></h3>
+						<pre><code>.track {
+  animation: slide-track linear both;
+  animation-timeline: --hz;
+}</code></pre>
+					</li>
+
+					
+					<li class="panel panel--lime">
+						<span class="panel__step"><span class="i18n-es">Paso 7</span><span class="i18n-en">Step 7</span></span>
+						<h3 class="panel__title"><span class="i18n-es">Demo<br>
+						Demo</span><span class="i18n-en">Demo<br>
+						enhancement</span></h3>
+						<pre><code>@supports (animation-timeline:
+  scroll()) { /* … */ }</code></pre>
+					</li>
+
+					
+					<li class="panel panel--sky">
+						<span class="panel__step"><span class="i18n-es">Paso 8</span><span class="i18n-en">Step 8</span></span>
+						<h3 class="panel__title"><span class="i18n-es">Demo<br>
+						Demo</span><span class="i18n-en">Demo<br>
+						first</span></h3>
+						<pre><code>@media (prefers-reduced-
+  motion: reduce) {
+  animation: none;
+}</code></pre>
+					</li>
+
+					
 				</ol>
 				<div aria-hidden="true" class="horizontal__bar">
 					<span></span>
