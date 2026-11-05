@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animaciones de scroll SOLO con CSS</title>
+  <meta name="description" content="Demo de animaciones ligadas al scroll hechas solo con CSS, sin JavaScript.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link href="./style.css" rel="stylesheet">
+  <style>
+    /* Translation button + bilingual styles */
+    .lang-switch {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.25rem;
+      z-index: 999;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .55rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: .875rem;
+      color: #fff;
+      background: rgba(20, 20, 30, .72);
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 999px;
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      transition: background .25s ease, transform .25s ease, border-color .25s ease;
+    }
+    .lang-switch:hover {
+      background: rgba(40, 40, 60, .9);
+      border-color: rgba(255, 255, 255, .45);
+      transform: translateY(-1px);
+    }
+    .lang-switch:focus-visible {
+      outline: 2px solid #a78bfa;
+      outline-offset: 3px;
+    }
+    .lang-switch__flag {
+      font-size: 1rem;
+      line-height: 1;
+    }
+    @media (max-width: 520px) {
+      .lang-switch {
+        top: .75rem;
+        right: .75rem;
+        padding: .45rem .75rem;
+        font-size: .78rem;
+      }
+    }
+    /* Hidden English spans – shown via JS toggle */
+    [data-lang="en"] .i18n-es { display: none; }
+    [data-lang="es"] .i18n-en { display: none; }
+    .i18n-en { font-style: normal; }
+  </style>
+</head>
+<body data-lang="es">
+	
+	<!--
+	  Demo: animaciones de scroll SOLO con CSS
+	  ─────────────────────────────────────────
+	  Todas las animaciones van ligadas al scroll mediante
+	  CSS Scroll-driven Animations (animation-timeline).
+	  No hay ni una línea de JavaScript.
+
+	  Soporte (oct. 2026): Chrome/Edge 115+ y Safari 26+.
+	  Firefox: tras el flag layout.css.scroll-driven-animations.enabled.
+	  En navegadores sin soporte la página se muestra estática y legible
+	  (mejora progresiva con @supports).
+	-->
+	<!-- Barra de progreso de lectura: decorativa, se oculta a lectores de pantalla -->
+	<div aria-hidden="true" class="progress"></div><!-- Aviso visible solo en navegadores sin soporte (ver @supports en el CSS) -->
+	<p class="notice" role="note"><span class="i18n-es">Tu navegador aún no soporta <code>animation-timeline</code>. Ábrela en Chrome, Edge o Safari 26+ para ver las animaciones.</span><span class="i18n-en">Your browser doesn't support <code>animation-timeline</code> yet. Open this in Chrome, Edge or Safari 26+ to see the animations.</span></p>
+	<main>
+		<!-- 1. HERO · animation-timeline: scroll(root) -->
+		<header class="hero">
+			<div aria-hidden="true" class="orb orb--violet"></div>
+			<div aria-hidden="true" class="orb orb--coral"></div>
+			<div class="hero__content">
+				<p class="eyebrow"><span class="i18n-es">Demo · Octubre 2026</span><span class="i18n-en">Demo · October 2026</span></p>
+				<h1 class="hero__title"><span class="i18n-es">Animaciones<br>
+				de scroll.<br>
+				<em>Solo CSS.</em></span><span class="i18n-en">Scroll<br>
+				animations.<br>
+				<em>CSS only.</em></span></h1>
+				<p class="hero__lead"><span class="i18n-es"><strong>0 líneas de JavaScript</strong> para animar.<br>
+				Todo lo que ves va ligado al scroll.</span><span class="i18n-en"><strong>0 lines of JavaScript</strong> to animate.<br>
+				Everything you see is tied to scroll.</span></p>
+			</div>
+			<p aria-hidden="true" class="hero__hint"><span class="i18n-es">Scroll ↓</span><span class="i18n-en">Scroll ↓</span></p>
+		</header>
+    <!-- 2. TEXTO PALABRA A PALABRA · view-timeline con nombre (--words) -->
+		<section aria-labelledby="reveal-title" class="reveal">
+			<div class="reveal__sticky">
+				<code class="tag">view-timeline: --words</code> 
+        <!-- --i = índice de cada palabra; desplaza su tramo de animación -->
+				<h2 class="reveal__text" id="reveal-title"><span class="word" style="--i: 0">La</span> <span class="word" style="--i: 1">IA</span> <span class="word" style="--i: 2">ya</span> <span class="word" style="--i: 3">genera</span> <span class="word" style="--i: 4">el</span> <span class="word word--accent" style="--i: 5">efecto</span> <span class="word word--accent" style="--i: 6">wow.</span> <span class="word" style="--i: 7">El</span> <span class="word" style="--i: 8">criterio</span> <span class="word" style="--i: 9">sigue</span> <span class="word" style="--i: 10">siendo</span> <span class="word word--accent" style="--i: 11">tuyo.</span></h2>
+			</div>
+		</section>
+    <!-- 3. TARJETAS · animation-timeline: view() -->
+		<section aria-labelledby="stack-title" class="stack">
+			<h2 class="section-label" id="stack-title"><span class="i18n-es">El stack en 2026</span><span class="i18n-en">The stack in 2026</span></h2>
+			<ol class="stack__list">
+				<li>
+					<article class="card">
+						<span aria-hidden="true" class="card__num">01</span>
+						<h3 class="card__title"><span class="i18n-es">GSAP, 100% gratis</span><span class="i18n-en">GSAP, 100% free</span></h3>
+						<p><span class="i18n-es">Todos los plugins, también para uso comercial. Y skills oficiales para que tu agente use bien ScrollTrigger.</span><span class="i18n-en">All plugins, including commercial use. Plus official skills so your agent uses ScrollTrigger well.</span></p><code class="tag">greensock/gsap-skills</code>
+					</article>
+				</li>
+				<li>
+					<article class="card">
+						<span aria-hidden="true" class="card__num">02</span>
+						<h3 class="card__title"><span class="i18n-es">Scroll en CSS nativo</span><span class="i18n-en">Native CSS scroll</span></h3>
+						<p><span class="i18n-es">Chrome, Edge y Safari 26. Progreso, parallax y revelados sin JavaScript.</span><span class="i18n-en">Chrome, Edge and Safari 26. Progress, parallax and reveals without JavaScript.</span></p><code class="tag">animation-timeline: view()</code>
+					</article>
+				</li>
+				<li>
+					<article class="card card--new">
+						<span class="badge"><span class="i18n-es">Nuevo</span><span class="i18n-en">New</span></span> <span aria-hidden="true" class="card__num">03</span>
+						<h3 class="card__title">animation-trigger</h3>
+						<p><span class="i18n-es">Chrome 146: el scroll dispara la animación y esta avanza con el tiempo. Alternativa nativa a IntersectionObserver.</span><span class="i18n-en">Chrome 146: scroll triggers the animation and it advances over time. A native alternative to IntersectionObserver.</span></p><code class="tag">scroll-triggered ≠ scroll-driven</code>
+					</article>
+				</li>
+			</ol>
+		</section>
+    <!-- 4. SCROLL HORIZONTAL FIJADO · position: sticky + view-timeline (--hz) -->
+		<section aria-labelledby="hz-title" class="horizontal">
+			<div class="horizontal__sticky">
+				<div class="horizontal__head">
+					<code class="tag">position: sticky + view-timeline</code>
+					<h2 class="horizontal__title" id="hz-title"><span class="i18n-es">Scroll vertical,<br>
+					<em>movimiento horizontal.</em></span><span class="i18n-en">Vertical scroll,<br>
+					<em>horizontal movement.</em></span></h2>
+				</div>
+				<ol class="track">
+					<li class="panel panel--violet">
+						<span class="panel__step"><span class="i18n-es">Paso 1</span><span class="i18n-en">Step 1</span></span>
+						<h3 class="panel__title"><span class="i18n-es">Define el<br>
+						timeline</span><span class="i18n-en">Define the<br>
+						timeline</span></h3>
+						<pre><code>.horizontal {
+  view-timeline: --hz block;
+}</code></pre>
+					</li>
+					<li class="panel panel--coral">
+						<span class="panel__step"><span class="i18n-es">Paso 2</span><span class="i18n-en">Step 2</span></span>
+						<h3 class="panel__title"><span class="i18n-es">Vincula la<br>
+						animación</span><span class="i18n-en">Link the<br>
+						animation</span></h3>
+						<pre><code>.track {
+  animation: slide-track linear both;
+  animation-timeline: --hz;
+}</code></pre>
+					</li>
+					<li class="panel panel--lime">
+						<span class="panel__step"><span class="i18n-es">Paso 3</span><span class="i18n-en">Step 3</span></span>
+						<h3 class="panel__title"><span class="i18n-es">Mejora<br>
+						progresiva</span><span class="i18n-en">Progressive<br>
+						enhancement</span></h3>
+						<pre><code>@supports (animation-timeline:
+  scroll()) { /* … */ }</code></pre>
+					</li>
+					<li class="panel panel--sky">
+						<span class="panel__step"><span class="i18n-es">Paso 4</span><span class="i18n-en">Step 4</span></span>
+						<h3 class="panel__title"><span class="i18n-es">Accesibilidad<br>
+						primero</span><span class="i18n-en">Accessibility<br>
+						first</span></h3>
+						<pre><code>@media (prefers-reduced-
+  motion: reduce) {
+  animation: none;
+}</code></pre>
+					</li>
+				</ol>
+				<div aria-hidden="true" class="horizontal__bar">
+					<span></span>
+				</div>
+			</div>
+		</section>
+    <!-- 5. CIERRE · animation-timeline: view() -->
+		<footer class="outro">
+			<div class="outro__content">
+				<h2 class="outro__title"><span class="i18n-es">Menos JS.<br>
+				Más <em>criterio.</em></span><span class="i18n-en">Less JS.<br>
+				More <em>judgment.</em></span></h2>
+				<ul class="outro__tags">
+					<li><code class="tag">scroll()</code></li>
+					<li><code class="tag">view()</code></li>
+					<li><code class="tag">@supports</code></li>
+					<li><code class="tag">prefers-reduced-motion</code></li>
+				</ul>
+				<p class="outro__note"><span class="i18n-es">Firefox aún lo tiene tras un flag:<br>
+				úsalo como mejora progresiva.</span><span class="i18n-en">Firefox still has it behind a flag:<br>
+				use it as progressive enhancement.</span></p>
+			</div>
+		</footer>
+	</main>
+
+	<!-- Translation button -->
+	<button type="button" class="lang-switch" id="langSwitch" aria-label="Switch to English / Cambiar a inglés">
+		<span class="lang-switch__flag" aria-hidden="true">🌐</span>
+		<span id="langSwitchText">EN</span>
+	</button>
+
+	<script>
+		(function() {
+			const body = document.body;
+			const btn = document.getElementById('langSwitch');
+			const label = document.getElementById('langSwitchText');
+
+			function updateLabel() {
+				const current = body.getAttribute('data-lang');
+				if (current === 'es') {
+					label.textContent = 'EN';
+					btn.setAttribute('aria-label', 'Switch to English / Cambiar a inglés');
+				} else {
+					label.textContent = 'ES';
+					btn.setAttribute('aria-label', 'Cambiar a español / Switch to Spanish');
+				}
+				btn.setAttribute('lang', current === 'es' ? 'en' : 'es');
+			}
+
+			function toggleLanguage() {
+				const current = body.getAttribute('data-lang');
+				body.setAttribute('data-lang', current === 'es' ? 'en' : 'es');
+				document.documentElement.setAttribute('lang', body.getAttribute('data-lang'));
+				updateLabel();
+			}
+
+			btn.addEventListener('click', toggleLanguage);
+			// Initialize label
+			updateLabel();
+		})();
+	</script>
+</body>
+</html>
