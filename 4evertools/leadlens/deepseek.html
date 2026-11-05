@@ -533,7 +533,7 @@
 
     let app, db, auth;
     let globalUserId = null;
-    const APP_VERSION = "V 1.0.3 - DeepSeek";
+    const APP_VERSION = "V 1.0.4 - DeepSeek";
 
     window.appState = {
         conversations: [],
@@ -1003,7 +1003,7 @@
 
         sidebarList.innerHTML = '';
         if (window.appState.conversations.length === 0) {
-            sidebarList.innerHTML = `<li class="p-2 text-xs text-text-color opacity-70">No reports yet. Generate one to see it here.</li>`;
+            sidebarList.innerHTML = `<li class="p-2 text-xs text-text-color opacity-70 sidebar-closed-text">No reports yet. Generate one to see it here.</li>`;
             return;
         }
 
@@ -1015,8 +1015,9 @@
             li.className = `p-2 my-1 rounded-lg transition duration-150 ease-in-out cursor-pointer flex justify-between items-center ${isActive ? 'sidebar-item-active shadow-md' : 'hover:bg-mirage-color/50'}`;
             li.onclick = () => window.loadConversation(conv.id);
             li.innerHTML = `
-                <p class="text-sm font-medium text-title-color truncate">${escapeHtml(title)}</p>
-                <button class="text-red-400 hover:text-red-600 p-1 rounded-full ${isActive ? 'text-white' : ''}" onclick="event.stopPropagation(); window.deleteConversation('${conv.id}');">
+                <i class="fas fa-file text-skin-color text-lg hidden sidebar-closed-icon" title="${escapeHtml(title)}"></i>
+                <p class="text-sm font-medium text-title-color truncate sidebar-closed-text">${escapeHtml(title)}</p>
+                <button class="text-red-400 hover:text-red-600 p-1 rounded-full sidebar-closed-text ${isActive ? 'text-white' : ''}" onclick="event.stopPropagation(); window.deleteConversation('${conv.id}');">
                     <i class="fas fa-trash-alt text-xs"></i>
                 </button>
             `;
@@ -1194,7 +1195,7 @@
     };
 
     // ============================================================
-    // REPORT HTML GENERATOR (with data-pdf-block markers)
+    // REPORT HTML GENERATOR
     // ============================================================
     window.generateReportHTML = (report, transcript) => {
         const { overallScore, finalVerdict, summary, scores, redFlags, prospectName, recommendations } = report;
@@ -1545,10 +1546,6 @@ Rules:
     // ============================================================
     // PDF EXPORT — BLOCK-AWARE PAGINATION
     // ============================================================
-    /**
-     * Crops a canvas vertically, returning a new canvas containing the slice
-     * [startYPx, startYPx + heightPx]. Used only for oversized blocks.
-     */
     function cropCanvasVertically(sourceCanvas, startYPx, heightPx) {
         const out = document.createElement('canvas');
         out.width = sourceCanvas.width;
@@ -1573,7 +1570,6 @@ Rules:
             return;
         }
 
-        // Loading toast
         const toast = document.createElement('div');
         toast.id = 'pdf-toast';
         toast.style.cssText = `
@@ -1597,7 +1593,6 @@ Rules:
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF('p', 'mm', 'a4');
 
-            // ---- Page geometry (mm) ----
             const PAGE_W = 210;
             const PAGE_H = 297;
             const MARGIN_X = 15;
@@ -1614,13 +1609,10 @@ Rules:
                 blocks = Array.from(inner.children);
             }
 
-            // ---- Pre-render every block ----
             const rendered = [];
             for (let i = 0; i < blocks.length; i++) {
                 const block = blocks[i];
-
                 toast.querySelector('span').textContent = `Generating PDF… ${i + 1}/${blocks.length}`;
-
                 const rect = block.getBoundingClientRect();
                 if (rect.width === 0 || rect.height === 0) continue;
 
@@ -1646,7 +1638,6 @@ Rules:
                 });
             }
 
-            // ---- Lay out blocks across pages ----
             let cursorY = MARGIN_TOP;
             let pageStarted = false;
 
@@ -1663,7 +1654,8 @@ Rules:
 
             for (let i = 0; i < rendered.length; i++) {
                 const item = rendered[i];
-                let blockHeight = item.mmHeight;
+                const blockHeight = item.mmHeight;
+                const isTallerThanPage = blockHeight > CONTENT_H;
 
                 // keep-with-next logic
                 if (item.keepWithNext && i + 1 < rendered.length) {
@@ -1677,56 +1669,47 @@ Rules:
                     }
                 }
 
-                let remaining = blockHeight;
-                let sourceYOffsetPx = 0;
-                const pxPerMm = item.canvas.width / CONTENT_W;
-
-                while (remaining > 0.01) {
+                if (!isTallerThanPage) {
+                    // If it fits on a page, but not on the remaining space, start a new page to avoid slicing
                     const availableOnPage = (MARGIN_TOP + CONTENT_H) - cursorY;
-
-                    if (availableOnPage < 5 && pageStarted) {
+                    if (blockHeight > availableOnPage && pageStarted) {
                         startNewPage();
-                        continue;
                     }
+                    placeImage(item.canvas, MARGIN_X, cursorY, CONTENT_W, blockHeight);
+                    cursorY += blockHeight + BLOCK_GAP;
+                    pageStarted = true;
+                } else {
+                    // Block is taller than a page, we MUST slice it
+                    let remaining = blockHeight;
+                    let sourceYOffsetPx = 0;
+                    const pxPerMm = item.canvas.width / CONTENT_W;
 
-                    if (remaining <= availableOnPage) {
-                        const drawH = remaining;
-                        const drawW = CONTENT_W;
-
-                        if (sourceYOffsetPx === 0 && drawH >= blockHeight - 0.1) {
-                            placeImage(item.canvas, MARGIN_X, cursorY, drawW, drawH);
-                        } else {
-                            const cropCanvas = cropCanvasVertically(
-                                item.canvas,
-                                sourceYOffsetPx,
-                                remaining * pxPerMm
-                            );
-                            placeImage(cropCanvas, MARGIN_X, cursorY, drawW, drawH);
+                    while (remaining > 0.01) {
+                        const availableOnPage = (MARGIN_TOP + CONTENT_H) - cursorY;
+                        if (availableOnPage < 10 && pageStarted) {
+                            startNewPage();
+                            continue;
                         }
 
-                        cursorY += drawH + BLOCK_GAP;
-                        pageStarted = true;
-                        remaining = 0;
-                    } else {
-                        const drawH = availableOnPage;
-                        const drawW = CONTENT_W;
-
-                        const cropCanvas = cropCanvasVertically(
-                            item.canvas,
-                            sourceYOffsetPx,
-                            drawH * pxPerMm
-                        );
-                        placeImage(cropCanvas, MARGIN_X, cursorY, drawW, drawH);
-
-                        sourceYOffsetPx += drawH * pxPerMm;
-                        remaining -= drawH;
-
-                        startNewPage();
+                        if (remaining <= availableOnPage) {
+                            const drawH = remaining;
+                            const cropCanvas = cropCanvasVertically(item.canvas, sourceYOffsetPx, remaining * pxPerMm);
+                            placeImage(cropCanvas, MARGIN_X, cursorY, CONTENT_W, drawH);
+                            cursorY += drawH + BLOCK_GAP;
+                            pageStarted = true;
+                            remaining = 0;
+                        } else {
+                            const drawH = availableOnPage;
+                            const cropCanvas = cropCanvasVertically(item.canvas, sourceYOffsetPx, drawH * pxPerMm);
+                            placeImage(cropCanvas, MARGIN_X, cursorY, CONTENT_W, drawH);
+                            sourceYOffsetPx += drawH * pxPerMm;
+                            remaining -= drawH;
+                            startNewPage();
+                        }
                     }
                 }
             }
 
-            // ---- Save ----
             const safeTitle = (window.appState.currentConversation.title || 'report')
                 .replace(/[^a-zA-Z0-9 _-]/g, '_')
                 .trim() || 'report';
@@ -1743,9 +1726,29 @@ Rules:
     };
 
     // ============================================================
-    // DOM READY
+    // DOM READY & DYNAMIC CSS FOR COLLAPSED SIDEBAR
     // ============================================================
     document.addEventListener('DOMContentLoaded', () => {
+        // Inject CSS for the collapsed sidebar file icons and hidden text
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .sidebar:not(.sidebar-open) .sidebar-closed-text { display: none !important; }
+            .sidebar:not(.sidebar-open) .sidebar-closed-icon { display: block !important; }
+            .sidebar:not(.sidebar-open) #conversation-list { padding-left: 0; padding-right: 0; }
+            .sidebar:not(.sidebar-open) #conversation-list li { justify-content: center; padding: 10px 0; border-radius: 8px; }
+            .sidebar:not(.sidebar-open) .new-report-btn { padding: 10px 0; }
+            .sidebar:not(.sidebar-open) .new-report-btn i { margin-right: 0 !important; }
+            .sidebar:not(.sidebar-open) .new-report-text { display: none !important; }
+        `;
+        document.head.appendChild(style);
+
+        // Wrap the "New Report" button text in a span so it can be hidden via CSS when collapsed
+        const newReportBtn = document.querySelector('button[onclick="window.newConversation()"]');
+        if (newReportBtn) {
+            newReportBtn.innerHTML = `<i class="fas fa-plus mr-2"></i><span class="new-report-text">New Report</span>`;
+            newReportBtn.classList.add('new-report-btn');
+        }
+
         document.getElementById('sidebar-version-display').textContent = APP_VERSION;
 
         restoreLocalConversations();
