@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek Lead Qualifier: AI Prospect Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <link rel="icon" href="https://bucket.mlcdn.com/a/3336/3336910/images/71dbdd24ad8ebf75d9a1a1400bfdede02f9e9b44.png">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        :root {
+            --skin-color: #ff5011;
+            --mirage-color: hsl(210, 10%, 23%);
+            --title-color: hsl(242, 8%, 98%);
+            --text-color: hsl(242, 8%, 80%);
+            --body-color: #0d0d0d;
+            --box-color: hsl(242, 14%, 12%);
+            --hue-color: 242;
+
+            --body-font: 'Inter', sans-serif;
+            --font-medium: 500;
+            --font-bold: 700;
+
+            --bg-color-main: var(--body-color);
+            --text-color-primary: var(--title-color);
+            --bg-color-sidebar: var(--body-color);
+            --bg-color-input: #1b1c1d;
+            --bg-color-report: var(--box-color);
+            --color-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            --flavia-bg: var(--mirage-color);
+            --nfc-bg: var(--skin-color);
+            --nfc-text: var(--title-color);
+            --highlight-border: var(--skin-color);
+            --highlight-bg: hsla(0, 100%, 50%, 0.1);
+            --blue-accent: var(--skin-color);
+            --border-color: var(--mirage-color);
+
+            --scroll-box-color: var(--box-color);
+            --scroll-thumb-color: var(--skin-color);
+
+            --api-key-valid-color: #10B981;
+        }
+
+        .light-mode {
+            --bg-color-main: #f7f9fb;
+            --text-color-primary: #1f2937;
+            --bg-color-sidebar: #ffffff;
+            --bg-color-input: #ffffff;
+            --bg-color-report: #ffffff;
+            --color-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --flavia-bg: #e2e8f0;
+            --nfc-bg: #3b82f6;
+            --nfc-text: white;
+            --highlight-border: #ef4444;
+            --highlight-bg: #fee2e2;
+            --blue-accent: #3b82f6;
+            --border-color: #e5e7eb;
+            --scroll-box-color: #ccc;
+            --scroll-thumb-color: #888;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--scroll-box-color); }
+        ::-webkit-scrollbar-thumb { background: var(--scroll-thumb-color); border-radius: 4px; }
+
+        body {
+            font-family: var(--body-font);
+            background-color: var(--body-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            overflow: hidden; /* main scroll handled inside #report-view */
+        }
+
+        .chat-bubble { max-width: 85%; padding: 10px 15px; border-radius: 1.5rem; margin-bottom: 8px; position: relative; }
+        .flavia-bubble { background-color: var(--flavia-bg); border-bottom-left-radius: 0.25rem; text-align: left; margin-right: auto; }
+        .nfc-bubble { background-color: var(--nfc-bg); color: var(--nfc-text); border-bottom-right-radius: 0.25rem; text-align: left; margin-left: auto; }
+
+        .highlight-box {
+            border: 2px solid var(--highlight-border);
+            background-color: var(--highlight-bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .score-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+
+        .sidebar {
+            width: 64px;
+            transition: width 0.3s ease, transform 0.3s ease;
+            position: fixed;
+            z-index: 50;
+            height: 100vh;
+            overflow-x: hidden;
+            background-color: var(--body-color);
+            top: 0;
+            left: 0;
+        }
+        .sidebar-open { width: 34vw; max-width: 280px; }
+
+        .sidebar-content {
+            width: 280px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .main-content-wrapper {
+            margin-left: 64px;
+            transition: margin-left 0.3s ease;
+            width: calc(100% - 64px);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .sidebar-open + .main-content-wrapper {
+            margin-left: min(34vw, 280px);
+            width: calc(100% - min(34vw, 280px));
+        }
+
+        .sidebar:not(.sidebar-open) .sidebar-footer-border { border-top: none !important; }
+
+        #sidebar { border-right: 1px solid #1b1c1d; }
+
+        /* Welcome view — fills the main column */
+        #welcome-view {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            padding: 1rem;
+            position: relative;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        #welcome-greeting {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            line-height: 1.1;
+        }
+
+        /* Report view — takes full main column and scrolls internally */
+        #report-view {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 4rem 2rem 4rem 2rem;
+            position: relative;
+            min-height: 0; /* critical for flex scroll context */
+        }
+
+        .fixed-top-right {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 40;
+        }
+
+        .pdf-button-style:hover { background-color: var(--mirage-color) !important; }
+        .pdf-button-style { background-color: var(--skin-color) !important; color: white; }
+
+        /* Welcome input container — no more fixed-bottom, stays inside welcome */
+        #main-input-container {
+            margin-top: 2.5rem;
+            z-index: 15;
+            transition: all 0.3s ease-out;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            transform: none;
+        }
+
+        @keyframes glowing {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 80, 17, 0.4), 0 0 10px rgba(255, 80, 17, 0.2);
+                border-color: rgba(255, 80, 17, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 15px var(--skin-color), 0 0 25px rgba(255, 80, 17, 0.8);
+                border-color: var(--skin-color);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(255, 80, 17, 0.4), 0 0 10px rgba(255, 80, 17, 0.2);
+                border-color: rgba(255, 80, 17, 0.5);
+            }
+        }
+
+        .minimal-input-wrapper {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-color-input);
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid transparent;
+            animation: glowing 3s infinite alternate;
+        }
+
+        .minimal-input {
+            flex-grow: 1;
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-color-primary);
+            resize: none;
+            min-height: 2.5rem;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding: 0.25rem 0.5rem;
+        }
+
+        #api-key-input.api-key-valid {
+            border-color: var(--api-key-valid-color) !important;
+            box-shadow: 0 0 3px 1px rgba(16, 185, 129, 0.5);
+        }
+
+        #api-key-input:not(:focus):not(.api-key-valid) {
+            border-color: var(--mirage-color) !important;
+            box-shadow: none !important;
+        }
+
+        #sidebar-full-logo { display: block; }
+        #sidebar-icon-logo { display: none !important; }
+        .sidebar:not(.sidebar-open) #sidebar-full-logo { display: none; }
+
+        #sidebar-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+        .sidebar.sidebar-open #sidebar-close-btn { display: block; color: var(--skin-color); }
+        .sidebar:not(.sidebar-open) #sidebar-close-btn { display: none; }
+        .sidebar.sidebar-open #sidebar-icon-logo { display: none !important; }
+
+        .sidebar:not(.sidebar-open) .sidebar-footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        .sidebar:not(.sidebar-open) .sidebar-footer-content > div { display: none; }
+        .sidebar:not(.sidebar-open) .sidebar-footer-content > img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0 !important; }
+        .goog-tooltip-bubble { display: none !important; }
+
+        .sidebar-item-active { background-color: var(--skin-color); color: var(--title-color); }
+        .sidebar-item-active p { color: var(--title-color); }
+
+        .case-study-report {
+            background-color: #ffffff;
+            color: #1f2937;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        .case-study-report .chat-bubble { background-color: #e2e8f0; color: #1f2937; }
+        .case-study-report .nfc-bubble { background-color: #3b82f6; color: white; }
+        .case-study-report h1, .case-study-report h2, .case-study-report h3 { color: #1f2937; }
+        .case-study-report .report-red-flag-box {
+            background-color: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+        .case-study-report .report-recommendation-box {
+            background-color: #f0fdf4;
+            border-left: 4px solid #16a34a;
+        }
+        .case-study-report .report-formula-score { background-color: #e5e7eb; }
+        .case-study-report .report-score-row-border { border-color: #d1d5db; }
+
+        #centerpiece-icon {
+            transition: transform 0.3s ease-in-out;
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: none;
+        }
+        #centerpiece-icon:hover {
+            transform: translateY(-8px) scale(1.05);
+            cursor: pointer;
+            border: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex antialiased dark-mode">
+
+    
+
+    <div id="loading-state" class="fixed inset-0 flex items-center justify-center z-50" style="background-color: var(--body-color)">
+        <div class="p-6 rounded-xl shadow-2xl text-center" style="background-color: var(--box-color)">
+            <i class="fas fa-compass fa-spin text-4xl" style="color: var(--skin-color)"></i>
+            <p class="text-lg font-semibold" style="color: var(--text-color); margin-top: 0.75rem;">Initializing Lead Qualifier...</p>
+        </div>
+    </div>
+
+    <div class="flex h-screen w-full">
+        <aside id="sidebar" class="sidebar bg-body-color border-r border-mirage-color transition-colors duration-300 flex flex-col">
+            <div class="sidebar-content h-full">
+                <div class="py-4 border-b px-4 flex flex-col flex-shrink-0 relative" style="border-color: var(--mirage-color)">
+                    <button id="sidebar-close-btn" class="p-1 rounded-full text-skin-color hover:opacity-80 transition hidden absolute top-[10px] right-[10px] z-10" onclick="window.toggleSidebar()" title="Close Sidebar">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                    <img id="sidebar-full-logo" src="https://ik.imagekit.io/bebell/LeadLens/logo-horizontal-leadlens.png?updatedAt=1763522577486" alt="Brand Logo" class="w-full h-auto mt-4" style="border-radius: 4px;">
+                    <img id="sidebar-icon-logo" src="https://ik.imagekit.io/bebell/LeadLens/icon%20for%20LeadLens.png" alt="Brand Icon" class="w-8 h-8 object-cover hidden">
+                </div>
+
+                <div class="my-4 px-4 flex-shrink-0">
+                    <button onclick="window.newConversation()" class="w-full bg-skin-color hover:opacity-90 text-title-color font-semibold py-2 rounded-lg transition duration-150 ease-in-out flex items-center justify-center">
+                        <i class="fas fa-plus mr-2"></i> New Report
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto px-4 pr-3">
+                    <ul id="conversation-list" class="space-y-1"></ul>
+                </div>
+
+                <div class="mt-auto pt-4 border-t px-4 flex-shrink-0 cursor-pointer hover:bg-mirage-color/50 transition duration-150 rounded-t-lg sidebar-footer-border" style="border-color: var(--mirage-color)" onclick="document.getElementById('settings-modal-wrapper').classList.remove('hidden')">
+                    <div class="flex items-center space-x-3 p-2 sidebar-footer-content">
+                        <img id="sidebar-avatar-display" src="https://ik.imagekit.io/bebell/LeadLens/Picture%20Avatar%20(1).png" alt="User Profile" class="w-10 h-10 rounded-full object-cover ring-2 user-avatar-display" style="border-color: var(--skin-color)">
+                        <div>
+                            <p class="text-sm font-semibold text-title-color truncate" id="sidebar-username-display">Lead Analyst</p>
+                            <p class="text-xs" style="color: var(--text-color)" id="sidebar-version-display"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <button id="sidebar-toggle-open" class="absolute top-4 left-0 z-50 p-3 rounded-full text-text-color hover:text-skin-color transition hidden" style="background-color: var(--box-color); margin-left: 10px;" onclick="window.toggleSidebar()" title="Open Sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <main id="main-content-wrapper" class="main-content-wrapper flex flex-col flex-1 overflow-x-hidden relative" style="background-color: var(--body-color)">
+            <div class="fixed-top-right flex space-x-3 items-center hide-for-pdf">
+                <button id="save-report-button" onclick="window.saveCurrentReport()" class="bg-green-600 hover:bg-green-700 text-title-color font-semibold py-2 px-3 rounded-lg shadow-md transition text-sm hidden items-center">
+                    <i class="fas fa-save mr-1"></i> Save Report
+                </button>
+                <button onclick="window.downloadReportAsPDF()" class="pdf-button-style font-semibold w-10 h-10 rounded-full shadow-md transition duration-200 ease-in-out flex items-center justify-center group" title="Download PDF">
+                    <i class="fas fa-file-pdf text-lg text-white group-hover:text-skin-color"></i>
+                </button>
+                <button id="close-report-button" onclick="window.closeReport()" class="bg-mirage-color hover:bg-red-600 text-title-color font-semibold w-10 h-10 rounded-full shadow-md transition duration-200 ease-in-out flex items-center justify-center group hidden" title="Close Report (auto-saves to sidebar)">
+                    <i class="fas fa-times text-lg group-hover:text-white"></i>
+                </button>
+            </div>
+
+            <div id="welcome-view" class="w-full flex-col p-4" style="display:flex;">
+                <div class="max-w-xl mx-auto flex flex-col items-center w-full">
+                    <div class="mb-4">
+                        <img id="centerpiece-icon"
+                            src="https://ik.imagekit.io/bebell/LeadLens/icon%20for%20LeadLens.png"
+                            alt="AI Avatar"
+                            class="w-28 h-28"
+                            onmouseover="this.src='https://bucket.mlcdn.com/a/3336/3336910/images/c6a34c2b6c9e37939e4f54113275a717f71b66aa.png';"
+                            onmouseout="this.src='https://ik.imagekit.io/bebell/LeadLens/icon%20for%20LeadLens.png';"
+                        >
+                    </div>
+                    <h2 id="welcome-greeting" class="text-title-color text-center" style="font-size: 2.5rem; font-weight: 800; letter-spacing: -0.05em; line-height: 1.1;">Who should we qualify today?</h2>
+
+                    <p class="text-text-color mt-3 text-sm text-center max-w-sm" style="color: #525252 !important;">
+                        Paste or upload a chat transcript. Use "Speaker1: text" format for best results.
+                    </p>
+
+                    <div id="main-input-container" class="w-full relative">
+                        <div class="minimal-input-wrapper mx-auto max-w-2xl">
+                            <label class="cursor-pointer text-text-color hover:text-skin-color transition mr-2 flex items-center" title="Upload Transcript">
+                                <i class="fas fa-cloud-arrow-up text-lg"></i>
+                                <input type="file" id="transcript-file-upload-main" onchange="window.handleFileUpload(event);" class="hidden" accept=".txt,.log,.md">
+                            </label>
+
+                            <textarea id="main-transcript-input" rows="1" class="minimal-input" placeholder="Upload or paste transcript here..."></textarea>
+
+                            <button id="main-analyze-button" onclick="window.handleLeadAnalysis()" class="bg-skin-color hover:opacity-90 text-title-color font-bold p-3 ml-2 rounded-full transition duration-150 ease-in-out flex items-center justify-center">
+                                <img id="analyze-button-icon" src="https://bucket.mlcdn.com/a/3336/3336910/images/900217d3be86945033e1ab943412dd93825c9b0c.png" alt="Analyze" class="w-10 h-10">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="report-view" class="hidden relative p-4 sm:p-8" style="display:none;">
+                <div id="report-content-display" class="w-full h-full flex justify-center items-start"></div>
+                <button id="back-to-top" class="hidden fixed bottom-24 right-8 text-title-color p-3 rounded-full shadow-lg transition duration-300" style="background-color: var(--skin-color)" title="Go to top">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <div id="settings-modal-wrapper" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden" onclick="if(event.target.id === 'settings-modal-wrapper') document.getElementById('settings-modal-wrapper').classList.add('hidden')">
+        <div id="settings-modal" class="rounded-xl shadow-2xl p-6 sm:p-8 w-11/12 max-w-lg transition-all duration-300 transform scale-100 border" style="background-color: var(--box-color); border-color: var(--mirage-color)" onclick="event.stopPropagation()">
+            <h3 class="text-2xl font-bold mb-6 border-b pb-2 text-title-color" style="border-color: var(--mirage-color)">User Settings & API Access</h3>
+
+            <div class="space-y-5">
+                <div class="flex flex-col space-y-4 pb-4 border-b" style="border-color: var(--mirage-color)">
+                    <div class="flex items-center space-x-4">
+                        <img id="modal-avatar-display" src="https://ik.imagekit.io/bebell/LeadLens/Picture%20Avatar%20(1).png" alt="User Profile" class="w-16 h-16 rounded-full object-cover ring-2 user-avatar-display" style="border-color: var(--skin-color)">
+                        <div class="flex-1">
+                            <label for="username-input" class="block text-sm font-medium text-text-color">Username</label>
+                            <input type="text" id="username-input" placeholder="Your Name" class="mt-1 block w-full p-2 border rounded-md shadow-sm text-title-color" style="background-color: var(--mirage-color); border-color: var(--mirage-color)">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-text-color mb-1">Profile Picture (Max 500KB)</label>
+                        <input type="file" id="profile-picture-upload" onchange="window.handleProfilePictureUpload(event)" accept="image/png, image/jpeg, image/gif" class="block w-full text-sm text-text-color
+                            file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold
+                            file:bg-skin-color file:text-black hover:file:bg-mirage-color hover:file:text-title-color"
+                        />
+                        <p id="upload-status" class="mt-2 text-xs text-green-500"></p>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="api-key-input" class="block text-sm font-medium text-text-color mb-2">DeepSeek API Key (BYOK)</label>
+                    <input type="password" id="api-key-input" placeholder="Enter your DeepSeek API Key (sk-...)" class="mt-1 block w-full p-2 border border-red-700 rounded-md shadow-sm focus:ring-skin-color focus:border-skin-color text-title-color" style="background-color: var(--mirage-color)">
+                    <p class="mt-2 text-xs text-red-400">Required for AI analysis. You can generate a key at <a href="https://platform.deepseek.com/api_keys" target="_blank" class="text-skin-color hover:underline font-semibold">DeepSeek Platform</a>.</p>
+                </div>
+
+                <div class="bg-yellow-900/20 p-3 rounded-md border border-yellow-700/50">
+                    <p class="text-xs text-yellow-500 font-semibold mb-1"><i class="fas fa-shield-alt mr-1"></i> Data Privacy Notice</p>
+                    <p class="text-xs text-gray-400">Transcripts are processed by the DeepSeek API. Do not upload transcripts containing sensitive PII (Personally Identifiable Information) such as credit card numbers or medical data.</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-text-color">Subscription Settings</label>
+                    <p class="mt-1 text-sm text-text-color">Current Plan: Pro Analyst (Mock)</p>
+                    <details class="mt-2 p-2 border rounded-md" style="border-color: var(--mirage-color)">
+                        <summary class="font-medium cursor-pointer text-title-color">Canceling Instructions (PayPal)</summary>
+                        <p class="text-xs mt-2 text-text-color">To cancel your subscription, please follow the instructions on your PayPal account's 'Automatic Payments' section.</p>
+                        <a href="#" class="hover:underline text-xs" style="color: var(--skin-color)" onclick="console.log('Placeholder for PayPal link.')">Go to PayPal Payments</a>
+                    </details>
+                </div>
+
+                <details class="pt-4 border-t" style="border-color: var(--mirage-color)">
+                    <summary class="font-medium cursor-pointer text-title-color text-sm">
+                        <i class="fas fa-file-export mr-2 text-blue-500"></i> Import & Export Data
+                    </summary>
+                    <div class="mt-4 space-y-3">
+                        <button onclick="window.exportConversationHistory()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition">
+                            <i class="fas fa-download mr-2"></i> EXPORT ALL DATA (.json)
+                        </button>
+                        <p id="export-status" class="mt-2 text-center text-sm text-green-500"></p>
+
+                        <div>
+                            <label for="import-file-input" class="block text-xs font-medium text-text-color mb-1">Restore from File (.json or .txt)</label>
+                            <input type="file" id="import-file-input" onchange="window.handleImport(event)" accept=".json,.txt,.log,.md" class="block w-full text-sm text-text-color
+                                file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold
+                                file:bg-mirage-color file:text-title-color hover:file:bg-skin-color hover:file:text-white"
+                            />
+                            <p id="import-status" class="mt-2 text-center text-sm text-green-500"></p>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="pt-4 border-t" style="border-color: var(--mirage-color)">
+                    <summary class="font-medium cursor-pointer text-title-color text-sm">
+                        <i class="fas fa-exclamation-triangle mr-2 text-red-500"></i> Advanced Data Management
+                    </summary>
+                    <div class="mt-4">
+                        <button onclick="window.eraseAllData()" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-2 rounded-lg transition">
+                            <i class="fas fa-trash-alt mr-2"></i> ERASE ALL DATA SAVED
+                        </button>
+                        <p id="erase-status" class="mt-2 text-center text-sm text-green-500"></p>
+                    </div>
+                </details>
+
+            </div>
+
+            <div class="mt-6 flex justify-end space-x-3">
+                <button onclick="window.saveUserSettings()" class="bg-skin-color hover:opacity-90 text-title-color font-semibold py-2 px-4 rounded-lg transition">Save Settings</button>
+                <button onclick="document.getElementById('settings-modal-wrapper').classList.add('hidden')" class="bg-mirage-color hover:bg-mirage-color/70 text-title-color font-semibold py-2 px-4 rounded-lg transition">Close</button>
+            </div>
+            <p id="save-status" class="mt-2 text-center text-sm text-green-500"></p>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query, serverTimestamp, deleteDoc, getDocs, writeBatch, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+    const DEFAULT_AVATAR = "https://ik.imagekit.io/bebell/LeadLens/Picture%20Avatar%20(1).png";
+    const LOCAL_STORAGE_KEY = 'deepseekLeadQualifierSettings';
+    const LOCAL_CONVERSATIONS_KEY = 'deepseekLeadQualifierConversations';
+
+    let app, db, auth;
+    let globalUserId = null;
+    const APP_VERSION = "V 1.0.3 - DeepSeek";
+
+    window.appState = {
+        conversations: [],
+        currentConversation: null,
+        settings: {
+            apiKey: "",
+            username: "Lead Analyst",
+            profilePictureBase64: DEFAULT_AVATAR
+        },
+        isAuthReady: false,
+        deepseekApiKey: ""
+    };
+
+    setLogLevel('Debug');
+
+    // ============================================================
+    // FIREBASE INITIALIZATION
+    // ============================================================
+    if (firebaseConfig) {
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            window.db = db;
+
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    try {
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        console.error("Firebase Auth Error:", error);
+                        globalUserId = 'anon-' + (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9));
+                    }
+                }
+
+                globalUserId = auth.currentUser?.uid || globalUserId;
+                window.appState.isAuthReady = true;
+
+                if (globalUserId) {
+                    await loadUserSettings();
+                    setupConversationsListener();
+                }
+                document.getElementById('loading-state').style.opacity = '0';
+                setTimeout(() => { document.getElementById('loading-state').style.display = 'none'; }, 300);
+            });
+
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+            document.getElementById('loading-state').innerHTML = '<div class="text-red-500 p-4">Error initializing Firebase. Check console for details.</div>';
+        }
+    } else {
+        document.getElementById('loading-state').innerHTML = '<div class="text-yellow-500 p-4">Firebase config not found. Data persistence is disabled. Using browser storage.</div>';
+        globalUserId = 'persistence-disabled-user';
+        window.appState.isAuthReady = true;
+        loadUserSettings();
+
+        setTimeout(() => {
+            document.getElementById('loading-state').style.opacity = '0';
+            setTimeout(() => { document.getElementById('loading-state').style.display = 'none'; }, 300);
+        }, 1000);
+    }
+
+    const getUserSettingsDocRef = (uid) => doc(db, `artifacts/${appId}/users/${uid}/settings/user_settings`);
+    const getConversationsCollectionRef = (uid) => collection(db, `artifacts/${appId}/users/${uid}/conversations`);
+
+    // ============================================================
+    // SETTINGS LOADING & SAVING
+    // ============================================================
+    async function loadUserSettings() {
+        let loadedSettings = { ...window.appState.settings };
+
+        const localSettingsJson = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (localSettingsJson) {
+            try {
+                const localSettings = JSON.parse(localSettingsJson);
+                loadedSettings = { ...loadedSettings, ...localSettings };
+            } catch (e) {
+                console.error("Error parsing localStorage settings:", e);
+            }
+        }
+
+        if (globalUserId && db) {
+            try {
+                const docRef = getUserSettingsDocRef(globalUserId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const firestoreSettings = docSnap.data();
+                    loadedSettings = { ...loadedSettings, ...firestoreSettings };
+                }
+            } catch(e) {
+                console.error("Error loading settings from Firestore:", e);
+            }
+        }
+
+        window.appState.settings = {
+            ...loadedSettings,
+            profilePictureBase64: loadedSettings.profilePictureBase64 || DEFAULT_AVATAR
+        };
+
+        document.body.classList.remove('dark-mode', 'light-mode');
+        document.body.classList.add('dark-mode');
+        window.appState.deepseekApiKey = window.appState.settings.apiKey;
+
+        updateSettingsUI();
+        updateMainViewVisibility();
+    }
+
+    window.saveUserSettings = async () => {
+        const settingsModal = document.getElementById('settings-modal');
+        const apiKeyInput = settingsModal.querySelector('#api-key-input');
+        const apiKey = apiKeyInput.value.trim();
+        const username = settingsModal.querySelector('#username-input').value.trim() || "Lead Analyst";
+        const profilePictureBase64 = window.appState.settings.profilePictureBase64 || DEFAULT_AVATAR;
+
+        const newSettings = { apiKey, username, profilePictureBase64 };
+        const statusElement = document.getElementById('save-status');
+
+        try {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newSettings));
+            window.appState.settings = { ...window.appState.settings, ...newSettings };
+            window.appState.deepseekApiKey = apiKey;
+        } catch (e) {
+            console.error("Error saving settings to localStorage:", e);
+        }
+
+        if (globalUserId && db) {
+            try {
+                const docRef = getUserSettingsDocRef(globalUserId);
+                await setDoc(docRef, newSettings, { merge: true });
+            } catch (e) {
+                console.error("Error saving settings to Firestore:", e);
+            }
+        }
+
+        if (apiKey.length > 0) {
+            apiKeyInput.classList.add('api-key-valid');
+            statusElement.textContent = 'Settings saved successfully!';
+        } else {
+            apiKeyInput.classList.remove('api-key-valid');
+            statusElement.textContent = 'Settings saved (API Key removed)!';
+        }
+        setTimeout(() => statusElement.textContent = '', 3000);
+
+        updateMainViewVisibility();
+        updateSettingsUI();
+    };
+
+    window.handleProfilePictureUpload = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (file.size > 500 * 1024) {
+            console.error('Image file is too large. Please select an image under 500KB.');
+            document.getElementById('upload-status').textContent = 'Error: Image file is too large (> 500KB).';
+            event.target.value = null;
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const base64Image = e.target.result;
+            window.appState.settings.profilePictureBase64 = base64Image;
+
+            document.querySelectorAll('.user-avatar-display').forEach(img => {
+                img.src = base64Image;
+            });
+
+            document.getElementById('upload-status').textContent = 'Image loaded! Click "Save Settings" to confirm.';
+        };
+        reader.readAsDataURL(file);
+    };
+
+    window.updateSettingsUI = () => {
+        const settings = window.appState.settings;
+        const settingsModal = document.getElementById('settings-modal');
+
+        if (settingsModal) {
+            const apiKeyInput = settingsModal.querySelector('#api-key-input');
+            apiKeyInput.value = settings.apiKey;
+            settingsModal.querySelector('#username-input').value = settings.username;
+
+            if (settings.apiKey && settings.apiKey.length > 0) {
+                apiKeyInput.classList.add('api-key-valid');
+            } else {
+                apiKeyInput.classList.remove('api-key-valid');
+            }
+        }
+        document.getElementById('sidebar-username-display').textContent = settings.username;
+
+        document.querySelectorAll('.user-avatar-display').forEach(img => {
+            img.src = settings.profilePictureBase64 || DEFAULT_AVATAR;
+        });
+    };
+
+    // ============================================================
+    // CONVERSATIONS (Firestore + localStorage fallback)
+    // ============================================================
+    function setupConversationsListener() {
+        if (!globalUserId || !db) return;
+        const q = query(getConversationsCollectionRef(globalUserId));
+
+        onSnapshot(q, (snapshot) => {
+            const conversations = [];
+            snapshot.forEach(doc => {
+                conversations.push({ id: doc.id, ...doc.data() });
+            });
+            conversations.sort((a, b) => {
+                const timeA = a.timestamp?.seconds || 0;
+                const timeB = b.timestamp?.seconds || 0;
+                return timeB - timeA;
+            });
+            window.appState.conversations = conversations;
+            renderSidebar();
+        }, (error) => {
+            console.error("Error setting up conversations listener:", error);
+        });
+    }
+
+    window.saveConversation = async (conversation) => {
+        // Fallback: no Firebase
+        if (!globalUserId || !db) {
+            if (!conversation.id) {
+                conversation.id = 'local-' + Math.random().toString(36).substring(2, 9);
+            }
+            conversation.isSaved = true;
+            conversation.timestamp = { seconds: Math.floor(Date.now() / 1000) };
+
+            const existingIdx = window.appState.conversations.findIndex(c => c.id === conversation.id);
+            if (existingIdx >= 0) {
+                window.appState.conversations[existingIdx] = { ...conversation };
+            } else {
+                window.appState.conversations.unshift({ ...conversation });
+            }
+
+            try {
+                localStorage.setItem(LOCAL_CONVERSATIONS_KEY, JSON.stringify(window.appState.conversations));
+            } catch (e) { console.warn('Local save failed', e); }
+
+            if (window.appState.currentConversation) {
+                window.appState.currentConversation.isSaved = true;
+            }
+            window.updateSaveButtonVisibility();
+            renderSidebar();
+            return conversation;
+        }
+
+        const conversationsRef = getConversationsCollectionRef(globalUserId);
+
+        try {
+            if (conversation.id) {
+                const docRef = doc(conversationsRef, conversation.id);
+                await setDoc(docRef, {
+                    ...conversation,
+                    isSaved: true,
+                    timestamp: serverTimestamp()
+                }, { merge: true });
+            } else {
+                const newDoc = await addDoc(conversationsRef, {
+                    ...conversation,
+                    isSaved: true,
+                    timestamp: serverTimestamp()
+                });
+                conversation.id = newDoc.id;
+            }
+            if (window.appState.currentConversation) {
+                window.appState.currentConversation.isSaved = true;
+            }
+            window.updateSaveButtonVisibility();
+
+            return conversation;
+        } catch (e) {
+            console.error("Error saving conversation:", e);
+            return null;
+        }
+    };
+
+    window.deleteConversation = async (id) => {
+        if (!globalUserId || !db) {
+            window.appState.conversations = window.appState.conversations.filter(c => c.id !== id);
+            try {
+                localStorage.setItem(LOCAL_CONVERSATIONS_KEY, JSON.stringify(window.appState.conversations));
+            } catch (e) {}
+            if (window.appState.currentConversation?.id === id) {
+                window.newConversation();
+            }
+            renderSidebar();
+            return;
+        }
+        try {
+            await deleteDoc(doc(getConversationsCollectionRef(globalUserId), id));
+            if (window.appState.currentConversation?.id === id) {
+                window.newConversation();
+            }
+        } catch (e) {
+            console.error("Error deleting conversation:", e);
+        }
+    };
+
+    window.eraseAllData = async () => {
+        if (!globalUserId || !db) {
+            console.error('Persistence is disabled.');
+            document.getElementById('erase-status').textContent = 'Error: Persistence is disabled.';
+            return;
+        }
+
+        const result = prompt("To permanently delete ALL saved conversations and settings, type 'DELETE' below:");
+        if (result !== "DELETE") {
+            document.getElementById('erase-status').textContent = 'Deletion canceled.';
+            setTimeout(() => document.getElementById('erase-status').textContent = '', 3000);
+            return;
+        }
+
+        try {
+            const batch = writeBatch(db);
+            const conversationsSnapshot = await getDocs(getConversationsCollectionRef(globalUserId));
+
+            conversationsSnapshot.forEach((doc) => {
+                batch.delete(doc.ref);
+            });
+            batch.delete(getUserSettingsDocRef(globalUserId));
+
+            await batch.commit();
+
+            window.appState.conversations = [];
+            window.appState.settings = { apiKey: "", username: "Lead Analyst", profilePictureBase64: DEFAULT_AVATAR };
+            window.appState.deepseekApiKey = "";
+            document.body.classList.remove('light-mode');
+            document.body.classList.add('dark-mode');
+            window.updateSettingsUI();
+            window.newConversation();
+
+            document.getElementById('erase-status').textContent = 'All data erased successfully!';
+            setTimeout(() => document.getElementById('erase-status').textContent = '', 3000);
+
+        } catch (e) {
+            console.error("Error erasing all data:", e);
+            document.getElementById('erase-status').textContent = 'Error erasing data.';
+        }
+    };
+
+    // ============================================================
+    // EXPORT / IMPORT
+    // ============================================================
+    window.exportConversationHistory = () => {
+        const exportState = {
+            settings: window.appState.settings,
+            conversations: window.appState.conversations.map(conv => {
+                const { timestamp, ...rest } = conv;
+                return rest;
+            }),
+            currentConversation: window.appState.currentConversation?.report &&
+                                         !window.appState.currentConversation.id ?
+                                         window.appState.currentConversation : null
+        };
+
+        const jsonString = JSON.stringify(exportState, null, 2);
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `DeepSeekLeadQualifier_Export_${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        document.getElementById('export-status').textContent = 'Exported successfully!';
+        setTimeout(() => document.getElementById('export-status').textContent = '', 3000);
+    };
+
+    window.handleImport = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const content = e.target.result;
+            const importStatus = document.getElementById('import-status');
+            importStatus.textContent = 'Importing...';
+
+            try {
+                const importedState = JSON.parse(content);
+
+                if (importedState.settings && Array.isArray(importedState.conversations)) {
+                    window.appState.settings = importedState.settings;
+                    window.appState.deepseekApiKey = importedState.settings.apiKey;
+
+                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(importedState.settings));
+                    updateSettingsUI();
+
+                    window.appState.conversations = importedState.conversations.map(conv => ({
+                        ...conv,
+                        id: conv.id && !conv.id.startsWith('local-') ? conv.id : 'local-' + Math.random().toString(36).substring(2, 9),
+                        isSaved: false
+                    }));
+
+                    if (importedState.currentConversation && importedState.currentConversation.transcript) {
+                        window.appState.currentConversation = importedState.currentConversation;
+                        document.getElementById('main-transcript-input').value = importedState.currentConversation.transcript;
+                    } else if (window.appState.conversations.length > 0) {
+                        window.loadConversation(window.appState.conversations[0].id);
+                    } else {
+                        window.newConversation();
+                    }
+
+                    renderSidebar();
+                    updateMainViewVisibility();
+                    importStatus.textContent = 'State restored from JSON!';
+
+                } else {
+                    throw new Error("Invalid JSON structure, treating as transcript.");
+                }
+
+            } catch (jsonError) {
+                window.newConversation();
+                document.getElementById('main-transcript-input').value = content;
+                window.appState.currentConversation.transcript = content;
+                window.appState.currentConversation.report = null;
+                window.updateMainViewVisibility();
+
+                importStatus.textContent = 'File imported as a new transcript!';
+            }
+            setTimeout(() => importStatus.textContent = '', 3000);
+        };
+
+        reader.readAsText(file);
+        event.target.value = '';
+    };
+
+    // ============================================================
+    // UTILITIES
+    // ============================================================
+    function escapeHtml(text) {
+        if (typeof text !== 'string') return text;
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function restoreLocalConversations() {
+        if (db) return;
+        try {
+            const stored = localStorage.getItem(LOCAL_CONVERSATIONS_KEY);
+            if (stored) {
+                window.appState.conversations = JSON.parse(stored) || [];
+            }
+        } catch (e) {
+            console.warn('Could not restore local conversations:', e);
+        }
+    }
+
+    // ============================================================
+    // UI RENDERING
+    // ============================================================
+    window.renderSidebar = () => {
+        const sidebarList = document.getElementById('conversation-list');
+        if (!sidebarList) return;
+
+        sidebarList.innerHTML = '';
+        if (window.appState.conversations.length === 0) {
+            sidebarList.innerHTML = `<li class="p-2 text-xs text-text-color opacity-70">No reports yet. Generate one to see it here.</li>`;
+            return;
+        }
+
+        window.appState.conversations.forEach(conv => {
+            const isActive = window.appState.currentConversation && window.appState.currentConversation.id === conv.id;
+            const title = conv.title || (conv.transcript ? conv.transcript.substring(0, 30).trim() + '...' : 'Untitled Report');
+
+            const li = document.createElement('li');
+            li.className = `p-2 my-1 rounded-lg transition duration-150 ease-in-out cursor-pointer flex justify-between items-center ${isActive ? 'sidebar-item-active shadow-md' : 'hover:bg-mirage-color/50'}`;
+            li.onclick = () => window.loadConversation(conv.id);
+            li.innerHTML = `
+                <p class="text-sm font-medium text-title-color truncate">${escapeHtml(title)}</p>
+                <button class="text-red-400 hover:text-red-600 p-1 rounded-full ${isActive ? 'text-white' : ''}" onclick="event.stopPropagation(); window.deleteConversation('${conv.id}');">
+                    <i class="fas fa-trash-alt text-xs"></i>
+                </button>
+            `;
+            sidebarList.appendChild(li);
+        });
+    };
+
+    window.loadConversation = (id) => {
+        const conv = window.appState.conversations.find(c => c.id === id);
+        if (conv) {
+            window.appState.currentConversation = { ...conv, isSaved: true };
+            document.getElementById('main-transcript-input').value = conv.transcript || '';
+
+            window.updateMainViewVisibility();
+            if (conv.report) {
+                document.getElementById('report-content-display').innerHTML = window.generateReportHTML(conv.report, conv.transcript);
+                window.animateCounter('score-counter-display', Math.round((conv.report.overallScore || 0) * 20), 500);
+                document.getElementById('report-view').scrollTop = 0;
+            }
+            renderSidebar();
+        }
+    };
+
+    window.newConversation = () => {
+        window.appState.currentConversation = {
+            id: null,
+            title: "New Report",
+            transcript: "",
+            report: null,
+            isSaved: true,
+        };
+        document.getElementById('main-transcript-input').value = '';
+        document.getElementById('report-content-display').innerHTML = '';
+        window.updateMainViewVisibility();
+        renderSidebar();
+    };
+
+    window.toggleSidebar = () => {
+        const sidebar = document.getElementById('sidebar');
+        const mainWrapper = document.getElementById('main-content-wrapper');
+        const toggleOpenButton = document.getElementById('sidebar-toggle-open');
+        const sidebarCloseButton = document.getElementById('sidebar-close-btn');
+        const isCurrentlyOpen = sidebar.classList.contains('sidebar-open');
+
+        if (isCurrentlyOpen) {
+            sidebar.classList.remove('sidebar-open');
+            mainWrapper.classList.remove('sidebar-open-main');
+            toggleOpenButton.classList.remove('hidden');
+            sidebarCloseButton.classList.add('hidden');
+        } else {
+            sidebar.classList.add('sidebar-open');
+            mainWrapper.classList.add('sidebar-open-main');
+            toggleOpenButton.classList.add('hidden');
+            sidebarCloseButton.classList.remove('hidden');
+        }
+    };
+
+    window.updateSaveButtonVisibility = () => {
+        const saveButton = document.getElementById('save-report-button');
+        const currentConv = window.appState.currentConversation;
+
+        if (saveButton) {
+            const shouldShow = currentConv && currentConv.report && !currentConv.isSaved;
+            saveButton.style.display = shouldShow ? 'flex' : 'none';
+        }
+    };
+
+    window.updateMainViewVisibility = () => {
+        const hasReport = !!(window.appState.currentConversation && window.appState.currentConversation.report);
+        const welcomeView = document.getElementById('welcome-view');
+        const reportView = document.getElementById('report-view');
+        const closeReportBtn = document.getElementById('close-report-button');
+
+        if (hasReport) {
+            welcomeView.classList.add('hidden');
+            welcomeView.style.display = 'none';
+            reportView.classList.remove('hidden');
+            reportView.style.display = 'block';
+            if (closeReportBtn) closeReportBtn.classList.remove('hidden');
+        } else {
+            welcomeView.classList.remove('hidden');
+            welcomeView.style.display = 'flex';
+            reportView.classList.add('hidden');
+            reportView.style.display = 'none';
+            if (closeReportBtn) closeReportBtn.classList.add('hidden');
+        }
+
+        window.updateSaveButtonVisibility();
+    };
+
+    window.saveCurrentReport = async () => {
+        const currentConv = window.appState.currentConversation;
+        if (!currentConv || !currentConv.report) {
+            console.error('No report has been generated to save.');
+            return;
+        }
+
+        const defaultTitle = `Report - ${currentConv.report.prospectName} (${currentConv.report.finalVerdict}) - ${new Date().toLocaleDateString()}`;
+        const customTitle = prompt("Enter a custom title for this report:", defaultTitle);
+
+        if (customTitle === null) return;
+
+        currentConv.title = customTitle.trim() || defaultTitle;
+
+        document.getElementById('save-report-button').disabled = true;
+        document.getElementById('save-report-button').textContent = 'Saving...';
+
+        await window.saveConversation(currentConv);
+
+        document.getElementById('save-report-button').textContent = 'Saved!';
+        document.getElementById('save-report-button').disabled = false;
+    };
+
+    window.closeReport = async () => {
+        const currentConv = window.appState.currentConversation;
+        if (!currentConv || !currentConv.report) {
+            window.newConversation();
+            return;
+        }
+
+        if (!currentConv.title || currentConv.title === "New Report") {
+            const prospect = currentConv.report.prospectName || 'Prospect';
+            const verdict = currentConv.report.finalVerdict || 'Report';
+            currentConv.title = `${prospect} — ${verdict} (${new Date().toLocaleDateString()})`;
+        }
+
+        const closeBtn = document.getElementById('close-report-button');
+        if (closeBtn) {
+            closeBtn.disabled = true;
+            closeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        }
+
+        try {
+            await window.saveConversation(currentConv);
+        } catch (e) {
+            console.warn('Auto-save on close failed; adding to in-memory list instead.', e);
+            if (!currentConv.id) {
+                currentConv.id = 'local-' + Math.random().toString(36).substring(2, 9);
+            }
+            currentConv.isSaved = true;
+            const exists = window.appState.conversations.find(c => c.id === currentConv.id);
+            if (!exists) {
+                window.appState.conversations.unshift({ ...currentConv });
+            }
+        }
+
+        window.newConversation();
+
+        if (closeBtn) {
+            closeBtn.disabled = false;
+            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        }
+    };
+
+    window.animateCounter = (targetId, targetValue, duration) => {
+        const obj = document.getElementById(targetId);
+        if (!obj) return;
+
+        let startTimestamp = null;
+        const startValue = 0;
+
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+
+            const currentValue = Math.floor(progress * (targetValue - startValue) + startValue);
+            obj.innerHTML = currentValue;
+
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+
+        window.requestAnimationFrame(step);
+    };
+
+    // ============================================================
+    // REPORT HTML GENERATOR (with data-pdf-block markers)
+    // ============================================================
+    window.generateReportHTML = (report, transcript) => {
+        const { overallScore, finalVerdict, summary, scores, redFlags, prospectName, recommendations } = report;
+        const qualificationScore = Math.round(overallScore * 20);
+
+        const transcriptToHtml = (text) => {
+            const lines = text.split('\n');
+            let html = '';
+            const usedQuotes = new Set();
+
+            lines.forEach((line) => {
+                const match = line.match(/^(\w+):\s*(.*)/);
+
+                if (match) {
+                    const [full, speaker, content] = match;
+                    const safeSpeaker = escapeHtml(speaker);
+                    const safeContent = escapeHtml(content);
+
+                    const speakerClass = safeSpeaker.toLowerCase().includes('agent') || safeSpeaker.toLowerCase().includes('nfc') ? 'nfc-bubble' : 'flavia-bubble';
+
+                    html += `
+                        <div data-pdf-block class="flex ${speakerClass === 'nfc-bubble' ? 'justify-end' : 'justify-start'}">
+                            <div class="chat-bubble ${speakerClass} text-sm">${safeContent}</div>
+                        </div>
+                    `;
+
+                    const flag = redFlags.find(flag => content.includes(flag.supportingQuote) && !usedQuotes.has(flag.supportingQuote));
+                    if (flag) {
+                        usedQuotes.add(flag.supportingQuote);
+                        html += `
+                            <div data-pdf-block class="report-red-flag-box p-4 rounded-lg mt-4 mb-4 shadow">
+                                <p class="font-semibold text-red-800"><i class="fas fa-triangle-exclamation mr-2"></i>RED FLAG: ${escapeHtml(flag.name)}</p>
+                                <p class="text-sm mt-1">${escapeHtml(flag.comment)}</p>
+                            </div>
+                        `;
+                    }
+                } else if (line.trim()) {
+                    html += `<div data-pdf-block class="text-xs text-gray-600 my-1 text-center">${escapeHtml(line)}</div>`;
+                }
+            });
+            return html;
+        };
+
+        const getRecommendation = (type) => {
+            const rec = recommendations.find(r => r.type === type);
+            return rec ? escapeHtml(rec.script) : `No specific recommendation script available for ${escapeHtml(type)}.`;
+        };
+
+        const renderBantScoreRow = (key, data, baseScore) => {
+            const scoreImpact = Math.round((data.score / 5) * baseScore);
+            const impactSign = data.score < 3 ? '-' : '+';
+            const impactColor = data.score < 3 ? 'text-red-600' : 'text-green-600';
+
+            return `
+                <div data-pdf-block class="score-row report-score-row-border" style="border-color: #e5e7eb;">
+                    <span class="w-1/2">${key.charAt(0).toUpperCase() + key.slice(1)}: ${escapeHtml(data.comment)}</span>
+                    <span class="w-1/4 text-center ${impactColor} font-semibold">${impactSign}${Math.abs(scoreImpact)}</span>
+                    <span class="w-1/4 text-center text-gray-700">${data.score}/5</span>
+                </div>
+            `;
+        };
+
+        return `
+        <div class="max-w-6xl mx-auto case-study-report shadow-xl rounded-xl p-6 md:p-10">
+            <div data-pdf-block>
+                <header class="mb-8 border-b pb-4 border-gray-200">
+                    <h1 class="text-3xl font-extrabold text-gray-800">Lead Qualification Report: Prospect Analysis</h1>
+                    <p class="text-xl text-gray-500 mt-2">${escapeHtml(prospectName || 'Unidentified Prospect')} vs. LeadLens AI</p>
+
+                    <div class="mt-6 p-4 bg-red-600 rounded-lg text-white flex items-center justify-between shadow-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-chart-line text-2xl mr-3"></i>
+                            <span class="text-lg font-medium">Qualification Score (${escapeHtml(finalVerdict)})</span>
+                        </div>
+                        <div class="flex items-end">
+                            <span id="score-counter-display" class="text-5xl font-extrabold leading-none">${qualificationScore}</span>
+                            <span class="text-2xl font-semibold ml-1 leading-none">/100</span>
+                        </div>
+                    </div>
+                </header>
+            </div>
+
+            <div data-pdf-block>
+                <section class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md border-t-4 border-blue-600 flex flex-col items-start md:col-span-3">
+                        <i class="fas fa-search-dollar text-3xl text-blue-600 mb-3"></i>
+                        <h2 class="text-xl font-semibold mb-2 text-blue-800">Analyst Summary: ${escapeHtml(finalVerdict)}</h2>
+                        <p class="text-gray-600">${escapeHtml(summary)}</p>
+                    </div>
+                </section>
+            </div>
+
+            <h2 data-pdf-block data-keep-with-next="true" class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2 border-gray-200"><i class="fas fa-calculator mr-2 text-green-600"></i>BANT Qualification Breakdown</h2>
+
+            <div data-pdf-block data-keep-with-next="true" class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">Qualification Scoring Matrix</h3>
+                <div class="font-bold text-sm text-gray-700 score-row border-b-2 border-gray-300">
+                    <span class="w-1/2">BANT Factor & Commentary</span>
+                    <span class="w-1/4 text-center">Score Impact</span>
+                    <span class="w-1/4 text-center">AI Score (1-5)</span>
+                </div>
+            </div>
+
+            ${renderBantScoreRow('budget', scores.budget, 25)}
+            ${renderBantScoreRow('authority', scores.authority, 25)}
+            ${renderBantScoreRow('need', scores.need, 25)}
+            ${renderBantScoreRow('timeline', scores.timeline, 25)}
+
+            <div data-pdf-block class="score-row bg-gray-200 font-extrabold mt-2 rounded-lg">
+                <span class="w-1/2 text-gray-800">CUMULATIVE SCORE</span>
+                <span class="w-1/4 text-center text-gray-800"></span>
+                <span class="w-1/4 text-center text-red-600 font-extrabold">${qualificationScore}/100</span>
+            </div>
+
+            <h2 data-pdf-block data-keep-with-next="true" class="text-2xl font-bold mt-12 mb-6 text-gray-800 border-b pb-2 border-gray-200">Conversation Timeline & Key Events</h2>
+
+            <div class="space-y-6">
+                ${transcriptToHtml(transcript)}
+            </div>
+
+            <h2 data-pdf-block data-keep-with-next="true" class="text-2xl font-bold mb-4 mt-12 text-gray-800 border-b pb-2 border-gray-200"><i class="fas fa-lightbulb mr-2 text-yellow-600"></i>Recommended Scripts</h2>
+            <p data-pdf-block class="mb-6 text-gray-600">Use these scripts for consistent boundary enforcement based on the behavioral patterns identified in this conversation.</p>
+
+            <div data-pdf-block class="p-4 report-recommendation-box rounded-lg mb-4 shadow" style="background-color: #fef2f2; border-left-color: #ef4444;">
+                <p class="font-bold text-red-800 mb-1"><i class="fas fa-hand-holding-dollar mr-2"></i>Pattern: Demanding Free Design/Mock-up (Red Flag)</p>
+                <p class="font-mono text-sm bg-white p-3 rounded">**"${getRecommendation('free_work')}"**</p>
+            </div>
+
+            <div data-pdf-block class="p-4 report-recommendation-box rounded-lg mb-4 shadow" style="background-color: #fffbeb; border-left-color: #f59e0b;">
+                <p class="font-bold text-yellow-800 mb-1"><i class="fas fa-tag mr-2"></i>Pattern: Price Before Qualification Data (Red Flag)</p>
+                <p class="font-mono text-sm bg-white p-3 rounded">**"${getRecommendation('price_first')}"**</p>
+            </div>
+
+            <div data-pdf-block class="p-4 report-recommendation-box rounded-lg shadow" style="background-color: #f0fdf4; border-left-color: #16a34a;">
+                <p class="font-bold text-green-800 mb-1"><i class="fas fa-clock mr-2"></i>Pattern: Long Response Gaps / Low Commitment</p>
+                <p class="font-mono text-sm bg-white p-3 rounded">**"${getRecommendation('low_commitment')}"**</p>
+            </div>
+        </div>
+        `;
+    };
+
+    // ============================================================
+    // DEEPSEEK API INTEGRATION
+    // ============================================================
+    const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
+    const DEEPSEEK_MODEL = "deepseek-chat";
+
+    function buildSystemPrompt() {
+        return `You are a sophisticated Lead Qualification Analyst AI. Your task is to analyze a chat transcript and generate a comprehensive qualification report structured as a JSON object.
+
+You MUST respond with ONLY a valid JSON object, no markdown code fences, no additional text. The JSON must conform EXACTLY to this schema:
+
+{
+  "overallScore": <number, average of 4 BANT scores rounded to 1 decimal>,
+  "finalVerdict": "<string: concise verdict, e.g. 'Highly Qualified', 'Requires Nurturing', 'Time Waster'>",
+  "prospectName": "<string: prospect or company name, or 'Unidentified Prospect'>",
+  "summary": "<string: detailed professional paragraph explaining overall lead status and key findings>",
+  "scores": {
+    "budget": { "score": <integer 1-5>, "comment": "<string>", "supportingQuote": "<string exact quote or 'No clear indication in transcript.'>" },
+    "authority": { "score": <integer 1-5>, "comment": "<string>", "supportingQuote": "<string>" },
+    "need": { "score": <integer 1-5>, "comment": "<string>", "supportingQuote": "<string>" },
+    "timeline": { "score": <integer 1-5>, "comment": "<string>", "supportingQuote": "<string>" }
+  },
+  "redFlags": [
+    { "name": "<string short name e.g. 'FREE MOCK-UP DEMAND'>", "comment": "<string explanation>", "supportingQuote": "<string exact quote from transcript>" }
+  ],
+  "recommendations": [
+    { "type": "free_work", "script": "<string response script in same language as transcript>" },
+    { "type": "price_first", "script": "<string>" },
+    { "type": "low_commitment", "script": "<string>" }
+  ]
+}
+
+Rules:
+- Assign 1 (Low/Missing) to 5 (High/Clear) for each BANT category.
+- overallScore = average of the four BANT scores, rounded to 1 decimal.
+- redFlags: 0 to 3 critical behavioral red flags found in the transcript.
+- recommendations: exactly 3 objects with type values 'free_work', 'price_first', and 'low_commitment'.
+- Write all string values in the same language as the transcript.
+- Return raw JSON only — no code fences, no commentary.`;
+    }
+
+    window.handleLeadAnalysis = async () => {
+        const transcript = document.getElementById('main-transcript-input').value.trim();
+        const analyzeButton = document.getElementById('main-analyze-button');
+        const reportContentDisplay = document.getElementById('report-content-display');
+        const RUN_ICON_URL = "https://bucket.mlcdn.com/a/3336/3336910/images/900217d3be86945033e1ab943412dd93825c9b0c.png";
+
+        if (!transcript) {
+            console.error('Please paste or upload a conversation transcript.');
+            return;
+        }
+
+        if (!window.appState.deepseekApiKey) {
+            console.error('Please set your DeepSeek API Key in Settings before analyzing.');
+            document.getElementById('settings-modal-wrapper').classList.remove('hidden');
+            return;
+        }
+
+        analyzeButton.disabled = true;
+        analyzeButton.innerHTML = `<i class="fas fa-spinner fa-spin text-xl text-white"></i>`;
+
+        window.appState.currentConversation = window.appState.currentConversation || {
+            id: null, title: "New Report", transcript: "", report: null, isSaved: true
+        };
+        window.appState.currentConversation.report = { _loading: true };
+        window.updateMainViewVisibility();
+        reportContentDisplay.innerHTML = `<div class="text-center p-10 text-xl" style="color: var(--skin-color)">AI is generating qualification report...</div>`;
+
+        const apiKey = window.appState.deepseekApiKey;
+
+        const payload = {
+            model: DEEPSEEK_MODEL,
+            messages: [
+                { role: "system", content: buildSystemPrompt() },
+                { role: "user", content: `Analyze the following chat transcript for lead qualification based on the BANT framework:\n\n---\n${transcript}\n---` }
+            ],
+            response_format: { type: "json_object" },
+            temperature: 0.3,
+            max_tokens: 4096,
+            stream: false
+        };
+
+        let response = null;
+        let lastError = null;
+
+        for (let attempt = 0; attempt < 3; attempt++) {
+            try {
+                response = await fetch(DEEPSEEK_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) break;
+
+                if (response.status === 401 || response.status === 403 || response.status === 400) {
+                    const errBody = await response.text();
+                    console.error(`DeepSeek API error ${response.status}:`, errBody);
+                    throw new Error(`API error ${response.status}: ${errBody}`);
+                }
+
+                lastError = `Status ${response.status}`;
+            } catch (err) {
+                lastError = err.message;
+                console.warn(`Attempt ${attempt + 1} failed:`, err.message);
+            }
+            if (attempt < 2) await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
+        }
+
+        try {
+            if (!response || !response.ok) {
+                throw new Error(lastError || 'DeepSeek API call failed after retries.');
+            }
+
+            const result = await response.json();
+            console.log("DeepSeek API Response:", result);
+
+            const choice = result.choices?.[0];
+            let rawText = choice?.message?.content;
+
+            if (!rawText) {
+                throw new Error("Empty response from DeepSeek API.");
+            }
+
+            rawText = rawText.trim();
+            if (rawText.startsWith('```')) {
+                rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+            }
+
+            let report;
+            try {
+                report = JSON.parse(rawText);
+            } catch (parseErr) {
+                console.error("Failed to parse DeepSeek JSON:", rawText);
+                throw new Error("AI returned malformed JSON. Please try again with a clearer transcript.");
+            }
+
+            report.overallScore = Number(report.overallScore) || 0;
+            report.finalVerdict = report.finalVerdict || "Unknown";
+            report.prospectName = report.prospectName || "Unidentified Prospect";
+            report.summary = report.summary || "No summary provided.";
+            report.scores = report.scores || {
+                budget: { score: 1, comment: "N/A", supportingQuote: "" },
+                authority: { score: 1, comment: "N/A", supportingQuote: "" },
+                need: { score: 1, comment: "N/A", supportingQuote: "" },
+                timeline: { score: 1, comment: "N/A", supportingQuote: "" }
+            };
+            report.redFlags = Array.isArray(report.redFlags) ? report.redFlags : [];
+            report.recommendations = Array.isArray(report.recommendations) ? report.recommendations : [];
+
+            const currentConv = window.appState.currentConversation || {
+                id: null,
+                title: `Report - ${report.prospectName}`,
+                transcript: transcript,
+                report: report,
+                isSaved: false
+            };
+
+            currentConv.report = report;
+            currentConv.transcript = transcript;
+            currentConv.isSaved = false;
+            window.appState.currentConversation = currentConv;
+
+            reportContentDisplay.innerHTML = window.generateReportHTML(report, transcript);
+            document.getElementById('report-view').scrollTop = 0;
+
+            const qualificationScore = Math.round(report.overallScore * 20);
+            window.animateCounter('score-counter-display', qualificationScore, 1000);
+
+        } catch (error) {
+            console.error("Error processing DeepSeek response:", error);
+            reportContentDisplay.innerHTML = `
+                <div class="p-10 text-red-500 text-center">
+                    <h3 class="text-xl font-bold mb-4">Analysis Failed</h3>
+                    <p>Error: ${escapeHtml(error.message)}</p>
+                    <p class="text-sm mt-4">Check that your DeepSeek API key is valid and that your account has sufficient balance. Open the browser console for details.</p>
+                </div>
+            `;
+            window.appState.currentConversation = window.appState.currentConversation || { id: null, title: "New Report", transcript: transcript, report: null, isSaved: true };
+            window.appState.currentConversation.report = null;
+            window.appState.currentConversation.transcript = transcript;
+        } finally {
+            analyzeButton.disabled = false;
+            analyzeButton.innerHTML = `<img id="analyze-button-icon" src="${RUN_ICON_URL}" alt="Analyze" class="w-10 h-10">`;
+            window.updateSaveButtonVisibility();
+        }
+    };
+
+    window.handleFileUpload = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const mainInput = document.getElementById('main-transcript-input');
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const text = e.target.result;
+            mainInput.value = text;
+            mainInput.focus();
+        };
+
+        reader.readAsText(file);
+    };
+
+    // ============================================================
+    // PDF EXPORT — BLOCK-AWARE PAGINATION
+    // ============================================================
+    /**
+     * Crops a canvas vertically, returning a new canvas containing the slice
+     * [startYPx, startYPx + heightPx]. Used only for oversized blocks.
+     */
+    function cropCanvasVertically(sourceCanvas, startYPx, heightPx) {
+        const out = document.createElement('canvas');
+        out.width = sourceCanvas.width;
+        out.height = Math.max(1, Math.round(heightPx));
+
+        const ctx = out.getContext('2d');
+        ctx.drawImage(
+            sourceCanvas,
+            0, Math.round(startYPx),
+            sourceCanvas.width, Math.round(heightPx),
+            0, 0,
+            sourceCanvas.width, Math.round(heightPx)
+        );
+        return out;
+    }
+
+    window.downloadReportAsPDF = async () => {
+        const reportElement = document.getElementById('report-content-display');
+        const currentReport = window.appState.currentConversation?.report;
+        if (!reportElement || !currentReport || currentReport._loading) {
+            console.error('No report has been generated yet.');
+            return;
+        }
+
+        // Loading toast
+        const toast = document.createElement('div');
+        toast.id = 'pdf-toast';
+        toast.style.cssText = `
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 9999; background: #ff5011; color: white;
+            padding: 12px 24px; border-radius: 999px;
+            font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            font-family: Inter, sans-serif; font-size: 14px;
+            display: flex; align-items: center; gap: 10px;
+        `;
+        toast.innerHTML = `<i class="fas fa-spinner fa-spin"></i><span>Generating PDF…</span>`;
+        document.body.appendChild(toast);
+
+        const tempHideElements = document.querySelectorAll('.hide-for-pdf');
+        tempHideElements.forEach(el => el.style.display = 'none');
+
+        try {
+            const inner = reportElement.querySelector('.case-study-report');
+            if (!inner) throw new Error('Report content not found.');
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            // ---- Page geometry (mm) ----
+            const PAGE_W = 210;
+            const PAGE_H = 297;
+            const MARGIN_X = 15;
+            const MARGIN_TOP = 15;
+            const MARGIN_BOTTOM = 15;
+            const CONTENT_W = PAGE_W - MARGIN_X * 2;
+            const CONTENT_H = PAGE_H - MARGIN_TOP - MARGIN_BOTTOM;
+
+            const BLOCK_GAP = 3;
+            const SCALE = 2;
+
+            let blocks = Array.from(inner.querySelectorAll('[data-pdf-block]'));
+            if (blocks.length === 0) {
+                blocks = Array.from(inner.children);
+            }
+
+            // ---- Pre-render every block ----
+            const rendered = [];
+            for (let i = 0; i < blocks.length; i++) {
+                const block = blocks[i];
+
+                toast.querySelector('span').textContent = `Generating PDF… ${i + 1}/${blocks.length}`;
+
+                const rect = block.getBoundingClientRect();
+                if (rect.width === 0 || rect.height === 0) continue;
+
+                const canvas = await html2canvas(block, {
+                    scale: SCALE,
+                    useCORS: true,
+                    backgroundColor: null,
+                    logging: false,
+                    windowWidth: inner.scrollWidth,
+                    windowHeight: block.scrollHeight,
+                    scrollX: 0,
+                    scrollY: -window.scrollY,
+                    width: block.scrollWidth,
+                    height: block.scrollHeight,
+                });
+
+                const mmHeight = (canvas.height / canvas.width) * CONTENT_W;
+
+                rendered.push({
+                    canvas,
+                    mmHeight,
+                    keepWithNext: block.getAttribute('data-keep-with-next') === 'true',
+                });
+            }
+
+            // ---- Lay out blocks across pages ----
+            let cursorY = MARGIN_TOP;
+            let pageStarted = false;
+
+            const startNewPage = () => {
+                pdf.addPage();
+                cursorY = MARGIN_TOP;
+                pageStarted = false;
+            };
+
+            const placeImage = (canvas, x, y, w, h) => {
+                const dataUrl = canvas.toDataURL('image/png');
+                pdf.addImage(dataUrl, 'PNG', x, y, w, h, undefined, 'FAST');
+            };
+
+            for (let i = 0; i < rendered.length; i++) {
+                const item = rendered[i];
+                let blockHeight = item.mmHeight;
+
+                // keep-with-next logic
+                if (item.keepWithNext && i + 1 < rendered.length) {
+                    const nextHeight = rendered[i + 1].mmHeight;
+                    const needed = blockHeight + BLOCK_GAP + nextHeight;
+                    const remainingOnPage = (MARGIN_TOP + CONTENT_H) - cursorY;
+                    const isFirstOnPage = !pageStarted;
+
+                    if (needed > remainingOnPage && !isFirstOnPage) {
+                        startNewPage();
+                    }
+                }
+
+                let remaining = blockHeight;
+                let sourceYOffsetPx = 0;
+                const pxPerMm = item.canvas.width / CONTENT_W;
+
+                while (remaining > 0.01) {
+                    const availableOnPage = (MARGIN_TOP + CONTENT_H) - cursorY;
+
+                    if (availableOnPage < 5 && pageStarted) {
+                        startNewPage();
+                        continue;
+                    }
+
+                    if (remaining <= availableOnPage) {
+                        const drawH = remaining;
+                        const drawW = CONTENT_W;
+
+                        if (sourceYOffsetPx === 0 && drawH >= blockHeight - 0.1) {
+                            placeImage(item.canvas, MARGIN_X, cursorY, drawW, drawH);
+                        } else {
+                            const cropCanvas = cropCanvasVertically(
+                                item.canvas,
+                                sourceYOffsetPx,
+                                remaining * pxPerMm
+                            );
+                            placeImage(cropCanvas, MARGIN_X, cursorY, drawW, drawH);
+                        }
+
+                        cursorY += drawH + BLOCK_GAP;
+                        pageStarted = true;
+                        remaining = 0;
+                    } else {
+                        const drawH = availableOnPage;
+                        const drawW = CONTENT_W;
+
+                        const cropCanvas = cropCanvasVertically(
+                            item.canvas,
+                            sourceYOffsetPx,
+                            drawH * pxPerMm
+                        );
+                        placeImage(cropCanvas, MARGIN_X, cursorY, drawW, drawH);
+
+                        sourceYOffsetPx += drawH * pxPerMm;
+                        remaining -= drawH;
+
+                        startNewPage();
+                    }
+                }
+            }
+
+            // ---- Save ----
+            const safeTitle = (window.appState.currentConversation.title || 'report')
+                .replace(/[^a-zA-Z0-9 _-]/g, '_')
+                .trim() || 'report';
+            pdf.save(`${safeTitle}_Report.pdf`);
+
+        } catch (err) {
+            console.error('PDF generation failed:', err);
+            alert('PDF generation failed: ' + err.message);
+        } finally {
+            tempHideElements.forEach(el => el.style.display = '');
+            const t = document.getElementById('pdf-toast');
+            if (t) t.remove();
+        }
+    };
+
+    // ============================================================
+    // DOM READY
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('sidebar-version-display').textContent = APP_VERSION;
+
+        restoreLocalConversations();
+
+        if (!window.appState.currentConversation) {
+            window.newConversation();
+        }
+
+        document.getElementById('sidebar').classList.add('sidebar-open');
+        document.getElementById('main-content-wrapper').classList.add('sidebar-open-main');
+
+        const backToTopButton = document.getElementById('back-to-top');
+        const reportView = document.getElementById('report-view');
+
+        if (reportView && backToTopButton) {
+            reportView.onscroll = function() {
+                if (!reportView.classList.contains('hidden') && reportView.scrollTop > 300) {
+                    backToTopButton.style.display = "block";
+                } else {
+                    backToTopButton.style.display = "none";
+                }
+            };
+        }
+
+        backToTopButton.onclick = function() {
+            reportView.scrollTop = 0;
+        };
+
+        document.body.classList.add('dark-mode');
+    });
+</script>
+
+
+  
+</body>
+</html>
