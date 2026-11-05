@@ -1225,7 +1225,7 @@
             window.updateMainViewVisibility(); 
 
             const apiKey = window.appState.geminiApiKey;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
             const systemPrompt = `You are a sophisticated Lead Qualification Analyst AI. Your task is to analyze the provided chat transcript and generate a comprehensive qualification report structured in JSON format. The analysis must strictly adhere to the BANT framework and include detailed behavioral analysis for generating the final case study report.
 
