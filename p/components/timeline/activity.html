@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Activity Feed Timeline</title>
+    <meta name="description" content="A detailed activity timeline showing user interactions with timestamps. Ideal for support tickets, project updates, or comment threads.">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        caveat: ['Caveat', 'cursive'],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="relative font-inter antialiased">
+    <main class="relative min-h-screen flex flex-col justify-center bg-slate-50 overflow-hidden">
+        <div class="w-full max-w-6xl mx-auto px-4 md:px-6 py-24">
+            <div class="flex flex-col justify-center">
+                <div class="w-full max-w-3xl mx-auto">
+                    <h1 class="text-3xl font-bold text-slate-900 mb-6">Support Ticket #4567</h1>
+                    <p class="text-slate-600 mb-12">Recent activity and updates on this support request.</p>
+                    
+                    <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:ml-[8.75rem] md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                        <!-- Item #1 -->
+                        <div class="relative">
+                            <div class="md:flex items-center md:space-x-4 mb-3">
+                                <div class="flex items-center space-x-4 md:space-x-2 md:space-x-reverse">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow md:order-1">
+                                        <svg class="fill-emerald-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                            <path d="M8 0a8 8 0 1 0 8 8 8.009 8.009 0 0 0-8-8Zm0 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z" />
+                                        </svg>
+                                    </div>
+                                    <time class="font-caveat font-medium text-xl text-indigo-500 md:w-28">Apr 7, 2024</time>
+                                </div>
+                                <div class="text-slate-500 ml-14"><span class="text-slate-900 font-bold">Mark Mikrol</span> opened the request</div>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-slate-200 text-slate-500 shadow ml-14 md:ml-44">I'm having trouble accessing my account dashboard. The page loads but then shows an error message.</div>
+                        </div>
+                        
+                        <!-- Item #2 -->
+                        <div class="relative">
+                            <div class="md:flex items-center md:space-x-4 mb-3">
+                                <div class="flex items-center space-x-4 md:space-x-2 md:space-x-reverse">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow md:order-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                            <path class="fill-slate-300" d="M14.853 6.861C14.124 10.348 10.66 13 6.5 13c-.102 0-.201-.016-.302-.019C7.233 13.618 8.557 14 10 14c.51 0 1.003-.053 1.476-.143L14.2 15.9a.499.499 0 0 0 .8-.4v-3.515c.631-.712 1-1.566 1-2.485 0-.987-.429-1.897-1.147-2.639Z" />
+                                            <path class="fill-slate-500" d="M6.5 0C2.91 0 0 2.462 0 5.5c0 1.075.37 2.074 1 2.922V11.5a.5.5 0 0 0 .8.4l1.915-1.436c.845.34 1.787.536 2.785.536 3.59 0 6.5-2.462 6.5-5.5S10.09 0 6.5 0Z" />
+                                        </svg>
+                                    </div>
+                                    <time class="font-caveat font-medium text-xl text-indigo-500 md:w-28">Apr 7, 2024</time>
+                                </div>
+                                <div class="text-slate-500 ml-14"><span class="text-slate-900 font-bold">John Mirkovic</span> commented</div>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-slate-200 text-slate-500 shadow ml-14 md:ml-44">Thanks for reaching out Mark. Could you please share a screenshot of the error message you're seeing? Also, which browser and device are you using?</div>
+                        </div>
+                        
+                        <!-- Item #3 -->
+                        <div class="relative">
+                            <div class="md:flex items-center md:space-x-4 mb-3">
+                                <div class="flex items-center space-x-4 md:space-x-2 md:space-x-reverse">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow md:order-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                            <path class="fill-slate-300" d="M14.853 6.861C14.124 10.348 10.66 13 6.5 13c-.102 0-.201-.016-.302-.019C7.233 13.618 8.557 14 10 14c.51 0 1.003-.053 1.476-.143L14.2 15.9a.499.499 0 0 0 .8-.4v-3.515c.631-.712 1-1.566 1-2.485 0-.987-.429-1.897-1.147-2.639Z" />
+                                            <path class="fill-slate-500" d="M6.5 0C2.91 0 0 2.462 0 5.5c0 1.075.37 2.074 1 2.922V11.5a.5.5 0 0 0 .8.4l1.915-1.436c.845.34 1.787.536 2.785.536 3.59 0 6.5-2.462 6.5-5.5S10.09 0 6.5 0Z" />
+                                        </svg>
+                                    </div>
+                                    <time class="font-caveat font-medium text-xl text-indigo-500 md:w-28">Apr 8, 2024</time>
+                                </div>
+                                <div class="text-slate-500 ml-14"><span class="text-slate-900 font-bold">Vlad Patterson</span> commented</div>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-slate-200 text-slate-500 shadow ml-14 md:ml-44">I've checked our logs and can see the error occurring. It seems to be related to a recent update. Our team is investigating this issue.</div>
+                        </div>
+                        
+                        <!-- Item #4 -->
+                        <div class="relative">
+                            <div class="md:flex items-center md:space-x-4 mb-3">
+                                <div class="flex items-center space-x-4 md:space-x-2 md:space-x-reverse">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow md:order-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                            <path class="fill-slate-300" d="M14.853 6.861C14.124 10.348 10.66 13 6.5 13c-.102 0-.201-.016-.302-.019C7.233 13.618 8.557 14 10 14c.51 0 1.003-.053 1.476-.143L14.2 15.9a.499.499 0 0 0 .8-.4v-3.515c.631-.712 1-1.566 1-2.485 0-.987-.429-1.897-1.147-2.639Z" />
+                                            <path class="fill-slate-500" d="M6.5 0C2.91 0 0 2.462 0 5.5c0 1.075.37 2.074 1 2.922V11.5a.5.5 0 0 0 .8.4l1.915-1.436c.845.34 1.787.536 2.785.536 3.59 0 6.5-2.462 6.5-5.5S10.09 0 6.5 0Z" />
+                                        </svg>
+                                    </div>
+                                    <time class="font-caveat font-medium text-xl text-indigo-500 md:w-28">Apr 8, 2024</time>
+                                </div>
+                                <div class="text-slate-500 ml-14"><span class="text-slate-900 font-bold">Mila Capentino</span> commented</div>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-slate-200 text-slate-500 shadow ml-14 md:ml-44">As a temporary workaround, could you try clearing your browser cache or using a different browser? We've identified the issue and are working on a fix.</div>
+                        </div>
+                        
+                        <!-- Item #5 -->
+                        <div class="relative">
+                            <div class="md:flex items-center md:space-x-4 mb-3">
+                                <div class="flex items-center space-x-4 md:space-x-2 md:space-x-reverse">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow md:order-1">
+                                        <svg class="fill-red-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                            <path d="M8 0a8 8 0 1 0 8 8 8.009 8.009 0 0 0-8-8Zm0 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z" />
+                                        </svg>
+                                    </div>
+                                    <time class="font-caveat font-medium text-xl text-indigo-500 md:w-28">Apr 9, 2024</time>
+                                </div>
+                                <div class="text-slate-500 ml-14"><span class="text-slate-900 font-bold">Mark Mikrol</span> closed the request</div>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-slate-200 text-slate-500 shadow ml-14 md:ml-44">The issue has been resolved after clearing my cache. Thanks for your help!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+  
+    <footer class="absolute left-6 right-6 md:left-12 md:right-auto bottom-4 md:bottom-8 text-center md:text-left">
+        <a class="text-xs text-slate-500 hover:underline" href="https://bebelldigitalsolutions.com">&copy;Powered by Bebell Digital Solutions - Tailwind CSS</a>
+    </footer>
+
+  
+</body>
+</html>
