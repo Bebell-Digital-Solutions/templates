@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>qme</title>
+    <link rel="icon" type="image/x-icon" href="imgs/favico.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+        integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body,
+        html {
+            scroll-behavior: smooth !important;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 antialiased px-4 md:px-0">
+    <header>
+        <div class="mx-auto sm:px-7 px-4 max-w-screen-xl py-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <a data-aos="fade-right" href="/qme.html" class="flex items-center gap-2">
+                    <img src="./imgs/logoqme.png" class="max-w-[50px] w-full" alt="">
+                </a>
+                <nav data-aos="fade-left" class="mx-auto md:mr-0 md:ml-auto mt-10 md:mt-0 flex items-center">
+                    <ul class="flex gap-5 text-gray-600">
+                        <li>
+                            <a href="" class="hover:underline">prices</a>
+                        </li>
+                        <li>
+                            <a href="" class="hover:underline">FAQ</a>
+                        </li>
+                    </ul>
+                    <a href="/qme-login.html"
+                        class="transition ease-in-out delay-150 ml-4 md:ml-10 border-2 border-blue-600 py-2 px-6 rounded-full text-blue-600 font-bold hover:bg-blue-600 hover:text-white">
+                        Log In
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <section id="hero">
+        <div data-aos="fade-down" class="mx-auto sm:px-7 px-4 max-w-screen-xl py-20 text-center flex flex-col">
+            <h1 class="pb-2 text-3xl md:text-6xl font-bold max-w-[900px] mx-auto text-slate-700">Create your own App and
+                boost
+                your business.</h1>
+            <p class="pb-10 text-lg text-gray-600 max-w-[600px] mx-auto">
+                Generate, manage and track your presence online easily.
+            </p>
+            <div class="flex mx-auto gap-0 md:gap-10 items-center">
+                <div class="hidden md:block ml-[-96px]">
+                    <img src="./imgs/home-arrow.svg" alt="">
+                </div>
+                <a href="/"
+                    class="transition ease-in-out delay-150 border-2 border-blue-600 py-2 px-10 rounded-full text-blue-600 font-bold bg-blue-600 text-white hover:bg-white hover:text-blue-600 text-xl">Let's
+                    start</a>
+            </div>
+            <div
+                class="flex flex-col sm:flex-row gap-4 items-center bg-slate-100 rounded p-4 mx-auto max-w-[300px] sm:max-w-[400px] w-full mt-10">
+                <div>
+                    <img src="./imgs/google.png" class="max-w-[120px]" alt="">
+                </div>
+                <div class="flex gap-1">
+                    <i class="bi bi-star-fill text-yellow-400"></i>
+                    <i class="bi bi-star-fill text-yellow-400"></i>
+                    <i class="bi bi-star-fill text-yellow-400"></i>
+                    <i class="bi bi-star-fill text-yellow-400"></i>
+                    <i class="bi bi-star-fill text-yellow-400"></i>
+                </div>
+                <span class="text-xs text-gray-600">
+                    4.8/5 (45k reviews)
+                </span>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h2 class="hidden text-center text-3xl md:text-5xl font-bold pb-2 text-slate-700">
+            Pretty App !
+        </h2>
+        <p class="hidden pb-10 text-lg text-gray-600 text-center">
+            Generate, manage and track your presence online easily.
+        </p>
+        <div data-aos="fade-up" class="relative mx-auto sm:px-7 px-4 max-w-screen-xl py-20 flex items-center">
+            <img src="./imgs/ihpone-mocup3.png" class="absolute max-w-[150px] md:max-w-[250px] end-0" alt="">
+            <img src="./imgs/hero.png" class="mx-auto w-full max-w-[1000px] rounded shadow-2xl" alt="">
+        </div>
+    </section>
+    <section id="partenaires">
+        <div class="flex flex-col gap-10 mx-auto sm:px-7 px-4 max-w-screen-xl py-20">
+            <h2 class="text-center text-gray-600 text-lg">
+                Our customers
+            </h2>
+            <ul class="flex flex-col md:flex-row gap-10 items-center mx-auto">
+                <li>
+                    <img class="grayscale max-w-[140px]"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png"
+                        alt="">
+                </li>
+                <li>
+                    <img class="grayscale max-w-[140px]"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Coinbase.svg/2560px-Coinbase.svg.png"
+                        alt="">
+                </li>
+                <li>
+                    <img class="grayscale max-w-[140px]"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png"
+                        alt="">
+                </li>
+                <li>
+                    <img class="grayscale max-w-[140px]"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Firebase_Logo.svg/1280px-Firebase_Logo.svg.png"
+                        alt="">
+                </li>
+            </ul>
+        </div>
+    </section>
+    <section class="features">
+        <div class="mx-auto sm:px-7 px-4 max-w-screen-xl py-20">
+            <h2 class="text-center text-3xl md:text-5xl font-bold pb-2 text-slate-700">Our unique features</h2>
+            <p class="pb-10 text-lg text-gray-600 text-center">
+                Choose what's fit you best
+            </p>
+            <div class="grid grid-cols-6 md:grid-cols-12 gap-10 items-center">
+                <div class="col-span-6 md:col-span-4 text-right">
+                    <div class="mb-10">
+                        <h3 class="mb-2 text-base font-semibold leading-tight text-gray-900 items-center flex gap-2">
+                            <span class="ml-auto">Personal Emails</span>
+                            <i class="bi bi-1-circle-fill text-2xl text-blue-600"></i>
+                        </h3>
+                        <p class="text-sm text-gray-500">Hand crafted dashboards for everything from Recurring Revenue
+                            to
+                            Customer Churn.</p>
+                    </div>
+                    <div class="mb-10">
+                        <h3 class="mb-2 text-base font-semibold leading-tight text-gray-900 items-center flex gap-2">
+                            <span class="ml-auto">Personal Emails</span>
+                            <i class="bi bi-2-circle-fill text-2xl text-blue-600"></i>
+                        </h3>
+                        <p class="text-sm text-gray-500">Hand crafted dashboards for everything from Recurring Revenue
+                            to
+                            Customer Churn.</p>
+                    </div>
+                    <div>
+                        <h3 class="mb-2 text-base font-semibold leading-tight text-gray-900 items-center flex gap-2">
+                            <span class="ml-auto">Personal Emails</span>
+                            <i class="bi bi-3-circle-fill text-2xl text-blue-600"></i>
+                        </h3>
+                        <p class="text-sm text-gray-500">Hand crafted dashboards for everything from Recurring Revenue
+                            to
+                            Customer Churn.</p>
+                    </div>
+                </div>
+                <div class="hidden relative md:block col-span-4">
+                    <img class="absolute bottom-32 -left-10" src="./imgs/home-arrow.svg" alt="">
+                    <img src="./imgs/ihpone-mocup3.png" class="w-full" alt="">
+                </div>
+                <div class="col-span-6 md:col-span-4">
+                    <div class="mb-10">
+                        <h3 class="mb-2 text-base font-semibold leading-tight text-gray-900 items-center flex gap-2">
+                            <i class="bi bi-4-circle-fill text-2xl text-blue-600"></i>
+                            <span>Personal Emails</span>
+                        </h3>
+                        <p class="text-sm text-gray-500">Hand crafted dashboards for everything from Recurring Revenue
+                            to
+                            Customer Churn.</p>
+                    </div>
+                    <div class="mb-10">
+                        <h3 class="mb-2 text-base font-semibold leading-tight text-gray-900 items-center flex gap-2">
+                            <i class="bi bi-5-circle-fill text-2xl text-blue-600"></i>
+                            <span>Personal Emails</span>
+                        </h3>
+                        <p class="text-sm text-gray-500">Hand crafted dashboards for everything from Recurring Revenue
+                            to
+                            Customer Churn.</p>
+                    </div>
+                    <div>
+                        <h3 class="mb-2 text-base font-semibold leading-tight text-gray-900 items-center flex gap-2">
+                            <i class="bi bi-6-circle-fill text-2xl text-blue-600"></i>
+                            <span>Personal Emails</span>
+                        </h3>
+                        <p class="text-sm text-gray-500">Hand crafted dashboards for everything from Recurring Revenue
+                            to
+                            Customer Churn.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="prices">
+        <div class="mx-auto sm:px-7 px-4 max-w-screen-lg py-20">
+            <h2 class="text-center text-3xl md:text-5xl font-bold pb-2 text-slate-700">
+                Choose your plan
+            </h2>
+            <div class="max-w-[300px] mx-auto mb-10">
+                <div
+                    class="inline-flex w-full border border-blue-600 rounded-lg mt-6 overflow-hidden bg-chalk p-0.5 z-0">
+                    <button
+                        class="text-white font-medium border rounded-md transition w-full py-2 block border-transparent px-8 text-xs bg-blue-600"
+                        type="button">
+                        Monthly
+                    </button>
+                    <button
+                        class="text-black font-medium border rounded-md transition w-full py-2 block border-transparent px-8 text-xs bg-white"
+                        type="button">
+                        Annual
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-6 lg:grid-cols-12 gap-10">
+                <div class="order-last lg:order-first col-span-6">
+                    <div class="w-full flex justify-between items-center bg-white border rounded-lg p-10 gap-10">
+                        <div class="flex flex-col gap-6">
+                            <span class="text-lg">Basic plan</span>
+                            <span class="text-gray-600 text-sm">Suitable for those that want to start.</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <strong class="text-5xl">15€</strong>
+                            <span>Per month</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-4 py-10">
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i
+                                    class="bi bi-check-lg text-white bg-green-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">3 mockup design</span>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i
+                                    class="bi bi-check-lg text-white bg-green-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">2 websites</span>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i
+                                    class="bi bi-check-lg text-white bg-green-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">Unlimited users</span>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i
+                                    class="bi bi-check-lg text-white bg-green-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">Basic support</span>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i class="bi bi-x text-white bg-red-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">Full support</span>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i class="bi bi-x text-white bg-red-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">Advanced analytics</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#"
+                        class="block rounded-lg w-full text-black text-center py-2 px-4 bg-white hover:text-white border-2 hover:border-blue-600 hover:bg-blue-600">Get
+                        started</a>
+                </div>
+                <div class="col-span-6">
+                    <div
+                        class="w-full flex justify-between items-center bg-blue-600 text-white border rounded-lg p-10 gap-10">
+                        <div class="flex flex-col gap-6">
+                            <span class="text-lg">Pro plan</span>
+                            <span class="text-gray-200 text-sm">Suitable for those that want to grow.</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <strong class="text-5xl">45€</strong>
+                            <span class="text-sm sm:text-lg">Per month</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-4 py-10">
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i
+                                    class="bi bi-check-lg text-white bg-green-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">3 mockup design</span>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i
+                                    class="bi bi-check-lg text-white bg-green-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">4 websites</span>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i
+                                    class="bi bi-check-lg text-white bg-green-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">Unlimited users</span>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i
+                                    class="bi bi-check-lg text-white bg-green-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">Basic support</span>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i
+                                    class="bi bi-check-lg text-white bg-green-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">Full support</span>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="flex gap-2 items-center">
+                                <i
+                                    class="bi bi-check-lg text-white bg-green-500 rounded-full w-6 h-6 block text-center"></i>
+                                <span class="text-sm sm:text-lg">Advanced analytics</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#"
+                        class="block text-center rounded-lg w-full text-white py-2 px-4 border bg-blue-600 hover:text-blue-600 hover:bg-white border-2 border-blue-600">Get
+                        started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="flex flex-col gap-10 mx-auto sm:px-7 px-4 max-w-screen-xl py-20">
+            <h2 class="text-center text-gray-600 text-lg">
+                What's our customers thinks about us ?
+            </h2>
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 lg:col-span-4">
+                    <div class="flex flex-col gap-4 p-4 border-4 bg-white">
+                        <div class="flex gap-1">
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                        </div>
+                        <p class="italic text-gray-600">
+                            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet fugit reiciendis numquam
+                            repellat. Sint harum corporis quae suscipit expedita, consequuntur repellat saepe
+                            accusantium, dicta dolor voluptas sed modi, non officia?"
+                        </p>
+                        <div class="flex flex-row justify-between items-center">
+                            <span class="text-xs">
+                                Laurent B.
+                            </span>
+                            <span class="partenaire">
+                                <img class="grayscale max-w-[80px]"
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png"
+                                    alt="">
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-span-12 lg:col-span-4">
+                    <div class="flex flex-col gap-4 p-4 border-4 bg-white">
+                        <div class="flex gap-1">
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                        </div>
+                        <p class="italic text-gray-600">
+                            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet fugit reiciendis numquam
+                            repellat. Sint harum corporis quae suscipit expedita, consequuntur repellat saepe
+                            accusantium, dicta dolor voluptas sed modi, non officia?"
+                        </p>
+                        <div class="flex flex-row justify-between items-center">
+                            <span class="text-xs">
+                                Laurent B.
+                            </span>
+                            <span class="partenaire">
+                                <img class="grayscale max-w-[80px]"
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png"
+                                    alt="">
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-span-12 lg:col-span-4">
+                    <div class="flex flex-col gap-4 p-4 border-4 bg-white">
+                        <div class="flex gap-1">
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                            <i class="bi bi-star-fill text-yellow-400"></i>
+                        </div>
+                        <p class="italic text-gray-600">
+                            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet fugit reiciendis numquam
+                            repellat. Sint harum corporis quae suscipit expedita, consequuntur repellat saepe
+                            accusantium, dicta dolor voluptas sed modi, non officia?"
+                        </p>
+                        <div class="flex flex-row justify-between items-center">
+                            <span class="text-xs">
+                                Laurent B.
+                            </span>
+                            <span class="partenaire">
+                                <img class="grayscale max-w-[80px]"
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png"
+                                    alt="">
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="FAQ">
+        <div class="gap-10 mx-auto sm:px-7 px-4 max-w-screen-xl py-20">
+            <h2 class="text-center text-3xl md:text-5xl font-bold pb-20 text-slate-700">Frequently Asked Questions</h2>
+            <div class="flex items-start justify-start mb-12">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" class="flex-none w-6 h-6 mr-4 text-gray-700"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                    </path>
+                </svg>
+                <div>
+                    <p class="mt-0 mb-3 font-semibold text-gray-900">Can i free testing you App ?</p>
+                    <p class="text-gray-600">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur reprehenderit labore neque
+                        facilis doloribus placeat! Aliquam eos, aspernatur nulla perferendis error quidem doloremque
+                        porro, possimus delectus repellendus veritatis ex in?
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-start justify-start mb-12">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" class="flex-none w-6 h-6 mr-4 text-gray-700"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                    </path>
+                </svg>
+                <div>
+                    <p class="mt-0 mb-3 font-semibold text-gray-900">Security issues ?</p>
+                    <p class="text-gray-600">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cum minima repellat, facilis magnam
+                        doloremque velit officiis blanditiis corporis! Deserunt fuga quae harum commodi nemo! Similique
+                        impedit repellat incidunt tenetur odit.
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-start justify-start mb-12">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" class="flex-none w-6 h-6 mr-4 text-gray-700"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                    </path>
+                </svg>
+                <div>
+                    <p class="mt-0 mb-3 font-semibold text-gray-900">Do you have ... ?</p>
+                    <p class="text-gray-600">
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora, impedit accusantium! Expedita
+                        ea repellat atque molestias modi fugit accusamus ipsum tempora facilis. Fuga vel architecto
+                        modi, quae velit asperiores illum?
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="mx-auto max-w-7xl py-20 lg:px-8">
+            <div
+                class="relative isolate overflow-hidden bg-blue-600 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
+            
+                <div class="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
+                    <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Enhance your efficiency.<br>Start using APP today.</h2>
+                    <p class="mt-6 text-lg leading-8 text-gray-300">Ac euismod vel sit maecenas id pellentesque eu sed
+                        consectetur. Malesuada adipiscing sagittis vel nulla.</p>
+                    <div class="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
+                        <a href="#"
+                            class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Get
+                            started</a>
+                        <a href="#" class="text-sm font-semibold leading-6 text-white">Learn more <span
+                                aria-hidden="true">→</span></a>
+                    </div>
+                </div>
+                <div class="relative h-80 mt-24">
+                    <img class="absolute left-0 top-0 w-[57rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10"
+                        src="./imgs/hero.png"
+                        alt="App screenshot" width="1824" height="1080">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section data-aos="fade-right" id="cookies"
+        class="fixed max-w-full md:max-w-md p-4 mx-auto bg-white border border-gray-200 left-0 md:left-12 bottom-0 md:bottom-16 rounded-none md:rounded-2xl w-full">
+        <h2 class="font-semibold text-gray-800">🍪 Cookie Notice</h2>
+
+        <p class="mt-4 text-sm text-gray-600">We use cookies to ensure that we give you the best
+            experience on our website. <a href="#" class="text-blue-500 hover:underline">Read cookies policies</a>.
+        </p>
+        <div class="flex items-center justify-between mt-4 gap-x-4 shrink-0">
+            <button
+                class="text-xs text-gray-800 underline transition-colors duration-300 hover:text-gray-600 focus:outline-none">
+                Manage your preferences
+            </button>
+
+            <button
+                class="close-cookie text-xs bg-gray-900 font-medium rounded-lg hover:bg-gray-700 text-white px-4 py-2.5 duration-300 transition-colors focus:outline-none">
+                Accept
+            </button>
+        </div>
+    </section>
+    <footer>
+        <div class="flex flex-col md:flex-row items-center justify-between mx-auto sm:px-7 px-4 max-w-screen-xl py-20">
+            <p class="text-sm text-center text-gray-700 w-full text-center">
+                © Copyright 2024 App. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+    <script>
+        jQuery(document).ready(function () {
+            jQuery(".close-cookie").on('click', function () {
+                jQuery("#cookies").hide()
+            })
+        })
+    </script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+
+</html>
