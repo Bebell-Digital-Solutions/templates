@@ -1,0 +1,36 @@
+/* Local Inter font (offline) */
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 300; font-display: swap; src: url("../assets/fonts/inter-latin-300-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 500; font-display: swap; src: url("../assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: swap; src: url("../assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 700; font-display: swap; src: url("../assets/fonts/inter-latin-700-normal.woff2") format("woff2"); }
+
+/* Checkered canvas background for transparency check */
+.bg-checkered {
+    background-color: #ffffff;
+    background-image: radial-gradient(#e2e8f0 0.75px, transparent 0.75px), radial-gradient(#e2e8f0 0.75px, #ffffff 0.75px);
+    background-size: 16px 16px;
+    background-position: 0 0, 8px 8px;
+}
+.dark .bg-checkered {
+    background-color: #0f172a;
+    background-image: radial-gradient(#334155 0.75px, transparent 0.75px), radial-gradient(#334155 0.75px, #0f172a 0.75px);
+    background-size: 16px 16px;
+    background-position: 0 0, 8px 8px;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+}
