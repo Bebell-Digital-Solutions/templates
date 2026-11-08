@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Liquid Glass Cube — Interactive 3D Glass Kit</title>
+  <meta name="description" content="Five liquid-glass shapes, six scenes, one tiny WebGL2 file. Drag, press, morph.">
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    *:focus, *:focus-visible { outline: none; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      --fg: #1d1d1f; --muted: rgba(29,29,31,.52);
+      --panel: rgba(255,255,255,.58); --panel-line: rgba(255,255,255,.8); --panel-shadow: 0 18px 50px rgba(30,30,50,.16), 0 2px 8px rgba(30,30,50,.06);
+      --chip: rgba(29,29,31,.07); --chip-on: rgba(29,29,31,.92); --chip-on-fg: #fff; --track: rgba(29,29,31,.14);
+      overflow: hidden; background: #efeeeb; color: var(--fg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition: color .5s;
+    }
+    body.ui-dark {
+      --fg: #f4f6ff; --muted: rgba(244,246,255,.55);
+      --panel: rgba(18,20,34,.55); --panel-line: rgba(255,255,255,.14); --panel-shadow: 0 18px 50px rgba(0,0,0,.45);
+      --chip: rgba(255,255,255,.09); --chip-on: #fff; --chip-on-fg: #0b0d1f; --track: rgba(255,255,255,.2);
+    }
+    .stage { position: fixed; inset: 0; }
+    .glass-canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+    .glass-canvas:active { cursor: grabbing; }
+    .glass-canvas.lg-no-webgl { cursor: default; }
+
+    .brand { position: fixed; top: 22px; left: 26px; display: flex; align-items: baseline; gap: 10px; font-size: 13px; font-weight: 600; letter-spacing: -.01em; }
+    .brand span { font-weight: 500; color: var(--muted); }
+    .links { position: fixed; top: 20px; right: 22px; display: flex; gap: 6px; }
+    .links a {
+      color: var(--fg); text-decoration: none; font-size: 12.5px; font-weight: 500; padding: 8px 13px; border-radius: 999px;
+      background: var(--panel); border: 1px solid var(--panel-line); backdrop-filter: blur(18px) saturate(1.6); -webkit-backdrop-filter: blur(18px) saturate(1.6);
+      transition: transform .2s;
+    }
+    .links a:hover { transform: translateY(-1px); }
+
+    .hint { position: fixed; left: 0; right: 0; bottom: 100px; text-align: center; font-size: 12.5px; font-weight: 500; color: var(--muted); pointer-events: none; }
+
+    .dock-wrap { position: fixed; left: 0; right: 0; bottom: 26px; display: flex; flex-direction: column; align-items: center; gap: 12px; pointer-events: none; }
+    .dock, .tune {
+      pointer-events: auto; background: var(--panel); border: 1px solid var(--panel-line); box-shadow: var(--panel-shadow);
+      backdrop-filter: blur(26px) saturate(1.7); -webkit-backdrop-filter: blur(26px) saturate(1.7);
+    }
+    .dock { display: flex; align-items: center; gap: 6px; padding: 8px; border-radius: 999px; max-width: calc(100vw - 24px); }
+    .sep { width: 1px; height: 26px; background: var(--track); margin: 0 6px; flex: none; }
+    button { font: inherit; color: inherit; border: 0; background: none; padding: 0; cursor: pointer; }
+
+    .swatch { width: 30px; height: 30px; border-radius: 50%; flex: none; position: relative; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); transition: transform .25s cubic-bezier(.3,1.6,.5,1); }
+    .swatch:hover { transform: scale(1.12); }
+    .swatch[aria-pressed="true"] { transform: scale(1.12); box-shadow: inset 0 0 0 1px rgba(0,0,0,.12), 0 0 0 2px var(--panel-line), 0 0 0 4px var(--fg); }
+
+    .shape { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--chip); transition: background .25s, color .25s, transform .25s cubic-bezier(.3,1.6,.5,1); flex: none; }
+    .shape:hover { transform: scale(1.08); }
+    .shape svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .shape[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-fg); }
+
+    .tune-btn { height: 40px; padding: 0 16px; border-radius: 999px; font-size: 13px; font-weight: 600; background: var(--chip); display: flex; align-items: center; gap: 8px; flex: none; transition: background .25s, color .25s; }
+    .tune-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; }
+    .tune-btn[aria-expanded="true"] { background: var(--chip-on); color: var(--chip-on-fg); }
+
+    .tune { width: min(340px, calc(100vw - 24px)); border-radius: 26px; padding: 18px 18px 16px; display: none; flex-direction: column; gap: 13px; }
+    @media (min-width: 900px) { .tune { position: fixed; right: 24px; bottom: 100px; } }
+    .tune.open { display: flex; animation: rise .28s cubic-bezier(.2,.9,.3,1); }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+    .row { display: grid; gap: 7px; }
+    .row label, .row .lab { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; letter-spacing: .01em; }
+    .row output { font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+    input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; background: none; margin: 0; cursor: pointer; }
+    input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: var(--track); }
+    input[type=range]::-moz-range-track { height: 4px; border-radius: 4px; background: var(--track); }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -8px; border-radius: 50%; background: #fff; box-shadow: 0 1px 5px rgba(0,0,0,.35), 0 0 0 .5px rgba(0,0,0,.08); }
+    input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 1px 5px rgba(0,0,0,.35); }
+    .text-in { width: 100%; height: 38px; border-radius: 12px; border: 1px solid var(--track); background: var(--chip); color: var(--fg); padding: 0 12px; font: inherit; font-size: 14px; font-weight: 500; }
+    .text-in::placeholder { color: var(--muted); }
+    .toggles { display: flex; gap: 8px; }
+    .toggle { flex: 1; height: 36px; border-radius: 12px; background: var(--chip); font-size: 12.5px; font-weight: 600; transition: background .25s, color .25s; }
+    .toggle[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-fg); }
+    .actions { display: flex; gap: 8px; }
+    .actions button { flex: 1; height: 38px; border-radius: 12px; background: var(--chip); font-size: 12.5px; font-weight: 600; }
+    .actions button.primary { background: var(--chip-on); color: var(--chip-on-fg); }
+
+    .no-webgl-note { display: none; position: fixed; inset: auto 0 150px; text-align: center; font-size: 13px; color: var(--muted); }
+    .lg-no-webgl ~ .no-webgl-note { display: block; }
+
+    @media (max-width: 640px) {
+      .brand span, .links { display: none; }
+      .dock { flex-wrap: wrap; justify-content: center; border-radius: 28px; padding: 10px; gap: 8px 6px; width: calc(100vw - 24px); }
+      .sep { display: none; }
+      #scenes { width: 100%; justify-content: center; }
+      .swatch { width: 28px; height: 28px; }
+      .shape { width: 38px; height: 38px; }
+      .tune-btn { padding: 0 14px; height: 38px; }
+      .hint { bottom: 150px; }
+      .dock-wrap { bottom: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" aria-label="Interactive 3D liquid glass">
+    <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Liquid Glass Cube — drag the glass to rotate it, use the dock to change shape and scene.</h1>
+    <canvas id="glass" class="glass-canvas"></canvas>
+    <p class="no-webgl-note">WebGL2 is not available in this browser.</p>
+  </main>
+
+  <div class="brand">Liquid Glass Cube <span>v2.0</span></div>
+  <nav class="links" aria-label="Examples">
+    <a href="examples/gallery.html">Gallery</a>
+    <a href="examples/hero.html">Hero</a>
+    <a href="examples/glass-pane.html">Glass pane</a>
+  </nav>
+
+  <p class="hint">Drag to rotate · press to make it glow</p>
+
+  <div class="dock-wrap">
+    <section class="tune" id="tune" aria-label="Glass settings">
+      <div class="row"><label for="txt">Backdrop word</label><input id="txt" class="text-in" type="text" maxlength="14" placeholder="Type something" autocomplete="off" spellcheck="false"></div>
+      <div class="row"><label for="ior">Refraction <output id="ior-o"></output></label><input id="ior" type="range" min="1.2" max="1.9" step="0.01"></div>
+      <div class="row"><label for="disp">Rainbow edges <output id="disp-o"></output></label><input id="disp" type="range" min="0" max="0.05" step="0.001"></div>
+      <div class="row"><label for="mag">Lens magnify <output id="mag-o"></output></label><input id="mag" type="range" min="0" max="0.6" step="0.01"></div>
+      <div class="row"><label for="spd">Spin speed <output id="spd-o"></output></label><input id="spd" type="range" min="0" max="3" step="0.05"></div>
+      <div class="toggles">
+        <button class="toggle" id="t-core" type="button" aria-pressed="true">Glowing core</button>
+        <button class="toggle" id="t-spin" type="button" aria-pressed="true">Auto-rotate</button>
+      </div>
+      <div class="actions">
+        <button id="reset" type="button">Reset</button>
+        <button id="save" type="button" class="primary">Save PNG</button>
+      </div>
+    </section>
+
+    <div class="dock" id="dock" role="toolbar" aria-label="Scene and shape">
+      <div id="scenes" style="display:flex;gap:6px;align-items:center;padding:0 4px"></div>
+      <span class="sep"></span>
+      <div id="shapes" style="display:flex;gap:6px;align-items:center"></div>
+      <span class="sep"></span>
+      <button class="tune-btn" id="tune-btn" type="button" aria-expanded="false" aria-controls="tune">
+        <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg><b>Tune</b>
+      </button>
+    </div>
+  </div>
+
+  <script src="assets/js/liquid-glass-cube.js"></script>
+  <script>
+  (function () {
+    var LG = window.LiquidGlassCube;
+    var D = LG.defaults;
+
+    // URL hash can pre-select a look:  index.html#shape=ring&scene=aurora&text=Hello
+    var q = {}; location.hash.replace(/^#/, '').split('&').forEach(function (p) { if (!p) return; var kv = p.split('='); q[kv[0]] = decodeURIComponent(kv[1] || ''); });
+
+    var glass = LG.create('#glass', { shape: q.shape || 'cube', scene: q.scene || 'studio', text: q.text != null ? q.text : null, hint: '' });
+
+    var ICONS = {
+      cube:    '<path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
+      sphere:  '<circle cx="12" cy="12" r="8.5"/><ellipse cx="12" cy="12" rx="8.5" ry="3.2"/><path d="M12 3.5c2.4 2.2 3.6 5.1 3.6 8.5s-1.2 6.3-3.6 8.5c-2.4-2.2-3.6-5.1-3.6-8.5S9.6 5.7 12 3.5Z"/>',
+      ring:    '<ellipse cx="12" cy="12" rx="9" ry="6.2"/><ellipse cx="12" cy="12" rx="4" ry="2.1"/>',
+      capsule: '<rect x="7.5" y="3" width="9" height="18" rx="4.5"/><path d="M7.5 12h9"/>',
+      pane:    '<rect x="3" y="6.5" width="18" height="11" rx="3.2"/><path d="M7 10.5c2-1 4-1 6 0"/>'
+    };
+
+    var sceneBox = document.getElementById('scenes'), shapeBox = document.getElementById('shapes');
+    var sceneBtns = {}, shapeBtns = {};
+    Object.keys(LG.scenes).forEach(function (k) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'swatch'; b.style.background = LG.scenes[k].swatch;
+      b.setAttribute('aria-label', LG.scenes[k].label + ' scene'); b.title = LG.scenes[k].label;
+      b.addEventListener('click', function () { glass.setScene(k); });
+      sceneBox.appendChild(b); sceneBtns[k] = b;
+    });
+    Object.keys(LG.shapes).forEach(function (k) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'shape';
+      b.innerHTML = '<svg viewBox="0 0 24 24">' + ICONS[k] + '</svg>';
+      b.setAttribute('aria-label', LG.shapes[k].label); b.title = LG.shapes[k].label;
+      b.addEventListener('click', function () { glass.setShape(k); });
+      shapeBox.appendChild(b); shapeBtns[k] = b;
+    });
+
+    function sync() {
+      var st = glass.getState();
+      Object.keys(sceneBtns).forEach(function (k) { sceneBtns[k].setAttribute('aria-pressed', k === st.scene); });
+      Object.keys(shapeBtns).forEach(function (k) { shapeBtns[k].setAttribute('aria-pressed', k === st.shape); });
+      document.body.classList.toggle('ui-dark', LG.scenes[st.scene].ui === 'dark');
+      document.documentElement.style.background = LG.scenes[st.scene].bg[1];
+      var t = document.getElementById('txt'); if (document.activeElement !== t) t.placeholder = LG.scenes[st.scene].text;
+    }
+    glass.on('scene', sync); glass.on('shape', sync); sync();
+
+    // sliders
+    var sliders = [
+      ['ior', 'ior', function (v) { return v.toFixed(2); }],
+      ['disp', 'dispersion', function (v) { return v.toFixed(3); }],
+      ['mag', 'magnify', function (v) { return v.toFixed(2); }],
+      ['spd', 'spinSpeed', function (v) { return v.toFixed(2) + '×'; }]
+    ];
+    function loadSliders() {
+      var st = glass.getState();
+      sliders.forEach(function (s) { var el = document.getElementById(s[0]); el.value = st[s[1]]; document.getElementById(s[0] + '-o').textContent = s[2](+el.value); });
+      document.getElementById('t-core').setAttribute('aria-pressed', st.core);
+      document.getElementById('t-spin').setAttribute('aria-pressed', st.spin);
+    }
+    sliders.forEach(function (s) {
+      document.getElementById(s[0]).addEventListener('input', function (e) {
+        var o = {}; o[s[1]] = +e.target.value; glass.set(o);
+        document.getElementById(s[0] + '-o').textContent = s[2](+e.target.value);
+      });
+    });
+    function toggle(id, key) {
+      var b = document.getElementById(id);
+      b.addEventListener('click', function () { var on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on); var o = {}; o[key] = on; glass.set(o); });
+    }
+    toggle('t-core', 'core'); toggle('t-spin', 'spin');
+    loadSliders();
+
+    var txt = document.getElementById('txt');
+    if (q.text) txt.value = q.text;
+    txt.addEventListener('input', function () { glass.set({ text: txt.value === '' ? null : txt.value }); });
+
+    document.getElementById('reset').addEventListener('click', function () {
+      glass.set({ ior: D.ior, dispersion: D.dispersion, magnify: D.magnify, spinSpeed: D.spinSpeed, core: true, spin: true, text: null });
+      txt.value = ''; loadSliders();
+    });
+    document.getElementById('save').addEventListener('click', function () {
+      var a = document.createElement('a'); a.download = 'Liquid Glass Cube.png'; a.href = glass.snapshot(); a.click();
+    });
+
+    var tune = document.getElementById('tune'), tb = document.getElementById('tune-btn');
+    tb.addEventListener('click', function () { var open = !tune.classList.contains('open'); tune.classList.toggle('open', open); tb.setAttribute('aria-expanded', open); });
+    if (q.tune === '1') { tune.classList.add('open'); tb.setAttribute('aria-expanded', 'true'); }
+  })();
+  </script>
+</body>
+</html>
