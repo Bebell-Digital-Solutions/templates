@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precise Horizontal Scroll Component</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Hide scrollbar for seamless look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none; 
+            scrollbar-width: none;  
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen flex items-center font-sans">
+
+    <!-- Main Component Container -->
+    <section class="max-w-[1280px] mx-auto w-full px-8 py-16 flex flex-col md:flex-row items-start">
+        
+        <!-- Left Content -->
+        <div class="w-full md:w-[38%] pr-8 md:pr-16 shrink-0 mb-12 md:mb-0 md:sticky md:top-24">
+            <h3 class="text-gray-500 uppercase tracking-[0.2em] text-[11px] font-semibold mb-6">
+                Nuestras Noticias
+            </h3>
+            <h2 class="text-3xl md:text-[36px] font-bold text-[#061c38] leading-[1.15] mb-8 tracking-tight">
+                Explora nuestros últimos hitos alcanzados así como también historias y consejos para el día a día.
+            </h2>
+            <a href="#" class="inline-flex items-center text-gray-400 hover:text-[#061c38] transition-colors text-[13px]">
+                Sala de prensa 
+                <svg class="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
+
+        <!-- Right Content (Scrollable Cards) -->
+        <div id="scroll-container" class="w-full md:w-[62%] flex overflow-x-auto no-scrollbar snap-x snap-mandatory">
+            
+            <!-- Cards Track -->
+            <div class="flex pt-2 pb-8">
+                
+                <!-- Card 1 -->
+                <article class="w-[280px] shrink-0 snap-start pr-8 border-r border-gray-200 mr-8 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=600&auto=format&fit=crop" 
+                         alt="Building" 
+                         class="w-full h-[150px] object-cover mb-6">
+                    <h4 class="text-[15px] font-bold text-[#061c38] mb-4 leading-snug">
+                        Fiduciaria Universal transforma activos inmobiliarios premium en una nueva oportunidad de inversión para el mercado dominicano
+                    </h4>
+                    <p class="text-gray-500 text-[12px] leading-relaxed">
+                        A través del Fideicomiso de Oferta Pública de Valores Inmobiliarios de Renta Fija Acrópolis 02-FU, inversionistas pueden acceder a una estructura respaldada por uno de los complejos corporativos y comerciales más relevantes de Santo Domingo.
+                    </p>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="w-[280px] shrink-0 snap-start pr-8 border-r border-gray-200 mr-8 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=600&auto=format&fit=crop" 
+                         alt="Finance Report" 
+                         class="w-full h-[150px] object-cover mb-6">
+                    <h4 class="text-[15px] font-bold text-[#061c38] mb-4 leading-snug">
+                        Feller Rate Eleva A AAst la Calificación de Fiduciaria Universal
+                    </h4>
+                    <p class="text-gray-500 text-[12px] leading-relaxed">
+                        Fiduciaria Universal, S.A. (SVSF-004), filial del Grupo Universal, ha recibido una mejora en su calificación al pasar de 'A+' a 'AA-st'.
+                    </p>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="w-[280px] shrink-0 snap-start pr-8 border-r border-gray-200 mr-8 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32d7?q=80&w=600&auto=format&fit=crop" 
+                         alt="Business Meeting" 
+                         class="w-full h-[150px] object-cover mb-6">
+                    <h4 class="text-[15px] font-bold text-[#061c38] mb-4 leading-snug">
+                        Fiduciaria Universal recibe premio "Mayor Emisor De Fideicomiso De Oferta Pública" del año
+                    </h4>
+                    <p class="text-gray-500 text-[12px] leading-relaxed">
+                        Es el primer fideicomiso de desarrollo inmobiliario privado que emite valores de oferta pública de renta variable en el mercado de valores.
+                    </p>
+                </article>
+
+                <!-- Card 4 (No right border on the last item) -->
+                <article class="w-[280px] shrink-0 snap-start pr-8 flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=600&auto=format&fit=crop" 
+                         alt="Stock Chart" 
+                         class="w-full h-[150px] object-cover mb-6">
+                    <h4 class="text-[15px] font-bold text-[#061c38] mb-4 leading-snug">
+                        Ascienden a "AA-sf" la calificación de Fiduciaria Universal
+                    </h4>
+                    <p class="text-gray-500 text-[12px] leading-relaxed">
+                        Mejora la calificación de Fiduciaria Universal por sus buenos resultados, manuales completos y un equipo de profesionales con conocimiento del mercado financiero.
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Scroll Logic Script -->
+    <script>
+        const scrollContainer = document.getElementById('scroll-container');
+
+        scrollContainer.addEventListener('wheel', (evt) => {
+            // Only hijack scroll on desktop (md breakpoint in tailwind is 768px)
+            if (window.innerWidth >= 768) {
+                const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+                const isScrollingRight = evt.deltaY > 0;
+                const isScrollingLeft = evt.deltaY < 0;
+
+                // Release the scroll lock if we hit the edges
+                if ((isScrollingRight && scrollContainer.scrollLeft >= maxScrollLeft - 1) || 
+                    (isScrollingLeft && scrollContainer.scrollLeft <= 0)) {
+                    return; 
+                }
+
+                // Translate vertical scroll to horizontal scroll
+                evt.preventDefault();
+                scrollContainer.scrollLeft += evt.deltaY;
+            }
+        });
+    </script>
+</body>
+</html>
