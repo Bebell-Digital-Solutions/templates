@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+
+
+  
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.converter-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui,
+    sans-serif;
+  background: #fafafa;
+  min-height: 100vh;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.header-section h1 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.header-section p {
+  color: #666;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
+  align-items: start;
+}
+
+.image-area {
+  background: #fff;
+  border: 1px solid #e1e1e1;
+  min-height: 500px;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: 2px dashed transparent;
+  padding: 40px;
+}
+
+.upload-prompt:hover {
+  background: #f8f8f8;
+  border-color: #d0d0d0;
+}
+
+.upload-prompt.dragover {
+  background: #f0f0f0;
+  border-color: #999;
+}
+
+.upload-icon {
+  width: 48px;
+  height: 48px;
+  opacity: 0.4;
+  margin-bottom: 16px;
+}
+
+.upload-text {
+  color: #666;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.image-display {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  min-height: 500px;
+}
+
+.image-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.image-panel:first-child {
+  border-right: 1px solid #e1e1e1;
+}
+
+.panel-header {
+  padding: 12px 20px;
+  background: #f8f8f8;
+  border-bottom: 1px solid #e1e1e1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 56px;
+}
+
+.header-spacer {
+  width: 98px;
+  height: 32px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.upload-new-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #fff;
+  border: 1px solid #e1e1e1;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: none;
+  letter-spacing: 0;
+  height: 32px;
+}
+
+.upload-new-btn:hover {
+  border-color: #999;
+  color: #333;
+}
+
+.upload-new-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.6;
+}
+
+.canvas-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: 0;
+}
+
+canvas {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+  border: 1px solid #f0f0f0;
+}
+
+#colorWheel {
+  border: none;
+  object-fit: contain;
+}
+
+.control-panel {
+  background: #fff;
+  border: 1px solid #e1e1e1;
+  padding: 30px;
+  height: fit-content;
+}
+
+.control-section {
+  margin-bottom: 32px;
+}
+
+.control-section:last-of-type {
+  margin-bottom: 0;
+}
+
+.control-title {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.color-wheel-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+#colorWheel {
+  cursor: crosshair;
+  display: block;
+}
+
+.color-preview {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 16px;
+  border: 1px solid #e1e1e1;
+  background: hsl(220, 70%, 50%);
+}
+
+.preset-colors {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.preset-color {
+  width: 100%;
+  height: 32px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.preset-color:hover {
+  border-color: #1a1a1a;
+}
+
+.preset-color.active {
+  border-color: #1a1a1a;
+}
+
+.slider-container {
+  position: relative;
+}
+
+.control-slider {
+  width: 100%;
+  height: 2px;
+  background: #e1e1e1;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.control-slider::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+  background: #1a1a1a;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.control-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #1a1a1a;
+  cursor: pointer;
+  border: none;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.method-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.method-btn-wrapper {
+  position: relative;
+}
+
+.method-btn {
+  padding: 12px 8px;
+  border: 1px solid #e1e1e1;
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.method-btn:hover {
+  border-color: #999;
+  color: #333;
+}
+
+.method-btn.active {
+  border-color: #1a1a1a;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 1000;
+  margin-bottom: 5px;
+}
+
+.method-btn-wrapper:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.action-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.action-btn {
+  padding: 16px 20px;
+  border: 1px solid #e1e1e1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.action-btn.primary {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+}
+
+.action-btn.primary:hover {
+  background: #000;
+  border-color: #000;
+}
+
+.attribution {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui,
+    sans-serif;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 0.75rem;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+
+
+.attribution:hover {
+  opacity: 1;
+}
+
+.attribution a {
+  color: #666;
+  text-decoration: none;
+}
+
+
+
+@media (max-width: 768px) {
+  .converter-container {
+    padding: 20px 15px;
+  }
+
+  .header-section h1 {
+    font-size: 2rem;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .image-display {
+    grid-template-columns: 1fr;
+    min-height: 600px;
+  }
+
+  .image-panel:first-child {
+    border-right: none;
+    border-bottom: 1px solid #e1e1e1;
+  }
+
+  .control-panel {
+    padding: 20px;
+  }
+
+  .method-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-header {
+    height: auto;
+    min-height: 56px;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 12px 20px;
+  }
+
+  .upload-new-btn {
+    align-self: flex-end;
+  }
+
+  .header-spacer {
+    display: none;
+  }
+
+  #colorWheel {
+    width: 140px;
+    height: 140px;
+  }
+
+  .preset-colors {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .preset-color {
+    height: 28px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="converter-container">
+  <div class="header-section">
+    <h1>Color Wheel Image Converter</h1>
+    <p>Transform any image through the spectrum of color</p>
+  </div>
+
+  <div class="workspace">
+    <div class="image-area" id="imageArea">
+      <div class="upload-prompt" id="uploadPrompt">
+        <img src="https://www.svgrepo.com/show/357902/image-upload.svg" alt="Upload" class="upload-icon">
+        <span class="upload-text">Select Image</span>
+      </div>
+
+      <input type="file" id="fileInput" accept="image/*" style="display: none;">
+
+      <div class="image-display" id="imageDisplay">
+        <div class="image-panel">
+          <div class="panel-header">
+            <span>Original</span>
+            <button class="upload-new-btn" id="uploadNewBtn">
+              <img src="https://www.svgrepo.com/show/357902/image-upload.svg" alt="Upload" class="upload-new-icon">
+              Upload New
+            </button>
+          </div>
+          <div class="canvas-wrapper">
+            <canvas id="originalCanvas"></canvas>
+          </div>
+        </div>
+        <div class="image-panel">
+          <div class="panel-header">
+            <span>Converted</span>
+            <div class="header-spacer"></div>
+          </div>
+          <div class="canvas-wrapper">
+            <canvas id="convertedCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-panel">
+      <div class="control-section">
+        <label class="control-title">Color Wheel</label>
+        <div class="color-wheel-container">
+          <canvas id="colorWheel" width="180" height="180"></canvas>
+        </div>
+        <div class="color-preview" id="colorPreview"></div>
+        <div class="preset-colors">
+          <div class="preset-color" data-hue="0" style="background: #ff4757;"></div>
+          <div class="preset-color" data-hue="30" style="background: #ff7f50;"></div>
+          <div class="preset-color" data-hue="60" style="background: #ffa502;"></div>
+          <div class="preset-color" data-hue="120" style="background: #2ed573;"></div>
+          <div class="preset-color" data-hue="180" style="background: #00d2d3;"></div>
+          <div class="preset-color" data-hue="240" style="background: #5352ed;"></div>
+          <div class="preset-color" data-hue="270" style="background: #a55eea;"></div>
+          <div class="preset-color" data-hue="300" style="background: #ff3838;"></div>
+        </div>
+      </div>
+
+      <div class="control-section">
+        <label class="control-title">Saturation</label>
+        <div class="slider-container">
+          <input type="range" id="saturationSlider" min="20" max="100" value="70" class="control-slider">
+          <div class="slider-labels">
+            <span>Subtle</span>
+            <span>Vibrant</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-section">
+        <label class="control-title">Method</label>
+        <div class="method-grid">
+          <div class="method-btn-wrapper">
+            <button class="method-btn active" data-method="hue-shift">Hue Shift</button>
+            <div class="tooltip">Preserves brightness, shifts color</div>
+          </div>
+          <div class="method-btn-wrapper">
+            <button class="method-btn" data-method="color-replace">Color Replace</button>
+            <div class="tooltip">Maps grayscale to color spectrum</div>
+          </div>
+          <div class="method-btn-wrapper">
+            <button class="method-btn" data-method="luminance-map">Luminance Map</button>
+            <div class="tooltip">Color based on brightness levels</div>
+          </div>
+          <div class="method-btn-wrapper">
+            <button class="method-btn" data-method="artistic">Artistic</button>
+            <div class="tooltip">Creative color interpretation</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-section">
+        <label class="control-title">Intensity</label>
+        <div class="slider-container">
+          <input type="range" id="intensitySlider" min="0" max="100" value="85" class="control-slider">
+          <div class="slider-labels">
+            <span>0%</span>
+            <span>100%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-section">
+        <button class="action-btn primary" id="downloadBtn">Download Result</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="attribution">
+  <a href="#" target="_blank" rel="dofollow">Powered by HTML LAB</a>
+</div>
+
+
+
+
+
+
+
+
+<script>
+class ColorWheelConverter {
+  constructor() {
+    this.originalCanvas = document.getElementById("originalCanvas");
+    this.convertedCanvas = document.getElementById("convertedCanvas");
+    this.colorWheel = document.getElementById("colorWheel");
+    this.colorPreview = document.getElementById("colorPreview");
+
+    this.originalCtx = this.originalCanvas.getContext("2d");
+    this.convertedCtx = this.convertedCanvas.getContext("2d");
+    this.wheelCtx = this.colorWheel.getContext("2d");
+
+    this.currentImage = null;
+    this.selectedHue = 220;
+    this.saturation = 0.7;
+    this.intensity = 0.85;
+    this.currentMethod = "hue-shift";
+
+    this.wheelRadius = 80;
+    this.wheelCenter = { x: 90, y: 90 };
+
+    this.initializeColorWheel();
+    this.initializeEventListeners();
+    this.updateColorPreview();
+    this.preloadDemoImage();
+  }
+
+  initializeColorWheel() {
+    const ctx = this.wheelCtx;
+    const centerX = this.wheelCenter.x;
+    const centerY = this.wheelCenter.y;
+    const outerRadius = this.wheelRadius;
+    const innerRadius = outerRadius * 0.35;
+
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    for (let r = innerRadius; r <= outerRadius; r++) {
+      for (let angle = 0; angle < 360; angle += 0.5) {
+        const radian = (angle * Math.PI) / 180;
+        const x = centerX + r * Math.cos(radian);
+        const y = centerY + r * Math.sin(radian);
+
+        const hue = angle;
+        const saturation = 80;
+        const lightness = 50;
+
+        ctx.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
+
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = "#f8f8f8";
+    ctx.fill();
+    ctx.strokeStyle = "#e1e1e1";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  updateColorPreview() {
+    const hsl = `hsl(${this.selectedHue}, ${this.saturation * 100}%, 50%)`;
+    this.colorPreview.style.background = hsl;
+  }
+
+  preloadDemoImage() {
+    const demoImageUrl =
+      "https://images.unsplash.com/photo-1425082661705-1834bfd09dca?q=80&w=876&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      this.currentImage = img;
+      this.setupCanvases();
+      this.showImageDisplay();
+      this.convertImage();
+    };
+    img.src = demoImageUrl;
+  }
+
+  initializeEventListeners() {
+    const uploadPrompt = document.getElementById("uploadPrompt");
+    const imageArea = document.getElementById("imageArea");
+    const fileInput = document.getElementById("fileInput");
+    const uploadNewBtn = document.getElementById("uploadNewBtn");
+    const saturationSlider = document.getElementById("saturationSlider");
+    const intensitySlider = document.getElementById("intensitySlider");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    const triggerFileUpload = (e) => {
+      e?.stopPropagation();
+      fileInput.click();
+    };
+
+    uploadPrompt.addEventListener("click", triggerFileUpload);
+    uploadNewBtn.addEventListener("click", triggerFileUpload);
+
+    imageArea.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      uploadPrompt.classList.add("dragover");
+    });
+
+    imageArea.addEventListener("dragleave", (e) => {
+      e.preventDefault();
+      uploadPrompt.classList.remove("dragover");
+    });
+
+    imageArea.addEventListener("drop", (e) => {
+      e.preventDefault();
+      uploadPrompt.classList.remove("dragover");
+      const files = e.dataTransfer.files;
+      if (files.length > 0 && files[0].type.startsWith("image/")) {
+        this.loadImage(files[0]);
+      }
+    });
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        this.loadImage(file);
+      }
+    });
+
+    this.colorWheel.addEventListener("click", (e) => {
+      this.handleWheelClick(e);
+    });
+
+    saturationSlider.addEventListener("input", (e) => {
+      this.saturation = e.target.value / 100;
+      this.updateColorPreview();
+      if (this.currentImage) this.convertImage();
+    });
+
+    intensitySlider.addEventListener("input", (e) => {
+      this.intensity = e.target.value / 100;
+      if (this.currentImage) this.convertImage();
+    });
+
+    document.querySelectorAll(".preset-color").forEach((preset) => {
+      preset.addEventListener("click", (e) => {
+        document
+          .querySelectorAll(".preset-color")
+          .forEach((p) => p.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+        this.selectedHue = parseInt(e.currentTarget.dataset.hue);
+        this.updateColorPreview();
+        if (this.currentImage) this.convertImage();
+      });
+    });
+
+    document.querySelectorAll(".method-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        document
+          .querySelectorAll(".method-btn")
+          .forEach((b) => b.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+        this.currentMethod = e.currentTarget.dataset.method;
+        if (this.currentImage) this.convertImage();
+      });
+    });
+
+    downloadBtn.addEventListener("click", () => this.downloadImage());
+  }
+
+  handleWheelClick(e) {
+    const rect = this.colorWheel.getBoundingClientRect();
+    const x = e.clientX - rect.left - this.wheelCenter.x;
+    const y = e.clientY - rect.top - this.wheelCenter.y;
+
+    const distance = Math.sqrt(x * x + y * y);
+    const innerRadius = this.wheelRadius * 0.35;
+    const outerRadius = this.wheelRadius;
+
+    if (distance >= innerRadius && distance <= outerRadius) {
+      let angle = (Math.atan2(y, x) * 180) / Math.PI;
+      angle = (angle + 360) % 360;
+
+      this.selectedHue = Math.round(angle);
+      this.updateColorPreview();
+
+      document
+        .querySelectorAll(".preset-color")
+        .forEach((p) => p.classList.remove("active"));
+
+      if (this.currentImage) this.convertImage();
+    }
+  }
+
+  loadImage(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        this.currentImage = img;
+        this.setupCanvases();
+        this.showImageDisplay();
+        this.convertImage();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  setupCanvases() {
+    const maxDisplayWidth = 350;
+    const maxDisplayHeight = 400;
+    const { naturalWidth, naturalHeight } = this.currentImage;
+    const aspectRatio = naturalWidth / naturalHeight;
+
+    let displayWidth, displayHeight;
+
+    if (aspectRatio > maxDisplayWidth / maxDisplayHeight) {
+      displayWidth = Math.min(maxDisplayWidth, naturalWidth);
+      displayHeight = displayWidth / aspectRatio;
+    } else {
+      displayHeight = Math.min(maxDisplayHeight, naturalHeight);
+      displayWidth = displayHeight * aspectRatio;
+    }
+
+    [this.originalCanvas, this.convertedCanvas].forEach((canvas) => {
+      canvas.width = displayWidth;
+      canvas.height = displayHeight;
+      canvas.style.width = displayWidth + "px";
+      canvas.style.height = displayHeight + "px";
+    });
+
+    this.originalCtx.clearRect(0, 0, displayWidth, displayHeight);
+    this.originalCtx.drawImage(
+      this.currentImage,
+      0,
+      0,
+      displayWidth,
+      displayHeight
+    );
+  }
+
+  showImageDisplay() {
+    document.getElementById("uploadPrompt").style.display = "none";
+    document.getElementById("imageDisplay").style.display = "grid";
+  }
+
+  convertImage() {
+    if (!this.currentImage) return;
+
+    const { width, height } = this.originalCanvas;
+    const imageData = this.originalCtx.getImageData(0, 0, width, height);
+    const data = new Uint8ClampedArray(imageData.data);
+
+    for (let i = 0; i < data.length; i += 4) {
+      const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
+      const convertedColor = this.applyColorMethod(r, g, b);
+
+      data[i] = Math.round(
+        r * (1 - this.intensity) + convertedColor.r * this.intensity
+      );
+      data[i + 1] = Math.round(
+        g * (1 - this.intensity) + convertedColor.g * this.intensity
+      );
+      data[i + 2] = Math.round(
+        b * (1 - this.intensity) + convertedColor.b * this.intensity
+      );
+    }
+
+    this.convertedCtx.clearRect(0, 0, width, height);
+    this.convertedCtx.putImageData(new ImageData(data, width, height), 0, 0);
+  }
+
+  applyColorMethod(r, g, b) {
+    const methods = {
+      "hue-shift": () => this.hueShiftMethod(r, g, b),
+      "color-replace": () => this.colorReplaceMethod(r, g, b),
+      "luminance-map": () => this.luminanceMapMethod(r, g, b),
+      artistic: () => this.artisticMethod(r, g, b)
+    };
+
+    return methods[this.currentMethod]() || methods["hue-shift"]();
+  }
+
+  hueShiftMethod(r, g, b) {
+    const hsl = this.rgbToHsl(r, g, b);
+    const newHsl = {
+      h: this.selectedHue / 360,
+      s: Math.min(1, hsl.s + (this.saturation - hsl.s) * 0.7),
+      l: hsl.l
+    };
+    return this.hslToRgb(newHsl.h, newHsl.s, newHsl.l);
+  }
+
+  colorReplaceMethod(r, g, b) {
+    const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+    const lightness = gray / 255;
+    const adjustedLightness = Math.pow(lightness, 0.8);
+
+    return this.hslToRgb(
+      this.selectedHue / 360,
+      this.saturation,
+      adjustedLightness
+    );
+  }
+
+  luminanceMapMethod(r, g, b) {
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    const mappedLuminance =
+      luminance < 0.5 ? 0.2 + luminance * 0.6 : 0.5 + (luminance - 0.5) * 0.5;
+
+    return this.hslToRgb(
+      this.selectedHue / 360,
+      this.saturation * 0.8,
+      mappedLuminance
+    );
+  }
+
+  artisticMethod(r, g, b) {
+    const hsl = this.rgbToHsl(r, g, b);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+    let hueShift = this.selectedHue / 360;
+    if (hsl.s > 0.3) {
+      hueShift = ((this.selectedHue + hsl.h * 360 * 0.2) % 360) / 360;
+    }
+
+    const newSaturation = Math.min(
+      1,
+      this.saturation + Math.sin(luminance * Math.PI) * 0.3
+    );
+    const newLightness = Math.min(
+      0.9,
+      Math.max(0.1, luminance + Math.sin(hsl.h * Math.PI * 2) * 0.1)
+    );
+
+    return this.hslToRgb(hueShift, newSaturation, newLightness);
+  }
+
+  rgbToHsl(r, g, b) {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h,
+      s,
+      l = (max + min) / 2;
+
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+      switch (max) {
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+        case g:
+          h = (b - r) / d + 2;
+          break;
+        case b:
+          h = (r - g) / d + 4;
+          break;
+      }
+      h /= 6;
+    }
+
+    return { h, s, l };
+  }
+
+  hslToRgb(h, s, l) {
+    let r, g, b;
+
+    if (s === 0) {
+      r = g = b = l;
+    } else {
+      const hue2rgb = (p, q, t) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p;
+      };
+
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1 / 3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1 / 3);
+    }
+
+    return {
+      r: Math.round(r * 255),
+      g: Math.round(g * 255),
+      b: Math.round(b * 255)
+    };
+  }
+
+  downloadImage() {
+    if (!this.currentImage) return;
+
+    const link = document.createElement("a");
+    link.download = "color-wheel-converted.png";
+    link.href = this.convertedCanvas.toDataURL("image/png", 1.0);
+    link.click();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => new ColorWheelConverter());
+
+</script>
+
+</body>
+</html>
