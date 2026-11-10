@@ -1,0 +1,718 @@
+/* ==========================================================================
+   LUMIÈRE — design tokens + Bootstrap 5 theming + shared component styles
+   ========================================================================== */
+
+/* ---- Spacing scale extension ----
+   Bootstrap 5's $spacers map stops at 5 (3rem) — it ships no "6" step, so
+   every py-6 / py-lg-6 / mb-lg-6 / etc. used across these pages compiles to
+   nothing and silently no-ops. This defines spacer 6 (4.5rem) as real
+   utility classes, generated the same way Bootstrap generates its own
+   (including !important and one block per breakpoint), so those classes
+   actually apply. */
+:root {
+  --lumiere-spacer-6: 4.5rem;
+}
+
+.p-6 { padding: var(--lumiere-spacer-6) !important; }
+.pt-6, .py-6 { padding-top: var(--lumiere-spacer-6) !important; }
+.pb-6, .py-6 { padding-bottom: var(--lumiere-spacer-6) !important; }
+.ps-6, .px-6 { padding-left: var(--lumiere-spacer-6) !important; }
+.pe-6, .px-6 { padding-right: var(--lumiere-spacer-6) !important; }
+.m-6 { margin: var(--lumiere-spacer-6) !important; }
+.mt-6, .my-6 { margin-top: var(--lumiere-spacer-6) !important; }
+.mb-6, .my-6 { margin-bottom: var(--lumiere-spacer-6) !important; }
+.ms-6, .mx-6 { margin-left: var(--lumiere-spacer-6) !important; }
+.me-6, .mx-6 { margin-right: var(--lumiere-spacer-6) !important; }
+.gap-6 { gap: var(--lumiere-spacer-6) !important; }
+
+@media (min-width: 576px) {
+  .p-sm-6 { padding: var(--lumiere-spacer-6) !important; }
+  .pt-sm-6, .py-sm-6 { padding-top: var(--lumiere-spacer-6) !important; }
+  .pb-sm-6, .py-sm-6 { padding-bottom: var(--lumiere-spacer-6) !important; }
+  .ps-sm-6, .px-sm-6 { padding-left: var(--lumiere-spacer-6) !important; }
+  .pe-sm-6, .px-sm-6 { padding-right: var(--lumiere-spacer-6) !important; }
+  .m-sm-6 { margin: var(--lumiere-spacer-6) !important; }
+  .mt-sm-6, .my-sm-6 { margin-top: var(--lumiere-spacer-6) !important; }
+  .mb-sm-6, .my-sm-6 { margin-bottom: var(--lumiere-spacer-6) !important; }
+  .ms-sm-6, .mx-sm-6 { margin-left: var(--lumiere-spacer-6) !important; }
+  .me-sm-6, .mx-sm-6 { margin-right: var(--lumiere-spacer-6) !important; }
+  .gap-sm-6 { gap: var(--lumiere-spacer-6) !important; }
+}
+
+@media (min-width: 768px) {
+  .p-md-6 { padding: var(--lumiere-spacer-6) !important; }
+  .pt-md-6, .py-md-6 { padding-top: var(--lumiere-spacer-6) !important; }
+  .pb-md-6, .py-md-6 { padding-bottom: var(--lumiere-spacer-6) !important; }
+  .ps-md-6, .px-md-6 { padding-left: var(--lumiere-spacer-6) !important; }
+  .pe-md-6, .px-md-6 { padding-right: var(--lumiere-spacer-6) !important; }
+  .m-md-6 { margin: var(--lumiere-spacer-6) !important; }
+  .mt-md-6, .my-md-6 { margin-top: var(--lumiere-spacer-6) !important; }
+  .mb-md-6, .my-md-6 { margin-bottom: var(--lumiere-spacer-6) !important; }
+  .ms-md-6, .mx-md-6 { margin-left: var(--lumiere-spacer-6) !important; }
+  .me-md-6, .mx-md-6 { margin-right: var(--lumiere-spacer-6) !important; }
+  .gap-md-6 { gap: var(--lumiere-spacer-6) !important; }
+}
+
+@media (min-width: 992px) {
+  .p-lg-6 { padding: var(--lumiere-spacer-6) !important; }
+  .pt-lg-6, .py-lg-6 { padding-top: var(--lumiere-spacer-6) !important; }
+  .pb-lg-6, .py-lg-6 { padding-bottom: var(--lumiere-spacer-6) !important; }
+  .ps-lg-6, .px-lg-6 { padding-left: var(--lumiere-spacer-6) !important; }
+  .pe-lg-6, .px-lg-6 { padding-right: var(--lumiere-spacer-6) !important; }
+  .m-lg-6 { margin: var(--lumiere-spacer-6) !important; }
+  .mt-lg-6, .my-lg-6 { margin-top: var(--lumiere-spacer-6) !important; }
+  .mb-lg-6, .my-lg-6 { margin-bottom: var(--lumiere-spacer-6) !important; }
+  .ms-lg-6, .mx-lg-6 { margin-left: var(--lumiere-spacer-6) !important; }
+  .me-lg-6, .mx-lg-6 { margin-right: var(--lumiere-spacer-6) !important; }
+  .gap-lg-6 { gap: var(--lumiere-spacer-6) !important; }
+}
+
+@media (min-width: 1200px) {
+  .p-xl-6 { padding: var(--lumiere-spacer-6) !important; }
+  .pt-xl-6, .py-xl-6 { padding-top: var(--lumiere-spacer-6) !important; }
+  .pb-xl-6, .py-xl-6 { padding-bottom: var(--lumiere-spacer-6) !important; }
+  .ps-xl-6, .px-xl-6 { padding-left: var(--lumiere-spacer-6) !important; }
+  .pe-xl-6, .px-xl-6 { padding-right: var(--lumiere-spacer-6) !important; }
+  .m-xl-6 { margin: var(--lumiere-spacer-6) !important; }
+  .mt-xl-6, .my-xl-6 { margin-top: var(--lumiere-spacer-6) !important; }
+  .mb-xl-6, .my-xl-6 { margin-bottom: var(--lumiere-spacer-6) !important; }
+  .ms-xl-6, .mx-xl-6 { margin-left: var(--lumiere-spacer-6) !important; }
+  .me-xl-6, .mx-xl-6 { margin-right: var(--lumiere-spacer-6) !important; }
+  .gap-xl-6 { gap: var(--lumiere-spacer-6) !important; }
+}
+
+@media (min-width: 1400px) {
+  .p-xxl-6 { padding: var(--lumiere-spacer-6) !important; }
+  .pt-xxl-6, .py-xxl-6 { padding-top: var(--lumiere-spacer-6) !important; }
+  .pb-xxl-6, .py-xxl-6 { padding-bottom: var(--lumiere-spacer-6) !important; }
+  .ps-xxl-6, .px-xxl-6 { padding-left: var(--lumiere-spacer-6) !important; }
+  .pe-xxl-6, .px-xxl-6 { padding-right: var(--lumiere-spacer-6) !important; }
+  .m-xxl-6 { margin: var(--lumiere-spacer-6) !important; }
+  .mt-xxl-6, .my-xxl-6 { margin-top: var(--lumiere-spacer-6) !important; }
+  .mb-xxl-6, .my-xxl-6 { margin-bottom: var(--lumiere-spacer-6) !important; }
+  .ms-xxl-6, .mx-xxl-6 { margin-left: var(--lumiere-spacer-6) !important; }
+  .me-xxl-6, .mx-xxl-6 { margin-right: var(--lumiere-spacer-6) !important; }
+  .gap-xxl-6 { gap: var(--lumiere-spacer-6) !important; }
+}
+
+:root {
+  /* LUMIÈRE palette */
+  --lumiere-primary: #5f5e5e;
+  --lumiere-primary-dim: #535252;
+  --lumiere-on-primary: #faf7f6;
+  --lumiere-surface: #f9f9f9;
+  --lumiere-surface-container-lowest: #ffffff;
+  --lumiere-surface-container-low: #f2f4f4;
+  --lumiere-surface-container: #ebeeef;
+  --lumiere-surface-container-high: #e4e9ea;
+  --lumiere-surface-container-highest: #dde4e5;
+  --lumiere-on-surface: #2d3435;
+  --lumiere-on-surface-variant: #5a6061;
+  --lumiere-outline: #757c7d;
+  --lumiere-outline-variant: #adb3b4;
+  --lumiere-error: #9f403d;
+
+  /* Bootstrap variable overrides — retheme stock components without a Sass build */
+  --bs-primary: var(--lumiere-primary);
+  --bs-primary-rgb: 95, 94, 94;
+  --bs-body-bg: var(--lumiere-surface);
+  --bs-body-color: var(--lumiere-on-surface);
+  --bs-body-font-family: 'Work Sans', sans-serif;
+  --bs-link-color: var(--lumiere-primary);
+  --bs-link-hover-color: var(--lumiere-primary-dim);
+  --bs-link-color-rgb: 95, 94, 94;
+  --bs-link-hover-color-rgb: 83, 82, 82;
+  --bs-border-color: var(--lumiere-outline-variant);
+  --bs-secondary-color: var(--lumiere-on-surface-variant);
+}
+
+body {
+  font-family: 'Work Sans', sans-serif;
+  background-color: var(--lumiere-surface);
+  color: var(--lumiere-on-surface);
+}
+
+a {
+  text-decoration: none;
+}
+
+/* ---- Fonts ---- */
+.font-headline {
+  font-family: 'Newsreader', serif;
+}
+
+.font-label,
+.font-body {
+  font-family: 'Work Sans', sans-serif;
+}
+
+.serif-italic {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+}
+
+/* ---- Letter-spacing steps (Tailwind "tracking-*" equivalents) ---- */
+.tracking-wide {
+  letter-spacing: 0.05em;
+}
+
+.tracking-wider {
+  letter-spacing: 0.1em;
+}
+
+.tracking-widest {
+  letter-spacing: 0.2em;
+}
+
+.tracking-widest-plus {
+  letter-spacing: 0.3em;
+}
+
+/* ---- Small uppercase label text used throughout (10–11px) ---- */
+.fs-label {
+  font-size: 0.6875rem;
+  /* 11px */
+}
+
+.fs-label-sm {
+  font-size: 0.625rem;
+  /* 10px */
+}
+
+/* ---- Semantic color utilities (Material-ish surface tokens) ---- */
+.bg-surface {
+  background-color: var(--lumiere-surface) !important;
+}
+
+.bg-surface-container-lowest {
+  background-color: var(--lumiere-surface-container-lowest) !important;
+}
+
+.bg-surface-container-low {
+  background-color: var(--lumiere-surface-container-low) !important;
+}
+
+.bg-surface-container {
+  background-color: var(--lumiere-surface-container) !important;
+}
+
+.bg-surface-container-high {
+  background-color: var(--lumiere-surface-container-high) !important;
+}
+
+.bg-surface-container-highest {
+  background-color: var(--lumiere-surface-container-highest) !important;
+}
+
+.text-on-surface {
+  color: var(--lumiere-on-surface) !important;
+}
+
+.text-on-surface-variant {
+  color: var(--lumiere-on-surface-variant) !important;
+}
+
+.text-outline {
+  color: var(--lumiere-outline) !important;
+}
+
+.border-outline {
+  border-color: var(--lumiere-outline) !important;
+}
+
+.border-outline-variant {
+  border-color: var(--lumiere-outline-variant) !important;
+}
+
+.bg-on-surface {
+  background-color: var(--lumiere-on-surface) !important;
+}
+
+.text-on-primary {
+  color: var(--lumiere-on-primary) !important;
+}
+
+/* ---- Images / media helpers ---- */
+.object-fit-cover {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.ratio-1-1 {
+  aspect-ratio: 1 / 1;
+}
+
+.ratio-4-5 {
+  aspect-ratio: 4 / 5;
+}
+
+.ratio-3-4 {
+  aspect-ratio: 3 / 4;
+}
+
+.ratio-3-2 {
+  aspect-ratio: 3 / 2;
+}
+
+.ratio-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+.ratio-16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.ratio-16-7 {
+  aspect-ratio: 16 / 7;
+}
+
+.img-zoom {
+  overflow: hidden;
+  display: block;
+}
+
+.img-zoom img {
+  transition: transform 0.7s ease;
+}
+
+.img-zoom:hover img {
+  transform: scale(1.05);
+}
+
+.img-grayscale {
+  filter: grayscale(1);
+  transition: filter 0.7s ease;
+}
+
+.img-grayscale:hover {
+  filter: grayscale(0);
+}
+
+/* ---- Buttons & CTAs ---- */
+.hero-gradient {
+  background: linear-gradient(135deg, #755a23 0%, #c1a162 100%);
+}
+
+.btn-lumiere {
+  background-color: var(--lumiere-primary);
+  color: var(--lumiere-on-primary);
+  border: none;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 1rem 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-lumiere:hover {
+  background-color: var(--lumiere-primary-dim);
+  color: var(--lumiere-on-primary);
+}
+
+.btn-lumiere-outline {
+  background-color: transparent;
+  color: var(--lumiere-on-surface);
+  border: 1px solid var(--lumiere-outline);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 1rem 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-lumiere-outline:hover {
+  background-color: var(--lumiere-surface-container-low);
+  color: var(--lumiere-on-surface);
+}
+
+/* ---- Navbar ---- */
+.navbar-lumiere {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.navbar-lumiere .navbar-brand {
+  font-family: 'Newsreader', serif;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: var(--lumiere-on-surface);
+}
+
+.navbar-lumiere .nav-link {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lumiere-on-surface-variant);
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid transparent;
+}
+
+.navbar-lumiere .nav-link:hover,
+.navbar-lumiere .nav-link.active {
+  color: var(--lumiere-on-surface);
+}
+
+.navbar-lumiere .nav-link.active {
+  border-bottom-color: var(--lumiere-outline);
+}
+
+.navbar-lumiere .material-symbols-outlined {
+  color: var(--lumiere-on-surface-variant);
+  cursor: pointer;
+}
+
+.pro-badge {
+  background-color: #c1a162;
+  color: #2d1e00;
+  font-size: 0.5625rem;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  padding: 0.15em 0.5em;
+  border-radius: 0.75rem;
+  vertical-align: middle;
+}
+
+.navbar-lumiere .dropdown-menu {
+  border: none;
+  box-shadow: 0 0.5rem 2rem rgba(45, 52, 53, 0.12);
+  padding: 0.75rem 0;
+}
+
+.navbar-lumiere .dropdown-header {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lumiere-outline);
+  padding-top: 0.5rem;
+}
+
+.navbar-lumiere .dropdown-item {
+  font-size: 0.875rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+
+.navbar-lumiere .dropdown-item:hover,
+.navbar-lumiere .dropdown-item:focus {
+  background-color: var(--lumiere-surface-container-low);
+}
+
+.navbar-lumiere .dropdown-divider {
+  border-color: var(--lumiere-outline-variant);
+  opacity: 0.4;
+}
+
+/* ---- Mega Menu ---- */
+.navbar-lumiere .dropdown-menu.mega-menu {
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin-top: 0;
+  padding: 0;
+  border-radius: 0;
+  border-top: 1px solid var(--lumiere-outline-variant);
+}
+
+.mega-menu-heading {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lumiere-outline);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.mega-menu .mega-link {
+  display: block;
+  font-family: 'Newsreader', serif;
+  font-size: 1.05rem;
+  color: var(--lumiere-on-surface);
+  padding: 0.4rem 0;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.mega-menu .mega-link:hover {
+  color: var(--lumiere-primary);
+  transform: translateX(0.25rem);
+}
+
+.mega-menu .mega-feature h3 {
+  transition: color 0.2s ease;
+}
+
+.mega-menu .mega-feature:hover h3 {
+  color: var(--lumiere-primary);
+}
+
+/* Below the navbar-expand-lg breakpoint the nav collapses into the mobile
+   menu — drop the mega layout entirely and match the plain Home/Pages
+   dropdown-item look instead of the desktop multi-column panel. */
+@media (max-width: 991.98px) {
+  .navbar-lumiere .dropdown-menu.mega-menu {
+    position: static;
+    border-top: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .mega-menu .container-xxl {
+    padding: 0 !important;
+  }
+
+  .mega-menu .row {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+  }
+
+  .mega-menu-heading {
+    font-size: 0.625rem;
+    letter-spacing: 0.15em;
+    padding: 0.5rem 1.5rem 0.35rem;
+    margin-bottom: 0;
+  }
+
+  .mega-menu .mega-link {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.875rem;
+    padding: 0.4rem 1.5rem;
+  }
+
+  .mega-menu .mega-link:hover {
+    color: var(--lumiere-on-surface);
+    background-color: var(--lumiere-surface-container-low);
+    transform: none;
+  }
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  background-color: #f4f2ef;
+  border-top: 1px solid var(--lumiere-outline-variant);
+}
+
+.site-footer .footer-brand {
+  font-family: 'Newsreader', serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+  color: var(--lumiere-on-surface);
+}
+
+.site-footer h6 {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+}
+
+.site-footer a {
+  color: var(--lumiere-on-surface-variant);
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+}
+
+.site-footer a:hover {
+  color: var(--lumiere-on-surface);
+}
+
+.footer-copyright a {
+  font-size: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
+.footer-copyright a:hover {
+  color: var(--lumiere-on-surface);
+}
+
+/* ---- Page-specific bits, consolidated ---- */
+.masonry-grid {
+  column-count: 2;
+  column-gap: 4rem;
+}
+
+@media (max-width: 768px) {
+  .masonry-grid {
+    column-count: 1;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 4rem;
+}
+
+.editorial-line {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--lumiere-outline-variant) 50%, transparent);
+  opacity: 0.4;
+}
+
+.editorial-container {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- Material Symbols baseline ---- */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--lumiere-outline-variant);
+  border-radius: 10px;
+}
+
+/* ---- Search popup / cart drawer interaction classes ----
+   Plain-CSS replacements for the Tailwind utility classes that
+   js/script.js toggles at runtime (hidden / opacity-100 / translate-x-full). */
+.hidden {
+  display: none !important;
+}
+
+#search-popup,
+#cart-drawer {
+  opacity: 0;
+  transition: visibility 0.2s, opacity 0.2s ease;
+}
+
+#search-popup.opacity-100,
+#cart-drawer.opacity-100 {
+  opacity: 1;
+}
+
+#cart-panel {
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+}
+
+#cart-panel.translate-x-full {
+  transform: translateX(100%);
+}
+
+#cart-drawer.opacity-100 #cart-panel:not(.translate-x-full) {
+  transform: translateX(0);
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+/* ---- Cart / Checkout ---- */
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--lumiere-outline-variant);
+}
+
+.qty-stepper button {
+  background: none;
+  border: none;
+  width: 2rem;
+  height: 2rem;
+  color: var(--lumiere-on-surface-variant);
+}
+
+.qty-stepper button:hover {
+  background-color: var(--lumiere-surface-container-low);
+}
+
+.qty-stepper input {
+  width: 2.5rem;
+  border: none;
+  background: transparent;
+  text-align: center;
+}
+
+.order-summary {
+  background-color: var(--lumiere-surface-container-low);
+  padding: 2rem;
+}
+
+.cart-table th {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lumiere-outline);
+  font-weight: 500;
+  border-bottom: 1px solid var(--lumiere-outline-variant);
+  padding-bottom: 1rem;
+}
+
+.cart-table td {
+  border-bottom: 1px solid var(--lumiere-outline-variant);
+  vertical-align: middle;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.form-control-lumiere {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--lumiere-outline-variant);
+  border-radius: 0;
+  padding: 0.75rem 0;
+  width: 100%;
+  color: var(--lumiere-on-surface);
+}
+
+.form-control-lumiere:focus {
+  outline: none;
+  border-color: var(--lumiere-primary);
+  box-shadow: none;
+}
+
+.step-badge {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  background-color: var(--lumiere-on-surface);
+  color: var(--lumiere-surface);
+}
+
+/* ---- Style Guide ---- */
+.swatch {
+  height: 6rem;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.75rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.style-guide-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid var(--lumiere-outline-variant);
+}
+
+/* ---- Fixed-navbar clearance (Bootstrap's spacers top out at 3rem) ---- */
+.pt-nav {
+  padding-top: 8rem;
+}
+
+@media (max-width: 768px) {
+  .pt-nav {
+    padding-top: 6.5rem;
+  }
+}
