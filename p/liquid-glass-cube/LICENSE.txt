@@ -1,0 +1,9 @@
+Liquid Glass Cube — Standard License
+
+Copyright (c) Mustafa Üncüoğlu. All rights reserved.
+
+You may use this product in unlimited personal and commercial projects (websites,
+apps, client work). You may not resell, redistribute or share the source files as
+a stand-alone product, template, UI kit or library, whether modified or not.
+
+THE PRODUCT IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hero — Liquid Glass Cube</title>
+  <style>
+    * { box-sizing: border-box; }
+    *:focus, *:focus-visible { outline: none; }
+    html, body { margin: 0; height: 100%; }
+    body { background: #070812; color: #fff; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; overflow: hidden; }
+    canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+    canvas:active { cursor: grabbing; }
+    nav { position: fixed; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 22px 36px; z-index: 2; pointer-events: none; }
+    nav > * { pointer-events: auto; }
+    .logo { font-weight: 700; letter-spacing: -.02em; font-size: 17px; }
+    .menu { display: flex; gap: 6px; padding: 6px; border-radius: 999px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .menu a { color: rgba(255,255,255,.8); text-decoration: none; font-size: 13.5px; font-weight: 500; padding: 8px 16px; border-radius: 999px; }
+    .menu a:first-child { background: rgba(255,255,255,.14); color: #fff; }
+    .cta { color: #0b0d1f; background: #fff; text-decoration: none; font-weight: 600; font-size: 13.5px; padding: 11px 20px; border-radius: 999px; }
+    .copy { position: fixed; left: 0; right: 0; bottom: 4.5vh; text-align: center; z-index: 2; padding: 0 24px; pointer-events: none; }
+    .copy p { margin: 0 auto 16px; max-width: 520px; color: rgba(255,255,255,.72); font-size: clamp(15px, 1.6vw, 18px); line-height: 1.5; }
+    .copy .row { display: flex; gap: 10px; justify-content: center; pointer-events: auto; }
+    .btn { text-decoration: none; font-weight: 600; font-size: 14px; padding: 13px 24px; border-radius: 999px; }
+    .btn.solid { background: #fff; color: #0b0d1f; }
+    .btn.ghost { color: #fff; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); }
+    @media (max-width: 720px) { .menu { display: none; } nav { padding: 18px 20px; } }
+  </style>
+</head>
+<body>
+  <canvas id="hero" aria-label="Interactive liquid glass cube over the word Depth"></canvas>
+  <nav>
+    <span class="logo">Prism</span>
+    <div class="menu"><a href="#">Product</a><a href="#">Pricing</a><a href="#">Docs</a></div>
+    <a class="cta" href="#">Get started</a>
+  </nav>
+  <div class="copy">
+    <p>The headline lives inside the canvas, so the glass can bend it.</p>
+    <div class="row"><a class="btn solid" href="#">Start free</a><a class="btn ghost" href="../index.html">Open playground</a></div>
+  </div>
+  <script src="../assets/js/liquid-glass-cube.js"></script>
+  <script>
+    LiquidGlassCube.create('#hero', { shape: 'cube', scene: 'midnight', text: 'Depth', hint: '', maxSize: 760 });
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gallery — Liquid Glass Cube</title>
+  <style>
+    * { box-sizing: border-box; }
+    *:focus, *:focus-visible { outline: none; }
+    body { margin: 0; background: #0c0d11; color: #f3f4f8; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 56px 28px 72px; }
+    header { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 36px; }
+    h1 { margin: 0; font-size: clamp(34px, 5vw, 58px); line-height: 1.02; letter-spacing: -.035em; font-weight: 700; }
+    h1 em { font-style: normal; color: rgba(243,244,248,.45); }
+    .back { color: #f3f4f8; text-decoration: none; font-size: 13px; font-weight: 600; padding: 10px 16px; border-radius: 999px; background: rgba(255,255,255,.08); }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { position: relative; border-radius: 28px; overflow: hidden; aspect-ratio: 5 / 4.4; background: #14151b; }
+    .card canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+    .card canvas:active { cursor: grabbing; }
+    .tag { position: absolute; left: 16px; bottom: 14px; font-size: 12px; font-weight: 600; padding: 6px 11px; border-radius: 999px; background: rgba(20,22,30,.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); color: #fff; pointer-events: none; }
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .wrap { padding: 36px 16px 48px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Five shapes.<br><em>Six scenes.</em></h1>
+      <a class="back" href="../index.html">Open the playground →</a>
+    </header>
+    <div class="grid">
+      <div class="card"><canvas data-liquid-glass data-shape="cube"    data-scene="studio"   data-hint=""></canvas><span class="tag">Cube · Studio</span></div>
+      <div class="card"><canvas data-liquid-glass data-shape="sphere"  data-scene="midnight" data-hint=""></canvas><span class="tag">Sphere · Midnight</span></div>
+      <div class="card"><canvas data-liquid-glass data-shape="ring"    data-scene="sunset"   data-hint=""></canvas><span class="tag">Ring · Sunset</span></div>
+      <div class="card"><canvas data-liquid-glass data-shape="capsule" data-scene="glacier"  data-hint=""></canvas><span class="tag">Capsule · Glacier</span></div>
+      <div class="card"><canvas data-liquid-glass data-shape="pane"    data-scene="ink"      data-hint="" data-text="Ink"></canvas><span class="tag">Pane · Ink</span></div>
+      <div class="card"><canvas data-liquid-glass data-shape="cube"    data-scene="aurora"   data-hint=""></canvas><span class="tag">Cube · Aurora</span></div>
+    </div>
+  </div>
+  <script src="../assets/js/liquid-glass-cube.js"></script>
+</body>
+</html>
