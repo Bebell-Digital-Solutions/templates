@@ -1,4 +1,8 @@
+<div style="justify-elements: center;">
 # LUMIÈRE — Jewelry Store Template
+
+
+</div>
 
 A multi-page jewelry / fine-goldsmith storefront template built with **Bootstrap 5** and **jQuery**.
 
