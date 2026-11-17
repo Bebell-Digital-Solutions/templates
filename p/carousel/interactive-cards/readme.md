@@ -1,3 +1,5 @@
+
+<div align="center">
 # Image-Carousel-model-1
 Image Carousel for Web Project - Model o1
 
@@ -6,3 +8,4 @@ Image Carousel for Web Project - Model o1
 
 ## Hosted Demo
 👉 [Preview Here](https://bebell-digital-solutions.github.io/Image-Carousel-model-1/)
+</div>
