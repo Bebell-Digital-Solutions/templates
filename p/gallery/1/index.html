@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+<style>
+@font-face {
+	font-family: 'Krona One'; 
+	src: local('Krona One'),
+		url('../fonts/KronaOne-Regular.ttf'); 
+}
+@font-face {
+	font-family: 'Jura'; 
+	src: local('Jura'),
+		url('../fonts/Jura-VariableFont_wght.ttf'); 
+}
+@font-face {
+	font-family: 'KoHo-regular'; 
+	src: local('KoHo-regular'),
+		url('../fonts/KoHo-Regular.ttf'); 
+}
+@font-face {
+	font-family: 'Inter'; 
+	src: local('Inter'),
+		url('../fonts/Inter-VariableFont_slnt\,wght.ttf'); 
+}
+/* font family */
+
+/* global color */
+:root {
+	--main-white: #EBEBEB;
+	--title-dark--color: #222222;
+	--desc-dark-color: #353535;
+	--green-color: #45C569;
+}
+/* color */
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--main-white);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+header {
+  margin: 0;
+}
+
+div, ul, li, a, p, span, button, section, h1, h2, h3, h4, h5 {
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+section {
+  margin-bottom: 120px;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+
+/* Demo */
+.chooise-main-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chooise-wrapper {
+  display: inline-block;
+}
+
+.chooise-wrapper__item {
+  width: 290px;
+  height: 500px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.chooise-wrapper__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.6s;
+}
+
+.chooise-wrapper__item__text {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 31px;
+  color: #FFFFFF;
+  position: absolute;
+  z-index: 30;
+  left: 30px;
+  top: 30px;
+  width: 80%;
+}
+
+.chooise-wrapper__item::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.31);
+}
+
+.chooise-wrapper__item:hover img {
+  transform: scale(110%);
+}
+
+
+.text-main-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-main-block .text-main-block__title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 38px;
+  letter-spacing: -0.025em;
+  color: #222222;
+}
+
+.text-main-block .text-main-block__wrapper {
+  margin-top: 60px;
+  padding-left: 60px;
+  border-left: 1px solid var(--desc-dark-color);
+}
+
+.text-main-block .text-main-block__wrapper .text-main-block__wrapper__desc {
+  color: var(--desc-dark-color);
+  font-size: 20px;
+  font-family: 'Inter';
+  overflow: auto;
+}
+
+
+</style>
+</head>
+<body>
+
+
+        <section class="chooise-section" id="chooise">
+            <div class="container">
+                <div class="chooise-main-wrapper">
+                    <a href="#Interior" class="chooise-wrapper">
+                        <div class="chooise-wrapper__item">
+                            <img src="https://ik.imagekit.io/bebell/Easy%20Listings/Banners-&-Backgrounds/123.webp" alt="chooise-img">
+                            <span class="chooise-wrapper__item__text">
+                                Interior Photography
+                            </span>
+                        </div>
+                    </a>
+                    <a href="#Exterior" class="chooise-wrapper">
+                        <div class="chooise-wrapper__item">
+                            <img src="https://ik.imagekit.io/bebell/Easy%20Listings/Banners-&-Backgrounds/property-banners.webp" alt="chooise-img">
+                            <span class="chooise-wrapper__item__text">
+                                Exterior
+    Photography
+                            </span>
+                        </div>
+                    </a>
+                    <a href="#Aerial" class="chooise-wrapper">
+                        <div class="chooise-wrapper__item">
+                            <img src="https://ik.imagekit.io/bebell/Easy%20Listings/Banners-&-Backgrounds/140.webp" alt="chooise-img">
+                            <span class="chooise-wrapper__item__text">
+                                Aerial
+    Photography
+                            </span>
+                        </div>
+                    </a>
+                    <a href="#HDR" class="chooise-wrapper">
+                        <div class="chooise-wrapper__item">
+                            <img src="https://ik.imagekit.io/bebell/Easy%20Listings/Banners-&-Backgrounds/123.webp?updatedAt=1794602636909" alt="chooise-img">
+                            <span class="chooise-wrapper__item__text">
+                                HDR photo
+                            </span>
+                        </div>
+                    </a>                    
+                </div>
+
+
+
+                <div class="text-main-block">
+                    <div class="text-main-block__wrapper animathion-elem-right element-animation">
+                        <p class="text-main-block__wrapper__desc animathion-elem-right element-animation">
+                            Our real estate photography service is designed to showcase the best features of your property. We use professional-grade cameras and lenses, along with advanced techniques and editing software, to capture stunning images that highlight your property's unique characteristics. Whether it's a spacious living room with high ceilings, a luxurious master bedroom with a panoramic view, or a stunning outdoor space with a pool and garden, our photos will help potential buyers visualize themselves living in your property.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+</body>
+</html>
