@@ -231,7 +231,7 @@
             color: var(--accent-neon);
         }
 
-        /* Hero Section */
+        /* Hero Section – LEFT ALIGNED */
         .hero {
             position: relative;
             min-height: 100vh;
@@ -242,10 +242,18 @@
                         url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80') center/cover no-repeat;
         }
 
+        .hero .container {
+            display: flex;
+            justify-content: flex-start; /* left align */
+            width: 100%;
+        }
+
         .hero-content {
             position: relative;
             z-index: 10;
             max-width: 650px;
+            text-align: left;
+            margin-right: auto; /* ensures left positioning */
         }
 
         .hero-actions {
@@ -253,6 +261,7 @@
             gap: 16px;
             margin-top: 2rem;
             align-items: center;
+            justify-content: flex-start;
         }
 
         .hero-stats {
@@ -261,6 +270,8 @@
             gap: 48px;
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 2rem;
+            justify-content: flex-start;
+            
         }
 
         .stat-item .stat-value {
@@ -275,28 +286,71 @@
             color: var(--text-gray-light);
         }
 
-        /* Philosophy Section */
+
+
+
+
+        /* Philosophy Section – TWO COLUMN HEADER */
         .philosophy-section {
             padding: var(--section-padding);
         }
 
         .philosophy-header {
-            max-width: 800px;
-            margin: 0 auto 5rem auto;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+            margin-bottom: 5rem;
         }
 
+        .philosophy-header .header-left {
+            /* title stays on left */
+        }
+
+        .philosophy-header .header-right {
+            /* description on right */
+        }
+
+        .philosophy-header .tag {
+            justify-content: flex-start;
+        }
+
+        /* Ensure title & description alignment */
+        .philosophy-header h2 {
+            margin-bottom: 0;
+        }
+
+        .philosophy-header .subtitle {
+            max-width: 100%;
+            margin-bottom: 0;
+        }
+        
+        
+        
+        
+
+        @media (max-width: 800px) {
+            .philosophy-header {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+        
+        
+        
+        
+
+        /* Browser Mockup – keep as is */
         .browser-mockup {
             background-color: var(--card-light);
             border-radius: var(--radius-lg);
             box-shadow: 0 30px 60px rgba(0,0,0,0.05);
             overflow: hidden;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             border: 1px solid rgba(0,0,0,0.05);
+                position: relative; /* ← ADD THIS */
+
         }
 
         .browser-header {
@@ -346,11 +400,16 @@
             color: #333;
             outline: none;
         }
+        
+        
+        
+        
+        
 
         /* Dashboard Layout */
         .browser-content.dash-layout {
             display: flex;
-            height: 550px;
+            height: 650px;
             grid-template-columns: none;
         }
         
@@ -447,6 +506,7 @@
             gap: 12px;
             padding-top: 20px;
             border-bottom: 2px solid #f1f3f4;
+            min-height: 180px; /* ← ADD THIS */
         }
         
         .chart-bar {
@@ -462,6 +522,9 @@
             opacity: 1;
             background: var(--accent-green-dark);
         }
+        
+        
+        
 
         /* Dashboard Views & Modal Additions */
         .dash-view { display: none; flex-direction: column; gap: 20px; animation: fadeIn 0.4s ease forwards; }
@@ -471,50 +534,275 @@
 
         /* Simple Table */
         .dash-table { width: 100%; border-collapse: collapse; background: var(--card-light); border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        
+        
         .dash-table th, .dash-table td { padding: 16px; text-align: left; border-bottom: 1px solid #f1f3f4; font-size: 0.85rem; }
+        
+        
         .dash-table th { background: #f8f9fa; font-weight: 600; color: var(--text-gray-dark); }
+        
+        
         .dash-table tr:last-child td { border-bottom: none; }
         
         /* Property Cards */
         .prop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+        
+        
+        
         .prop-card { background: var(--card-light); border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        
         .prop-img { height: 120px; background: #e2e8f0; }
+        
         .prop-info { padding: 16px; }
+        
         .prop-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+        
         .prop-price { color: var(--text-gray-dark); font-size: 0.85rem; }
+        
+        
+        
+        
+        
 
         /* Settings Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s ease; }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-content { background: var(--card-light); width: 90%; max-width: 500px; border-radius: var(--radius-lg); padding: 32px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); position: relative; transform: scale(0.95); transition: transform 0.3s ease; }
-        .modal-overlay.active .modal-content { transform: scale(1); }
-        .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; cursor: pointer; color: var(--text-gray-dark); }
-        .modal-close:hover { color: var(--text-dark); }
-        .modal-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; }
+        .modal-overlay {
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        background: rgba(0,0,0,0.5); 
+        z-index: 1000; 
+        display: none; 
+        align-items: center; 
+        justify-content: center; 
+        backdrop-filter: blur(4px); 
+        opacity: 0; 
+        transition: opacity 0.3s ease; 
+        }
         
-        .settings-group { margin-bottom: 20px; }
-        .settings-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--text-gray-dark); }
-        .settings-group input[type="text"] { width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: var(--radius-sm); }
         
-        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--accent-neon); }
-        input:checked + .slider:before { transform: translateX(24px); }
+        .modal-overlay.active { 
+        display: flex; 
+        opacity: 1; }
+        
+        
+        .modal-content { 
+        background: var(--card-light); 
+        width: 90%; 
+        max-width: 500px; 
+        border-radius: var(--radius-lg); 
+        padding: 32px; 
+        box-shadow: 0 25px 50px rgba(0,0,0,0.25); 
+        position: relative; 
+        transform: scale(0.95); 
+        transition: transform 0.3s ease; }
+        
+        
+        .modal-overlay.active .modal-content { 
+        transform: scale(1); 
+        }
+        
+        
+        .modal-close { 
+        position: absolute; 
+        top: 20px; 
+        right: 20px; 
+        background: none; 
+        border: none; 
+        cursor: pointer; 
+        color: var(--text-gray-dark); 
+        }
+        
+        
+        
+        .modal-close:hover { 
+        color: var(--text-dark); }
+        
+        
+        .modal-title { 
+        font-size: 1.5rem; 
+        font-weight: 700; 
+        margin-bottom: 24px; 
+        }
+        
+        
+        
+        .settings-group { 
+        margin-bottom: 20px; 
+        }
+        
+        
+        .settings-group label { 
+        display: block; 
+        font-size: 0.85rem; 
+        font-weight: 600; 
+        margin-bottom: 8px; 
+        color: var(--text-gray-dark); 
+        }
+        
+        
+        .settings-group input[type="text"] { 
+        width: 100%; 
+        padding: 12px; 
+        border: 1px solid #e5e7eb; 
+        border-radius: var(--radius-sm); 
+        }
+        
+        
+        .toggle-switch { 
+        position: relative; 
+        display: inline-block; 
+        width: 50px; 
+        height: 26px; 
+        }
+        
+        
+        .toggle-switch input { 
+        opacity: 0; 
+        width: 0; 
+        height: 0; 
+        }
+        
+        
+        .slider { 
+        position: absolute; 
+        cursor: pointer; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0; 
+        background-color: #ccc; 
+        transition: .4s; 
+        border-radius: 34px; 
+        }
+        
+        
+        .slider:before { 
+        position: absolute; 
+        content: ""; 
+        height: 18px; 
+        width: 18px; 
+        left: 4px; 
+        bottom: 4px; 
+        background-color: white; transition: .4s; 
+        border-radius: 50%; 
+        }
+        
+        
+        input:checked + .slider { 
+        background-color: var(--accent-neon); 
+        }
+        
+        
+        input:checked + .slider:before { 
+        transform: translateX(24px); 
+        }
+
+
+
+
+
+
+
+
 
         /* AI Chatbot Section */
-        .ai-section { padding: var(--section-padding); display: grid; grid-template-columns: 1fr; gap: 60px; align-items: center; }
-        @media(min-width: 900px) { .ai-section { grid-template-columns: 1fr 1fr; } }
+        .ai-section { 
+        padding: var(--section-padding); 
+        display: grid; 
+        grid-template-columns: 1fr; 
+        gap: 60px; 
+        align-items: center; 
+        }
         
-        .chat-widget { background: var(--card-light); border-radius: var(--radius-lg); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 30px 60px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; height: 500px; }
-        .chat-header { background: var(--bg-dark); color: white; padding: 20px; display: flex; align-items: center; gap: 12px; }
-        .chat-header-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-neon); color: var(--bg-dark); display: flex; align-items: center; justify-content: center; }
-        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: #f8f9fa; scroll-behavior: smooth; }
-        .chat-msg { max-width: 85%; padding: 14px 18px; font-size: 0.9rem; border-radius: 18px; line-height: 1.4; animation: fadeIn 0.3s ease; word-wrap: break-word; }
-        .chat-msg.bot { background: white; color: var(--text-dark); align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .chat-msg.user { background: var(--accent-neon); color: var(--text-dark); align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 500; }
-        .chat-input { padding: 20px; background: white; border-top: 1px solid #f1f3f4; display: flex; gap: 12px; }
+        
+        @media(min-width: 900px) { .ai-section { 
+        grid-template-columns: 1fr 1fr; 
+        } 
+        }
+        
+        
+        .chat-widget { 
+        background: var(--card-light); 
+        border-radius: var(--radius-lg); 
+        border: 1px solid rgba(0,0,0,0.05); 
+        box-shadow: 0 30px 60px rgba(0,0,0,0.08); 
+        overflow: hidden; 
+        display: flex; 
+        flex-direction: column; 
+        height: 500px; 
+        }
+        
+        
+        .chat-header { 
+        background: var(--bg-dark); 
+        color: white; 
+        padding: 20px; 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        }
+        
+        
+        .chat-header-icon { 
+        width: 40px; 
+        height: 40px; 
+        border-radius: 50%; 
+        background: var(--accent-neon); 
+        color: var(--bg-dark); 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; }
+        
+        
+        .chat-messages { 
+        flex: 1; 
+        padding: 20px; 
+        overflow-y: auto; display: flex; 
+        flex-direction: column; 
+        background: #f8f9fa; 
+        scroll-behavior: smooth; }
+        
+        
+        .chat-msg { 
+        max-width: 85%; 
+        padding: 14px 18px; 
+        font-size: 0.9rem; 
+        border-radius: 18px; 
+        line-height: 1.4; 
+        animation: fadeIn 0.3s ease; 
+        word-wrap: break-word; 
+        }
+        
+        
+        .chat-msg.bot { 
+        background: white; 
+        color: var(--text-dark); 
+        align-self: flex-start; 
+        border-bottom-left-radius: 4px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04); 
+        }
+        
+        
+        .chat-msg.user { 
+        background: var(--accent-neon); 
+        color: var(--text-dark); 
+        align-self: flex-end; 
+        border-bottom-right-radius: 4px; 
+        font-weight: 500; 
+        }
+        
+        
+        .chat-input { 
+        padding: 20px; 
+        background: white; 
+        border-top: 1px solid #f1f3f4; 
+        display: flex; 
+        gap: 12px; 
+        }
+        
+        
         .chat-input input { flex: 1; padding: 12px 16px; border: 1px solid #e5e7eb; border-radius: var(--radius-full); outline: none; font-size: 0.95rem; }
         .chat-input input:focus { border-color: var(--accent-neon); }
         .chat-btn { background: var(--bg-dark); color: white; border: none; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; }
@@ -525,6 +813,13 @@
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
         @keyframes typing { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+        
+        
+        
+        
+        
+        
+        
 
         /* Features Section */
         .features-section {
@@ -589,6 +884,13 @@
         .feat-card-dark .feature-icon-wrapper {
             background-color: rgba(255,255,255,0.05);
         }
+        
+        
+        
+        
+        
+        
+        
 
         /* Pricing Section */
         .pricing-section {
@@ -651,6 +953,112 @@
             padding: 3px;
         }
         .price-card.white .check-list li i { background-color: var(--bg-dark); color: var(--card-light); }
+        
+        
+        
+        
+        
+        
+        
+        
+ /* Image Bento Gallery */
+ /* Photo-grid */
+
+.photo-grids-wrapp {
+  margin-top: 60px;
+  display: grid;
+  grid-template-areas: "a b d" "a c d";
+  height: 407px;
+  width: 100%;
+  gap: 40px;
+}
+
+.photo-grids-wrapp div {
+  overflow: hidden;
+  border-radius: 20px;
+  transition: 0.4s;
+  box-shadow: 6px 11px 16px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.photo-grids-wrapp div img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.6s;
+}
+
+.photo-grids-wrapp div:hover {
+  box-shadow: 6px 11px 16px rgba(0, 0, 0, 0.3);
+}
+
+.photo-grids-wrapp div:hover img {
+  transform: scale(110%);
+}
+
+.photo-grids-wrapp__item1 {
+  grid-area: a;
+}
+
+.photo-grids-wrapp__item2 {
+  grid-area: b;
+}
+
+.photo-grids-wrapp__item3 {
+  grid-area: c;
+}
+
+.photo-grids-wrapp__item4 {
+  grid-area: d;
+}
+
+@media (max-width: 1200px) {
+  .photo-grids-wrapp {
+    gap: 10px;
+    margin-top: 20px;
+    height: 320px;
+  }
+}
+
+@media (max-width: 700px) {
+  .photo-grids-wrapp {
+    grid-template-areas: "a a a a" "b b c c" "d d d d";
+    height: auto;
+    grid-template-rows: 200px 150px 200px;
+  }
+}
+
+@media (max-width: 400px) {
+  .Interior-section {
+    border-radius: 0 123px 0 0;
+  }
+
+  .photo-grids-wrapp {
+    grid-template-rows: 150px 120px 150px;
+    gap: 8px;
+  }
+}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         /* Stats Split Section */
         .stats-split {
@@ -678,6 +1086,172 @@
             line-height: 1;
             letter-spacing: -0.05em;
         }
+        
+        
+        
+        
+  
+  
+  
+  
+  /* Image Gallery */
+  
+  /* ---- Choice Section ---- */
+.choice-section {
+    padding: var(--section-padding);
+}
+
+.choice-main-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 60px;
+}
+
+/* Text block — reuses your typography scale */
+.text-main-block {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 320px;
+    max-width: 360px;
+}
+
+.text-main-block__title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 3vw, 2.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.text-main-block__wrapper {
+    margin-top: 1.5rem;
+    padding-left: 24px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.text-main-block__wrapper__desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--text-gray-dark);
+}
+
+/* Cards group */
+.choice-wrapper {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.choice-wrapper__item {
+    flex: 1 1 0;
+    max-width: 290px;
+    height: 500px;
+    border-radius: var(--radius-lg);   /* 24px — matches your cards */
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    background: var(--bg-dark);
+}
+
+.choice-wrapper__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.choice-wrapper__item__text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--text-white);
+    position: absolute;
+    z-index: 30;
+    left: 24px;
+    top: 24px;
+    width: 80%;
+}
+
+/* Gradient overlay — blends with your dark palette instead of flat black */
+.choice-wrapper__item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: linear-gradient(
+        180deg,
+        rgba(13, 19, 15, 0.55) 0%,
+        rgba(13, 19, 15, 0.15) 45%,
+        rgba(13, 19, 15, 0.65) 100%
+    );
+}
+
+.choice-wrapper__item:hover img {
+    transform: scale(1.1);
+}
+
+/* Accent ring on hover — matches your stat-card interaction */
+.choice-wrapper__item::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    border-radius: inherit;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+    pointer-events: none;
+}
+
+.choice-wrapper__item:hover::after {
+    border-color: var(--accent-neon);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .choice-main-wrapper {
+        flex-direction: column;
+        gap: 40px;
+    }
+    .text-main-block {
+        flex: 1 1 auto;
+        max-width: 100%;
+    }
+    .choice-wrapper {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    .choice-wrapper__item {
+        height: 420px;
+    }
+}
+
+@media (max-width: 700px) {
+    .choice-wrapper {
+        flex-direction: column;
+    }
+    .choice-wrapper__item {
+        max-width: 100%;
+        height: 300px;
+    }
+}
+  
+  
+  
+     
+        
+        
+        
+        
+        
+        
+        
 
         /* Guarantee Section */
         .guarantee-section {
@@ -714,16 +1288,28 @@
             user-select: none;
         }
 
-        /* Contact Section */
+
+
+
+
+
+
+
+
+        /* Contact Section – 1/3 text, 2/3 form */
         .contact-section {
             padding: var(--section-padding);
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 2fr; /* 1/3 text, 2/3 form */
             gap: 60px;
+            align-items: start;
         }
 
-        @media(min-width: 900px) {
-            .contact-section { grid-template-columns: 1fr 1fr; }
+        @media (max-width: 900px) {
+            .contact-section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
         }
 
         .form-card {
@@ -798,6 +1384,15 @@
             width: 100%;
             margin-top: 1rem;
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         /* Footer */
         .footer {
@@ -858,6 +1453,8 @@
             color: var(--text-gray-dark);
         }
 
+        /* small adjustments */
+        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
     </style>
 </head>
 <body>
@@ -887,30 +1484,32 @@
 
 
   
-    <!-- Hero Section -->
+    <!-- Hero Section – left aligned -->
     <section class="hero section-dark">
-        <div class="container hero-content">
-            <div class="tag fade-up" style="color: rgba(255,255,255,0.7);">WEB DEVELOPMENT AGENCY</div>
-            <h1 class="fade-up">Turn more local<br>searches into<br><span class="text-neon">instructions.</span></h1>
-            <p class="subtitle fade-up">A bespoke website designed specifically for estate agents. Give your brand the local dominance it deserves without the hefty price tag.</p>
-            
-            <div class="hero-actions fade-up">
-                <button class="btn btn-neon">Start your project</button>
-                <button class="btn btn-outline">Explore our work <i data-lucide="arrow-right" style="width: 18px;"></i></button>
-            </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="tag fade-up" style="color: rgba(255,255,255,0.7);">WEB DEVELOPMENT AGENCY</div>
+                <h1 class="fade-up">Turn more local<br>searches into<br><span class="text-neon">instructions.</span></h1>
+                <p class="subtitle fade-up">A bespoke website designed specifically for estate agents. Give your brand the local dominance it deserves without the hefty price tag.</p>
+                
+                <div class="hero-actions fade-up">
+                    <button class="btn btn-neon">Start your project</button>
+                    <button class="btn btn-outline">Explore our work <i data-lucide="arrow-right" style="width: 18px;"></i></button>
+                </div>
 
-            <div class="hero-stats fade-up">
-                <div class="stat-item">
-                    <div class="stat-value"><span class="counter" data-target="4.9" data-decimals="1">0</span>/5</div>
-                    <div class="stat-label">Google Rating</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value"><span class="counter" data-target="1200">0</span>+</div>
-                    <div class="stat-label">Agencies using PWB</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value"><span class="counter" data-target="10">0</span> yrs</div>
-                    <div class="stat-label">Industry experience</div>
+                <div class="hero-stats fade-up">
+                    <div class="stat-item">
+                        <div class="stat-value"><span class="counter" data-target="4.9" data-decimals="1">0</span>/5</div>
+                        <div class="stat-label">Google Rating</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value"><span class="counter" data-target="1200">0</span>+</div>
+                        <div class="stat-label">Agencies using PWB</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value"><span class="counter" data-target="10">0</span> yrs</div>
+                        <div class="stat-label">Industry experience</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -927,13 +1526,17 @@
 
 
   
-    <!-- Philosophy Section -->
+    <!-- Philosophy Section – two-column header -->
     <section class="philosophy-section section-light">
         <div class="container">
             <div class="philosophy-header">
-                <div class="tag fade-up">OUR PHILOSOPHY</div>
-                <h2 class="fade-up">Your agency is<br>distinctive.<br><span class="text-green-dark">Your website should<br>prove it.</span></h2>
-                <p class="subtitle fade-up" style="text-align: center;">You shouldn't have to compromise on quality just because you're a local agency. We build premium, bespoke websites that position you as the definitive market leader.</p>
+                <div class="header-left fade-up">
+                    <div class="tag">OUR PHILOSOPHY</div>
+                    <h2>Your agency is<br>distinctive.<br><span class="text-green-dark">Your website should<br>prove it.</span></h2>
+                </div>
+                <div class="header-right fade-up">
+                    <p class="subtitle" style="max-width: 100%; text-align: left;">You shouldn't have to compromise on quality just because you're a local agency. We build premium, bespoke websites that position you as the definitive market leader.</p>
+                </div>
             </div>
 
             <div class="browser-mockup fade-up hover-lift">
@@ -1055,10 +1658,60 @@
                             </div>
                         </div>
                     </main>
+                    
+                    
+                      
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settings-modal" onclick="closeSettingsModalOnOutsideClick(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSettingsModal()"><i data-lucide="x"></i></button>
+            <h3 class="modal-title">Dashboard Settings</h3>
+            
+            <div class="settings-group">
+                <label>Agency Name</label>
+                <input type="text" value="PWB Demo Agency">
+            </div>
+            
+            <div class="settings-group">
+                <label>Admin Email</label>
+                <input type="text" value="admin@propertywebbuilders.com">
+            </div>
+            
+            <div class="settings-group" style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #eee;">
+                <div>
+                    <label style="margin-bottom: 0;">Email Notifications</label>
+                    <span style="font-size: 0.75rem; color: var(--text-gray-dark);">Receive alerts for new leads</span>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="settings-group" style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #eee; margin-bottom: 32px;">
+                <div>
+                    <label style="margin-bottom: 0;">Dark Mode (Dashboard)</label>
+                    <span style="font-size: 0.75rem; color: var(--text-gray-dark);">Toggle dashboard theme</span>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <button class="btn btn-dark" style="width: 100%;" onclick="closeSettingsModal()">Save Changes</button>
+        </div>
+    </div>
+      
                 </div>
             </div>
         </div>
     </section>
+
+
+
+
+
 
 
 
@@ -1123,6 +1776,13 @@
 
 
 
+
+
+
+
+
+
+
   
     <!-- AI Chatbot Demo Section -->
     <section class="section-light" style="border-top: 1px solid rgba(0,0,0,0.05); background-color: white;">
@@ -1179,6 +1839,9 @@
 
 
 
+
+
+
   
     <!-- Pricing Section -->
     <section class="pricing-section section-light">
@@ -1222,6 +1885,50 @@
 
 
 
+
+
+
+
+
+
+  <section class="Interior-section white-section" id="Interior">
+    <div class="container">
+
+      <div class="fade-up photo-grids-wrapp cliks-elem-wrapper">
+        <div class="photo-grids-wrapp__item1 cliks-elem">
+          <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-banners/demo-image-0.webp" alt="">
+        </div>
+        
+        <div class="fade-up photo-grids-wrapp__item2 cliks-elem">
+          <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-banners/demo-image-2.webp" alt="">
+        </div>
+        
+        <div class="fade-up photo-grids-wrapp__item3 cliks-elem">
+          <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-banners/demo-image-6.webp" alt="">
+        </div>
+        
+        <div class="fade-up photo-grids-wrapp__item4 cliks-elem">
+          <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-banners/demo-image-5.webp" alt="">
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
     <!-- Stats Section -->
     <section class="section-light">
@@ -1241,6 +1948,60 @@
             </div>
         </div>
     </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Image Gallery -->
+
+<section class="choice-section section-light">
+    <div class="container">
+        <div class="choice-main-wrapper">
+            <!-- Text block (left) -->
+            <div class="text-main-block fade-up">
+                <div class="tag">WHAT WE BUILD</div>
+                <h2 class="text-main-block__title">Choose your build path.</h2>
+                <div class="text-main-block__wrapper">
+                    <p class="text-main-block__wrapper__desc">
+                        Whether you're after a full bespoke platform or a refined refresh of your current site,
+                        every path is engineered around one goal: turning local searches into instructions.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Cards (right) -->
+            <div class="choice-wrapper fade-up">
+                <div class="choice-wrapper__item hover-lift">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=600" alt="Bespoke build">
+                    <span class="choice-wrapper__item__text">Bespoke<br>Platform</span>
+                </div>
+                <div class="choice-wrapper__item hover-lift" style="transition-delay: 0.1s;">
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=600" alt="Refresh build">
+                    <span class="choice-wrapper__item__text">Site<br>Refresh</span>
+                </div>
+                <div class="choice-wrapper__item hover-lift" style="transition-delay: 0.2s;">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=600" alt="Growth build">
+                    <span class="choice-wrapper__item__text">Growth<br>Retainer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
 
 
 
@@ -1271,9 +2032,10 @@
 
 
   
-    <!-- Contact Form Section -->
-    <section class="contact-section section-light">
-        <div class="container contact-section">
+    <!-- Contact Form Section – 1/3 text, 2/3 form -->
+    <section class="container contact-section section-light">
+        
+        
             <div class="fade-up">
                 <div class="tag">GET STARTED</div>
                 <h2>Let's make your website work harder.</h2>
@@ -1324,7 +2086,8 @@
                         By submitting this form, you agree to our privacy policy and terms of service.
                     </p>
                 </form>
-            </div>
+               
+           
         </div>
     </section>
 
@@ -1379,50 +2142,6 @@
 
 
 
-  
-    <!-- Settings Modal -->
-    <div class="modal-overlay" id="settings-modal" onclick="closeSettingsModalOnOutsideClick(event)">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeSettingsModal()"><i data-lucide="x"></i></button>
-            <h3 class="modal-title">Dashboard Settings</h3>
-            
-            <div class="settings-group">
-                <label>Agency Name</label>
-                <input type="text" value="PWB Demo Agency">
-            </div>
-            
-            <div class="settings-group">
-                <label>Admin Email</label>
-                <input type="text" value="admin@propertywebbuilders.com">
-            </div>
-            
-            <div class="settings-group" style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #eee;">
-                <div>
-                    <label style="margin-bottom: 0;">Email Notifications</label>
-                    <span style="font-size: 0.75rem; color: var(--text-gray-dark);">Receive alerts for new leads</span>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-            
-            <div class="settings-group" style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #eee; margin-bottom: 32px;">
-                <div>
-                    <label style="margin-bottom: 0;">Dark Mode (Dashboard)</label>
-                    <span style="font-size: 0.75rem; color: var(--text-gray-dark);">Toggle dashboard theme</span>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            
-            <button class="btn btn-dark" style="width: 100%;" onclick="closeSettingsModal()">Save Changes</button>
-        </div>
-    </div>
-
-
 
 
 
@@ -1447,7 +2166,7 @@
             gsap.from(el, {
                 scrollTrigger: {
                     trigger: el,
-                    start: "top 85%", // Animation starts when top of element hits 85% of viewport
+                    start: "top 85%",
                     toggleActions: "play none none none"
                 },
                 y: 40,
@@ -1491,11 +2210,9 @@
 
         // Interactive Dashboard Logic
         function setActiveSidebar(el, viewId) {
-            // Update sidebar active state
             document.querySelectorAll('.dash-sidebar-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
             
-            // Update main view
             if (viewId) {
                 document.querySelectorAll('.dash-view').forEach(view => view.classList.remove('active'));
                 document.getElementById(viewId).classList.add('active');
@@ -1505,7 +2222,6 @@
         const chartContainer = document.getElementById('mock-chart');
         const chartTitle = document.getElementById('chart-title');
         
-        // Initial chart render
         renderChart([40, 60, 45, 80, 65, 90, 100]);
 
         function renderChart(dataPoints) {
@@ -1513,11 +2229,9 @@
             dataPoints.forEach((point, index) => {
                 const bar = document.createElement('div');
                 bar.className = 'chart-bar';
-                // Start at 0 height for animation
                 bar.style.height = '0%';
                 chartContainer.appendChild(bar);
                 
-                // Trigger reflow and animate
                 setTimeout(() => {
                     bar.style.height = `${point}%`;
                 }, index * 50);
@@ -1525,14 +2239,10 @@
         }
 
         function updateDashboardChart(cardEl, title, dataPoints) {
-            // Update active state on cards
             document.querySelectorAll('.dash-stat-card').forEach(card => card.classList.remove('active'));
             cardEl.classList.add('active');
             
-            // Update Title
             chartTitle.textContent = `Performance: ${title}`;
-            
-            // Re-render chart
             renderChart(dataPoints);
         }
 
@@ -1608,22 +2318,18 @@
             const text = chatInput.value.trim();
             if (!text) return;
             
-            // Add user message
             appendMessage(text, 'user');
             chatInput.value = '';
             
-            // Show typing indicator
             setTimeout(() => {
                 typingIndicator.classList.add('active');
                 chatMessages.appendChild(typingIndicator); 
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 300);
 
-            // Simulate AI response
             setTimeout(() => {
                 typingIndicator.classList.remove('active');
                 
-                // Simple logic for demo
                 const lowerText = text.toLowerCase();
                 let reply = "Thanks for reaching out! One of our agents will be in touch shortly to assist you further.";
                 
@@ -1646,7 +2352,6 @@
             });
         }
 
-        // Re-initialize icons for newly injected HTML
         lucide.createIcons();
 
     </script>
