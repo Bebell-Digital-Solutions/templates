@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Product Agency</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: '#0a0a0c',
+                        card: '#15151a',
+                        cardHover: '#1c1c24',
+                        accent: '#ffffff',
+                        muted: '#8f8f9e',
+                        borderLight: 'rgba(255, 255, 255, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Vanilla CSS for specific tweaks and GSAP init -->
+    <style>
+        body {
+            background-color: #0a0a0c;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Hide elements initially for GSAP to reveal them cleanly */
+        .gsap-reveal {
+            visibility: hidden;
+        }
+
+        .glass-panel {
+            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .image-overlay {
+            background: linear-gradient(0deg, rgba(10,10,12,0.8) 0%, rgba(10,10,12,0) 50%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a2a35;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f4e;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-dark">
+
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full z-50 transition-all duration-300 backdrop-blur-md bg-dark/70 border-b border-borderLight" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 gsap-nav-item">
+                <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                    <!-- Placeholder for logo image icon -->
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <span class="font-bold text-xl tracking-tight">synergi</span>
+            </a>
+
+            <!-- Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-muted">
+                <a href="#" class="hover:text-white transition-colors gsap-nav-item">Home</a>
+                <a href="#" class="hover:text-white transition-colors gsap-nav-item">Work</a>
+                <a href="#" class="hover:text-white transition-colors gsap-nav-item">About</a>
+                <a href="#" class="hover:text-white transition-colors gsap-nav-item">Services</a>
+                <a href="#" class="hover:text-white transition-colors gsap-nav-item">Pricing</a>
+            </nav>
+
+            <!-- CTA -->
+            <div class="hidden md:block gsap-nav-item">
+                <a href="#" class="bg-white text-dark px-5 py-2.5 rounded-full text-sm font-semibold hover:scale-105 transition-transform inline-block">Let's Talk</a>
+            </div>
+            
+            <!-- Mobile Menu Btn -->
+            <button class="md:hidden text-white">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-32">
+            <div class="glass-panel rounded-[2rem] p-8 md:p-16 flex flex-col lg:flex-row items-center gap-12 gsap-reveal hero-container relative overflow-hidden">
+                <!-- Background glow -->
+                <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+
+                <div class="lg:w-1/2 z-10">
+                    <span class="inline-block py-1 px-3 rounded-full border border-white/20 text-xs font-medium mb-6 backdrop-blur-sm hero-el">
+                        👋 Welcome to Synergi
+                    </span>
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-6 hero-el">
+                        Let's make your <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50">product a success</span>
+                    </h1>
+                    <p class="text-muted text-lg mb-10 max-w-md leading-relaxed hero-el">
+                        We are a digital product agency that helps companies build exceptional products, from idea to launch and beyond.
+                    </p>
+                    <div class="flex flex-wrap items-center gap-4 hero-el">
+                        <a href="#" class="bg-white text-dark px-7 py-3.5 rounded-full font-semibold hover:bg-gray-200 transition-colors">Get started</a>
+                        <a href="#" class="px-7 py-3.5 rounded-full font-semibold text-white hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">Our work</a>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 w-full h-[400px] lg:h-[500px] relative rounded-2xl overflow-hidden hero-el group">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80" alt="Team collaborating" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105">
+                </div>
+            </div>
+        </section>
+
+        <!-- Partners Section -->
+        <section class="max-w-5xl mx-auto px-6 mb-32 text-center gsap-reveal block-reveal">
+            <span class="text-xs font-semibold tracking-widest uppercase text-muted mb-4 block">Partners</span>
+            <h2 class="text-2xl md:text-3xl font-semibold mb-12">Trusted by the best companies<br>in the business</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <!-- Logos simulated with text for exact layout match without broken images -->
+                <div class="glass-panel py-6 px-4 rounded-xl flex justify-center items-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                    <span class="font-bold text-lg tracking-wider">Spotify</span>
+                </div>
+                <div class="glass-panel py-6 px-4 rounded-xl flex justify-center items-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                    <span class="font-bold text-lg tracking-wider">Slack</span>
+                </div>
+                <div class="glass-panel py-6 px-4 rounded-xl flex justify-center items-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                    <span class="font-bold text-lg tracking-wider text-blue-400">Dropbox</span>
+                </div>
+                <div class="glass-panel py-6 px-4 rounded-xl flex justify-center items-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                    <span class="font-bold text-lg tracking-wider text-blue-500">zoom</span>
+                </div>
+                <div class="glass-panel py-6 px-4 rounded-xl flex justify-center items-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                    <span class="font-bold text-lg tracking-wider text-indigo-400">stripe</span>
+                </div>
+                <div class="glass-panel py-6 px-4 rounded-xl flex justify-center items-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                    <span class="font-bold text-lg tracking-wider text-blue-300">intercom</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="max-w-7xl mx-auto px-6 mb-40">
+            <div class="mb-16 flex flex-col md:flex-row justify-between items-end gap-6 gsap-reveal block-reveal">
+                <div>
+                    <span class="text-xs font-semibold tracking-widest uppercase text-muted mb-4 block">Services</span>
+                    <h2 class="text-4xl md:text-5xl font-bold max-w-xl leading-tight">We create digital products that help you get ahead</h2>
+                </div>
+                <p class="text-muted max-w-sm">We provide a wide range of services to help you build and grow your digital presence.</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-12 h-full">
+                <!-- Accordion/List side -->
+                <div class="lg:w-5/12 flex flex-col gap-4">
+                    <!-- Service Item -->
+                    <div class="glass-panel rounded-2xl p-6 service-card cursor-pointer border-borderLight relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                        <div class="flex items-start justify-between">
+                            <h3 class="text-xl font-semibold mb-2">Web Design</h3>
+                            <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-dark transition-all">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </div>
+                        </div>
+                        <p class="text-muted text-sm mt-2">Beautiful, responsive, and user-centric web designs tailored to your brand identity.</p>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl p-6 service-card cursor-pointer border-borderLight relative overflow-hidden group">
+                         <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                        <div class="flex items-start justify-between">
+                            <h3 class="text-xl font-semibold mb-2">UX/UI Design</h3>
+                             <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-dark transition-all">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </div>
+                        </div>
+                        <p class="text-muted text-sm mt-2">Intuitive user experiences and stunning interfaces that delight your customers.</p>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-6 service-card cursor-pointer border-borderLight relative overflow-hidden group">
+                         <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                        <div class="flex items-start justify-between">
+                            <h3 class="text-xl font-semibold mb-2">Web Development</h3>
+                             <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-dark transition-all">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </div>
+                        </div>
+                        <p class="text-muted text-sm mt-2">Robust, scalable, and secure web applications built with modern technologies.</p>
+                    </div>
+                </div>
+                
+                <!-- Images Grid side -->
+                <div class="lg:w-7/12 grid grid-cols-2 gap-4 gsap-reveal block-reveal">
+                    <div class="h-64 md:h-full rounded-2xl overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=600&q=80" alt="Working on laptop" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <div class="h-32 md:h-1/2 rounded-2xl overflow-hidden group">
+                            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=600&q=80" alt="Meeting" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        </div>
+                        <div class="h-32 md:h-1/2 rounded-2xl overflow-hidden group">
+                            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=600&q=80" alt="Colleagues" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+        <section class="max-w-7xl mx-auto px-6 mb-40 text-center">
+            <span class="text-xs font-semibold tracking-widest uppercase text-muted mb-4 block gsap-reveal block-reveal">Process</span>
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 max-w-2xl mx-auto gsap-reveal block-reveal">Experience our simple design process</h2>
+            <p class="text-muted mb-16 max-w-xl mx-auto gsap-reveal block-reveal">We follow a structured workflow to ensure successful delivery and high quality outcomes.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                <!-- Connecting Line -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-[1px] bg-borderLight -translate-y-1/2 z-0"></div>
+                
+                <!-- Step 1 -->
+                <div class="relative z-10 bg-dark p-6 process-step gsap-reveal">
+                    <div class="w-12 h-12 rounded-full bg-card border border-borderLight flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                        <span class="font-bold">1</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Discovery</h3>
+                    <p class="text-muted text-sm">We start by understanding your goals, audience, and the unique challenges you face.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="relative z-10 bg-dark p-6 process-step gsap-reveal">
+                    <div class="w-12 h-12 rounded-full bg-card border border-borderLight flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                        <span class="font-bold">2</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Design & Prototyping</h3>
+                    <p class="text-muted text-sm">We create wireframes and high-fidelity prototypes to visualize the end product.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="relative z-10 bg-dark p-6 process-step gsap-reveal">
+                    <div class="w-12 h-12 rounded-full bg-card border border-borderLight flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                        <span class="font-bold">3</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Development & Launch</h3>
+                    <p class="text-muted text-sm">Our developers bring the designs to life, ensuring optimal performance before launch.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Work Section -->
+        <section class="max-w-7xl mx-auto px-6 mb-40">
+            <div class="text-center mb-20 gsap-reveal block-reveal">
+                <span class="text-xs font-semibold tracking-widest uppercase text-muted mb-4 block">Work</span>
+                <h2 class="text-4xl md:text-5xl font-bold max-w-2xl mx-auto">Check out some of our recent & current work</h2>
+            </div>
+
+            <div class="space-y-32">
+                <!-- Project 1 -->
+                <div class="relative flex flex-col md:flex-row items-center project-row gsap-reveal">
+                    <div class="w-full md:w-3/4 h-[400px] md:h-[500px] rounded-3xl overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1200&q=80" alt="Art piece" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Overlay Card -->
+                    <div class="w-[90%] md:w-[400px] glass-panel bg-card/95 backdrop-blur-xl p-8 rounded-3xl -mt-20 md:mt-0 md:-ml-32 z-10 shadow-2xl project-card transform transition-all duration-500 hover:-translate-y-2">
+                        <span class="text-xs uppercase tracking-wider text-muted mb-3 block">Illustration</span>
+                        <h3 class="text-2xl font-bold mb-4">Aella</h3>
+                        <p class="text-muted text-sm mb-6 leading-relaxed">A stunning digital illustration project exploring human connection through vibrant, expressive hand art.</p>
+                        <a href="#" class="text-sm font-semibold flex items-center gap-2 hover:gap-3 transition-all">View case study <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    </div>
+                </div>
+
+                <!-- Project 2 (Reversed) -->
+                <div class="relative flex flex-col md:flex-row-reverse items-center project-row gsap-reveal">
+                    <div class="w-full md:w-3/4 h-[400px] md:h-[500px] rounded-3xl overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443?auto=format&fit=crop&w=1200&q=80" alt="Pantone Pink" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Overlay Card -->
+                    <div class="w-[90%] md:w-[400px] glass-panel bg-card/95 backdrop-blur-xl p-8 rounded-3xl -mt-20 md:mt-0 md:-mr-32 z-10 shadow-2xl project-card transform transition-all duration-500 hover:-translate-y-2">
+                        <span class="text-xs uppercase tracking-wider text-muted mb-3 block">Branding</span>
+                        <h3 class="text-2xl font-bold mb-4">Pantone 201</h3>
+                        <p class="text-muted text-sm mb-6 leading-relaxed">Comprehensive brand identity and visual system creation centered around striking pastel aesthetics.</p>
+                        <a href="#" class="text-sm font-semibold flex items-center gap-2 hover:gap-3 transition-all">View case study <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="relative flex flex-col md:flex-row items-center project-row gsap-reveal">
+                    <div class="w-full md:w-3/4 h-[400px] md:h-[500px] rounded-3xl overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1545127398-14699f92334b?auto=format&fit=crop&w=1200&q=80" alt="JBL Speaker" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Overlay Card -->
+                    <div class="w-[90%] md:w-[400px] glass-panel bg-card/95 backdrop-blur-xl p-8 rounded-3xl -mt-20 md:mt-0 md:-ml-32 z-10 shadow-2xl project-card transform transition-all duration-500 hover:-translate-y-2">
+                        <span class="text-xs uppercase tracking-wider text-muted mb-3 block">Product Design</span>
+                        <h3 class="text-2xl font-bold mb-4">Sonics</h3>
+                        <p class="text-muted text-sm mb-6 leading-relaxed">E-commerce experience redesign focusing on high-quality audio products, improving conversion by 40%.</p>
+                        <a href="#" class="text-sm font-semibold flex items-center gap-2 hover:gap-3 transition-all">View case study <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    </div>
+                </div>
+                
+                 <!-- Project 4 (Reversed) -->
+                 <div class="relative flex flex-col md:flex-row-reverse items-center project-row gsap-reveal">
+                    <div class="w-full md:w-3/4 h-[400px] md:h-[500px] rounded-3xl overflow-hidden relative bg-black flex justify-center items-center">
+                        <img src="https://images.unsplash.com/photo-1611605698335-8b1569810432?auto=format&fit=crop&w=1200&q=80" alt="Social Media 3D" class="w-full h-full object-cover opacity-80 mix-blend-screen">
+                    </div>
+                    <!-- Overlay Card -->
+                    <div class="w-[90%] md:w-[400px] glass-panel bg-card/95 backdrop-blur-xl p-8 rounded-3xl -mt-20 md:mt-0 md:-mr-32 z-10 shadow-2xl project-card transform transition-all duration-500 hover:-translate-y-2">
+                        <span class="text-xs uppercase tracking-wider text-muted mb-3 block">Social Campaign</span>
+                        <h3 class="text-2xl font-bold mb-4">Argon</h3>
+                        <p class="text-muted text-sm mb-6 leading-relaxed">A viral social media campaign strategy utilizing 3D assets to engage Gen Z audiences on short-form platforms.</p>
+                        <a href="#" class="text-sm font-semibold flex items-center gap-2 hover:gap-3 transition-all">View case study <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials / Stats Section -->
+        <section class="max-w-7xl mx-auto px-6 mb-32">
+            <div class="text-center mb-16 gsap-reveal block-reveal">
+                <span class="text-xs font-semibold tracking-widest uppercase text-muted mb-4 block">Testimonials</span>
+                <h2 class="text-3xl md:text-4xl font-bold">What they say about us</h2>
+                <p class="text-muted mt-4 max-w-xl mx-auto">Don't just take our word for it, read from our clients.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Stats Left Card -->
+                <div class="glass-panel p-10 rounded-3xl lg:col-span-1 flex flex-col justify-between gsap-reveal block-reveal h-full">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 leading-tight">It seems we have a very satisfied client base</h3>
+                        <p class="text-muted text-sm mb-10">We pride ourselves on delivering outstanding results and building long-lasting relationships.</p>
+                    </div>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <div class="text-4xl font-bold text-white mb-1">89<span class="text-lg text-muted">%</span></div>
+                            <div class="text-sm text-muted">Success rate</div>
+                        </div>
+                        <div class="w-full h-px bg-borderLight"></div>
+                        <div>
+                            <div class="text-4xl font-bold text-white mb-1">42<span class="text-lg text-muted">M</span></div>
+                            <div class="text-sm text-muted">Revenue generated</div>
+                        </div>
+                        <div class="w-full h-px bg-borderLight"></div>
+                        <div>
+                            <div class="text-4xl font-bold text-white mb-1">20<span class="text-lg text-muted">+</span></div>
+                            <div class="text-sm text-muted">Countries served</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonials Grid Right -->
+                <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+                    <!-- Review 1 -->
+                    <div class="glass-panel p-8 rounded-3xl flex flex-col justify-between gsap-reveal review-card hover:bg-cardHover transition-colors duration-300">
+                        <p class="text-sm leading-relaxed mb-8">"Truly exceptional work. The team transformed our fragmented ideas into a cohesive, stunning digital product that our users love."</p>
+                        <div class="flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Sarah J." class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h4 class="text-sm font-semibold">Sarah Jenkins</h4>
+                                <span class="text-xs text-muted">CEO at TechFlow</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Review 2 -->
+                    <div class="glass-panel p-8 rounded-3xl flex flex-col justify-between gsap-reveal review-card hover:bg-cardHover transition-colors duration-300">
+                        <p class="text-sm leading-relaxed mb-8">"Communication was flawless throughout the entire process. They met every deadline and exceeded our expectations technically and visually."</p>
+                        <div class="flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Michael T." class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h4 class="text-sm font-semibold">Michael Torres</h4>
+                                <span class="text-xs text-muted">Founder, Innovate</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Review 3 -->
+                    <div class="glass-panel p-8 rounded-3xl flex flex-col justify-between gsap-reveal review-card hover:bg-cardHover transition-colors duration-300">
+                        <p class="text-sm leading-relaxed mb-8">"Their attention to detail in UX design resulted in a 50% increase in our conversion rates within the first month of launch."</p>
+                        <div class="flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" alt="Elena V." class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h4 class="text-sm font-semibold">Elena Vance</h4>
+                                <span class="text-xs text-muted">Marketing Director</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Review 4 -->
+                    <div class="glass-panel p-8 rounded-3xl flex flex-col justify-between gsap-reveal review-card hover:bg-cardHover transition-colors duration-300">
+                        <p class="text-sm leading-relaxed mb-8">"A fantastic agency partner. They feel like an extension of our own internal team. Highly recommended for any serious startup."</p>
+                        <div class="flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="David C." class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h4 class="text-sm font-semibold">David Chen</h4>
+                                <span class="text-xs text-muted">CTO at Stack</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="max-w-7xl mx-auto px-6 gsap-reveal">
+            <div class="glass-panel rounded-[2rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+                <!-- BG Glow -->
+                <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-transparent pointer-events-none"></div>
+
+                <div class="z-10 text-center md:text-left">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-4">Let's make something<br>great together.</h2>
+                </div>
+                <div class="z-10">
+                    <a href="#" class="bg-white text-dark px-8 py-4 rounded-full font-semibold hover:scale-105 transition-transform inline-block text-lg shadow-[0_0_20px_rgba(255,255,255,0.2)]">Get in touch</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    
+    
+    
+    
+    
+
+    <!-- Footer -->
+    <footer class="border-t border-borderLight pt-20 pb-10 mt-10">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <!-- Col 1: Brand -->
+            <div class="md:col-span-1">
+                <a href="#" class="flex items-center gap-3 mb-6">
+                    <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">synergi</span>
+                </a>
+                <p class="text-muted text-sm mb-6">Building digital experiences that matter. Designing the future, one pixel at a time.</p>
+                <div class="flex gap-4">
+                    <!-- Social icons -->
+                    <a href="#" class="text-muted hover:text-white transition-colors">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+                    </a>
+                    <a href="#" class="text-muted hover:text-white transition-colors">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+                    <a href="#" class="text-muted hover:text-white transition-colors">
+                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Col 2: Links -->
+            <div>
+                <h4 class="font-semibold mb-6">Company</h4>
+                <ul class="space-y-4 text-sm text-muted">
+                    <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">News</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3: Services -->
+            <div>
+                <h4 class="font-semibold mb-6">Services</h4>
+                <ul class="space-y-4 text-sm text-muted">
+                    <li><a href="#" class="hover:text-white transition-colors">Web Design</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">UI/UX Design</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Development</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Branding</a></li>
+                </ul>
+            </div>
+
+             <!-- Col 4: Contact -->
+             <div>
+                <h4 class="font-semibold mb-6">Contact Us</h4>
+                <ul class="space-y-4 text-sm text-muted">
+                    <li class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> hello@synergi.com</li>
+                    <li class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> +1 (555) 123-4567</li>
+                    <li class="flex items-center gap-2 mt-4"><a href="#" class="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white transition-colors">Book a discovery call</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs text-muted">
+            <p>&copy; 2024 Synergi Agency. All rights reserved.</p>
+            <div class="flex gap-4 mt-4 md:mt-0">
+                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- GSAP Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script>
+        // Register ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Make body visible after GSAP binds to avoid FOUC
+        document.addEventListener("DOMContentLoaded", (event) => {
+            
+            // 1. Initial Hero Load Animation
+            const heroTimeline = gsap.timeline();
+            
+            // Reveal Navbar items
+            heroTimeline.fromTo(".gsap-nav-item", 
+                { y: -20, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power3.out" }
+            );
+
+            // Reveal Hero Container & contents
+            gsap.set(".hero-container", { visibility: "visible" });
+            heroTimeline.fromTo(".hero-el", 
+                { y: 40, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out" },
+                "-=0.4"
+            );
+
+            // 2. Scroll Animations for all sections
+            // Generic fade up for block reveals (Titles, generic containers)
+            gsap.utils.toArray('.block-reveal').forEach(block => {
+                gsap.set(block, { visibility: "visible" });
+                gsap.fromTo(block,
+                    { y: 50, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: block,
+                            start: "top 85%",
+                            toggleActions: "play none none reverse"
+                        }
+                    }
+                );
+            });
+
+            // Process Steps Stagger
+            gsap.utils.toArray('.process-step').forEach((step, i) => {
+                gsap.set(step, { visibility: "visible" });
+                gsap.fromTo(step,
+                    { y: 40, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.6,
+                        delay: i * 0.2, // Stagger effect
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: step.parentElement, // trigger on parent container
+                            start: "top 80%",
+                        }
+                    }
+                );
+            });
+
+            // Project Rows Reveal
+            gsap.utils.toArray('.project-row').forEach(row => {
+                gsap.set(row, { visibility: "visible" });
+                
+                const imgContainer = row.querySelector('.rounded-3xl');
+                const card = row.querySelector('.project-card');
+
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: row,
+                        start: "top 75%",
+                    }
+                });
+
+                tl.fromTo(imgContainer, 
+                    { scale: 0.95, opacity: 0, filter: "blur(10px)" },
+                    { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1, ease: "power3.out" }
+                )
+                .fromTo(card,
+                    { y: 50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
+                    "-=0.6"
+                );
+            });
+
+            // Testimonial Cards Stagger
+            gsap.utils.toArray('.review-card').forEach((card, i) => {
+                 gsap.set(card, { visibility: "visible" });
+                 gsap.fromTo(card,
+                    { scale: 0.9, opacity: 0 },
+                    {
+                        scale: 1,
+                        opacity: 1,
+                        duration: 0.5,
+                        delay: i * 0.1,
+                        ease: "back.out(1.2)",
+                        scrollTrigger: {
+                            trigger: card.parentElement,
+                            start: "top 85%",
+                        }
+                    }
+                );
+            });
+
+            // Bottom CTA Reveal
+            const ctaSection = document.querySelector('.max-w-7xl.mx-auto.px-6.gsap-reveal:last-of-type');
+            if(ctaSection) {
+                gsap.set(ctaSection, { visibility: "visible" });
+                gsap.fromTo(ctaSection,
+                    { y: 80, opacity: 0, scale: 0.95 },
+                    { 
+                        y: 0, opacity: 1, scale: 1, duration: 1, ease: "power4.out",
+                        scrollTrigger: {
+                            trigger: ctaSection,
+                            start: "top 90%"
+                        }
+                    }
+                );
+            }
+
+            // 3. GSAP Hover Animations (enhancing CSS hovers)
+            // Service Cards GSAP Hover Interaction
+            const serviceCards = document.querySelectorAll('.service-card');
+            serviceCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        y: -5,
+                        boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)",
+                        borderColor: "rgba(255,255,255,0.15)",
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        y: 0,
+                        boxShadow: "none",
+                        borderColor: "rgba(255, 255, 255, 0.08)", // original borderLight color
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+            });
+
+            // Navbar Blur effect on scroll
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-lg');
+                } else {
+                    navbar.classList.remove('shadow-lg');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
