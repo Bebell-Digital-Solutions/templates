@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sibling Rivalry — A CSS family affair</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Figtree:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    
+    
+    <style>
+    
+    html {
+  --color-bg: oklch(93% 0.035 170);
+  --color-ink: oklch(24% 0.035 190);
+  --color-muted: oklch(41% 0.035 190);
+  --color-stage: oklch(88% 0.07 170);
+  --color-accent: oklch(77% 0.17 48);
+  --color-paper: oklch(98% 0.015 100);
+  --font-body: 'Figtree', sans-serif;
+  --font-heading: 'Bricolage Grotesque', sans-serif;
+  --space: 8px;
+  --font-small: 0.75rem;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-synthesis: none;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-size: 1rem; line-height: 1.5; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible { outline: 3px solid var(--color-ink); outline-offset: 5px; }
+::selection { background: var(--color-ink); color: var(--color-bg); }
+.playground { max-width: 1440px; padding: 0 5%; margin: auto; }
+.masthead { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 1.3em 0; border-bottom: 1px solid var(--color-ink); }
+.masthead > span:last-child { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; }
+.wordmark { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.85rem; }
+.wordmark svg { width: 32px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
+.intro { text-align: center; padding: 2.1em 0 1.8em; }
+h1, h2 { font-family: var(--font-heading); line-height: 1.05; text-wrap: balance; }
+h1 { display: inline-block; position: relative; margin: 0; font-size: clamp(3rem, 7.2vw, 6rem); font-weight: 800; letter-spacing: -0.04em; }
+h1 span { position: relative; }
+h1 span::after { content: ''; position: absolute; left: 2%; right: 2%; bottom: -5px; height: 5px; background: var(--color-ink); border-radius: 50%; rotate: -2deg; }
+.title-spark { position: absolute; width: 35px; height: 35px; right: -50px; top: 0; fill: var(--color-accent); stroke: var(--color-ink); stroke-width: 2; }
+.intro p { margin: 1.3em 0 0; color: var(--color-muted); font-size: 1rem; }
+.mobile-break { display: none; }
+.stage { position: relative; background: var(--color-stage); border: 1px solid var(--color-ink); border-radius: 18px; overflow: hidden; }
+.stage-caption, .stage-bottom { display: flex; justify-content: space-between; gap: 12px; position: relative; z-index: 1; padding: 1.5em 2em; }
+.stage-caption { font-size: var(--font-small); }
+.queue-label { font-weight: 700; letter-spacing: 0.12em; }
+#crowd-count { font-variant-numeric: tabular-nums; }
+.handwritten { position: absolute; top: 75px; right: 8%; font-family: var(--font-heading); font-weight: 600; font-size: 1.05rem; rotate: 7deg; }
+.crowd { position: relative; height: 260px; margin: 0 7%; isolation: isolate; }
+.floor { position: absolute; bottom: 0; left: 0; right: 0; height: 77px; border-top: 1px solid var(--color-ink); background: oklch(82% 0.075 170); }
+.stage-bottom { padding-top: 1.7em; padding-bottom: 1.7em; font-size: 0.65rem; letter-spacing: 0.08em; }
+.stage-bottom span:last-child { letter-spacing: 0; font-size: var(--font-small); }
+.sibling {
+  --count: var(--fallback-count, 7);
+  --index: var(--fallback-index, 1);
+  --lean: calc((var(--index) - (var(--count) + 1) / 2) * 2.2deg);
+  position: absolute;
+  bottom: 8px;
+  left: calc((var(--index) - .5) * 100% / var(--count));
+  width: clamp(44px, calc(130% / var(--count)), 142px);
+  height: 205px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transform: translateX(-50%) rotate(var(--lean));
+  transform-origin: 50% 100%;
+  transition: left 550ms cubic-bezier(.2, 0, 0, 1), width 550ms cubic-bezier(.2, 0, 0, 1), transform 250ms ease;
+  animation: arrive 500ms both;
+  animation-delay: calc(var(--index) * 60ms);
+  -webkit-tap-highlight-color: transparent;
+}
+@supports (left: calc(sibling-index() * 1px)) and (width: calc(sibling-count() * 1px)) {
+  .sibling { --count: sibling-count(); --index: sibling-index(); }
+}
+.sibling[data-kind="0"] { --skin: oklch(77% 0.17 48); --radius: 50% 50% 24% 24%; --height: 155px; }
+.sibling[data-kind="1"] { --skin: oklch(76% 0.12 290); --radius: 45% 45% 42% 42%; --height: 185px; }
+.sibling[data-kind="2"] { --skin: oklch(86% 0.17 95); --radius: 22% 22% 30% 30%; --height: 140px; }
+.sibling[data-kind="3"] { --skin: oklch(72% 0.15 235); --radius: 50% 50% 12% 12%; --height: 180px; }
+.sibling[data-kind="4"] { --skin: oklch(77% 0.17 15); --radius: 44% 44% 44% 44%; --height: 145px; }
+.sibling[data-kind="5"] { --skin: oklch(79% 0.17 135); --radius: 12% 48% 15% 36%; --height: 165px; }
+.sibling[data-kind="6"] { --skin: oklch(84% 0.12 65); --radius: 48% 18% 40% 20%; --height: 150px; }
+.character { position: absolute; bottom: 19px; left: 3%; width: 94%; height: var(--height); background: var(--skin); border: 2px solid var(--color-ink); border-radius: var(--radius); box-shadow: inset -7px -5px 0 oklch(24% 0.035 190 / .08); }
+.character::before, .character::after { content: ''; position: absolute; width: 12%; height: 26px; bottom: -25px; border-left: 3px solid var(--color-ink); border-bottom: 5px solid var(--color-ink); border-radius: 0 0 0 5px; }
+.character::before { left: 24%; }
+.character::after { right: 20%; transform: scaleX(-1); }
+.eyes { position: absolute; top: 27%; left: 17%; width: 66%; display: flex; justify-content: center; gap: 4%; }
+.eye { position: relative; width: 40%; aspect-ratio: .8; background: var(--color-paper); border: 2px solid var(--color-ink); border-radius: 50%; }
+.eye::after { content: ''; position: absolute; top: 36%; right: 17%; width: 36%; height: 40%; background: var(--color-ink); border-radius: 50%; transition: translate 200ms; }
+.mouth { position: absolute; top: 65%; left: 38%; width: 25%; height: 10%; border-bottom: 3px solid var(--color-ink); border-radius: 0 0 50% 50%; }
+.sibling[data-kind="1"] .mouth, .sibling[data-kind="4"] .mouth { border: 2px solid var(--color-ink); background: var(--color-ink); border-radius: 50%; width: 15%; left: 43%; }
+.sibling[data-kind="2"] .eyes { top: 23%; }
+.sibling[data-kind="5"] .eye { aspect-ratio: 1.2; }
+.personality { position: absolute; bottom: calc(var(--height) + 53px); left: 50%; translate: -50% 6px; width: max-content; max-width: 180px; padding: .6em .9em; background: var(--color-paper); border: 1px solid var(--color-ink); border-radius: 10px 10px 10px 0; font-size: 0.8rem; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 180ms, translate 180ms; }
+.sibling:hover, .sibling:focus-visible { z-index: 20; transform: translate(-50%, -24px) rotate(0); }
+.sibling:hover .personality, .sibling:focus-visible .personality { opacity: 1; translate: -50% 0; }
+.sibling:hover .eye::after, .sibling:focus-visible .eye::after { translate: -3px -2px; }
+.sibling:focus-visible { border-radius: 25px; }
+.controls { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; padding-top: 1.7em; }
+.controls button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; background: transparent; border: 1px solid var(--color-ink); border-radius: 8px; padding: .65em 1.2em; font-weight: 600; transition: background 180ms, transform 180ms; }
+.controls .primary { background: var(--color-accent); }
+.controls button:hover:not(:disabled) { background: var(--color-paper); transform: translateY(-2px); }
+.controls button:active:not(:disabled) { transform: translateY(1px); }
+.controls button:disabled { cursor: not-allowed; border-style: dashed; background: var(--color-stage); color: var(--color-muted); }
+.controls button > span { font-size: 1.4rem; line-height: 1; }
+.controls svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.interaction-note { text-align: center; margin: 1em 0 2em; font-size: 0.85rem; color: var(--color-muted); }
+.under-the-hood { display: grid; grid-template-areas: 'intro code'; grid-template-columns: 1fr 1.3fr; align-items: center; gap: 32px; border-top: 1px solid var(--color-ink); padding: 1.8em 0; }
+.recipe-intro { grid-area: intro; }
+h2 { font-size: 1.65rem; margin: 0 0 .5em; font-weight: 700; }
+.recipe-intro p { font-size: 0.85rem; color: var(--color-muted); margin: 0; }
+.recipe-intro .support-status { margin-top: 1em; font-size: 0.75rem; font-weight: 600; }
+.css-recipe { display: none; grid-area: code; margin: 0; padding: 1.5em; border-radius: 10px; background: var(--color-ink); color: oklch(94% 0.025 170); font-size: 0.75rem; line-height: 1.8; overflow-x: auto; }
+.code-selector, .css-recipe strong { color: oklch(85% 0.14 95); font-weight: 400; }
+.code-property { color: oklch(82% 0.1 170); }
+footer { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid oklch(65% 0.04 170); padding: 1.3em 0; font-size: 0.7rem; color: var(--color-muted); }
+@keyframes arrive { from { opacity: .3; translate: 0 -20px; } to { opacity: 1; translate: 0 0; } }
+@media (min-width: 1500px) { .intro { padding-top: 3em; } .crowd { height: 300px; } }
+@media (max-width: 700px) {
+  .playground { padding: 0 5%; }
+  .masthead > span:last-child { max-width: 125px; text-align: right; font-size: 0.55rem; }
+  .wordmark { font-size: 0.75rem; gap: 6px; }
+  .intro { padding: 2em 0; }
+  h1 { font-size: clamp(2.8rem, 10vw, 4.5rem); }
+  .title-spark { width: 22px; height: 22px; right: -23px; top: -12px; }
+  .mobile-break { display: block; }
+  .stage-caption { padding: 1.5em 1.2em; font-size: 0.6rem; }
+  .crowd { height: 260px; margin: 0 9%; }
+  .sibling { height: 180px; }
+  .character { height: calc(var(--height) * .8); }
+  .personality { bottom: calc(var(--height) * .8 + 48px); max-width: 140px; white-space: normal; }
+  .handwritten { font-size: .85rem; top: 64px; right: 9%; }
+  .stage-bottom { padding: 2em 1.2em; font-size: 0.5rem; }
+  .stage-bottom span:last-child { font-size: 0.6rem; }
+  .controls { gap: 8px; }
+  .controls button { padding: .7em .85em; font-size: 0.85rem; }
+  .interaction-note { padding: 0 1em; }
+  .under-the-hood { grid-template-areas: 'intro' 'code'; grid-template-columns: 1fr; gap: 20px; }
+  .css-recipe { font-size: 0.65rem; }
+  footer { flex-direction: column; gap: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .sibling:hover, .sibling:focus-visible { transform: translateX(-50%) rotate(0); }
+}
+
+    
+</style>    
+    
+  </head>
+  <body>
+    <main class="playground">
+      <header class="masthead">
+        <span class="wordmark"><svg viewBox="0 0 32 24" aria-hidden="true"><path d="M4 19V8a4 4 0 0 1 8 0v11M20 19V8a4 4 0 0 1 8 0v11M4 12h8m8 0h8"/></svg> A CSS family affair</span>
+        <span>CODEPEN CHALLENGE / CSS SIBLINGS</span>
+      </header>
+
+      <section class="experiment" aria-labelledby="title">
+        <div class="intro">
+          <h1 id="title">Sibling <span>rivalry.</span><svg class="title-spark" viewBox="0 0 60 60" aria-hidden="true"><path d="m30 3 2 18 15-11-10 16 20 4-20 4 10 16-15-11-2 18-3-18-15 11 10-16L3 30l19-4-10-16 15 11z"/></svg></h1>
+          <p>Same parent. Big personalities. <br class="mobile-break">Absolutely no personal space.</p>
+        </div>
+
+        <div class="stage">
+          <div class="stage-caption"><span class="queue-label">THE FAMILY LINEUP</span><span id="crowd-count" role="status" aria-live="polite" aria-atomic="true">7 siblings · room for trouble</span></div>
+          <span class="handwritten" aria-hidden="true">go on, pick a favorite ↘</span>
+          <div class="crowd" aria-label="Sibling characters"></div>
+          <div class="floor" aria-hidden="true"></div>
+          <div class="stage-bottom"><span>EVERYONE WANTS TO BE FIRST.</span><span>Hover or focus a sibling ↑</span></div>
+        </div>
+
+        <div class="controls" aria-label="Manage the sibling lineup">
+          <button id="add-sibling" class="primary" type="button"><span aria-hidden="true">＋</span> Add a sibling</button>
+          <button id="remove-sibling" type="button"><span aria-hidden="true">−</span> Remove one</button>
+          <button id="shuffle-siblings" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h3c5 0 7 12 12 12h3m-4-4 4 4-4 4M3 18h3c2 0 4-3 6-6s4-6 6-6h3m-4-4 4 4-4 4"/></svg> Shuffle order</button>
+        </div>
+        <p class="interaction-note">Add a sibling. Steal some space. Let CSS sort out the family drama.</p>
+      </section>
+
+      <section class="under-the-hood" aria-labelledby="recipe-title">
+        <div class="recipe-intro family-story"><h2 id="recipe-title">The lineup has a mind of its own.</h2><p>Pip claims the best spot. Lulu asks for room, and Moe is already inching closer.</p><p>Then the door swings open and another sibling joins. Everyone shuffles, grumbles, and somehow finds a place together.</p></div>
+      </section>
+      <footer><span>Small functions. Big sibling energy.</span><span>#cpc-css-sibs &nbsp; #codepenchallenge</span></footer>
+    </main>
+
+
+
+<script src="./script.js"></script>
+
+<script>
+
+const crowd = document.querySelector('.crowd');
+const addButton = document.querySelector('#add-sibling');
+const removeButton = document.querySelector('#remove-sibling');
+const shuffleButton = document.querySelector('#shuffle-siblings');
+const countLabel = document.querySelector('#crowd-count');
+const nativeSiblings = CSS.supports('left', 'calc(sibling-index() * 1px)') &&
+  CSS.supports('width', 'calc(sibling-count() * 1px)');
+const personalities = [
+  { name: 'Pip', line: 'I was here first.' },
+  { name: 'Lulu', line: 'I need my space.' },
+  { name: 'Moe', line: 'Are we there yet?' },
+  { name: 'Otto', line: 'Yes, I am this tall.' },
+  { name: 'Bea', line: 'Clearly the favorite.' },
+  { name: 'Fig', line: 'Just happy to be here.' },
+  { name: 'Nell', line: 'Who invited everyone?' }
+];
+let nextIdentity = 0;
+const minimum = 2;
+const maximum = 12;
+
+function updateCrowd(action = '') {
+  const siblings = [...crowd.children];
+  const count = siblings.length;
+  // Only unsupported browsers need index bookkeeping. Native CSS reads the DOM.
+  if (!nativeSiblings) {
+    siblings.forEach((sibling, index) => {
+      sibling.style.setProperty('--fallback-count', count);
+      sibling.style.setProperty('--fallback-index', index + 1);
+    });
+  }
+  countLabel.textContent = `${count} siblings · ${action || (count === maximum ? 'a full house!' : 'room for trouble')}`;
+  addButton.disabled = count >= maximum;
+  removeButton.disabled = count <= minimum;
+  addButton.title = count >= maximum ? 'The family is full (12 siblings)' : 'Add another personality';
+  removeButton.title = count <= minimum ? 'Keep at least two siblings' : 'Remove the last sibling';
+}
+
+function addSibling() {
+  if (crowd.children.length >= maximum) return;
+  const identity = nextIdentity++;
+  const kind = identity % personalities.length;
+  const personality = personalities[kind];
+  const sibling = document.createElement('button');
+  sibling.type = 'button';
+  sibling.className = 'sibling';
+  sibling.dataset.kind = kind;
+  sibling.setAttribute('aria-label', `${personality.name}: ${personality.line}`);
+  sibling.innerHTML = '<span class="character" aria-hidden="true"><span class="eyes"><span class="eye"></span><span class="eye"></span></span><span class="mouth"></span></span><span class="personality" aria-hidden="true"></span>';
+  sibling.querySelector('.personality').textContent = personality.line;
+  // Touch users can tap to focus a character and expose the same speech bubble.
+  sibling.addEventListener('click', () => sibling.focus());
+  crowd.append(sibling);
+  updateCrowd();
+}
+
+addButton.addEventListener('click', addSibling);
+removeButton.addEventListener('click', () => {
+  if (crowd.children.length <= minimum) return;
+  crowd.lastElementChild.remove();
+  updateCrowd();
+});
+shuffleButton.addEventListener('click', () => {
+  const original = [...crowd.children];
+  const shuffled = [...original];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  if (shuffled.every((sibling, index) => sibling === original[index])) {
+    shuffled.push(shuffled.shift());
+  }
+  // Move existing elements rather than rebuilding characters or assigning positions.
+  shuffled.forEach(sibling => crowd.append(sibling));
+  updateCrowd('new order, same drama');
+});
+
+for (let i = 0; i < 7; i++) addSibling();
+
+
+</script>
+  </body>
+</html>
