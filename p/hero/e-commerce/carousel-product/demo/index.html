@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Poppins -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+<style>
+* { box-sizing: border-box; }
+
+:root {
+	--ink: #141414;
+	--muted: #6b6b6b;
+	--line: #e3dede;
+	--accent: #f97907;
+	--radius: 16px;
+}
+
+html, body { margin: 0; }
+
+body {
+	min-height: 100vh;
+	font-family: "Poppins", sans-serif;
+	color: var(--ink);
+	background-image: linear-gradient(
+		to right bottom,
+		#ffffff,
+		#f9f8f9,
+		#f3f0f2,
+		#eee8ea,
+		#e9e1e1
+	);
+}
+
+/* ============================================================
+   BROWSER-CHROME NAVBAR
+   ============================================================ */
+.browser-bar {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	background: #f1eeee;
+	border-bottom: 1px solid var(--line);
+	padding: 10px 16px;
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+/* traffic lights */
+.browser-dots {
+	display: flex;
+	gap: 7px;
+	flex-shrink: 0;
+}
+
+.browser-dots span {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	display: block;
+}
+
+.browser-dots .dot-red    { background: #ff5f57; }
+.browser-dots .dot-yellow { background: #febc2e; }
+.browser-dots .dot-green  { background: #28c840; }
+
+/* nav arrows */
+.browser-arrows {
+	display: flex;
+	gap: 4px;
+	flex-shrink: 0;
+}
+
+.browser-arrows button {
+	border: none;
+	background: none;
+	padding: 4px;
+	cursor: pointer;
+	border-radius: 6px;
+	display: flex;
+	color: #8a8585;
+}
+
+.browser-arrows button:hover { background: rgba(0,0,0,0.06); }
+
+.browser-arrows button:disabled { opacity: 0.35; cursor: default; }
+
+/* address bar */
+.address-bar {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	background: #fff;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	padding: 6px 12px;
+	min-width: 0;
+}
+
+.address-bar svg { flex-shrink: 0; color: #8a8585; }
+
+.address-bar input {
+	flex: 1;
+	border: none;
+	outline: none;
+	font-family: inherit;
+	font-size: 13px;
+	color: var(--ink);
+	background: transparent;
+	min-width: 0;
+}
+
+.address-bar input::placeholder { color: #b0aaaa; }
+
+/* right-side browser icons */
+.browser-icons {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex-shrink: 0;
+}
+
+.browser-icons button {
+	border: none;
+	background: none;
+	padding: 6px;
+	cursor: pointer;
+	border-radius: 6px;
+	display: flex;
+	color: #8a8585;
+}
+
+.browser-icons button:hover { background: rgba(0,0,0,0.06); }
+
+/* site nav underneath the browser bar */
+.site-nav {
+	position: sticky;
+	top: 49px;
+	z-index: 49;
+	background: rgba(255,255,255,0.8);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border-bottom: 1px solid var(--line);
+}
+
+.site-nav-inner {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 32px;
+	height: 56px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+}
+
+.logo {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 15px;
+	letter-spacing: -1.5px;
+	font-weight: 600;
+}
+
+.logo h1 {
+	margin: 0;
+	font-size: 15px;
+	letter-spacing: -1.5px;
+}
+
+.nav-links {
+	display: flex;
+	gap: 28px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.nav-links a {
+	color: var(--ink);
+	text-decoration: none;
+	font-size: 14px;
+	opacity: 0.7;
+	transition: opacity 0.2s;
+}
+
+.nav-links a:hover { opacity: 1; }
+
+.icons {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.icons button {
+	border: none;
+	background: none;
+	padding: 6px;
+	cursor: pointer;
+	border-radius: 50%;
+	display: flex;
+	transition: background 0.2s;
+}
+
+.icons button:hover { background: rgba(0,0,0,0.05); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 72px 32px 96px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 80px;
+	align-items: center;
+}
+
+.hero-content { max-width: 540px; }
+
+.eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	color: var(--accent);
+	background: rgba(249, 121, 7, 0.08);
+	padding: 6px 14px;
+	border-radius: 999px;
+	margin-bottom: 24px;
+}
+
+.eyebrow::before {
+	content: "";
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--accent);
+}
+
+.hero-title {
+	font-size: 58px;
+	line-height: 1.05;
+	letter-spacing: -2px;
+	font-weight: 700;
+	margin: 0 0 24px;
+}
+
+.hero-title em {
+	font-style: normal;
+	color: var(--accent);
+}
+
+.hero-subtitle {
+	font-size: 16px;
+	line-height: 1.65;
+	color: var(--muted);
+	margin: 0 0 36px;
+	max-width: 460px;
+}
+
+.cta-group {
+	display: flex;
+	gap: 14px;
+	flex-wrap: wrap;
+	margin-bottom: 40px;
+}
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 14px 26px;
+	border-radius: 10px;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+	border: 1px solid transparent;
+	transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+	background: var(--ink);
+	color: #fff;
+}
+
+.btn-primary:hover {
+	background: #000;
+	box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+
+.btn-secondary {
+	background: transparent;
+	color: var(--ink);
+	border-color: var(--line);
+}
+
+.btn-secondary:hover { background: #fff; }
+
+.tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	padding-top: 24px;
+	border-top: 1px solid var(--line);
+}
+
+.tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12.5px;
+	color: var(--muted);
+	background: #fff;
+	border: 1px solid var(--line);
+	padding: 6px 12px;
+	border-radius: 999px;
+}
+
+.tag::before {
+	content: "✓";
+	color: var(--accent);
+	font-weight: 700;
+	font-size: 11px;
+}
+
+.hero-visual {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* ============================================================
+   SWIPER — EXACTLY AS YOU HAD IT
+   ============================================================ */
+.swiper {
+	width: 100%;
+	max-width: 400px;
+	margin: 0 auto;
+	border-radius: 16px;
+	--swiper-navigation-size: 20px;
+	--swiper-navigation-color: #4e4f4e;
+	--swiper-pagination-color: #4e4f4e;
+	--swiper-pagination-bullet-inactive-color: #b9b6b6;
+	--swiper-pagination-bullet-inactive-opacity: 1;
+}
+
+.swiper-slide {
+	border-radius: 16px;
+	overflow: hidden;
+	border: 1px solid #f7f7f7;
+	background-color: #fff;
+	height: 680px;
+	max-height: 680px;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.card-img img {
+	display: block;
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+}
+
+.details {
+	display: flex;
+	gap: 20px;
+	align-items: center;
+	padding: 8px 10px;
+	border-radius: 12px 12px 0 0;
+	padding-top: 1rem;
+	background-color: white;
+}
+
+.details h3 {
+	font-size: 12px;
+	font-weight: bold;
+	padding-left: 1rem;
+	margin: 0;
+}
+
+.details p {
+	background-color: #f97907;
+	padding: 0.3rem 0.8rem;
+	border-radius: 12px;
+	font-size: 12px;
+	color: white;
+	margin: 0;
+}
+
+.details button {
+	border: 1px solid black;
+	background-color: white;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.details button:hover { opacity: 0.85; }
+
+.swiper-pagination { bottom: 8px !important; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 960px) {
+	.hero {
+		grid-template-columns: 1fr;
+		gap: 56px;
+		padding: 56px 24px 72px;
+		text-align: center;
+	}
+	.hero-content { max-width: 100%; margin: 0 auto; }
+	.hero-subtitle { margin-left: auto; margin-right: auto; }
+	.cta-group, .tags { justify-content: center; }
+	.hero-title { font-size: 48px; }
+}
+
+@media (max-width: 640px) {
+	.browser-bar { gap: 10px; padding: 8px 12px; }
+	.site-nav-inner { padding: 0 20px; height: 52px; }
+	.nav-links { display: none; }
+	.hero { padding: 40px 20px 64px; gap: 40px; }
+	.hero-title { font-size: 40px; letter-spacing: -1.5px; }
+	.hero-subtitle { font-size: 15px; }
+	.swiper-slide { height: 480px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     BROWSER-CHROME TOP BAR
+     ============================================================ -->
+<div class="browser-bar">
+	<div class="browser-dots">
+		<span class="dot-red"></span>
+		<span class="dot-yellow"></span>
+		<span class="dot-green"></span>
+	</div>
+
+	<div class="browser-arrows">
+		<button aria-label="back">
+			<svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+				<path d="M400-80 0-480l400-400 56 57-343 343 343 343-56 57Z"/>
+			</svg>
+		</button>
+		<button aria-label="forward" disabled>
+			<svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+				<path d="m560-80-56-57 343-343-343-343 56-57 400 400L560-80Z"/>
+			</svg>
+		</button>
+		<button aria-label="reload">
+			<svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+				<path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/>
+			</svg>
+		</button>
+	</div>
+
+	<div class="address-bar">
+		<svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 -960 960 960" width="14" fill="currentColor">
+			<path d="M240-80v-40h200v-120h-80q-33 0-56.5-23.5T280-320v-80q-33 0-56.5-23.5T200-480v-40h-40v-120h120v120h-40v40q0 17 11.5 28.5T280-440h40v-120q0-33 23.5-56.5T400-640h40v-40q0-33 23.5-56.5T520-760q33 0 56.5 23.5T600-680v40h40q33 0 56.5 23.5T720-560v160q0 33-23.5 56.5T640-320h-80v120h200v40H240Zm80-520h80v-80q0-17-11.5-28.5T360-720q-17 0-28.5 11.5T320-680v80Zm240 0h80v-80q0-17-11.5-28.5T600-720q-17 0-28.5 11.5T560-680v80ZM520-80h80v-120q0-33-23.5-56.5T520-280q-33 0-56.5 23.5T440-200v120h80Z"/>
+		</svg>
+		<input type="text" value="shop.example.com/collections/new" aria-label="Address bar" />
+	</div>
+
+	<div class="browser-icons">
+		<button aria-label="bookmark">
+			<svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+				<path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z"/>
+			</svg>
+		</button>
+		<button aria-label="menu">
+			<svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16" fill="currentColor">
+				<path d="M144-264v-72h672v72H144Zm0-180v-72h672v72H144Zm0-180v-72h672v72H144Z"/>
+			</svg>
+		</button>
+	</div>
+</div>
+
+<!-- ============================================================
+     SITE NAV
+     ============================================================ -->
+<header class="site-nav">
+	<nav class="site-nav-inner">
+		<div class="logo">
+			<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#000000">
+				<path d="M144-264v-72h240v72H144Zm0-180v-72h432v72H144Zm0-180v-72h672v72H144Z" />
+			</svg>
+			<h1>Shop</h1>
+		</div>
+
+		<ul class="nav-links">
+			<li><a href="#">Home</a></li>
+			<li><a href="#">Shop</a></li>
+			<li><a href="#">Collections</a></li>
+			<li><a href="#">About</a></li>
+		</ul>
+
+		<div class="icons">
+			<button aria-label="search">
+				<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#000000">
+					<path d="M765-144 526-383q-30 22-65.79 34.5-35.79 12.5-76.18 12.5Q284-336 214-406t-70-170q0-100 70-170t170-70q100 0 170 70t70 170.03q0 40.39-12.5 76.18Q599-464 577-434l239 239-51 51ZM384-408q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Z" />
+				</svg>
+			</button>
+			<button aria-label="account">
+				<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#000000">
+					<path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.29-49 61.29-17 124.5-17t124.71 17Q666-398 721-366q22 13 34.5 34t12.5 44v96H192Zm72-72h432v-24q0-5.18-3.03-9.41-3.02-4.24-7.97-6.59-46-28-98-42t-107-14q-55 0-107 14t-98 42q-5 4-8 7.72-3 3.73-3 8.28v24Zm216.21-288Q510-552 531-573.21t21-51Q552-654 530.79-675t-51-21Q450-696 429-674.79t-21 51Q408-594 429.21-573t51 21Zm-.21-72Zm0 360Z" />
+				</svg>
+			</button>
+		</div>
+	</nav>
+</header>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero">
+
+	<!-- LEFT -->
+	<div class="hero-content">
+		<span class="eyebrow">New Collection 2026</span>
+
+		<h1 class="hero-title">
+			Wear the <em>essentials</em>,<br>
+			own the moment.
+		</h1>
+
+		<p class="hero-subtitle">
+			Everyday pieces built with intent — soft cotton, structured fits,
+			and a colour palette that goes with everything you already love.
+		</p>
+
+		<div class="cta-group">
+			<a href="#" class="btn btn-primary">
+				Shop the collection
+				<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+					<path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
+				</svg>
+			</a>
+			<a href="#" class="btn btn-secondary">View lookbook</a>
+		</div>
+
+		<div class="tags">
+			<span class="tag">Free shipping</span>
+			<span class="tag">30-day returns</span>
+			<span class="tag">Organic cotton</span>
+			<span class="tag">Made in EU</span>
+		</div>
+	</div>
+
+	<!-- RIGHT: product carousel (exactly as you had it) -->
+	<div class="hero-visual">
+		<div class="swiper">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<div class="details">
+						<h3>Black T-Shirt</h3>
+						<p>$120.00 USD</p>
+					</div>
+					<div class="card-img">
+						<img src="https://images.unsplash.com/photo-1618354691229-88d47f285158?w=500&auto=format&fit=crop&q=60" alt="Black T-Shirt Photo by Ryan Hoffmann from Unsplash" loading="lazy" />
+					</div>
+				</div>
+				<div class="swiper-slide">
+					<div class="details">
+						<h3>Black T-Shirt</h3>
+						<p>$20.00 USD</p>
+					</div>
+					<div class="card-img">
+						<img src="https://images.unsplash.com/photo-1618354691438-25bc04584c23?w=500&auto=format&fit=crop&q=60" alt="Black T-Shirt Photo by Ryan Hoffmann from Unsplash" loading="lazy" />
+					</div>
+				</div>
+				<div class="swiper-slide">
+					<div class="details">
+						<h3>Black T-Shirt</h3>
+						<p>$20.00 USD</p>
+					</div>
+					<div class="card-img">
+						<img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&auto=format&fit=crop&q=60" alt="Black T-Shirt Photo by Ryan Hoffmann from Unsplash" loading="lazy" />
+					</div>
+				</div>
+			</div>
+
+			<div class="swiper-pagination"></div>
+
+			<div class="swiper-button-prev" id="prev-button"></div>
+			<div class="swiper-button-next" id="next-button"></div>
+		</div>
+	</div>
+
+</section>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+const swiper = new Swiper(".swiper", {
+	direction: "horizontal",
+	loop: true,
+	effect: "cube",
+	cubeEffect: {
+		shadow: false,
+		slideShadows: false
+	},
+	autoplay: {
+		delay: 4000
+	},
+	pagination: {
+		el: ".swiper-pagination"
+	},
+	navigation: {
+		nextEl: ".swiper-button-next",
+		prevEl: ".swiper-button-prev"
+	}
+});
+</script>
+</body>
+</html>
