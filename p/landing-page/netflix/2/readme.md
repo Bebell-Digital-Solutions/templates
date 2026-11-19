@@ -1,6 +1,6 @@
   <div align="center">
 
-# Modern Geometric Webpage
+# Netflix 3-Tab Page 2
     
-  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/screenshots/geometric-banner.png" alt="Banner" width="100%" />
+  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/screenshots/netflix-1.png" alt="Banner" width="100%" />
   </div>
