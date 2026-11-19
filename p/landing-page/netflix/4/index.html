@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Netflix Clone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #221f1f; color: #fff; font-family: 'Lato', sans-serif; }
+
+    .Header {
+      display: flex; align-items: center; padding: 20px 40px;
+      position: fixed; top: 0; left: 0; width: 100vw; z-index: 5;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+    }
+    .Logo { width: 120px; height: 40px; margin-right: 20px; cursor: pointer; }
+    .Logo svg { width: 100%; height: 100%; }
+    .Logo svg path { fill: #e50914; transition: fill .125s; }
+    .Logo:hover svg path { fill: #fff; }
+
+    .Navigation ul { display: flex; height: 37px; align-items: center; gap: 4px; list-style: none; }
+    .Navigation ul li { font-weight: 400; padding: 7px 10px; font-size: 14px; border-radius: 3px; transition: background .125s; cursor: pointer; }
+    .Navigation ul li:hover { background: #e50914; }
+
+    .Search { flex: 1; display: flex; justify-content: center; }
+    .Search input {
+      font-family: 'Lato', sans-serif; font-weight: 300; font-size: 14px;
+      height: 37px; width: 250px; background: transparent; color: #fff;
+      border: 2px solid rgba(245,245,241,0.2); border-radius: 37px;
+      padding: 0 16px; outline: none; transition: border .25s, width .125s;
+    }
+    .Search input:focus { border-color: #e50914; width: 320px; }
+
+    .UserProfile { margin-left: auto; }
+    .UserProfile .User { display: flex; align-items: center; cursor: pointer; }
+    .UserProfile .User .name { font-size: 16px; font-weight: 300; margin-right: 10px; }
+    .UserProfile .User .image { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; border: 3px solid transparent; transition: border .125s; }
+    .UserProfile .User .image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .UserProfile .User:hover .image { border-color: #e50914; }
+
+    .Hero {
+      width: 100%; position: relative; min-height: 800px;
+      background-size: cover; background-position: center;
+    }
+    .Hero .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(34,31,31,1), rgba(34,31,31,0));
+      transform: rotate(180deg);
+    }
+    .Hero .content {
+      position: relative; z-index: 4; width: 500px;
+      left: 10vw; top: 15vw; padding-top: 80px;
+    }
+    .Hero .content h2 { font-size: 24px; font-weight: 600; margin-bottom: 1em; }
+    .Hero .content p { font-size: 15px; font-weight: 300; line-height: 1.6; margin-bottom: 1em; }
+    .Hero .content .logo { max-width: 300px; margin-bottom: 20px; display: block; }
+    .Hero .button-wrapper { display: flex; gap: 10px; margin-top: 30px; }
+
+    .Button {
+      display: inline-flex; height: 44px; align-items: center; justify-content: center;
+      text-decoration: none; color: #fff; padding: 0 24px; border-radius: 44px;
+      font-size: 14px; font-weight: 600; border: 2px solid rgba(245,245,241,0.2);
+      transition: border .125s, background .125s; cursor: pointer;
+    }
+    .Button:hover { border-color: #f5f5f1; }
+    .Button[data-primary="true"] { border-color: #e50914; }
+    .Button[data-primary="true"]:hover { background: #e50914; }
+
+    .TitleList { padding: 20px 40px; position: relative; z-index: 4; }
+    .TitleList:nth-of-type(3) { margin-top: -8vw; }
+    .TitleList .Title h1 { font-size: 22px; font-weight: 600; margin-bottom: 12px; }
+    .TitleList .titles-wrapper { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .Item {
+      width: calc(20% - 10px); min-width: calc(20% - 10px); flex: 1 0 auto;
+      background-color: #000; background-position: center; background-size: 100%;
+      height: 200px; background-repeat: no-repeat; overflow: hidden;
+      transition: background-size 1s ease, transform .25s ease;
+      position: relative; cursor: pointer;
+    }
+    .Item:hover { background-size: 150%; }
+    .Item .overlay {
+      position: absolute; inset: 0; padding: 20px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.1));
+      opacity: 0; transition: opacity .2s ease; pointer-events: none;
+    }
+    .Item:hover .overlay { opacity: 1; pointer-events: all; }
+    .Item .overlay .title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .Item .overlay .rating { font-size: 13px; color: #f5c518; margin-bottom: 8px; }
+    .Item .overlay .plot {
+      font-size: 12px; font-weight: 300; line-height: 1.5;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .ListToggle {
+      position: absolute; right: 12px; top: 12px;
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.4);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 14px; cursor: pointer;
+      transition: border-color .125s, background .125s;
+      background: rgba(0,0,0,0.5);
+    }
+    .ListToggle:hover { border-color: #fff; }
+    .ListToggle[data-toggled="true"] { background: #e50914; border-color: #e50914; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- React 18 (UMD) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel standalone to compile JSX in-browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- jQuery for AJAX -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script type="text/babel" data-presets="react">
+    const { useState, useEffect } = React;
+    const API_KEY = '87dfa1c669eea853da609d4968d294be';
+
+    // ----- Logo -----
+    function Logo() {
+      return (
+        <div className="Logo">
+          <svg viewBox="0 0 300 81">
+            <g transform="translate(-384.28,-428.81)">
+              <g transform="matrix(2.5445,0,0,2.5445,1157.17,-1457.87)">
+                <path d="m -203.1,771.41 c 1.64,0.16 3.28,0.33 4.92,0.51 l 3.62,-8.93 3.44,9.75 c 1.76,0.22 3.53,0.45 5.28,0.7 l -6.02,-17.1 6.03,-14.88 -5.1,0 -0.05,0.07 -3.26,8.04 -2.86,-8.11 -5.04,0 5.2,14.76 -6.15,15.19 z" fill="#e50914"/>
+                <path d="m -206.91,771.06 0,-29.6 -5.04,0 0,29.19 c 1.68,0.13 3.36,0.27 5.04,0.42" fill="#e50914"/>
+                <path d="m -244.75,769.41 c 1.36,0 2.72,0.01 4.07,0.02 l 0,-10.88 6.05,0 0,-4.63 -6.05,0 0,-7.83 6.97,0 0,-4.64 -12.03,0 0,27.95 c 0.33,0 0.66,0 0.99,0" fill="#e50914"/>
+                <path d="m -260.39,769.69 c 1.68,-0.06 3.36,-0.11 5.04,-0.15 l 0,-23.44 4.71,0 0,-4.64 -14.46,0 0,4.64 4.71,0 0,23.59 z" fill="#e50914"/>
+              </g>
+            </g>
+          </svg>
+        </div>
+      );
+    }
+
+    // ----- Navigation -----
+    function Navigation() {
+      return (
+        <div className="Navigation">
+          <nav>
+            <ul>
+              <li>Browse</li>
+              <li>My list</li>
+              <li>Top picks</li>
+              <li>Recent</li>
+            </ul>
+          </nav>
+        </div>
+      );
+    }
+
+    // ----- Search -----
+    function Search({ onSubmit }) {
+      return (
+        <form onSubmit={onSubmit} className="Search">
+          <input type="search" placeholder="Search for a title..." />
+        </form>
+      );
+    }
+
+    // ----- UserProfile -----
+    function UserProfile() {
+      return (
+        <div className="UserProfile">
+          <div className="User">
+            <div className="name">Jack Oliver</div>
+            <div className="image">
+              <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/profile/profile-512_1.jpg" alt="profile" />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ----- Header -----
+    function Header({ onSubmit }) {
+      return (
+        <header className="Header">
+          <Logo />
+          <Navigation />
+          <Search onSubmit={onSubmit} />
+          <UserProfile />
+        </header>
+      );
+    }
+
+    // ----- Hero -----
+    function Hero() {
+      return (
+        <div className="Hero" style={{ backgroundImage: 'url(https://images.alphacoders.com/633/633643.jpg)' }}>
+          <div className="overlay"></div>
+          <div className="content">
+            <img className="logo" src="http://www.returndates.com/backgrounds/narcos.logo.png" alt="Narcos" />
+            <h2>Season 2 now available</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque id quam sapiente unde voluptatum alias vero debitis, magnam quis quod.</p>
+            <div className="button-wrapper">
+              <a href="#" className="Button" data-primary="true">Watch now</a>
+              <a href="#" className="Button">+ My list</a>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ----- ListToggle -----
+    function ListToggle() {
+      const [toggled, setToggled] = useState(false);
+      return (
+        <div
+          className="ListToggle"
+          data-toggled={toggled}
+          onClick={(e) => { e.stopPropagation(); setToggled(!toggled); }}
+        >
+          <i className={toggled ? 'fa fa-check' : 'fa fa-plus'}></i>
+        </div>
+      );
+    }
+
+    // ----- Item -----
+    function Item({ title, score, overview, backdrop }) {
+      return (
+        <div className="Item" style={{ backgroundImage: `url(${backdrop})` }}>
+          <div className="overlay">
+            <div className="title">{title}</div>
+            <div className="rating">{score ? `${score.toFixed(1)} / 10` : 'N/A'}</div>
+            <div className="plot">{overview}</div>
+            <ListToggle />
+          </div>
+        </div>
+      );
+    }
+
+    // ----- TitleList -----
+    function TitleList({ title, url }) {
+      const [items, setItems] = useState([]);
+      const [loaded, setLoaded] = useState(false);
+
+      useEffect(() => {
+        const requestUrl = `https://api.themoviedb.org/3/${url}&api_key=${API_KEY}`;
+        $.ajax({
+          url: requestUrl,
+          dataType: 'json',
+          cache: false,
+          success: (data) => {
+            if (data.results) setItems(data.results.slice(0, 5));
+            setLoaded(true);
+          },
+          error: (xhr, status, err) => {
+            console.error(url, status, err.toString());
+            setLoaded(true);
+          }
+        });
+      }, [url]);
+
+      return (
+        <div className="TitleList" data-loaded={loaded}>
+          <div className="Title">
+            <h1>{title}</h1>
+            <div className="titles-wrapper">
+              {items.map((item) => {
+                const backdrop = item.backdrop_path
+                  ? `https://image.tmdb.org/t/p/original${item.backdrop_path}`
+                  : 'https://via.placeholder.com/500x281/221f1f/e50914?text=No+Image';
+                const name = item.name || item.original_title || item.title || 'Untitled';
+                return (
+                  <Item
+                    key={item.id}
+                    title={name}
+                    score={item.vote_average}
+                    overview={item.overview || 'No description available.'}
+                    backdrop={backdrop}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ----- App -----
+    function App() {
+      const handleSearch = (e) => {
+        e.preventDefault();
+        const val = $('.Search input').val();
+        if (!val.trim()) return;
+        const requestUrl = `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(val)}&api_key=${API_KEY}`;
+        $.ajax({
+          url: requestUrl,
+          dataType: 'json',
+          success: (data) => console.log('Search results:', data),
+          error: (xhr, status, err) => console.error(status, err)
+        });
+      };
+
+      return (
+        <div>
+          <Header onSubmit={handleSearch} />
+          <Hero />
+          <TitleList title="Top TV picks for Jack" url="discover/tv?sort_by=popularity.desc&page=1" />
+          <TitleList title="Trending now" url="discover/movie?sort_by=popularity.desc&page=1" />
+          <TitleList title="Most watched in Horror" url="genre/27/movies?sort_by=popularity.desc&page=1" />
+          <TitleList title="Sci-Fi greats" url="genre/878/movies?sort_by=popularity.desc&page=1" />
+          <TitleList title="Comedy magic" url="genre/35/movies?sort_by=popularity.desc&page=1" />
+        </div>
+      );
+    }
+
+    // Render
+    const root = ReactDOM.createRoot(document.getElementById('app'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
