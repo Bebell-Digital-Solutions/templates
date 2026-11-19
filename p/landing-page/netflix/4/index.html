@@ -2,320 +2,566 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Netflix Clone</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netflix Clone — Interactive Demo</title>
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            nf: {
+              red:   '#e50914',
+              redHi: '#f40612',
+              bg:    '#141414',
+              elev:  '#1f1f1f',
+              hover: '#2a2a2a',
+              txt:   '#ffffff',
+              sub:   '#b3b3b3',
+              mute:  '#808080',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          keyframes: {
+            shimmer: {
+              '0%':   { backgroundPosition: '-400px 0' },
+              '100%': { backgroundPosition: '400px 0' },
+            },
+            fadeUp: {
+              '0%':   { opacity: 0, transform: 'translateY(16px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' },
+            },
+            scaleIn: {
+              '0%':   { opacity: 0, transform: 'scale(0.94)' },
+              '100%': { opacity: 1, transform: 'scale(1)' },
+            },
+          },
+          animation: {
+            shimmer: 'shimmer 1.4s linear infinite',
+            fadeUp:  'fadeUp .5s cubic-bezier(.2,.8,.2,1) both',
+            scaleIn: 'scaleIn .2s ease-out both',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome (icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #221f1f; color: #fff; font-family: 'Lato', sans-serif; }
+    html, body { background: #141414; color: #fff; font-family: 'Inter', sans-serif; }
+    /* Hide scrollbars on carousels but keep scrollability */
+    .row-scroll::-webkit-scrollbar { display: none; }
+    .row-scroll { -ms-overflow-style: none; scrollbar-width: none; scroll-behavior: smooth; }
 
-    .Header {
-      display: flex; align-items: center; padding: 20px 40px;
-      position: fixed; top: 0; left: 0; width: 100vw; z-index: 5;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+    /* Masked gradient at left/right of rows for a cinematic fade */
+    .row-wrap { position: relative; }
+    .row-wrap::before,
+    .row-wrap::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 40px; pointer-events: none; z-index: 2;
     }
-    .Logo { width: 120px; height: 40px; margin-right: 20px; cursor: pointer; }
-    .Logo svg { width: 100%; height: 100%; }
-    .Logo svg path { fill: #e50914; transition: fill .125s; }
-    .Logo:hover svg path { fill: #fff; }
+    .row-wrap::before { left: 0; background: linear-gradient(90deg, #141414 0%, transparent 100%); }
+    .row-wrap::after  { right: 0; background: linear-gradient(270deg, #141414 0%, transparent 100%); }
 
-    .Navigation ul { display: flex; height: 37px; align-items: center; gap: 4px; list-style: none; }
-    .Navigation ul li { font-weight: 400; padding: 7px 10px; font-size: 14px; border-radius: 3px; transition: background .125s; cursor: pointer; }
-    .Navigation ul li:hover { background: #e50914; }
+    /* Hide arrows when at start/end */
+    .arrow-hidden { opacity: 0 !important; pointer-events: none; }
 
-    .Search { flex: 1; display: flex; justify-content: center; }
-    .Search input {
-      font-family: 'Lato', sans-serif; font-weight: 300; font-size: 14px;
-      height: 37px; width: 250px; background: transparent; color: #fff;
-      border: 2px solid rgba(245,245,241,0.2); border-radius: 37px;
-      padding: 0 16px; outline: none; transition: border .25s, width .125s;
-    }
-    .Search input:focus { border-color: #e50914; width: 320px; }
+    /* Hover card — keep inside the viewport */
+    .tile:hover .hover-card { display: block; animation: scaleIn .18s ease-out both; }
 
-    .UserProfile { margin-left: auto; }
-    .UserProfile .User { display: flex; align-items: center; cursor: pointer; }
-    .UserProfile .User .name { font-size: 16px; font-weight: 300; margin-right: 10px; }
-    .UserProfile .User .image { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; border: 3px solid transparent; transition: border .125s; }
-    .UserProfile .User .image img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .UserProfile .User:hover .image { border-color: #e50914; }
-
-    .Hero {
-      width: 100%; position: relative; min-height: 800px;
-      background-size: cover; background-position: center;
-    }
-    .Hero .overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(34,31,31,1), rgba(34,31,31,0));
-      transform: rotate(180deg);
-    }
-    .Hero .content {
-      position: relative; z-index: 4; width: 500px;
-      left: 10vw; top: 15vw; padding-top: 80px;
-    }
-    .Hero .content h2 { font-size: 24px; font-weight: 600; margin-bottom: 1em; }
-    .Hero .content p { font-size: 15px; font-weight: 300; line-height: 1.6; margin-bottom: 1em; }
-    .Hero .content .logo { max-width: 300px; margin-bottom: 20px; display: block; }
-    .Hero .button-wrapper { display: flex; gap: 10px; margin-top: 30px; }
-
-    .Button {
-      display: inline-flex; height: 44px; align-items: center; justify-content: center;
-      text-decoration: none; color: #fff; padding: 0 24px; border-radius: 44px;
-      font-size: 14px; font-weight: 600; border: 2px solid rgba(245,245,241,0.2);
-      transition: border .125s, background .125s; cursor: pointer;
-    }
-    .Button:hover { border-color: #f5f5f1; }
-    .Button[data-primary="true"] { border-color: #e50914; }
-    .Button[data-primary="true"]:hover { background: #e50914; }
-
-    .TitleList { padding: 20px 40px; position: relative; z-index: 4; }
-    .TitleList:nth-of-type(3) { margin-top: -8vw; }
-    .TitleList .Title h1 { font-size: 22px; font-weight: 600; margin-bottom: 12px; }
-    .TitleList .titles-wrapper { display: flex; flex-wrap: wrap; gap: 10px; }
-
-    .Item {
-      width: calc(20% - 10px); min-width: calc(20% - 10px); flex: 1 0 auto;
-      background-color: #000; background-position: center; background-size: 100%;
-      height: 200px; background-repeat: no-repeat; overflow: hidden;
-      transition: background-size 1s ease, transform .25s ease;
-      position: relative; cursor: pointer;
-    }
-    .Item:hover { background-size: 150%; }
-    .Item .overlay {
-      position: absolute; inset: 0; padding: 20px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.1));
-      opacity: 0; transition: opacity .2s ease; pointer-events: none;
-    }
-    .Item:hover .overlay { opacity: 1; pointer-events: all; }
-    .Item .overlay .title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-    .Item .overlay .rating { font-size: 13px; color: #f5c518; margin-bottom: 8px; }
-    .Item .overlay .plot {
-      font-size: 12px; font-weight: 300; line-height: 1.5;
-      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-      overflow: hidden; text-overflow: ellipsis;
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .row-scroll { scroll-behavior: auto; }
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
 
-    .ListToggle {
-      position: absolute; right: 12px; top: 12px;
-      width: 32px; height: 32px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.4);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 14px; cursor: pointer;
-      transition: border-color .125s, background .125s;
-      background: rgba(0,0,0,0.5);
+    /* Focus ring for accessibility */
+    :focus-visible { outline: 2px solid #e50914; outline-offset: 3px; border-radius: 4px; }
+
+    /* Skeleton shimmer */
+    .skeleton {
+      background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 50%, #1f1f1f 75%);
+      background-size: 400px 100%;
+      animation: shimmer 1.4s linear infinite;
     }
-    .ListToggle:hover { border-color: #fff; }
-    .ListToggle[data-toggled="true"] { background: #e50914; border-color: #e50914; }
+
+    /* Top 10 numbers */
+    .top10-num {
+      font-weight: 900;
+      -webkit-text-stroke: 3px #595959;
+      color: transparent;
+      line-height: .8;
+      letter-spacing: -.05em;
+    }
   </style>
 </head>
-<body>
-  <div id="app"></div>
 
-  <!-- React 18 (UMD) -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <!-- Babel standalone to compile JSX in-browser -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- jQuery for AJAX -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<body class="bg-nf-bg text-nf-txt antialiased overflow-x-hidden">
 
-  <script type="text/babel" data-presets="react">
-    const { useState, useEffect } = React;
-    const API_KEY = '87dfa1c669eea853da609d4968d294be';
+  <!-- ============ HEADER ============ -->
+  <header id="header"
+    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gradient-to-b from-black/90 to-transparent">
+    <div class="flex items-center gap-6 px-4 md:px-12 h-16 md:h-[68px]">
+      <!-- Logo -->
+      <!-- Logo -->
+<a href="#" class="flex items-center select-none shrink-0" aria-label="Home">
+  <img
+    src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/logos/netflix/Logo.svg?updatedAt=1795123136798"
+    alt="Netflix"
+    class="h-6 w-auto"
+  />
+</a>
 
-    // ----- Logo -----
-    function Logo() {
-      return (
-        <div className="Logo">
-          <svg viewBox="0 0 300 81">
-            <g transform="translate(-384.28,-428.81)">
-              <g transform="matrix(2.5445,0,0,2.5445,1157.17,-1457.87)">
-                <path d="m -203.1,771.41 c 1.64,0.16 3.28,0.33 4.92,0.51 l 3.62,-8.93 3.44,9.75 c 1.76,0.22 3.53,0.45 5.28,0.7 l -6.02,-17.1 6.03,-14.88 -5.1,0 -0.05,0.07 -3.26,8.04 -2.86,-8.11 -5.04,0 5.2,14.76 -6.15,15.19 z" fill="#e50914"/>
-                <path d="m -206.91,771.06 0,-29.6 -5.04,0 0,29.19 c 1.68,0.13 3.36,0.27 5.04,0.42" fill="#e50914"/>
-                <path d="m -244.75,769.41 c 1.36,0 2.72,0.01 4.07,0.02 l 0,-10.88 6.05,0 0,-4.63 -6.05,0 0,-7.83 6.97,0 0,-4.64 -12.03,0 0,27.95 c 0.33,0 0.66,0 0.99,0" fill="#e50914"/>
-                <path d="m -260.39,769.69 c 1.68,-0.06 3.36,-0.11 5.04,-0.15 l 0,-23.44 4.71,0 0,-4.64 -14.46,0 0,4.64 4.71,0 0,23.59 z" fill="#e50914"/>
-              </g>
-            </g>
-          </svg>
+      <!-- Nav -->
+      <nav class="hidden md:flex items-center gap-5 text-sm text-nf-sub">
+        <a href="#" class="text-white font-medium hover:text-white">Home</a>
+        <a href="#" class="hover:text-white transition">TV Shows</a>
+        <a href="#" class="hover:text-white transition">Movies</a>
+        <a href="#" class="hover:text-white transition">New &amp; Popular</a>
+        <a href="#" class="hover:text-white transition">My List</a>
+        
+        <button class="flex items-center gap-1 hover:text-white transition">
+          Browse <i class="fa-solid fa-caret-down text-[10px]"></i>
+        </button>
+        
+      </nav>
+      
+      
+      
+
+      <!-- Right side -->
+      <div class="ml-auto flex items-center gap-4">
+        <!-- Search -->
+        <div class="relative">
+          <button id="searchToggle" class="text-white hover:text-nf-sub transition" aria-label="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <input id="searchInput" type="text" placeholder="Titles, people, genres"
+            class="absolute right-0 top-1/2 -translate-y-1/2 w-0 opacity-0 bg-black/80 border border-white/20 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 outline-none transition-all duration-300"
+            style="pointer-events:none;" />
         </div>
-      );
+
+        <button class="text-white hover:text-nf-sub transition" aria-label="Notifications">
+          <i class="fa-regular fa-bell"></i>
+        </button>
+
+        <!-- Avatar -->
+        <button class="flex items-center gap-1 group" aria-label="Profile">
+          <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/user-avatars/8-stock-illustration-default-placeholder-man-and-woman.png"
+            alt="Profile" class="w-8 h-8 rounded-full object-cover" />
+          <i class="fa-solid fa-caret-down text-[10px] text-white group-hover:rotate-180 transition-transform"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="relative h-[85vh] min-h-[560px] w-full overflow-hidden">
+    <!-- Background image -->
+    <div id="heroBg" class="absolute inset-0 bg-cover bg-center transition-opacity duration-700"
+      style="background-image:url('https://image.tmdb.org/t/p/original/9enxZ12XqBkq3r3sH0Q6w8r4sQ7.jpg');"></div>
+
+    <!-- Gradient overlays -->
+    <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-nf-bg via-transparent to-transparent"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 h-full flex flex-col justify-end md:justify-center max-w-2xl px-4 md:px-12 pb-16 md:pb-0">
+      <p class="text-nf-red font-bold text-sm tracking-widest mb-2">N SERIES</p>
+      <h1 id="heroTitle" class="text-4xl md:text-6xl font-black leading-tight mb-4 drop-shadow-lg">
+        Stranger Things
+      </h1>
+      <div class="flex items-center gap-3 text-sm text-nf-sub mb-4">
+        <span class="text-green-400 font-bold">98% Match</span>
+        <span>2024</span>
+        <span class="border border-nf-sub px-1.5 text-xs">TV-14</span>
+        <span>4 Seasons</span>
+        <span class="hidden sm:inline-flex items-center gap-1"><i class="fa-solid fa-closed-captioning"></i> CC</span>
+      </div>
+      <p id="heroDesc" class="text-base md:text-lg text-white/90 mb-6 line-clamp-3 max-w-xl">
+        When a young boy vanishes, a small town uncovers a mystery involving secret experiments,
+        terrifying supernatural forces, and one strange little girl.
+      </p>
+      <div class="flex items-center gap-3">
+        <button class="flex items-center gap-2 bg-white text-black font-bold px-6 py-2.5 rounded hover:bg-white/80 transition">
+          <i class="fa-solid fa-play"></i> Play
+        </button>
+        <button class="flex items-center gap-2 bg-gray-500/60 text-white font-bold px-6 py-2.5 rounded hover:bg-gray-500/40 transition">
+          <i class="fa-solid fa-circle-info"></i> More Info
+        </button>
+      </div>
+    </div>
+
+    <!-- Maturity badge (right) -->
+    <div class="hidden md:block absolute right-0 bottom-32 border-l-2 border-white/60 bg-black/40 backdrop-blur-sm pl-3 pr-10 py-2 text-sm">
+      TV-14
+    </div>
+  </section>
+
+  <!-- ============ ROWS ============ -->
+  <main id="rows" class="relative z-20 -mt-24 md:-mt-32 pb-20 space-y-8 px-4 md:px-12"></main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="px-4 md:px-12 py-10 text-nf-mute text-sm border-t border-white/10">
+    <div class="max-w-5xl mx-auto">
+      <p class="mb-6">Questions? Contact us.</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        <a href="#" class="hover:underline">FAQ</a>
+        <a href="#" class="hover:underline">Help Center</a>
+        <a href="#" class="hover:underline">Account</a>
+        <a href="#" class="hover:underline">Media Center</a>
+        <a href="#" class="hover:underline">Investor Relations</a>
+        <a href="#" class="hover:underline">Jobs</a>
+        <a href="#" class="hover:underline">Ways to Watch</a>
+        <a href="#" class="hover:underline">Terms of Use</a>
+        <a href="#" class="hover:underline">Privacy</a>
+        <a href="#" class="hover:underline">Cookie Preferences</a>
+        <a href="#" class="hover:underline">Corporate Information</a>
+        <a href="#" class="hover:underline">Contact Us</a>
+      </div>
+      <p class="text-xs opacity-70">
+        Demo only — educational concept. Not affiliated with Netflix. Data via TMDB.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ============ TOAST ============ -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white text-black text-sm font-semibold px-5 py-2.5 rounded shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-[100]"></div>
+
+  <!-- ============ SCRIPT ============ -->
+  <script>
+    /* ============================================================
+       CONFIG
+       ============================================================ */
+    // Get a free key at https://www.themoviedb.org/settings/api
+    // This is a public demo key — replace with your own for production.
+    const TMDB_KEY = '87dfa1c669eea853da609d4968d294be'; // demo key (may be rate-limited)
+    const IMG = (path, size = 'w500') => path ? `https://image.tmdb.org/t/p/${size}${path}` : '';
+
+    // Fallback catalog if TMDB is blocked / rate-limited
+    const FALLBACK = {
+      results: Array.from({ length: 12 }, (_, i) => ({
+        id: i,
+        title: `Demo Title ${i + 1}`,
+        name: `Demo Title ${i + 1}`,
+        original_title: `Demo Title ${i + 1}`,
+        overview: 'A placeholder description because the TMDB API was unavailable. Replace the API key with your own to load real data.',
+        vote_average: (7 + Math.random() * 3).toFixed(1),
+        backdrop_path: null,
+        poster_path: null,
+      })),
+    };
+
+    /* ============================================================
+       ROW DEFINITIONS
+       ============================================================ */
+    const ROWS = [
+      { id: 'trending',   title: 'Trending Now',                    endpoint: 'trending/all/week',          variant: 'standard' },
+      { id: 'tv',         title: 'Top TV Picks for Jack',           endpoint: 'discover/tv?sort_by=popularity.desc', variant: 'standard' },
+      { id: 'top10',      title: 'Top 10 in the US Today',          endpoint: 'trending/movie/day',         variant: 'top10' },
+      { id: 'action',     title: 'Action & Adventure',              endpoint: 'discover/movie?with_genres=28', variant: 'standard' },
+      { id: 'scifi',      title: 'Sci-Fi Greats',                   endpoint: 'discover/movie?with_genres=878', variant: 'standard' },
+      { id: 'comedy',     title: 'Comedy Magic',                    endpoint: 'discover/movie?with_genres=35', variant: 'standard' },
+      { id: 'horror',     title: 'Most Watched in Horror',          endpoint: 'discover/movie?with_genres=27', variant: 'standard' },
+    ];
+
+    /* ============================================================
+       HELPERS
+       ============================================================ */
+    const $ = (sel, ctx = document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+
+    function tmdb(path) {
+      const sep = path.includes('?') ? '&' : '?';
+      return `https://api.themoviedb.org/3/${path}${sep}api_key=${TMDB_KEY}&language=en-US`;
     }
 
-    // ----- Navigation -----
-    function Navigation() {
-      return (
-        <div className="Navigation">
-          <nav>
-            <ul>
-              <li>Browse</li>
-              <li>My list</li>
-              <li>Top picks</li>
-              <li>Recent</li>
-            </ul>
-          </nav>
-        </div>
-      );
+    async function fetchJSON(url) {
+      try {
+        const r = await fetch(url, { cache: 'force-cache' });
+        if (!r.ok) throw new Error(r.status);
+        return await r.json();
+      } catch (e) {
+        console.warn('TMDB fetch failed, using fallback.', e);
+        return FALLBACK;
+      }
     }
 
-    // ----- Search -----
-    function Search({ onSubmit }) {
-      return (
-        <form onSubmit={onSubmit} className="Search">
-          <input type="search" placeholder="Search for a title..." />
-        </form>
-      );
+    function titleOf(item) {
+      return item.name || item.title || item.original_title || item.original_name || 'Untitled';
     }
 
-    // ----- UserProfile -----
-    function UserProfile() {
-      return (
-        <div className="UserProfile">
-          <div className="User">
-            <div className="name">Jack Oliver</div>
-            <div className="image">
-              <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/profile/profile-512_1.jpg" alt="profile" />
-            </div>
-          </div>
-        </div>
-      );
+    function showToast(msg) {
+      const t = $('#toast');
+      t.textContent = msg;
+      t.style.opacity = '1';
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => (t.style.opacity = '0'), 1600);
     }
 
-    // ----- Header -----
-    function Header({ onSubmit }) {
-      return (
-        <header className="Header">
-          <Logo />
-          <Navigation />
-          <Search onSubmit={onSubmit} />
-          <UserProfile />
-        </header>
-      );
+    /* ============================================================
+       HEADER SCROLL BEHAVIOR
+       ============================================================ */
+    const header = $('#header');
+    const onScroll = () => {
+      if (window.scrollY > 40) {
+        header.classList.remove('bg-gradient-to-b', 'from-black/90', 'to-transparent');
+        header.classList.add('bg-nf-bg');
+      } else {
+        header.classList.add('bg-gradient-to-b', 'from-black/90', 'to-transparent');
+        header.classList.remove('bg-nf-bg');
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ============================================================
+       SEARCH TOGGLE
+       ============================================================ */
+    const searchToggle = $('#searchToggle');
+    const searchInput = $('#searchInput');
+    let searchOpen = false;
+    searchToggle.addEventListener('click', () => {
+      searchOpen = !searchOpen;
+      if (searchOpen) {
+        searchInput.style.width = '240px';
+        searchInput.style.opacity = '1';
+        searchInput.style.pointerEvents = 'all';
+        searchInput.focus();
+      } else {
+        searchInput.style.width = '0';
+        searchInput.style.opacity = '0';
+        searchInput.style.pointerEvents = 'none';
+      }
+    });
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && searchInput.value.trim()) {
+        showToast(`Searching "${searchInput.value.trim()}" (demo only)`);
+      }
+    });
+
+    /* ============================================================
+       SKELETON TILE
+       ============================================================ */
+    function skeletonRow(title) {
+      const wrapper = document.createElement('section');
+      wrapper.className = 'row-wrap';
+      wrapper.innerHTML = `
+        <h2 class="text-lg md:text-xl font-bold mb-3 px-1">${title}</h2>
+        <div class="flex gap-2 overflow-hidden pb-2">
+          ${Array.from({ length: 7 }).map(() => `
+            <div class="skeleton shrink-0 w-40 md:w-56 aspect-[2/3] rounded-md"></div>
+          `).join('')}
+        </div>`;
+      return wrapper;
     }
 
-    // ----- Hero -----
-    function Hero() {
-      return (
-        <div className="Hero" style={{ backgroundImage: 'url(https://images.alphacoders.com/633/633643.jpg)' }}>
-          <div className="overlay"></div>
-          <div className="content">
-            <img className="logo" src="http://www.returndates.com/backgrounds/narcos.logo.png" alt="Narcos" />
-            <h2>Season 2 now available</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque id quam sapiente unde voluptatum alias vero debitis, magnam quis quod.</p>
-            <div className="button-wrapper">
-              <a href="#" className="Button" data-primary="true">Watch now</a>
-              <a href="#" className="Button">+ My list</a>
-            </div>
-          </div>
-        </div>
-      );
-    }
+    /* ============================================================
+       TILE
+       ============================================================ */
+    function buildTile(item, variant) {
+      const id = item.id;
+      const title = titleOf(item);
+      const overview = item.overview || 'No description available.';
+      const score = item.vote_average ? Number(item.vote_average).toFixed(1) : 'N/A';
+      const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+      const posterPath = item.poster_path || item.backdrop_path;
+      const poster = posterPath ? IMG(posterPath, 'w342') : null;
 
-    // ----- ListToggle -----
-    function ListToggle() {
-      const [toggled, setToggled] = useState(false);
-      return (
-        <div
-          className="ListToggle"
-          data-toggled={toggled}
-          onClick={(e) => { e.stopPropagation(); setToggled(!toggled); }}
-        >
-          <i className={toggled ? 'fa fa-check' : 'fa fa-plus'}></i>
-        </div>
-      );
-    }
+      // Hover preview uses backdrop if available
+      const backdrop = item.backdrop_path ? IMG(item.backdrop_path, 'w780') : poster;
 
-    // ----- Item -----
-    function Item({ title, score, overview, backdrop }) {
-      return (
-        <div className="Item" style={{ backgroundImage: `url(${backdrop})` }}>
-          <div className="overlay">
-            <div className="title">{title}</div>
-            <div className="rating">{score ? `${score.toFixed(1)} / 10` : 'N/A'}</div>
-            <div className="plot">{overview}</div>
-            <ListToggle />
-          </div>
-        </div>
-      );
-    }
+      const tile = document.createElement('div');
+      tile.className = 'tile relative shrink-0 w-40 md:w-56 snap-start cursor-pointer group';
 
-    // ----- TitleList -----
-    function TitleList({ title, url }) {
-      const [items, setItems] = useState([]);
-      const [loaded, setLoaded] = useState(false);
+      if (variant === 'top10') {
+        // Top 10 style — big number to the left
+        tile.classList.add('pl-10');
+        tile.innerHTML = `
+          <span class="top10-num absolute left-0 bottom-0 text-[120px] md:text-[160px] select-none">${id % 10 || 10}</span>
+          ${poster
+            ? `<img src="${poster}" alt="${title}" loading="lazy" class="relative w-full aspect-[2/3] object-cover rounded-md shadow-lg transition-transform duration-300 group-hover:scale-105" />`
+            : `<div class="relative w-full aspect-[2/3] rounded-md bg-nf-elev flex items-center justify-center p-3 text-center text-sm">${title}</div>`}
+          ${hoverCardHTML(item, title, overview, score, year, backdrop)}
+        `;
+      } else {
+        tile.innerHTML = `
+          ${poster
+            ? `<img src="${poster}" alt="${title}" loading="lazy" class="w-full aspect-[2/3] object-cover rounded-md shadow-lg transition-transform duration-300 group-hover:scale-105" />`
+            : `<div class="w-full aspect-[2/3] rounded-md bg-nf-elev flex items-center justify-center p-3 text-center text-sm">${title}</div>`}
+          ${hoverCardHTML(item, title, overview, score, year, backdrop)}
+        `;
+      }
 
-      useEffect(() => {
-        const requestUrl = `https://api.themoviedb.org/3/${url}&api_key=${API_KEY}`;
-        $.ajax({
-          url: requestUrl,
-          dataType: 'json',
-          cache: false,
-          success: (data) => {
-            if (data.results) setItems(data.results.slice(0, 5));
-            setLoaded(true);
-          },
-          error: (xhr, status, err) => {
-            console.error(url, status, err.toString());
-            setLoaded(true);
-          }
+      // Wire up play button
+      tile.querySelectorAll('[data-action="play"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showToast(`▶ Playing "${title}" (demo)`);
         });
-      }, [url]);
+      });
+      tile.querySelectorAll('[data-action="list"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const added = btn.dataset.added === 'true';
+          btn.dataset.added = (!added).toString();
+          btn.innerHTML = added
+            ? '<i class="fa-solid fa-plus"></i>'
+            : '<i class="fa-solid fa-check"></i>';
+          showToast(added ? `Removed "${title}"` : `Added "${title}" to My List`);
+        });
+      });
 
-      return (
-        <div className="TitleList" data-loaded={loaded}>
-          <div className="Title">
-            <h1>{title}</h1>
-            <div className="titles-wrapper">
-              {items.map((item) => {
-                const backdrop = item.backdrop_path
-                  ? `https://image.tmdb.org/t/p/original${item.backdrop_path}`
-                  : 'https://via.placeholder.com/500x281/221f1f/e50914?text=No+Image';
-                const name = item.name || item.original_title || item.title || 'Untitled';
-                return (
-                  <Item
-                    key={item.id}
-                    title={name}
-                    score={item.vote_average}
-                    overview={item.overview || 'No description available.'}
-                    backdrop={backdrop}
-                  />
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      );
+      return tile;
     }
 
-    // ----- App -----
-    function App() {
-      const handleSearch = (e) => {
-        e.preventDefault();
-        const val = $('.Search input').val();
-        if (!val.trim()) return;
-        const requestUrl = `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(val)}&api_key=${API_KEY}`;
-        $.ajax({
-          url: requestUrl,
-          dataType: 'json',
-          success: (data) => console.log('Search results:', data),
-          error: (xhr, status, err) => console.error(status, err)
-        });
+    function hoverCardHTML(item, title, overview, score, year, backdrop) {
+      return `
+        <div class="hover-card hidden absolute left-0 right-0 -bottom-2 translate-y-full z-40 pointer-events-none">
+          <div class="pointer-events-auto bg-nf-elev rounded-md shadow-2xl overflow-hidden border border-white/10">
+            ${backdrop ? `<img src="${backdrop}" alt="" class="w-full aspect-video object-cover" />` : ''}
+            <div class="p-3">
+              <h3 class="font-bold text-sm mb-2">${title}</h3>
+              <div class="flex items-center gap-2 text-xs text-nf-sub mb-3">
+                <span class="text-green-400 font-bold">${score} Match</span>
+                ${year ? `<span>${year}</span>` : ''}
+                <span class="border border-nf-sub px-1">TV-14</span>
+              </div>
+              <p class="text-xs text-nf-sub line-clamp-3 mb-3">${overview}</p>
+              <div class="flex items-center gap-2">
+                <button data-action="play" class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center hover:bg-white/80">
+                  <i class="fa-solid fa-play text-xs"></i>
+                </button>
+                <button data-action="list" class="w-8 h-8 rounded-full border border-white/40 text-white flex items-center justify-center hover:border-white">
+                  <i class="fa-solid fa-plus text-xs"></i>
+                </button>
+                <button class="ml-auto w-8 h-8 rounded-full border border-white/40 text-white flex items-center justify-center hover:border-white">
+                  <i class="fa-solid fa-chevron-down text-xs"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    /* ============================================================
+       CAROUSEL ROW
+       ============================================================ */
+    function buildRow(row, items) {
+      const section = document.createElement('section');
+      section.className = 'row-wrap';
+      section.dataset.rowId = row.id;
+
+      section.innerHTML = `
+        <div class="flex items-center justify-between mb-3 px-1">
+          <h2 class="text-lg md:text-xl font-bold">${row.title}</h2>
+          <div class="flex items-center gap-1 text-xs text-nf-sub hover:text-white cursor-pointer">
+            <span>Explore All</span>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+          </div>
+        </div>
+        <div class="relative">
+          <button data-dir="left" class="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/60 hover:bg-black/80 rounded-full arrow-hidden transition-opacity" aria-label="Scroll left">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <div class="row-scroll flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory" role="list">
+            ${items.slice(0, 20).map((_, i) => `<div class="tile-slot-${i}"></div>`).join('')}
+          </div>
+          <button data-dir="right" class="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/60 hover:bg-black/80 rounded-full transition-opacity" aria-label="Scroll right">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      `;
+
+      // Insert tiles into slots (avoids innerHTML churn with large strings)
+      const scroller = section.querySelector('.row-scroll');
+      items.slice(0, 20).forEach((item, i) => {
+        const slot = section.querySelector(`.tile-slot-${i}`);
+        if (slot) slot.replaceWith(buildTile(item, row.variant));
+      });
+
+      // Wire up arrow buttons
+      const leftBtn = section.querySelector('[data-dir="left"]');
+      const rightBtn = section.querySelector('[data-dir="right"]');
+      const pageWidth = () => scroller.clientWidth * 0.9;
+
+      const updateArrows = () => {
+        const atStart = scroller.scrollLeft < 10;
+        const atEnd = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 10;
+        leftBtn.classList.toggle('arrow-hidden', atStart);
+        rightBtn.classList.toggle('arrow-hidden', atEnd);
       };
 
-      return (
-        <div>
-          <Header onSubmit={handleSearch} />
-          <Hero />
-          <TitleList title="Top TV picks for Jack" url="discover/tv?sort_by=popularity.desc&page=1" />
-          <TitleList title="Trending now" url="discover/movie?sort_by=popularity.desc&page=1" />
-          <TitleList title="Most watched in Horror" url="genre/27/movies?sort_by=popularity.desc&page=1" />
-          <TitleList title="Sci-Fi greats" url="genre/878/movies?sort_by=popularity.desc&page=1" />
-          <TitleList title="Comedy magic" url="genre/35/movies?sort_by=popularity.desc&page=1" />
-        </div>
-      );
+      leftBtn.addEventListener('click', () => scroller.scrollBy({ left: -pageWidth(), behavior: 'smooth' }));
+      rightBtn.addEventListener('click', () => scroller.scrollBy({ left: pageWidth(), behavior: 'smooth' }));
+      scroller.addEventListener('scroll', updateArrows, { passive: true });
+      requestAnimationFrame(updateArrows);
+
+      return section;
     }
 
-    // Render
-    const root = ReactDOM.createRoot(document.getElementById('app'));
-    root.render(<App />);
+    /* ============================================================
+       HERO LOADING
+       ============================================================ */
+    async function loadHero() {
+      const data = await fetchJSON(tmdb('trending/all/week'));
+      const featured = data.results?.find(x => x.backdrop_path) || data.results?.[0];
+      if (!featured) return;
+
+      const title = titleOf(featured);
+      const overview = featured.overview || '';
+      const backdrop = featured.backdrop_path ? IMG(featured.backdrop_path, 'original') : '';
+
+      if (backdrop) {
+        $('#heroBg').style.backgroundImage = `url(${backdrop})`;
+      }
+      $('#heroTitle').textContent = title;
+      $('#heroDesc').textContent = overview;
+    }
+
+    /* ============================================================
+       BOOT
+       ============================================================ */
+    async function boot() {
+      const rowsContainer = $('#rows');
+
+      // 1. Render skeletons immediately
+      const skeletonEls = ROWS.map(r => {
+        const el = skeletonRow(r.title);
+        rowsContainer.appendChild(el);
+        return el;
+      });
+
+      // 2. Load hero + rows in parallel
+      loadHero();
+
+      for (let i = 0; i < ROWS.length; i++) {
+        const row = ROWS[i];
+        const data = await fetchJSON(tmdb(row.endpoint));
+        const items = (data.results || []).filter(x => x.poster_path || x.backdrop_path);
+        const realRow = buildRow(row, items.length ? items : FALLBACK.results);
+        realRow.classList.add('animate-fadeUp');
+
+        // Replace skeleton
+        if (skeletonEls[i] && skeletonEls[i].parentNode) {
+          skeletonEls[i].replaceWith(realRow);
+        } else {
+          rowsContainer.appendChild(realRow);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', boot);
   </script>
 </body>
 </html>
