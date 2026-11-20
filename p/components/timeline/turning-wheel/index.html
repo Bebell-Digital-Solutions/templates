@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Turning Timeline</title>
+    
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+    
+    
+    
+    <style>
+      :root {
+        --bg: #f7f9fc;
+        --ink: #16202e;
+        --muted: #4f5b6b;
+        --line: #dfe5ee;
+
+        --coral: #ff6b4a;
+        --sun: #ffc53d;
+        --mint: #2fbf8f;
+        --sky: #3a9bff;
+        --violet: #8a6cff;
+        --pink: #ff6fae;
+        --lime: #a3d63f;
+        --teal: #14adb0;
+
+        --d: min(92vh, 92vw);       /* dial diameter */
+        --slice: 45deg;             /* 8 years around the dial */
+        --stops: 7;                 /* 8 sections, 7 steps between them */
+        --col: calc(var(--d) / 2 + clamp(1.25rem, 7vw, 7rem)); /* timeline column start */
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      
+      
+
+      /* ---------- The year dial: centred on the left edge, right half visible ---------- */
+      .dial-wrap {
+        position: fixed;
+        left: 0;
+        top: 50%;
+        width: var(--d);
+        height: var(--d);
+        translate: -50% -50%;
+        transform: perspective(1600px) rotateY(8deg);
+        container-type: size;
+      }
+
+      .dial {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 1.4cqw solid #fff;
+        box-sizing: border-box;
+        box-shadow: 0 2cqw 6cqw rgb(58 155 255 / 0.18), 0 0.6cqw 1.6cqw rgb(22 32 46 / 0.12);
+        background: conic-gradient(from 67.5deg,
+          var(--coral)  0deg 45deg,    /* 2011 */
+          var(--sun)    45deg 90deg,   /* 2013 */
+          var(--mint)   90deg 135deg,  /* 2015 */
+          var(--sky)    135deg 180deg, /* 2017 */
+          var(--violet) 180deg 225deg, /* 2019 */
+          var(--pink)   225deg 270deg, /* 2021 */
+          var(--lime)   270deg 315deg, /* 2023 */
+          var(--teal)   315deg 360deg  /* 2025 */
+        );
+
+        animation: turn linear both;
+        animation-timeline: scroll(root block);
+      }
+
+      @keyframes turn {
+        to { rotate: calc(var(--slice) * var(--stops) * -1); }
+      }
+
+      /* fine ticks around the rim */
+      .dial::before {
+        content: "";
+        position: absolute;
+        inset: 0.8cqw;
+        border-radius: 50%;
+        background: repeating-conic-gradient(rgb(255 255 255 / 0.55) 0 0.35deg, transparent 0.35deg 4.5deg);
+        -webkit-mask: radial-gradient(closest-side, transparent 95%, #000 95.3%);
+                mask: radial-gradient(closest-side, transparent 95%, #000 95.3%);
+      }
+
+      .year-label {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 46%;
+        height: 6cqw;
+        margin-top: -3cqw;
+        transform-origin: 0 50%;
+        rotate: var(--a);
+        box-sizing: border-box;
+        padding-right: 11%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        font-family: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+        font-size: 4.4cqw;
+        font-weight: 800;
+        color: var(--on, #fff);
+      }
+
+      .hub {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 12%;
+        aspect-ratio: 1;
+        translate: -50% -50%;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 0 0 0.6cqw rgb(22 32 46 / 0.08);
+      }
+
+      /* Fixed index at 3 o'clock */
+      .marker {
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        width: 4cqw;
+        height: 3cqw;
+        translate: -45% -50%;
+        background: var(--ink);
+        clip-path: polygon(0 50%, 100% 0, 100% 100%);
+      }
+
+      /* ---------- Timeline spine ---------- */
+      .spine {
+        position: fixed;
+        left: var(--col);
+        top: 14vh;
+        bottom: 14vh;
+        width: 3px;
+        translate: -1.5px 0;
+        border-radius: 3px;
+        background: var(--line);
+      }
+      .spine::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(var(--coral), var(--sun), var(--mint), var(--sky), var(--violet), var(--pink), var(--lime), var(--teal));
+        transform-origin: top;
+        animation: fill linear both;
+        animation-timeline: scroll(root block);
+      }
+      @keyframes fill {
+        from { scale: 1 0.1; }
+        to   { scale: 1 1; }
+      }
+
+      /* ---------- One section per year ---------- */
+      .stop {
+        height: 100vh;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        padding: 2rem clamp(1rem, 6vw, 6rem) 2rem var(--col);
+      }
+
+      .entry {
+        position: relative;
+        max-width: 30rem;
+        padding-left: clamp(1.5rem, 3vw, 2.5rem);
+
+        animation: arrive linear both;
+        animation-timeline: view();
+      }
+
+      @keyframes arrive {
+        entry 10%  { opacity: 0; translate: 0 2.5rem; }
+        entry 100% { opacity: 1; translate: 0 0; }
+        exit 0%    { opacity: 1; translate: 0 0; }
+        exit 90%   { opacity: 0; translate: 0 -2.5rem; }
+      }
+
+      /* dot on the spine, in the year's colour */
+      .year::before {
+        content: "";
+        position: absolute;
+        left: -9px;
+        margin-top: 0.4em;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--c);
+        box-shadow: 0 0 0 4px var(--bg), 0 0 0 7px color-mix(in srgb, var(--c) 30%, var(--bg));
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin: 0 0 1rem;
+        padding: 0.3rem 0.75rem;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--sky) 14%, var(--bg));
+        color: #1b5fae;
+        font-weight: 600;
+        font-size: 0.875rem;
+        letter-spacing: 0.04em;
+      }
+
+      h1 {
+        margin: 0 0 2.75rem;
+        font-family: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+        font-weight: 700;
+        font-size: clamp(2rem, 4vw, 3.25rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        max-width: 15ch;
+      }
+
+      .year {
+        margin: 0;
+        font-family: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+        font-weight: 800;
+        font-size: clamp(2.75rem, 6vw, 5rem);
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: var(--c-text, var(--c));
+      }
+
+      h2 {
+        margin: 0.9rem 0 0;
+        font-weight: 600;
+        font-size: clamp(1.125rem, 1.7vw, 1.375rem);
+        line-height: 1.3;
+      }
+
+      .entry p:not(.year):not(.eyebrow) {
+        margin: 0.5rem 0 0;
+        font-size: clamp(1rem, 1.3vw, 1.125rem);
+        line-height: 1.6;
+        max-width: 40ch;
+        color: var(--muted);
+      }
+
+      .notice { display: none; }
+
+      @supports not (animation-timeline: scroll()) {
+        .notice {
+          display: block;
+          position: fixed;
+          right: 1rem;
+          bottom: 1rem;
+          max-width: 20rem;
+          margin: 0;
+          padding: 0.75rem 1rem;
+          background: var(--ink);
+          color: #fff;
+          line-height: 1.4;
+          z-index: 2;
+        }
+        .dial, .spine::after, .entry { animation: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dial-wrap" aria-hidden="true">
+      <div class="dial">
+        <span class="year-label" style="--a: 0deg">2011</span>
+        <span class="year-label" style="--a: 45deg; --on: #4a3300">2013</span>
+        <span class="year-label" style="--a: 90deg">2015</span>
+        <span class="year-label" style="--a: 135deg">2017</span>
+        <span class="year-label" style="--a: 180deg">2019</span>
+        <span class="year-label" style="--a: 225deg">2021</span>
+        <span class="year-label" style="--a: 270deg; --on: #2c3d07">2023</span>
+        <span class="year-label" style="--a: 315deg">2025</span>
+        <span class="hub"></span>
+      </div>
+      <span class="marker"></span>
+    </div>
+
+    <div class="spine" aria-hidden="true"></div>
+
+    <main>
+      <!-- Year text colours are darker than the slice colours where needed, so they stay readable on the light background -->
+      <section class="stop" aria-labelledby="story-title">
+        <div class="entry" style="--c: var(--coral); --c-text: #e0482a">
+          <p class="eyebrow">About us</p>
+          <h1 id="story-title">Fifteen years of building bikes by hand</h1>
+          <p class="year">2011</p>
+          <h2>A garage and two frames</h2>
+          <p>Emma and James weld their first steel frames in a rented garage in Bristol. Both bikes go to friends, who ask for more.</p>
+        </div>
+      </section>
+
+      <section class="stop">
+        <div class="entry" style="--c: var(--sun); --c-text: #c98a00">
+          <p class="year">2013</p>
+          <h2>Our first workshop</h2>
+          <p>We move into a small workshop near the harbour and hire our first frame builder. Forty bikes leave the door that year.</p>
+        </div>
+      </section>
+
+      <section class="stop">
+        <div class="entry" style="--c: var(--mint); --c-text: #1a9a70">
+          <p class="year">2015</p>
+          <h2>The Wanderer city bike</h2>
+          <p>A commuter with fenders, lights and a rack built in. It becomes our best-seller and still is today.</p>
+        </div>
+      </section>
+
+      <section class="stop">
+        <div class="entry" style="--c: var(--sky); --c-text: #1f7fe6">
+          <p class="year">2017</p>
+          <h2>Repairs for life</h2>
+          <p>Every frame we have ever sold now comes with free lifetime frame repairs. A bike should outlast its trends.</p>
+        </div>
+      </section>
+
+      <section class="stop">
+        <div class="entry" style="--c: var(--violet); --c-text: #6c4ff0">
+          <p class="year">2019</p>
+          <h2>Riding abroad</h2>
+          <p>First shipments to Germany and the Netherlands. The team grows to eighteen people.</p>
+        </div>
+      </section>
+
+      <section class="stop">
+        <div class="entry" style="--c: var(--pink); --c-text: #e64a90">
+          <p class="year">2021</p>
+          <h2>Electric, carefully</h2>
+          <p>Our first e-bike, with a battery you can lift out and a frame that rides well even with the motor off.</p>
+        </div>
+      </section>
+
+      <section class="stop">
+        <div class="entry" style="--c: var(--lime); --c-text: #6f9e14">
+          <p class="year">2023</p>
+          <h2>A workshop under the sun</h2>
+          <p>We open a new workshop with rooftop solar panels that cover most of the power it uses.</p>
+        </div>
+      </section>
+
+      <section class="stop">
+        <div class="entry" style="--c: var(--teal); --c-text: #0e8f92">
+          <p class="year">2025</p>
+          <h2>Ten thousand riders</h2>
+          <p>Our 10,000th bike leaves the workshop. We start buying back used frames to refurbish and ride again.</p>
+        </div>
+      </section>
+    </main>
+
+    <p class="notice">This browser doesn’t support scroll-driven animations yet, so the dial won’t turn. Try a recent Chrome, Edge or Safari.</p>
+    
+    
+    
+    
+  </body>
+</html>
