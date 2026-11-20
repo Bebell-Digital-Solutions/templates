@@ -2,6 +2,6 @@
 
 # 3D Scroll Animation Bee Webpage
     
-  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/screenshots/firewatch.png" alt="Banner" width="100%" />
+  <img src="https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/screenshots/firewatch2.png" alt="Banner" width="100%" />
   </div>
 
