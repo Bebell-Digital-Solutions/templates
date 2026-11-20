@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parallax</title>
+<style>
+
+
+  html, body {
+    margin: 0; padding: 0;
+    background: #1f0202;
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+
+
+  .keyart {
+    position: relative;
+    z-index: 10;
+    height: 100vh;
+    overflow: hidden;           /* clip anything below the mask */
+  }
+
+  .keyart_layer {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 1000px;
+    background-position: bottom center;
+    background-size: auto 1038px;
+    background-repeat: repeat-x;
+  }
+
+
+
+  .keyart_layer.parallax { 
+  position: fixed; 
+  }
+
+  #keyart-0 { 
+  background-image: url('https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-websites/parallax-firewatch/imgi_14_parallax0@2x.png'); 
+  background-color: #1f0202; 
+  position: absolute;
+    top: 0;
+  }
+  
+  
+  #keyart-1 { background-image: url('https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-websites/parallax-firewatch/imgi_15_parallax1@2x.png'); }
+  
+  
+  #keyart-2 { background-image: url('https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-websites/parallax-firewatch/imgi_16_parallax2@2x.png'); }
+  
+  
+  #keyart-3 { background-image: url('https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-websites/parallax-firewatch/imgi_17_parallax3@2x.png'); }
+  
+  
+  #keyart-4 { background-image: url('https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-websites/parallax-firewatch/imgi_18_parallax4@2x.png'); }
+  
+  
+  #keyart-5 { background-image: url('https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-websites/parallax-firewatch/imgi_19_parallax5@2x.png'); }
+  
+  
+  #keyart-6 { background-image: url('https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-websites/parallax-firewatch/imgi_20_parallax6@2x.png'); }
+  
+  
+  #keyart-7 { background-image: url('https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-websites/parallax-firewatch/imgi_21_parallax7@2x.png'); }
+  
+
+  /* FRONT LAYER: the tall 2270x2400 mask. Only the top ~10% shows.
+     It is NOT .parallax — it's the opaque foreground mask. */
+  #keyart-8 {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 1000;
+    height: 640px;                 /* ~10% of 2400 */
+    background-image: url('https://ik.imagekit.io/bebell/PRO%20BUSINESS%20PAGE/assets/demo-websites/parallax-firewatch/top-layer.webp');
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 2270px 2400px; /* natural size, top-aligned => top 240px visible */
+    background-color: transparent;
+    z-index: 150;                    /* above the parallax layers */
+  }
+
+  #keyart-scrim {
+    background-color: #ffaf00;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;                     /* behind the mask */
+  }
+
+  .content {
+    position: relative;
+    z-index: 20;
+    margin-top: -80px;              /* overlap the bottom of the mask */
+    background: #1f0202;
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    box-sizing: border-box;
+  }
+
+  .content h1 { margin-top: 0; }
+</style>
+</head>
+<body>
+
+<div class="keyart" id="parallax">
+  <div class="keyart_layer parallax" id="keyart-0" data-speed="2"></div>
+  <div class="keyart_layer parallax" id="keyart-1" data-speed="5"></div>
+  <div class="keyart_layer parallax" id="keyart-2" data-speed="11"></div>
+  <div class="keyart_layer parallax" id="keyart-3" data-speed="16"></div>
+  <div class="keyart_layer parallax" id="keyart-4" data-speed="26"></div>
+  <div class="keyart_layer parallax" id="keyart-5" data-speed="36"></div>
+  <div class="keyart_layer parallax" id="keyart-6" data-speed="49"></div>
+  <div class="keyart_layer" id="keyart-scrim"></div>
+  <div class="keyart_layer parallax" id="keyart-7" data-speed="69"></div>
+  <div class="keyart_layer" id="keyart-8"></div>
+</div>
+
+<main class="content">
+  <h1>Main content</h1>
+  <p>This section overlaps the bottom edge of the foreground mask.</p>
+</main>
+
+<script>
+(function () {
+  var layers   = document.getElementsByClassName('parallax');
+  var scrim    = document.getElementById('keyart-scrim');
+  var opThresh = 350;
+  var opFactor = 750;
+
+  function onScroll() {
+    var top = window.pageYOffset || document.documentElement.scrollTop;
+
+    for (var i = 0; i < layers.length; i++) {
+      var layer = layers[i];
+      var speed = parseFloat(layer.getAttribute('data-speed')) || 0;
+      layer.style.transform = 'translate3d(0px, ' + (-(top * speed / 100)) + 'px, 0px)';
+    }
+
+    if (scrim) {
+      scrim.style.opacity = Math.min(1, Math.max(0, (top - opThresh) / opFactor));
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+
+</body>
+</html>
