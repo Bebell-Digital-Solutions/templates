@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href='https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&display=swap' rel='stylesheet'>
+
+<style>
+:root {
+  --bg: #0b0c0f;
+  --fg: #f3f4f6;
+  --muted: #3f434a;
+  font-family: "Syne", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.page {
+  min-height: 200vh;
+  padding: 3vh 6vw 30vh;
+  gap: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+}
+
+.hero {
+  max-width: 980px;
+}
+
+.fill-text {
+  margin: 0;
+  font-size: clamp(22px, 4vw, 48px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+  font-family: "Syne", system-ui, sans-serif;
+}
+
+.fill-text > span {
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-color: var(--muted);
+  background-image: linear-gradient(135deg, var(--fg) 50%, var(--muted) 60%);
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: 0% 200%;
+  color: transparent;
+  display: inline;
+  will-change: background-size;
+}
+
+.credit {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--fg) 70%, transparent);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.credit:hover {
+  color: var(--fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill-text > span {
+    background-size: 200% 200%;
+  }
+}
+</style>
+</head>
+<body>
+
+<main class="page">
+  <svg width="42px" height="42px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+    <path d="M12 3L12 21M12 21L20.5 12.5M12 21L3.5 12.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+  </svg>
+
+  <section class="hero">
+    <p class="fill-text js-fill">
+      <span>
+        We don't just build interfaces; we choreograph pixels. Static design is a photograph, but this is a performance. Every scroll is a keystroke, every pixel is deliberate, and motion is the only language that truly translates across every device. You are painting with code.
+      </span>
+    </p>
+  </section>
+
+  <a class="credit" href="http://madebybeings.com" target="_blank" rel="noopener">
+    Made By Beings
+  </a>
+</main>
+
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  const target = document.querySelector(".js-fill > span");
+
+  if (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    gsap.to(target, {
+      backgroundSize: "200% 200%",
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".js-fill",
+        start: "top 80%",
+        end: "bottom 35%",
+        scrub: true
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
