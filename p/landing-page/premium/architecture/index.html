@@ -1,0 +1,2683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Residencias de Autor en Santo Domingo</title>
+
+  <!-- Google Fonts: Cormorant Garamond (Wordmark), Newsreader (Editorial Serif), Inter (Architectural Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap"
+    rel="stylesheet"
+  />
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN TOKENS & RESET
+       ========================================================================== */
+    :root {
+      --ink-primary: #1c252c;
+      --ink-secondary: #4a4945;
+      --ink-muted: #7a7872;
+      --ink-light: #ffffff;
+      --ink-light-muted: rgba(255, 255, 255, 0.72);
+
+      --surface-travertine: #e4e3de;
+      --surface-alabaster: #f2f1ed;
+      --surface-stone: #dcdad4;
+      --surface-pill: #efece5;
+
+      --border-travertine: #c8c6be;
+      --border-alabaster: #dad8d2;
+      --border-stone: #bfbdb5;
+      --border-hero: rgba(255, 255, 255, 0.22);
+
+      --font-wordmark: 'Cormorant Garamond', Georgia, serif;
+      --font-serif: 'Newsreader', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --container-max: 1180px;
+      --gutter: clamp(1.25rem, 4vw, 3.25rem);
+      --transition-fast: 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --transition-smooth: 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--ink-primary);
+      background-color: var(--surface-alabaster);
+      line-height: 1.55;
+      font-size: 14px;
+      overflow-x: hidden;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+    }
+
+    /* Editorial Underlined Link */
+    .editorial-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--ink-primary);
+      padding-bottom: 3px;
+      border-bottom: 1px solid var(--ink-primary);
+      transition: opacity var(--transition-fast), gap var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .editorial-link:hover {
+      opacity: 0.65;
+      gap: 0.5rem;
+    }
+
+    .editorial-link .arrow {
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    /* Eyebrow Micro-Label */
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    /* Brand Wordmark */
+    .brand-logo {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .brand-logo__main {
+      font-family: var(--font-wordmark);
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      padding-left: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .brand-logo__sub {
+      font-family: var(--font-sans);
+      font-size: 7.5px;
+      font-weight: 500;
+      letter-spacing: 0.44em;
+      padding-left: 0.44em;
+      text-transform: uppercase;
+      margin-top: 3px;
+      opacity: 0.85;
+    }
+
+    /* ==========================================================================
+       2. HERO FULL-VIEWPORT SLIDER & TOP NAVIGATION
+       ========================================================================== */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100svh;
+      min-height: 680px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: var(--ink-light);
+      overflow: hidden;
+      background-color: #151c22;
+    }
+
+    /* Full-width Ken Burns Background Slider */
+    .hero__slider {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero__slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      z-index: 0;
+      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: opacity;
+    }
+
+    .hero__slide.is-active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .hero__slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 35%;
+      filter: brightness(0.86) contrast(1.04);
+      transform: scale(1);
+      transition: transform 8.5s linear;
+      will-change: transform;
+    }
+
+    .hero__slide.is-zooming img {
+      transform: scale(1.11);
+    }
+
+    /* Architectural twilight top & bottom vignettes */
+    .hero__scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background:
+        linear-gradient(180deg, rgba(14, 21, 28, 0.56) 0%, rgba(14, 21, 28, 0.12) 26%, rgba(14, 21, 28, 0.08) 62%, rgba(12, 18, 24, 0.78) 100%);
+      pointer-events: none;
+    }
+
+    /* Top Nav */
+    .navbar {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      border-bottom: 1px solid var(--border-hero);
+    }
+
+    .navbar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 74px;
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+      width: 100%;
+    }
+
+    .navbar__links {
+      display: flex;
+      align-items: center;
+      gap: 2.1rem;
+      list-style: none;
+    }
+
+    /* Hover Underline Animation */
+    .navbar__links a {
+      position: relative;
+      display: inline-block;
+      padding: 5px 0;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: rgba(255, 255, 255, 0.88);
+      transition: color var(--transition-fast);
+    }
+
+    .navbar__links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+      background-color: #ffffff;
+      transform: scaleX(0);
+      transform-origin: right center;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .navbar__links a:hover,
+    .navbar__links a:focus-visible {
+      color: #ffffff;
+    }
+
+    .navbar__links a:hover::after,
+    .navbar__links a:focus-visible::after {
+      transform: scaleX(1);
+      transform-origin: left center;
+    }
+
+    .navbar__actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    /* Consultar Dropdown */
+    .nav-dropdown {
+      position: relative;
+    }
+
+    .nav-dropdown__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      line-height: 1;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(18, 25, 32, 0.28);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      font-size: 11.5px;
+      color: #ffffff;
+      border-radius: 2px;
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .nav-dropdown__btn:hover {
+      background: rgba(18, 25, 32, 0.55);
+      border-color: rgba(255, 255, 255, 0.55);
+    }
+
+    .nav-dropdown__chevron {
+      width: 14px;
+      height: 14px;
+      stroke-width: 1.75;
+      flex-shrink: 0;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .nav-dropdown.is-open .nav-dropdown__chevron {
+      transform: rotate(180deg);
+    }
+
+    .nav-dropdown__menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 185px;
+      background: rgba(20, 28, 35, 0.58);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 4px;
+      padding: 6px 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+      box-shadow:
+        0 16px 36px rgba(0, 0, 0, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    }
+
+    .nav-dropdown.is-open .nav-dropdown__menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .nav-dropdown__menu a {
+      display: block;
+      padding: 9px 14px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.85);
+      transition: background var(--transition-fast);
+    }
+
+    .nav-dropdown__menu a:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 11.5px;
+    }
+
+    .lang-switch button {
+      position: relative;
+      color: rgba(255, 255, 255, 0.62);
+      padding: 3px 0;
+      transition: color var(--transition-fast);
+    }
+
+    .lang-switch button::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+      background-color: #ffffff;
+      transform: scaleX(0);
+      transform-origin: right center;
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .lang-switch button.is-active,
+    .lang-switch button:hover {
+      color: #ffffff;
+    }
+
+    .lang-switch button.is-active::after,
+    .lang-switch button:hover::after {
+      transform: scaleX(1);
+      transform-origin: left center;
+    }
+
+    /* Hero Bottom Metadata */
+    .hero__footer {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      padding: 0 var(--gutter) 2.25rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .hero__meta-left,
+    .hero__meta-right {
+      display: flex;
+      flex-direction: column;
+      min-width: 240px;
+    }
+
+    .hero__meta-right {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .hero__eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light-muted);
+      margin-bottom: 4px;
+    }
+
+    .hero__delivery {
+      font-family: var(--font-serif);
+      font-size: clamp(2.1rem, 3.1vw, 2.75rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+
+    .hero__address {
+      font-size: 12.5px;
+      font-weight: 400;
+      color: #ffffff;
+      margin-top: 2px;
+    }
+
+    .hero__rule {
+      width: 100%;
+      height: 1px;
+      background: var(--border-hero);
+      margin: 12px 0 10px;
+    }
+
+    .hero__subinfo {
+      font-size: 11px;
+      color: var(--ink-light-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .hero__subinfo a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+    
+    
+    
+    
+    
+
+    /* Floating "Pregúntame algo" Pill */
+   .concierge-pill {
+  position: fixed;
+  right: clamp(1.25rem, 3vw, 2.25rem);
+  bottom: clamp(1.25rem, 3vw, 2rem);
+  z-index: 90; /* Stays above page content, below the modal (z-index: 100) */
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 16px 8px 8px;
+  background: var(--surface-pill);
+  color: var(--ink-primary);
+  border: 1px solid rgba(28, 37, 44, 0.12);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 500;
+  box-shadow: 0 10px 28px rgba(16, 22, 28, 0.22);
+  transition: transform var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+
+
+.concierge-pill:hover {
+  transform: translateY(-2px);
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(16, 22, 28, 0.28);
+}
+  
+
+    .concierge-pill__dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--ink-primary);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-wordmark);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    /* END Floating "Pregúntame algo" Pill */
+  
+    
+    
+    
+    
+    
+    
+
+    /* ==========================================================================
+       3. SECTION 2: ELIGE TU APARTAMENTO (TRAVERTINE SURFACE)
+       ========================================================================== */
+    .section-apartments {
+      background-color: var(--surface-travertine);
+      padding: clamp(4rem, 7vw, 6rem) 0 clamp(3.5rem, 6vw, 5rem);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 2.25rem;
+    }
+
+    .section-title {
+      font-family: var(--font-sans);
+      font-size: clamp(1.95rem, 3.2vw, 2.65rem);
+      font-weight: 300;
+      letter-spacing: -0.025em;
+      line-height: 1.12;
+      color: var(--ink-primary);
+    }
+
+    .section-title em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .section-subtitle {
+      margin-top: 0.45rem;
+      font-size: 12.5px;
+      color: var(--ink-secondary);
+    }
+
+    /* 3-Column Architectural Tabs */
+    .apt-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border-travertine);
+      border-bottom: 1px solid var(--border-travertine);
+      margin-bottom: 2.25rem;
+    }
+
+    .apt-tab {
+      position: relative;
+      text-align: left;
+      padding: 1.2rem 1rem 1.25rem 0;
+      transition: opacity var(--transition-fast);
+      opacity: 0.56;
+    }
+
+    .apt-tab:hover {
+      opacity: 0.85;
+    }
+
+    .apt-tab.is-active {
+      opacity: 1;
+    }
+
+    .apt-tab::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 0;
+      height: 2px;
+      background: var(--ink-primary);
+      transition: width var(--transition-smooth);
+    }
+
+    .apt-tab.is-active::after {
+      width: 92%;
+    }
+
+    .apt-tab__eyebrow {
+      display: block;
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 4px;
+    }
+
+    .apt-tab__size {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: clamp(1.55rem, 2.3vw, 2rem);
+      font-weight: 400;
+      color: var(--ink-primary);
+      line-height: 1.15;
+    }
+
+    .apt-tab__meta {
+      display: block;
+      font-size: 11.5px;
+      color: var(--ink-secondary);
+      margin-top: 3px;
+    }
+
+    /* Apartment Detail Split */
+    .apt-panel {
+      display: grid;
+      grid-template-columns: 1.22fr 0.95fr;
+      gap: clamp(2rem, 4.5vw, 4rem);
+      align-items: center;
+      transition: opacity 0.25s ease;
+    }
+
+    .apt-panel.is-fading {
+      opacity: 0.25;
+    }
+
+    .apt-media {
+      position: relative;
+      aspect-ratio: 16 / 10.6;
+      overflow: hidden;
+      background: #cfcdc7;
+    }
+
+    .apt-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .apt-media:hover img {
+      transform: scale(1.03);
+    }
+
+    .apt-media__top-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink-primary);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 8px 13px;
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background var(--transition-fast);
+    }
+
+    .apt-media__top-btn:hover {
+      background: #ffffff;
+    }
+
+    .apt-media__bottom-btn {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      background: rgba(24, 31, 37, 0.82);
+      backdrop-filter: blur(6px);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 400;
+      padding: 8px 13px;
+      border-radius: 2px;
+      transition: background var(--transition-fast);
+    }
+
+    .apt-media__bottom-btn:hover {
+      background: rgba(24, 31, 37, 0.96);
+    }
+
+    .apt-info__title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.55rem, 2.2vw, 1.95rem);
+      font-weight: 400;
+      line-height: 1.18;
+      color: var(--ink-primary);
+      margin-top: 0.55rem;
+    }
+
+    .apt-info__desc {
+      margin-top: 0.85rem;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--ink-secondary);
+      max-width: 44ch;
+    }
+
+    .apt-specs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem 2rem;
+      margin-top: 1.75rem;
+      padding-top: 1.35rem;
+      border-top: 1px solid var(--border-travertine);
+    }
+
+    .apt-spec__label {
+      display: block;
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-bottom: 3px;
+    }
+
+    .apt-spec__value {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink-primary);
+    }
+
+    .apt-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.75rem;
+      margin-top: 1.85rem;
+    }
+
+    .section-disclaimer {
+      margin-top: 1.5rem;
+      font-size: 10.5px;
+      color: var(--ink-muted);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+
+    /* ==========================================================================
+       4. SECTION 3: AMENIDADES, CREDITS & FAQ (ALABASTER SURFACE)
+       ========================================================================== */
+    .section-amenities {
+      background-color: var(--surface-alabaster);
+      padding: clamp(4rem, 7vw, 6rem) 0 clamp(4rem, 7vw, 5.5rem);
+    }
+
+    .amenity-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9.2;
+      min-height: 310px;
+      overflow: hidden;
+      background: #d9d8d2;
+      transition: opacity 0.25s ease;
+    }
+
+    .amenity-stage.is-fading {
+      opacity: 0.3;
+    }
+
+    .amenity-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .amenity-stage__scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(16, 22, 28, 0.05) 35%, rgba(16, 22, 28, 0.72) 100%);
+      pointer-events: none;
+    }
+
+    .amenity-stage__cta {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--ink-primary);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 9px 15px;
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition-fast);
+    }
+
+    .amenity-stage__cta:hover {
+      background: #ffffff;
+    }
+
+    .amenity-stage__caption {
+      position: absolute;
+      left: clamp(1.25rem, 3vw, 2.25rem);
+      bottom: clamp(1.25rem, 3vw, 2rem);
+      max-width: 460px;
+      color: #ffffff;
+      z-index: 2;
+    }
+
+    .amenity-stage__count {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.78);
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .amenity-stage__title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw, 2rem);
+      font-weight: 400;
+      line-height: 1.15;
+    }
+
+    .amenity-stage__desc {
+      margin-top: 6px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* 6-Item Amenity Tab Strip */
+    .amenity-tabs {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-alabaster);
+      margin-top: 1rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .amenity-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .amenity-tab {
+      position: relative;
+      padding: 0.85rem 0.25rem;
+      font-size: 11.5px;
+      font-weight: 400;
+      color: var(--ink-muted);
+      white-space: nowrap;
+      transition: color var(--transition-fast);
+    }
+
+    .amenity-tab:hover {
+      color: var(--ink-primary);
+    }
+
+    .amenity-tab.is-active {
+      color: var(--ink-primary);
+      font-weight: 500;
+    }
+
+    .amenity-tab.is-active::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 1.5px;
+      background: var(--ink-primary);
+    }
+
+    /* Material Informativo Bar */
+    .materials-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2.75rem;
+      padding-bottom: 2.75rem;
+      border-bottom: 1px solid var(--border-alabaster);
+    }
+
+    .materials-bar__label {
+      font-size: 12px;
+      color: var(--ink-secondary);
+    }
+
+    .materials-bar__links {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+    }
+
+    /* Credits + FAQ Grid */
+    .credits-faq {
+      display: grid;
+      grid-template-columns: 0.78fr 1.22fr;
+      gap: clamp(2.5rem, 6vw, 5.5rem);
+      padding-top: 3rem;
+      align-items: start;
+    }
+
+    .credit-block + .credit-block {
+      margin-top: 2.25rem;
+    }
+
+    .credit-block__role {
+      display: block;
+      font-size: 10.5px;
+      color: var(--ink-muted);
+      margin-bottom: 6px;
+    }
+
+    .credit-block__name {
+      font-family: var(--font-sans);
+      font-size: clamp(1.45rem, 2.2vw, 1.8rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: var(--ink-primary);
+    }
+
+    .faq__heading {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--ink-primary);
+      margin-bottom: 1rem;
+    }
+
+    .faq-list {
+      border-top: 1px solid var(--border-alabaster);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-alabaster);
+    }
+
+    .faq-item__trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.05rem 0;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink-primary);
+      transition: opacity var(--transition-fast);
+    }
+
+    .faq-item__trigger:hover {
+      opacity: 0.7;
+    }
+
+    .faq-item__icon {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--ink-secondary);
+      transition: transform var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    .faq-item.is-open .faq-item__icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-item__content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .faq-item.is-open .faq-item__content {
+      grid-template-rows: 1fr;
+    }
+
+    .faq-item__body {
+      overflow: hidden;
+    }
+
+    .faq-item__body p {
+      padding-bottom: 1.15rem;
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: var(--ink-secondary);
+      max-width: 56ch;
+    }
+
+    .faq__footnote {
+      margin-top: 1.1rem;
+      font-size: 11px;
+      color: var(--ink-muted);
+    }
+
+    /* ==========================================================================
+       5. SECTION 4: PRECIOS Y DISPONIBILIDAD (STONE SURFACE)
+       ========================================================================== */
+    .section-contact {
+      background-color: var(--surface-stone);
+      padding: clamp(4.25rem, 7.5vw, 6.25rem) 0;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 0.84fr 1.16fr;
+      gap: clamp(2.5rem, 6vw, 5.5rem);
+      align-items: start;
+    }
+
+    .contact-info__title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.15rem, 3.4vw, 2.85rem);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--ink-primary);
+      margin-top: 0.6rem;
+    }
+
+    .contact-info__desc {
+      margin-top: 1.15rem;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--ink-secondary);
+      max-width: 38ch;
+    }
+
+    .contact-info__wa {
+      margin-top: 1.5rem;
+    }
+
+    .contact-details {
+      margin-top: 2.25rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border-stone);
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .contact-detail__label {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-muted);
+      margin-bottom: 3px;
+    }
+
+    .contact-detail__value {
+      font-size: 12.5px;
+      color: var(--ink-primary);
+      line-height: 1.5;
+    }
+
+    /* Architectural Form */
+    .lead-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-field label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink-primary);
+    }
+
+    .form-field input,
+    .form-field select {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid #b5b3aa;
+      border-radius: 2px;
+      font-size: 12.5px;
+      color: var(--ink-primary);
+      outline: none;
+      transition: border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+    .form-field select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a4945' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 34px;
+    }
+
+    .form-field input::placeholder {
+      color: var(--ink-muted);
+    }
+
+    .form-field input:focus,
+    .form-field select:focus {
+      border-color: var(--ink-primary);
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .form-consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin-top: 0.25rem;
+      font-size: 11px;
+      color: var(--ink-secondary);
+      cursor: pointer;
+    }
+
+    .form-consent input {
+      margin-top: 2px;
+      accent-color: var(--ink-primary);
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 46px;
+      background: var(--ink-primary);
+      color: #ffffff;
+      border-radius: 2px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      margin-top: 0.35rem;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-submit:hover {
+      background: #10171c;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.995);
+    }
+
+    .form-note {
+      font-size: 10.5px;
+      color: var(--ink-muted);
+    }
+
+    .form-feedback {
+      display: none;
+      padding: 12px 14px;
+      background: #1c252c;
+      color: #ffffff;
+      font-size: 12px;
+      border-radius: 2px;
+    }
+
+    .form-feedback.is-visible {
+      display: block;
+    }
+
+    /* ==========================================================================
+       6. FOOTER (ALABASTER SURFACE)
+       ========================================================================== */
+    .footer {
+      background-color: var(--surface-alabaster);
+      padding: 3rem 0 2.5rem;
+    }
+
+    .footer__top {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1.5rem;
+      padding-bottom: 2.25rem;
+      border-bottom: 1px solid var(--border-alabaster);
+    }
+
+    .footer__brand {
+      justify-self: start;
+    }
+
+    .footer__tagline {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--ink-primary);
+      text-align: center;
+    }
+
+    .footer__links {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 11.5px;
+      color: var(--ink-secondary);
+    }
+
+    .footer__links a:hover {
+      color: var(--ink-primary);
+    }
+
+    .footer__bottom {
+      padding-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 10.5px;
+      color: var(--ink-muted);
+    }
+
+    .footer__legal {
+      margin-top: 1.15rem;
+      font-size: 9.5px;
+      line-height: 1.6;
+      color: #908e88;
+      max-width: 92ch;
+    }
+
+    /* ==========================================================================
+       7. CONCIERGE DRAWER & LIGHTBOX MODAL
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(16, 22, 28, 0.62);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 1.25rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-fast);
+    }
+
+    .modal-backdrop.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--surface-alabaster);
+      color: var(--ink-primary);
+      border-radius: 3px;
+      padding: 1.75rem;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+      transform: translateY(10px);
+      transition: transform var(--transition-fast);
+    }
+
+    .modal-backdrop.is-open .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-alabaster);
+    }
+
+    .modal-header h3 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 400;
+    }
+
+    .modal-close {
+      font-size: 20px;
+      color: var(--ink-secondary);
+      padding: 4px;
+    }
+
+    .modal-body {
+      padding-top: 1.15rem;
+      font-size: 13px;
+      color: var(--ink-secondary);
+    }
+
+    .chat-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .chat-chip {
+      padding: 7px 12px;
+      font-size: 11.5px;
+      border: 1px solid var(--border-travertine);
+      border-radius: 999px;
+      color: var(--ink-primary);
+      background: #ffffff;
+      transition: background var(--transition-fast);
+    }
+
+    .chat-chip:hover {
+      background: var(--surface-travertine);
+    }
+
+    .chat-reply {
+      margin-top: 1rem;
+      padding: 12px 14px;
+      background: var(--surface-travertine);
+      border-radius: 2px;
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: var(--ink-primary);
+      display: none;
+    }
+
+    .chat-reply.is-visible {
+      display: block;
+    }
+
+    /* ==========================================================================
+       8. RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @media (max-width: 960px) {
+      .navbar__links {
+        display: none;
+      }
+
+      .apt-panel,
+      .credits-faq,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .amenity-stage {
+        aspect-ratio: 16 / 10;
+      }
+
+      .footer__top {
+        grid-template-columns: 1fr;
+        text-align: center;
+        justify-items: center;
+      }
+
+      .footer__brand,
+      .footer__links {
+        justify-self: center;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero__footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero__meta-right {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .apt-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .apt-tab {
+        border-bottom: 1px solid var(--border-travertine);
+      }
+
+      .apt-tab:last-child {
+        border-bottom: none;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-dropdown {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================================
+       SECTION 1: FULL-WIDTH HERO SLIDER & NAVIGATION
+       ====================================================================== -->
+  <header class="hero" id="inicio">
+    <div class="hero__slider" id="heroSlider" aria-hidden="true"></div>
+    <div class="hero__scrim"></div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar" aria-label="Navegación principal">
+      <div class="navbar__inner">
+        <a href="#inicio" class="brand-logo" aria-label="AIUNA Piantini">
+          <span class="brand-logo__main">AIUNA</span>
+          <span class="brand-logo__sub">PIANTINI</span>
+        </a>
+
+        <ul class="navbar__links">
+          <li><a href="#apartamentos" data-i18="nav.apartments">Apartamentos</a></li>
+          <li><a href="#apartamentos" data-i18="nav.views">Vistas</a></li>
+          <li><a href="#apartamentos" data-i18="nav.plans">Planos</a></li>
+          <li><a href="#amenidades" data-i18="nav.amenities">Amenidades</a></li>
+          <li><a href="#amenidades" data-i18="nav.gallery">Galería</a></li>
+        </ul>
+
+        <div class="navbar__actions">
+          <div class="nav-dropdown" id="consultDropdown">
+            <button type="button" class="nav-dropdown__btn" id="consultBtn" aria-expanded="false">
+              <span data-i18="nav.inquire">Consultar</span>
+              <i data-lucide="chevron-down" class="nav-dropdown__chevron" aria-hidden="true"></i>
+            </button>
+
+            <div class="nav-dropdown__menu" role="menu">
+              <a href="#precios" role="menuitem" data-i18="nav.requestPrices">Solicitar precios</a>
+              <a href="#precios" role="menuitem" data-i18="nav.scheduleVisit">Agendar visita privada</a>
+              <a href="https://wa.me/18095620071" target="_blank" rel="noopener" role="menuitem" data-i18="nav.directWhatsapp">WhatsApp directo</a>
+            </div>
+          </div>
+
+          <div class="lang-switch" aria-label="Selector de idioma">
+            <button type="button" class="is-active" data-lang="es">Español</button>
+            <button type="button" data-lang="en">English</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Bottom Hero Overlay -->
+    <div class="hero__footer">
+      <div class="hero__meta-left">
+        <span class="hero__eyebrow" data-i18="hero.deliveryLabel">Entrega estimada</span>
+        <div class="hero__delivery" data-i18="hero.deliveryDate">Q2 2029</div>
+        <div class="hero__rule"></div>
+        <div class="hero__subinfo">
+          <a href="mailto:ventas@aiunapiantini.com">aiunapiantini.com</a>
+        </div>
+      </div>
+
+
+
+      <div class="hero__meta-right">
+        <span class="hero__eyebrow" data-i18="hero.locationLabel">Piantini, Santo Domingo</span>
+        <div class="hero__address" data-i18="hero.address">Calle Gustavo Mejía Ricart #102</div>
+        <div class="hero__rule"></div>
+        <div class="hero__subinfo">
+          <a href="tel:+18095620071">(809) 562-0071</a> &nbsp;·&nbsp;
+          <a href="https://wa.me/18095620071" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       SECTION 2: ELIGE TU APARTAMENTO
+       ====================================================================== -->
+  <section class="section-apartments" id="apartamentos">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" data-i18="apt.sectionTitle">Elige tu <em>apartamento.</em></h2>
+          <p class="section-subtitle" data-i18="apt.sectionSubtitle">Conoce metrajes, habitaciones y distribución.</p>
+        </div>
+        <a href="#precios" class="editorial-link" data-modal-trigger="plans">
+          <span data-i18="apt.allPlans">Todos los planos</span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+
+      <!-- 3-Column Tipology Tabs -->
+      <div class="apt-tabs" role="tablist" aria-label="Tipologías de apartamentos">
+        <button type="button" class="apt-tab is-active" role="tab" aria-selected="true" data-apt="138">
+          <span class="apt-tab__eyebrow" data-i18="apt.tabA.label">Apartamento A</span>
+          <span class="apt-tab__size">138 m²</span>
+          <span class="apt-tab__meta" data-i18="apt.tabA.meta">2 habitaciones</span>
+        </button>
+
+        <button type="button" class="apt-tab" role="tab" aria-selected="false" data-apt="211">
+          <span class="apt-tab__eyebrow" data-i18="apt.tabB.label">Apartamento B</span>
+          <span class="apt-tab__size">211 m²</span>
+          <span class="apt-tab__meta" data-i18="apt.tabB.meta">3 habitaciones + estudio</span>
+        </button>
+
+        <button type="button" class="apt-tab" role="tab" aria-selected="false" data-apt="355">
+          <span class="apt-tab__eyebrow" data-i18="apt.tabC.label">Apartamento C</span>
+          <span class="apt-tab__size">355 m²</span>
+          <span class="apt-tab__meta" data-i18="apt.tabC.meta">Penthouse · 3 hab + family</span>
+        </button>
+      </div>
+
+      <!-- Active Apartment Detail Split -->
+      <div class="apt-panel" id="aptPanel">
+        <div class="apt-media">
+          <img id="aptImage" src="" alt="Interior de apartamento Aiuna Piantini" />
+          <button type="button" class="apt-media__top-btn" data-modal-trigger="tour">
+            <span data-i18="apt.viewTour">Ver Tour 360°</span>
+            <span>↗</span>
+          </button>
+          <button type="button" class="apt-media__bottom-btn" data-modal-trigger="plans" data-i18="apt.viewFloorplan">
+            Ver vista en planta
+          </button>
+        </div>
+
+        <div class="apt-info">
+          <span class="eyebrow" id="aptEyebrow">APARTAMENTO A · 138 M²</span>
+          <h3 class="apt-info__title" id="aptTitle">138 m² para<br />vivir con calma.</h3>
+          <p class="apt-info__desc" id="aptDesc">
+            Diseñado para una rutina práctica y cómoda: cocina con isla, sala abierta y balcón diario.
+          </p>
+
+          <div class="apt-specs">
+            <div>
+              <span class="apt-spec__label" data-i18="apt.spec.beds">Habitaciones</span>
+              <span class="apt-spec__value" id="specBeds">2</span>
+            </div>
+            <div>
+              <span class="apt-spec__label" data-i18="apt.spec.baths">Baños</span>
+              <span class="apt-spec__value" id="specBaths">2.5</span>
+            </div>
+            <div>
+              <span class="apt-spec__label" data-i18="apt.spec.area">Área aproximada</span>
+              <span class="apt-spec__value" id="specArea">138 m²</span>
+            </div>
+            <div>
+              <span class="apt-spec__label" data-i18="apt.spec.parking">Parqueos</span>
+              <span class="apt-spec__value" id="specParking">2 techados</span>
+            </div>
+          </div>
+
+          <div class="apt-actions">
+            <a href="#precios" class="editorial-link" data-modal-trigger="plans">
+              <span data-i18="apt.viewPlan">Ver plano</span>
+              <span class="arrow">↗</span>
+            </a>
+            <a href="#precios" class="editorial-link" id="consultUnitBtn">
+              <span data-i18="apt.inquireUnit">Consultar esta unidad</span>
+              <span class="arrow">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <p class="section-disclaimer" data-i18="apt.disclaimer">
+        *Imágenes y distribuciones de referencia. Metrajes y acabados sujetos a confirmación final en contrato.
+      </p>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SECTION 3: AMENIDADES, CREDITS & FAQ
+       ====================================================================== -->
+  <section class="section-amenities" id="amenidades">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" data-i18="amenities.sectionTitle">Amenidades para <em>disfrutar.</em></h2>
+          <p class="section-subtitle" data-i18="amenities.sectionSubtitle">Espacios creados para elevar tu experiencia diaria.</p>
+        </div>
+        <a href="#precios" class="editorial-link" data-modal-trigger="brochure">
+          <span data-i18="amenities.allAreas">Todas las áreas</span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+
+      <!-- Wide Cinematic Showcase -->
+      <div class="amenity-stage" id="amenityStage">
+        <img id="amenityImage" src="" alt="Amenidad de Aiuna Piantini" />
+        <div class="amenity-stage__scrim"></div>
+
+        <button type="button" class="amenity-stage__cta" data-modal-trigger="brochure">
+          <span data-i18="amenities.viewMore">Ver más</span>
+          <span>↗</span>
+        </button>
+
+        <div class="amenity-stage__caption">
+          <span class="amenity-stage__count" id="amenityCount">01 / 06</span>
+          <h3 class="amenity-stage__title" id="amenityTitle">Piscina infinity</h3>
+          <p class="amenity-stage__desc" id="amenityDesc">
+            Espejo de agua rodeado de deck en piedra natural y cabañas privadas para desconectar al final del día.
+          </p>
+        </div>
+      </div>
+
+      <!-- 6-Item Amenity Selector -->
+      <div class="amenity-tabs" role="tablist" aria-label="Amenidades del proyecto">
+        <button type="button" class="amenity-tab is-active" data-amenity="piscina" data-i18="amenities.tab.piscina">Piscina</button>
+        <button type="button" class="amenity-tab" data-amenity="salon" data-i18="amenities.tab.salon">Salón de eventos</button>
+        <button type="button" class="amenity-tab" data-amenity="gimnasio" data-i18="amenities.tab.gimnasio">Gimnasio</button>
+        <button type="button" class="amenity-tab" data-amenity="parque" data-i18="amenities.tab.parque">Parque familiar</button>
+        <button type="button" class="amenity-tab" data-amenity="lobby" data-i18="amenities.tab.lobby">Lobby</button>
+        <button type="button" class="amenity-tab" data-amenity="social" data-i18="amenities.tab.social">Área social</button>
+      </div>
+
+      <p class="section-disclaimer" data-i18="amenities.disclaimer">
+        *Renders arquitectónicos conceptuales de las áreas comunes del proyecto.
+      </p>
+
+      <!-- Secondary Materials Row -->
+      <div class="materials-bar">
+        <span class="materials-bar__label" data-i18="materials.label">Material informativo</span>
+        <div class="materials-bar__links">
+          <a href="#precios" class="editorial-link" data-modal-trigger="tour">
+            <span data-i18="materials.tour">Tour virtual 360°</span>
+            <span class="arrow">↗</span>
+          </a>
+          <a href="#precios" class="editorial-link" data-modal-trigger="brochure">
+            <span data-i18="materials.brochure">Descargar brochure</span>
+            <span class="arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Credits & FAQ Split -->
+      <div class="credits-faq">
+        <div class="credits-col">
+          <div class="credit-block">
+            <span class="credit-block__role" data-i18="credits.developer">Desarrolla</span>
+            <div class="credit-block__name">Grupo Roble</div>
+          </div>
+          <div class="credit-block">
+            <span class="credit-block__role" data-i18="credits.design">Diseño</span>
+            <div class="credit-block__name">Sánchez &amp; Curiel</div>
+          </div>
+        </div>
+
+        <div class="faq-col">
+          <h3 class="faq__heading" data-i18="faq.heading">Preguntas frecuentes</h3>
+          <div class="faq-list">
+            <div class="faq-item">
+              <button type="button" class="faq-item__trigger" aria-expanded="false">
+                <span data-i18="faq.q1">¿Cuál es el plan de pago?</span>
+                <span class="faq-item__icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-item__content">
+                <div class="faq-item__body">
+                  <p data-i18="faq.a1">
+                    Reserva con US$5,000, completa el 10% a la firma del contrato, 40% dividido en cuotas mensuales durante el proceso constructivo y 50% contra entrega en Q2 2029.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button type="button" class="faq-item__trigger" aria-expanded="false">
+                <span data-i18="faq.q2">¿Cuándo se entrega?</span>
+                <span class="faq-item__icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-item__content">
+                <div class="faq-item__body">
+                  <p data-i18="faq.a2">
+                    La entrega estimada del proyecto está programada para el segundo trimestre de 2029 (Q2 2029).
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button type="button" class="faq-item__trigger" aria-expanded="false">
+                <span data-i18="faq.q3">¿Qué opciones de metraje hay disponibles?</span>
+                <span class="faq-item__icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-item__content">
+                <div class="faq-item__body">
+                  <p data-i18="faq.a3">
+                    Contamos con tres tipologías principales: residencias de 138 m² (2 habitaciones), 211 m² (3 habitaciones + estudio) y penthouses de 355 m².
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button type="button" class="faq-item__trigger" aria-expanded="false">
+                <span data-i18="faq.q4">¿Se permite Airbnb?</span>
+                <span class="faq-item__icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-item__content">
+                <div class="faq-item__body">
+                  <p data-i18="faq.a4">
+                    Aiuna Piantini ha sido concebido como un edificio de vocación residencial familiar, por lo que no se permiten rentas cortas tipo Airbnb.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="faq__footnote" data-i18="faq.footnote">
+            Si tienes otra consulta, escríbenos por WhatsApp o completa el formulario.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SECTION 4: PRECIOS Y DISPONIBILIDAD
+       ====================================================================== -->
+  <section class="section-contact" id="precios">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <span class="eyebrow" data-i18="contact.eyebrow">Solicita información personalizada</span>
+          <h2 class="contact-info__title" data-i18="contact.title">Precios y<br />disponibilidad.</h2>
+          <p class="contact-info__desc" data-i18="contact.desc">
+            Completa tus datos y un asesor de ventas compartirá disponibilidad actualizada y plan de pago según el apartamento que te interese.
+          </p>
+
+          <div class="contact-info__wa">
+            <a href="https://wa.me/18095620071" target="_blank" rel="noopener" class="editorial-link">
+              <span data-i18="contact.whatsapp">Escribir ahora por WhatsApp</span>
+              <span class="arrow">↗</span>
+            </a>
+          </div>
+
+          <div class="contact-details">
+            <div>
+              <span class="contact-detail__label" data-i18="contact.phoneLabel">Teléfono directo</span>
+              <div class="contact-detail__value">(809) 562-0071 · ventas@aiunapiantini.com</div>
+            </div>
+            <div>
+              <span class="contact-detail__label" data-i18="contact.officeLabel">Oficina de ventas</span>
+              <div class="contact-detail__value" data-i18="contact.officeAddress">
+                Torre Empresarial Piantini<br />
+                Calle Gustavo Mejía Ricart, Santo Domingo
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form class="lead-form" id="leadForm" novalidate>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="fullName" data-i18="form.nameLabel">Nombre completo *</label>
+              <input type="text" id="fullName" name="fullName" placeholder="Tu nombre y apellido" data-i18-placeholder="form.namePlaceholder" required />
+            </div>
+            <div class="form-field">
+              <label for="phone" data-i18="form.phoneLabel">Teléfono / WhatsApp *</label>
+              <input type="tel" id="phone" name="phone" placeholder="+1 (809) 000-0000" data-i18-placeholder="form.phonePlaceholder" required />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="email" data-i18="form.emailLabel">Correo electrónico *</label>
+            <input type="email" id="email" name="email" placeholder="nombre@correo.com" data-i18-placeholder="form.emailPlaceholder" required />
+          </div>
+
+          <div class="form-field">
+            <label for="interest" data-i18="form.interestLabel">Me interesa *</label>
+            <select id="interest" name="interest" required>
+              <option value="" data-i18="form.interestDefault">Selecciona tu interés</option>
+              <option value="apt-138" data-i18="form.interest138">Apartamento A — 138 m² (2 hab.)</option>
+              <option value="apt-211" data-i18="form.interest211">Apartamento B — 211 m² (3 hab. + estudio)</option>
+              <option value="apt-355" data-i18="form.interest355">Apartamento C — 355 m² (Penthouse)</option>
+              <option value="general" data-i18="form.interestGeneral">Información general del proyecto</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="budget" data-i18="form.budgetLabel">Presupuesto estimado</label>
+              <select id="budget" name="budget">
+                <option value="" data-i18="form.budgetDefault">Selecciona un rango</option>
+                <option value="400k-600k">US$400,000 – US$600,000</option>
+                <option value="600k-900k">US$600,000 – US$900,000</option>
+                <option value="900k+" data-i18="form.budget900">Más de US$900,000</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="source" data-i18="form.sourceLabel">¿Cómo conociste el proyecto?</label>
+              <select id="source" name="source">
+                <option value="" data-i18="form.sourceDefault">Selecciona una opción</option>
+                <option value="Instagram" data-i18="form.sourceIG">Instagram / Redes sociales</option>
+                <option value="Google" data-i18="form.sourceGoogle">Búsqueda en Google</option>
+                <option value="Referido" data-i18="form.sourceReferral">Referido / Broker</option>
+                <option value="Valla" data-i18="form.sourceBillboard">Valla en Piantini</option>
+              </select>
+            </div>
+          </div>
+
+          <label class="form-consent">
+            <input type="checkbox" id="consent" required />
+            <span data-i18="form.consent">Acepto recibir información comercial sobre el proyecto y la política de privacidad.</span>
+          </label>
+
+          <button type="submit" class="btn-submit">
+            <span data-i18="form.submit">Solicitar información</span>
+            <span aria-hidden="true">→</span>
+          </button>
+
+          <div class="form-feedback" id="formFeedback" role="status"></div>
+          <p class="form-note" data-i18="form.note">Tus datos están protegidos. No compartimos tu información con terceros.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SECTION 5: FOOTER
+       ====================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <a href="#inicio" class="brand-logo footer__brand" aria-label="AIUNA Piantini">
+          <span class="brand-logo__main">AIUNA</span>
+          <span class="brand-logo__sub">PIANTINI</span>
+        </a>
+
+        <p class="footer__tagline" data-i18="footer.tagline">Un proyecto que inspira vivir.</p>
+
+        <div class="footer__links">
+          <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://wa.me/18095620071" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="#precios" data-i18="footer.location">Ubicación</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span data-i18="footer.copyright">© 2026 Aiuna Piantini. Todos los derechos reservados.</span>
+        <a href="#precios" data-i18="footer.privacy">Privacidad</a>
+      </div>
+
+      <p class="footer__legal" data-i18="footer.legal">
+        Las imágenes, planos, dimensiones y especificaciones mostradas en este sitio web son ilustrativas y representan una interpretación artística del proyecto arquitectónico. El desarrollador se reserva el derecho de realizar modificaciones sin previo aviso para optimizar el diseño o la ejecución técnica.
+      </p>
+    </div>
+  </footer>
+  
+  
+  
+  
+  
+  
+  
+   <!-- ======================================================================
+       Help floating button
+       ====================================================================== --> 
+  
+  <button type="button" class="concierge-pill" id="openConciergeBtn">
+          <span class="concierge-pill__dot">A</span>
+          <span data-i18="hero.concierge">Pregúntame algo</span>
+        </button>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  <!-- ======================================================================
+       INTERACTIVE MODAL (CONCIERGE / PLANS / TOUR / BROCHURE)
+       ====================================================================== -->
+  <div class="modal-backdrop" id="appModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h3 id="modalTitle" data-i18="modal.defaultTitle">Asistente Aiuna</h3>
+        <button type="button" class="modal-close" id="closeModalBtn" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  <script>
+    lucide.createIcons();
+
+    /* ========================================================================
+       TRANSLATIONS (ES / EN)
+       ======================================================================== */
+    let currentLang = 'es';
+
+    const TRANSLATIONS = {
+      es: {
+        pageTitle: 'AIUNA Piantini — Residencias de Autor en Santo Domingo',
+        'nav.apartments': 'Apartamentos',
+        'nav.views': 'Vistas',
+        'nav.plans': 'Planos',
+        'nav.amenities': 'Amenidades',
+        'nav.gallery': 'Galería',
+        'nav.inquire': 'Consultar',
+        'nav.requestPrices': 'Solicitar precios',
+        'nav.scheduleVisit': 'Agendar visita privada',
+        'nav.directWhatsapp': 'WhatsApp directo',
+        'hero.deliveryLabel': 'Entrega estimada',
+        'hero.deliveryDate': 'Q2 2029',
+        'hero.concierge': 'Pregúntame algo',
+        'hero.locationLabel': 'Piantini, Santo Domingo',
+        'hero.address': 'Calle Gustavo Mejía Ricart #102',
+        'apt.sectionTitle': 'Elige tu <em>apartamento.</em>',
+        'apt.sectionSubtitle': 'Conoce metrajes, habitaciones y distribución.',
+        'apt.allPlans': 'Todos los planos',
+        'apt.tabA.label': 'Apartamento A',
+        'apt.tabA.meta': '2 habitaciones',
+        'apt.tabB.label': 'Apartamento B',
+        'apt.tabB.meta': '3 habitaciones + estudio',
+        'apt.tabC.label': 'Apartamento C',
+        'apt.tabC.meta': 'Penthouse · 3 hab + family',
+        'apt.viewTour': 'Ver Tour 360°',
+        'apt.viewFloorplan': 'Ver vista en planta',
+        'apt.spec.beds': 'Habitaciones',
+        'apt.spec.baths': 'Baños',
+        'apt.spec.area': 'Área aproximada',
+        'apt.spec.parking': 'Parqueos',
+        'apt.viewPlan': 'Ver plano',
+        'apt.inquireUnit': 'Consultar esta unidad',
+        'apt.disclaimer': '*Imágenes y distribuciones de referencia. Metrajes y acabados sujetos a confirmación final en contrato.',
+        'amenities.sectionTitle': 'Amenidades para <em>disfrutar.</em>',
+        'amenities.sectionSubtitle': 'Espacios creados para elevar tu experiencia diaria.',
+        'amenities.allAreas': 'Todas las áreas',
+        'amenities.viewMore': 'Ver más',
+        'amenities.tab.piscina': 'Piscina',
+        'amenities.tab.salon': 'Salón de eventos',
+        'amenities.tab.gimnasio': 'Gimnasio',
+        'amenities.tab.parque': 'Parque familiar',
+        'amenities.tab.lobby': 'Lobby',
+        'amenities.tab.social': 'Área social',
+        'amenities.disclaimer': '*Renders arquitectónicos conceptuales de las áreas comunes del proyecto.',
+        'materials.label': 'Material informativo',
+        'materials.tour': 'Tour virtual 360°',
+        'materials.brochure': 'Descargar brochure',
+        'credits.developer': 'Desarrolla',
+        'credits.design': 'Diseño',
+        'faq.heading': 'Preguntas frecuentes',
+        'faq.q1': '¿Cuál es el plan de pago?',
+        'faq.a1': 'Reserva con US$5,000, completa el 10% a la firma del contrato, 40% dividido en cuotas mensuales durante el proceso constructivo y 50% contra entrega en Q2 2029.',
+        'faq.q2': '¿Cuándo se entrega?',
+        'faq.a2': 'La entrega estimada del proyecto está programada para el segundo trimestre de 2029 (Q2 2029).',
+        'faq.q3': '¿Qué opciones de metraje hay disponibles?',
+        'faq.a3': 'Contamos con tres tipologías principales: residencias de 138 m² (2 habitaciones), 211 m² (3 habitaciones + estudio) y penthouses de 355 m².',
+        'faq.q4': '¿Se permite Airbnb?',
+        'faq.a4': 'Aiuna Piantini ha sido concebido como un edificio de vocación residencial familiar, por lo que no se permiten rentas cortas tipo Airbnb.',
+        'faq.footnote': 'Si tienes otra consulta, escríbenos por WhatsApp o completa el formulario.',
+        'contact.eyebrow': 'Solicita información personalizada',
+        'contact.title': 'Precios y<br />disponibilidad.',
+        'contact.desc': 'Completa tus datos y un asesor de ventas compartirá disponibilidad actualizada y plan de pago según el apartamento que te interese.',
+        'contact.whatsapp': 'Escribir ahora por WhatsApp',
+        'contact.phoneLabel': 'Teléfono directo',
+        'contact.officeLabel': 'Oficina de ventas',
+        'contact.officeAddress': 'Torre Empresarial Piantini<br />Calle Gustavo Mejía Ricart, Santo Domingo',
+        'form.nameLabel': 'Nombre completo *',
+        'form.namePlaceholder': 'Tu nombre y apellido',
+        'form.phoneLabel': 'Teléfono / WhatsApp *',
+        'form.phonePlaceholder': '+1 (809) 000-0000',
+        'form.emailLabel': 'Correo electrónico *',
+        'form.emailPlaceholder': 'nombre@correo.com',
+        'form.interestLabel': 'Me interesa *',
+        'form.interestDefault': 'Selecciona tu interés',
+        'form.interest138': 'Apartamento A — 138 m² (2 hab.)',
+        'form.interest211': 'Apartamento B — 211 m² (3 hab. + estudio)',
+        'form.interest355': 'Apartamento C — 355 m² (Penthouse)',
+        'form.interestGeneral': 'Información general del proyecto',
+        'form.budgetLabel': 'Presupuesto estimado',
+        'form.budgetDefault': 'Selecciona un rango',
+        'form.budget900': 'Más de US$900,000',
+        'form.sourceLabel': '¿Cómo conociste el proyecto?',
+        'form.sourceDefault': 'Selecciona una opción',
+        'form.sourceIG': 'Instagram / Redes sociales',
+        'form.sourceGoogle': 'Búsqueda en Google',
+        'form.sourceReferral': 'Referido / Broker',
+        'form.sourceBillboard': 'Valla en Piantini',
+        'form.consent': 'Acepto recibir información comercial sobre el proyecto y la política de privacidad.',
+        'form.submit': 'Solicitar información',
+        'form.note': 'Tus datos están protegidos. No compartimos tu información con terceros.',
+        'form.error': 'Por favor completa los campos obligatorios (*) y acepta la política de privacidad.',
+        'form.success': 'Gracias, {name}. Un asesor de Aiuna Piantini te enviará la disponibilidad de {interest} en breve.',
+        'footer.tagline': 'Un proyecto que inspira vivir.',
+        'footer.location': 'Ubicación',
+        'footer.copyright': '© 2026 Aiuna Piantini. Todos los derechos reservados.',
+        'footer.privacy': 'Privacidad',
+        'footer.legal': 'Las imágenes, planos, dimensiones y especificaciones mostradas en este sitio web son ilustrativas y representan una interpretación artística del proyecto arquitectónico. El desarrollador se reserva el derecho de realizar modificaciones sin previo aviso para optimizar el diseño o la ejecución técnica.',
+        'modal.defaultTitle': 'Asistente Aiuna',
+        'modal.conciergeTitle': 'Asistente Aiuna Piantini',
+        'modal.conciergeIntro': 'Selecciona una consulta rápida sobre el proyecto o escríbenos directamente:',
+        'modal.chip1': 'Metrajes disponibles',
+        'modal.ans1': 'Los apartamentos disponibles son de 138 m² (2 hab.), 211 m² (3 hab. + estudio) y penthouses de 355 m².',
+        'modal.chip2': 'Plan de pago y entrega',
+        'modal.ans2': 'La entrega estimada es Q2 2029. Reserva con US$5,000, 10% a la firma, 40% durante construcción y 50% contra entrega.',
+        'modal.chip3': 'Ubicación exacta',
+        'modal.ans3': 'Estamos ubicados en el corazón de Piantini, Calle Gustavo Mejía Ricart, Santo Domingo.',
+        'modal.plansTitle': 'Planos Arquitectónicos',
+        'modal.plansText': 'Estás viendo la tipología {unit}. Déjanos tus datos en el formulario de disponibilidad para recibir el dossier completo de plantas arquitectónicas en PDF.',
+        'modal.tourTitle': 'Recorrido Virtual 360°',
+        'modal.tourText': 'Conecta aquí tu enlace de Matterport o Kuula 360° para permitir que tus clientes recorran el interior en tiempo real.',
+        'modal.brochureTitle': 'Brochure Digital — Aiuna Piantini',
+        'modal.brochureText': 'Incluye memoria de calidades, terminaciones en mármol travertino, distribución por niveles y especificaciones de áreas comunes.',
+        'modal.goToForm': 'Ir al formulario de solicitud'
+      },
+      en: {
+        pageTitle: 'AIUNA Piantini — Signature Residences in Santo Domingo',
+        'nav.apartments': 'Apartments',
+        'nav.views': 'Views',
+        'nav.plans': 'Floor Plans',
+        'nav.amenities': 'Amenities',
+        'nav.gallery': 'Gallery',
+        'nav.inquire': 'Inquire',
+        'nav.requestPrices': 'Request pricing',
+        'nav.scheduleVisit': 'Schedule private tour',
+        'nav.directWhatsapp': 'Direct WhatsApp',
+        'hero.deliveryLabel': 'Estimated delivery',
+        'hero.deliveryDate': 'Q2 2029',
+        'hero.concierge': 'Ask me anything',
+        'hero.locationLabel': 'Piantini, Santo Domingo',
+        'hero.address': '102 Gustavo Mejía Ricart St.',
+        'apt.sectionTitle': 'Choose your <em>apartment.</em>',
+        'apt.sectionSubtitle': 'Explore floor areas, bedrooms, and layouts.',
+        'apt.allPlans': 'All floor plans',
+        'apt.tabA.label': 'Apartment A',
+        'apt.tabA.meta': '2 bedrooms',
+        'apt.tabB.label': 'Apartment B',
+        'apt.tabB.meta': '3 bedrooms + study',
+        'apt.tabC.label': 'Apartment C',
+        'apt.tabC.meta': 'Penthouse · 3 bed + family',
+        'apt.viewTour': 'View 360° Tour',
+        'apt.viewFloorplan': 'View floor plan',
+        'apt.spec.beds': 'Bedrooms',
+        'apt.spec.baths': 'Bathrooms',
+        'apt.spec.area': 'Approx. area',
+        'apt.spec.parking': 'Parking spaces',
+        'apt.viewPlan': 'View plan',
+        'apt.inquireUnit': 'Inquire about this unit',
+        'apt.disclaimer': '*Reference renderings and layouts. Areas and finishes are subject to final contract confirmation.',
+        'amenities.sectionTitle': 'Amenities to <em>enjoy.</em>',
+        'amenities.sectionSubtitle': 'Spaces crafted to elevate your daily experience.',
+        'amenities.allAreas': 'All areas',
+        'amenities.viewMore': 'View more',
+        'amenities.tab.piscina': 'Pool',
+        'amenities.tab.salon': 'Event hall',
+        'amenities.tab.gimnasio': 'Gym',
+        'amenities.tab.parque': 'Family park',
+        'amenities.tab.lobby': 'Lobby',
+        'amenities.tab.social': 'Social area',
+        'amenities.disclaimer': '*Conceptual architectural renderings of the project’s common areas.',
+        'materials.label': 'Project materials',
+        'materials.tour': '360° Virtual Tour',
+        'materials.brochure': 'Download brochure',
+        'credits.developer': 'Developed by',
+        'credits.design': 'Architecture',
+        'faq.heading': 'Frequently asked questions',
+        'faq.q1': 'What is the payment plan?',
+        'faq.a1': 'Reserve with US$5,000, complete 10% upon signing the contract, 40% in monthly installments during construction, and 50% upon delivery in Q2 2029.',
+        'faq.q2': 'When is the expected delivery?',
+        'faq.a2': 'Estimated project delivery is scheduled for the second quarter of 2029 (Q2 2029).',
+        'faq.q3': 'What unit sizes are available?',
+        'faq.a3': 'We offer three main layouts: 138 m² residences (2 bedrooms), 211 m² (3 bedrooms + study), and 355 m² penthouses.',
+        'faq.q4': 'Is Airbnb allowed?',
+        'faq.a4': 'Aiuna Piantini is designed as an exclusive family-oriented residential tower, so short-term rentals such as Airbnb are not permitted.',
+        'faq.footnote': 'Have another question? Message us on WhatsApp or fill out the form below.',
+        'contact.eyebrow': 'Request personalized information',
+        'contact.title': 'Pricing &amp;<br />availability.',
+        'contact.desc': 'Fill in your details and a sales advisor will share updated availability and a tailored payment plan for the residence you prefer.',
+        'contact.whatsapp': 'Chat now on WhatsApp',
+        'contact.phoneLabel': 'Direct phone',
+        'contact.officeLabel': 'Sales gallery',
+        'contact.officeAddress': 'Torre Empresarial Piantini<br />Gustavo Mejía Ricart St., Santo Domingo',
+        'form.nameLabel': 'Full name *',
+        'form.namePlaceholder': 'Your first and last name',
+        'form.phoneLabel': 'Phone / WhatsApp *',
+        'form.phonePlaceholder': '+1 (809) 000-0000',
+        'form.emailLabel': 'Email address *',
+        'form.emailPlaceholder': 'name@email.com',
+        'form.interestLabel': 'I am interested in *',
+        'form.interestDefault': 'Select your interest',
+        'form.interest138': 'Apartment A — 138 m² (2 bed.)',
+        'form.interest211': 'Apartment B — 211 m² (3 bed. + study)',
+        'form.interest355': 'Apartment C — 355 m² (Penthouse)',
+        'form.interestGeneral': 'General project information',
+        'form.budgetLabel': 'Estimated budget',
+        'form.budgetDefault': 'Select a range',
+        'form.budget900': 'Over US$900,000',
+        'form.sourceLabel': 'How did you hear about us?',
+        'form.sourceDefault': 'Select an option',
+        'form.sourceIG': 'Instagram / Social media',
+        'form.sourceGoogle': 'Google search',
+        'form.sourceReferral': 'Referral / Broker',
+        'form.sourceBillboard': 'Billboard in Piantini',
+        'form.consent': 'I agree to receive commercial information about the project and accept the privacy policy.',
+        'form.submit': 'Request information',
+        'form.note': 'Your data is protected. We never share your information with third parties.',
+        'form.error': 'Please complete all required fields (*) and accept the privacy policy.',
+        'form.success': 'Thank you, {name}. An Aiuna Piantini advisor will send you availability for {interest} shortly.',
+        'footer.tagline': 'A project that inspires living.',
+        'footer.location': 'Location',
+        'footer.copyright': '© 2026 Aiuna Piantini. All rights reserved.',
+        'footer.privacy': 'Privacy',
+        'footer.legal': 'Images, floor plans, dimensions, and specifications shown on this website are illustrative and represent an artistic interpretation of the architectural project. The developer reserves the right to make modifications without prior notice to optimize design or technical execution.',
+        'modal.defaultTitle': 'Aiuna Assistant',
+        'modal.conciergeTitle': 'Aiuna Piantini Assistant',
+        'modal.conciergeIntro': 'Choose a quick question about the project or reach out to us directly:',
+        'modal.chip1': 'Available sizes',
+        'modal.ans1': 'Available residences are 138 m² (2 bed.), 211 m² (3 bed. + study), and 355 m² penthouses.',
+        'modal.chip2': 'Payment plan & delivery',
+        'modal.ans2': 'Estimated delivery is Q2 2029. Reserve with US$5,000, 10% at contract signing, 40% during construction, and 50% upon delivery.',
+        'modal.chip3': 'Exact location',
+        'modal.ans3': 'We are located in the heart of Piantini, Gustavo Mejía Ricart St., Santo Domingo.',
+        'modal.plansTitle': 'Architectural Floor Plans',
+        'modal.plansText': 'You are currently viewing {unit}. Leave your details in the availability form to receive the complete PDF floor plan dossier.',
+        'modal.tourTitle': '360° Virtual Tour',
+        'modal.tourText': 'Connect your Matterport or Kuula 360° link here so buyers can walk through the residence in real time.',
+        'modal.brochureTitle': 'Digital Brochure — Aiuna Piantini',
+        'modal.brochureText': 'Includes quality specifications, travertine marble finishes, level distributions, and common area details.',
+        'modal.goToForm': 'Go to inquiry form'
+      }
+    };
+
+    /* ========================================================================
+       DEMO IMAGES — REPLACE THESE URLS WITH YOUR OWN ASSETS
+       ======================================================================== */
+    const DEMO_IMAGES = {
+      heroSlides: [
+        {
+          src: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=2200&q=85',
+          alt: 'Fachada arquitectónica de Aiuna Piantini al atardecer'
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2200&q=85',
+          alt: 'Perspectiva arquitectónica contemporánea en Piantini'
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=85',
+          alt: 'Terrazas y vegetación integrada de Aiuna Piantini'
+        }
+      ],
+      apartments: {
+        '138': 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=85',
+        '211': 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85',
+        '355': 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1400&q=85'
+      },
+      amenities: {
+        piscina: 'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=1600&q=85',
+        salon: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85',
+        gimnasio: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1600&q=85',
+        parque: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1600&q=85',
+        lobby: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85',
+        social: 'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=1600&q=85'
+      }
+    };
+
+    /* ========================================================================
+       HERO KEN BURNS BACKGROUND SLIDER
+       ======================================================================== */
+    (function initHeroSlider() {
+      const sliderEl = document.getElementById('heroSlider');
+      const SLIDE_INTERVAL = 6500;
+      const FADE_DURATION = 1800;
+
+      const slides = DEMO_IMAGES.heroSlides.map((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'hero__slide' + (index === 0 ? ' is-active' : '');
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = item.alt;
+        div.appendChild(img);
+        sliderEl.appendChild(div);
+        return div;
+      });
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (slides[0]) slides[0].classList.add('is-zooming');
+        });
+      });
+
+      if (slides.length < 2) return;
+
+      let current = 0;
+      setInterval(() => {
+        const prevIndex = current;
+        current = (current + 1) % slides.length;
+
+        const prevSlide = slides[prevIndex];
+        const nextSlide = slides[current];
+
+        nextSlide.classList.add('is-active');
+        requestAnimationFrame(() => {
+          nextSlide.classList.add('is-zooming');
+        });
+
+        prevSlide.classList.remove('is-active');
+        setTimeout(() => {
+          prevSlide.classList.remove('is-zooming');
+        }, FADE_DURATION + 100);
+      }, SLIDE_INTERVAL);
+    })();
+
+    /* ========================================================================
+       BILINGUAL DATA MODELS (APARTMENTS & AMENITIES)
+       ======================================================================== */
+    const APARTMENTS_DATA = {
+      '138': {
+        selectValue: 'apt-138',
+        img: DEMO_IMAGES.apartments['138'],
+        baths: '2.5',
+        area: '138 m²',
+        es: {
+          eyebrow: 'APARTAMENTO A · 138 M²',
+          title: '138 m² para<br />vivir con calma.',
+          desc: 'Diseñado para una rutina práctica y cómoda: cocina con isla, sala abierta y balcón diario con ventilación cruzada.',
+          beds: '2',
+          parking: '2 techados'
+        },
+        en: {
+          eyebrow: 'APARTMENT A · 138 M²',
+          title: '138 m² designed<br />for calm living.',
+          desc: 'Crafted for an effortless daily routine: island kitchen, open-concept living room, and a breezy everyday balcony.',
+          beds: '2',
+          parking: '2 covered'
+        }
+      },
+      '211': {
+        selectValue: 'apt-211',
+        img: DEMO_IMAGES.apartments['211'],
+        baths: '3.5',
+        area: '211 m²',
+        es: {
+          eyebrow: 'APARTAMENTO B · 211 M²',
+          title: '211 m² con amplitud<br />y luz natural.',
+          desc: 'Equilibrio perfecto entre vida social y privacidad familiar: tres habitaciones con baño propio, estudio independiente y terraza integrada.',
+          beds: '3 + estudio',
+          parking: '3 techados'
+        },
+        en: {
+          eyebrow: 'APARTMENT B · 211 M²',
+          title: '211 m² of space<br />and natural light.',
+          desc: 'A seamless balance of entertaining and family privacy: three en-suite bedrooms, an independent study, and an integrated terrace.',
+          beds: '3 + study',
+          parking: '3 covered'
+        }
+      },
+      '355': {
+        selectValue: 'apt-355',
+        img: DEMO_IMAGES.apartments['355'],
+        baths: '4.5',
+        area: '355 m²',
+        es: {
+          eyebrow: 'APARTAMENTO C · 355 M²',
+          title: '355 m² en las alturas<br />de Piantini.',
+          desc: 'Residencia de piso completo con vistas panorámicas a la ciudad, doble altura social, cocina fría y caliente, y family room privado.',
+          beds: '3 + family',
+          parking: '4 techados'
+        },
+        en: {
+          eyebrow: 'APARTMENT C · 355 M²',
+          title: '355 m² high above<br />Piantini.',
+          desc: 'Full-floor residence featuring panoramic skyline views, double-height social quarters, hot & cold kitchens, and a private family room.',
+          beds: '3 + family',
+          parking: '4 covered'
+        }
+      }
+    };
+
+    const AMENITIES_DATA = {
+      piscina: {
+        count: '01 / 06',
+        img: DEMO_IMAGES.amenities.piscina,
+        es: {
+          title: 'Piscina infinity',
+          desc: 'Espejo de agua rodeado de deck en piedra natural y cabañas privadas para desconectar al final del día.'
+        },
+        en: {
+          title: 'Infinity pool',
+          desc: 'Tranquil lap pool framed by a natural stone deck and private cabanas to unwind at the end of the day.'
+        }
+      },
+      salon: {
+        count: '02 / 06',
+        img: DEMO_IMAGES.amenities.salon,
+        es: {
+          title: 'Salón de eventos',
+          desc: 'Espacio climatizado de arquitectura sobria con bar de servicio y terraza para celebraciones privadas.'
+        },
+        en: {
+          title: 'Event hall',
+          desc: 'Understated climate-controlled lounge with a service bar and open terrace for private gatherings.'
+        }
+      },
+      gimnasio: {
+        count: '03 / 06',
+        img: DEMO_IMAGES.amenities.gimnasio,
+        es: {
+          title: 'Gimnasio & Wellness',
+          desc: 'Equipamiento de última generación, zona funcional y vistas hacia los jardines interiores.'
+        },
+        en: {
+          title: 'Gym & Wellness',
+          desc: 'State-of-the-art equipment, functional training zone, and serene views overlooking the interior gardens.'
+        }
+      },
+      parque: {
+        count: '04 / 06',
+        img: DEMO_IMAGES.amenities.parque,
+        es: {
+          title: 'Parque familiar',
+          desc: 'Un espacio seguro y rodeado de vegetación diseñado para que los más pequeños disfruten cada tarde en la residencia.'
+        },
+        en: {
+          title: 'Family park',
+          desc: 'A safe, lushly landscaped play area designed for children to enjoy every afternoon within the residence.'
+        }
+      },
+      lobby: {
+        count: '05 / 06',
+        img: DEMO_IMAGES.amenities.lobby,
+        es: {
+          title: 'Lobby de doble altura',
+          desc: 'Recepción climatizada revestida en travertino y madera natural con servicio de conserjería 24/7.'
+        },
+        en: {
+          title: 'Double-height lobby',
+          desc: 'Air-conditioned reception clad in travertine stone and warm natural wood with 24/7 concierge service.'
+        }
+      },
+      social: {
+        count: '06 / 06',
+        img: DEMO_IMAGES.amenities.social,
+        es: {
+          title: 'Área social & Lounge',
+          desc: 'Terrazas abiertas con paisajismo tropical, zona BBQ y espacios íntimos de lectura y coworking.'
+        },
+        en: {
+          title: 'Social area & Lounge',
+          desc: 'Open-air terraces with tropical landscaping, BBQ station, and intimate reading and coworking corners.'
+        }
+      }
+    };
+
+    /* ========================================================================
+       1. LANGUAGE ENGINE
+       ======================================================================== */
+    function t(key) {
+      return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || key;
+    }
+
+    function applyLanguage(lang) {
+      if (!TRANSLATIONS[lang]) return;
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.title = TRANSLATIONS[lang].pageTitle;
+
+      // Update text / HTML elements
+      document.querySelectorAll('[data-i18]').forEach((el) => {
+        const key = el.getAttribute('data-i18');
+        if (TRANSLATIONS[lang][key] !== undefined) {
+          el.innerHTML = TRANSLATIONS[lang][key];
+        }
+      });
+
+      // Update input placeholders
+      document.querySelectorAll('[data-i18-placeholder]').forEach((el) => {
+        const key = el.getAttribute('data-i18-placeholder');
+        if (TRANSLATIONS[lang][key] !== undefined) {
+          el.setAttribute('placeholder', TRANSLATIONS[lang][key]);
+        }
+      });
+
+      // Re-render dynamic sections without flicker
+      renderApartment(activeAptKey, false);
+      renderAmenity(activeAmenityKey, false);
+    }
+
+    document.querySelectorAll('.lang-switch button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.lang-switch button').forEach((b) => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        applyLanguage(btn.dataset.lang);
+      });
+    });
+
+    /* ========================================================================
+       2. NAVBAR DROPDOWN
+       ======================================================================== */
+    const consultDropdown = document.getElementById('consultDropdown');
+    const consultBtn = document.getElementById('consultBtn');
+
+    consultBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = consultDropdown.classList.toggle('is-open');
+      consultBtn.setAttribute('aria-expanded', String(open));
+    });
+
+    document.addEventListener('click', () => {
+      consultDropdown.classList.remove('is-open');
+      consultBtn.setAttribute('aria-expanded', 'false');
+    });
+
+    /* ========================================================================
+       3. APARTMENT TABS INTERACTIVITY
+       ======================================================================== */
+    const aptTabs = document.querySelectorAll('.apt-tab');
+    const aptPanel = document.getElementById('aptPanel');
+    let activeAptKey = '138';
+
+    function renderApartment(key, animate = true) {
+      const data = APARTMENTS_DATA[key];
+      if (!data) return;
+      activeAptKey = key;
+      const localized = data[currentLang];
+
+      const updateDOM = () => {
+        document.getElementById('aptImage').src = data.img;
+        document.getElementById('aptEyebrow').textContent = localized.eyebrow;
+        document.getElementById('aptTitle').innerHTML = localized.title;
+        document.getElementById('aptDesc').textContent = localized.desc;
+        document.getElementById('specBeds').textContent = localized.beds;
+        document.getElementById('specBaths').textContent = data.baths;
+        document.getElementById('specArea').textContent = data.area;
+        document.getElementById('specParking').textContent = localized.parking;
+      };
+
+      if (!animate) {
+        updateDOM();
+        return;
+      }
+
+      aptPanel.classList.add('is-fading');
+      setTimeout(() => {
+        updateDOM();
+        aptPanel.classList.remove('is-fading');
+      }, 170);
+    }
+
+    aptTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        aptTabs.forEach((t) => {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        renderApartment(tab.dataset.apt, true);
+      });
+    });
+
+    document.getElementById('consultUnitBtn').addEventListener('click', () => {
+      const select = document.getElementById('interest');
+      select.value = APARTMENTS_DATA[activeAptKey].selectValue;
+    });
+
+    renderApartment('138', false);
+
+    /* ========================================================================
+       4. AMENITIES SHOWCASE INTERACTIVITY
+       ======================================================================== */
+    const amenityTabs = document.querySelectorAll('.amenity-tab');
+    const amenityStage = document.getElementById('amenityStage');
+    let activeAmenityKey = 'piscina';
+
+    function renderAmenity(key, animate = true) {
+      const data = AMENITIES_DATA[key];
+      if (!data) return;
+      activeAmenityKey = key;
+      const localized = data[currentLang];
+
+      const updateDOM = () => {
+        document.getElementById('amenityImage').src = data.img;
+        document.getElementById('amenityCount').textContent = data.count;
+        document.getElementById('amenityTitle').textContent = localized.title;
+        document.getElementById('amenityDesc').textContent = localized.desc;
+      };
+
+      if (!animate) {
+        updateDOM();
+        return;
+      }
+
+      amenityStage.classList.add('is-fading');
+      setTimeout(() => {
+        updateDOM();
+        amenityStage.classList.remove('is-fading');
+      }, 170);
+    }
+
+    amenityTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        amenityTabs.forEach((t) => t.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        renderAmenity(tab.dataset.amenity, true);
+      });
+    });
+
+    renderAmenity('piscina', false);
+
+    /* ========================================================================
+       5. FAQ ACCORDION
+       ======================================================================== */
+    document.querySelectorAll('.faq-item__trigger').forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const item = trigger.closest('.faq-item');
+        const isOpen = item.classList.contains('is-open');
+
+        document.querySelectorAll('.faq-item').forEach((el) => {
+          el.classList.remove('is-open');
+          el.querySelector('.faq-item__trigger').setAttribute('aria-expanded', 'false');
+        });
+
+        if (!isOpen) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    /* ========================================================================
+       6. LEAD FORM VALIDATION & SUBMISSION
+       ======================================================================== */
+    const leadForm = document.getElementById('leadForm');
+    const formFeedback = document.getElementById('formFeedback');
+
+    leadForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('fullName').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const interestSelect = document.getElementById('interest');
+      const interestVal = interestSelect.value;
+      const interestLabel = interestSelect.options[interestSelect.selectedIndex]?.text || '';
+      const consent = document.getElementById('consent').checked;
+
+      if (!name || !phone || !email || !interestVal || !consent) {
+        formFeedback.textContent = t('form.error');
+        formFeedback.style.background = '#7a2e2e';
+        formFeedback.classList.add('is-visible');
+        return;
+      }
+
+      formFeedback.textContent = t('form.success')
+        .replace('{name}', name)
+        .replace('{interest}', interestLabel);
+      formFeedback.style.background = '#1c252c';
+      formFeedback.classList.add('is-visible');
+      leadForm.reset();
+    });
+
+    /* ========================================================================
+       7. CONCIERGE & RESOURCE MODAL
+       ======================================================================== */
+    const appModal = document.getElementById('appModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    function openModal(title, htmlContent) {
+      modalTitle.textContent = title;
+      modalBody.innerHTML = htmlContent;
+      appModal.classList.add('is-open');
+      appModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      appModal.classList.remove('is-open');
+      appModal.setAttribute('aria-hidden', 'true');
+    }
+
+    closeModalBtn.addEventListener('click', closeModal);
+    appModal.addEventListener('click', (e) => {
+      if (e.target === appModal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    document.getElementById('openConciergeBtn').addEventListener('click', () => {
+      openModal(
+        t('modal.conciergeTitle'),
+        `
+        <p>${t('modal.conciergeIntro')}</p>
+        <div class="chat-suggestions">
+          <button type="button" class="chat-chip" data-answer="${t('modal.ans1')}">${t('modal.chip1')}</button>
+          <button type="button" class="chat-chip" data-answer="${t('modal.ans2')}">${t('modal.chip2')}</button>
+          <button type="button" class="chat-chip" data-answer="${t('modal.ans3')}">${t('modal.chip3')}</button>
+        </div>
+        <div class="chat-reply" id="chatReply"></div>
+        `
+      );
+
+      modalBody.querySelectorAll('.chat-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          const reply = document.getElementById('chatReply');
+          reply.textContent = chip.dataset.answer;
+          reply.classList.add('is-visible');
+        });
+      });
+    });
+
+    document.querySelectorAll('[data-modal-trigger]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const type = el.dataset.modalTrigger;
+        const unitLabel = APARTMENTS_DATA[activeAptKey][currentLang].eyebrow;
+        const copyMap = {
+          plans: {
+            title: t('modal.plansTitle'),
+            text: t('modal.plansText').replace('{unit}', unitLabel)
+          },
+          tour: {
+            title: t('modal.tourTitle'),
+            text: t('modal.tourText')
+          },
+          brochure: {
+            title: t('modal.brochureTitle'),
+            text: t('modal.brochureText')
+          }
+        };
+        const cfg = copyMap[type] || copyMap.brochure;
+        openModal(
+          cfg.title,
+          `<p style="line-height:1.65; margin-bottom:1.25rem;">${cfg.text}</p>
+           <a href="#precios" class="editorial-link" onclick="document.getElementById('appModal').classList.remove('is-open')">
+             <span>${t('modal.goToForm')}</span><span class="arrow">↗</span>
+           </a>`
+        );
+      });
+    });
+  </script>
+</body>
+</html>
