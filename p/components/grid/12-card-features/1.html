@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TwinClips AI — Create Videos Effortlessly</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Configuration for Fonts & Custom Colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Inter"', 'system-ui', 'sans-serif'],
+            body: ['"Inter"', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              bg: '#FAF9FF',
+              slate: '#2B2638',
+              purple: '#6E41D6',
+              darkPurple: '#2E1065',
+              lilac: '#E0C3FC',
+              lilacBright: '#D8B4FE',
+              muted: '#6E6A7C',
+              label: '#6B5E82',
+              border: '#E9E4F5',
+              cardBorder: '#ECE9F6',
+              badge: '#F1ECFD',
+              cardText: '#353044',
+            },
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-brand-bg text-brand-slate font-sans antialiased overflow-x-hidden min-h-screen flex flex-col justify-center selection:bg-brand-purple/20 selection:text-brand-darkPurple">
+
+  <!-- Main Landing Page Section -->
+  <section class="relative w-full py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+
+    <!-- Decorative Background Elements -->
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
+      <!-- Top-Left Translucent Circular Ring -->
+      <div
+        class="absolute -top-44 -left-44 sm:-top-36 sm:-left-36 w-[380px] h-[380px] sm:w-[460px] sm:h-[460px] rounded-full border-[44px] sm:border-[54px] border-[#EAE4F8]/55"
+      ></div>
+
+      <!-- Bottom-Right Translucent Circular Ring -->
+      <div
+        class="absolute -bottom-52 -right-44 sm:-bottom-44 sm:-right-36 w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] rounded-full border-[44px] sm:border-[56px] border-[#EAE4F8]/55"
+      ></div>
+
+      <!-- Gentle Top & Center Purple Radial Glow Behind Heading & Container -->
+      <div
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[920px] h-[680px] rounded-full bg-gradient-to-b from-[#7C3AED]/[0.07] via-[#9333EA]/[0.05] to-transparent blur-3xl"
+      ></div>
+    </div>
+
+    <!-- Content Wrapper -->
+    <div class="relative z-10 max-w-4xl mx-auto">
+
+      <!-- Centered Header Section -->
+      <header class="text-center mb-10 sm:mb-12 px-2">
+        <h1 class="text-3xl sm:text-4xl md:text-[2.75rem] font-extrabold tracking-tight leading-[1.15] text-brand-slate">
+          You Don't Need To Film
+          <span class="block text-brand-purple mt-1">Every Video Yourself.</span>
+        </h1>
+
+        <p class="mt-5 max-w-xl mx-auto text-sm sm:text-base font-body leading-relaxed text-brand-muted">
+          TwinClips AI helps you show up, teach, sell, and stay consistent with a personal AI twin that creates videos using
+          <strong class="font-semibold text-brand-slate">your face and voice.</strong>
+        </p>
+      </header>
+
+      <!-- Main Card Container -->
+      <div class="relative rounded-3xl bg-white/95 backdrop-blur-sm border border-brand-border shadow-[0_20px_60px_-15px_rgba(110,65,214,0.12),0_4px_16px_-4px_rgba(43,38,56,0.04)] p-5 sm:p-8 md:p-9 overflow-hidden">
+
+        <!-- Subtle Top Border Purple Accent Glow -->
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-[2px] bg-gradient-to-r from-transparent via-brand-purple/45 to-transparent"
+        ></div>
+
+        <!-- Inside Container Header with Fading Horizontal Divider Lines -->
+        <div class="flex items-center justify-center gap-3 sm:gap-5 mb-6 sm:mb-8">
+          <span
+            aria-hidden="true"
+            class="h-px flex-1 max-w-[110px] sm:max-w-[140px] bg-gradient-to-r from-transparent to-[#DFD8EE]"
+          ></span>
+          <h2 class="text-xs sm:text-[13px] font-semibold tracking-wide text-brand-label text-center whitespace-nowrap">
+            So You Can Quickly Create Videos Like...
+          </h2>
+          <span
+            aria-hidden="true"
+            class="h-px flex-1 max-w-[110px] sm:max-w-[140px] bg-gradient-to-l from-transparent to-[#DFD8EE]"
+          ></span>
+        </div>
+
+        <!-- 2-Column Responsive Grid for 12 Video Category Cards -->
+        <div
+          id="video-cards-grid"
+          class="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4"
+          role="list"
+          aria-label="Video categories you can create with TwinClips AI"
+        >
+          <!-- Cards are dynamically injected by vanilla JavaScript -->
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Vanilla JavaScript: Card Data, Rendering, Staggered Entrance & Interactive Hover Spotlight -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      /**
+       * Structured array of the 12 video categories in exact 2-column left-to-right order,
+       * paired with crisp inline outline SVG icons.
+       */
+      const videoCategories = [
+        {
+          title: 'Marketing & Promo Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 8a3 3 0 0 1 0 6" />
+              <path d="M10 8h2l6-4v14l-6-4h-2a3 3 0 0 1 0-6Z" />
+              <path d="M10 14l1.2 4.5a1 1 0 0 1-1 1.25H9a1 1 0 0 1-.95-.68L7 14" />
+            </svg>
+          `,
+        },
+        {
+          title: 'Product Explainer Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+              <path d="m3.3 7 8.7 5 8.7-5" />
+              <path d="M12 22V12" />
+            </svg>
+          `,
+        },
+        {
+          title: 'Educational & How-To Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 5.5A2.5 2.5 0 0 1 4.5 3H9a3 3 0 0 1 3 3v14a2.5 2.5 0 0 0-2.5-2.5H4.5A2.5 2.5 0 0 0 2 20V5.5Z" />
+              <path d="M22 5.5A2.5 2.5 0 0 0 19.5 3H15a3 3 0 0 0-3 3v14a2.5 2.5 0 0 1 2.5-2.5h5A2.5 2.5 0 0 1 22 20V5.5Z" />
+            </svg>
+          `,
+        },
+        {
+          title: 'Sales & Offer Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42l-8.704-8.704Z" />
+              <circle cx="7.5" cy="7.5" r="1.25" fill="currentColor" stroke="none" />
+            </svg>
+          `,
+        },
+        {
+          title: 'Local Business Offer Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 9.5 4.8 4h14.4L21 9.5" />
+              <path d="M3 9.5a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 3 0" />
+              <path d="M5 11.8V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7.2" />
+              <path d="M9.5 20v-4.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1V20" />
+            </svg>
+          `,
+        },
+        {
+          title: 'Client Follow-Up Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2.5" />
+              <path d="m4 7 8 6 8-6" />
+            </svg>
+          `,
+        },
+        {
+          title: 'Coaching & Advice Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z" />
+              <path d="M8.5 10.5h7" />
+              <path d="M8.5 14h4.5" />
+            </svg>
+          `,
+        },
+        {
+          title: 'YouTube Talking Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2.5" y="5.5" width="19" height="13" rx="3.5" />
+              <path d="M10.25 9.25 15 12l-4.75 2.75v-5.5Z" />
+            </svg>
+          `,
+        },
+        {
+          title: 'Course Lesson Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="12.5" rx="2.2" />
+              <path d="M10.5 8.25 14.5 10.25 10.5 12.25v-4Z" />
+              <path d="M8 20h8" />
+              <path d="M12 16.5V20" />
+            </svg>
+          `,
+        },
+        {
+          title: 'TikTok Short-Form Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 4v10.5a3.5 3.5 0 1 1-2.5-3.35" />
+              <path d="M14 4c.8 2.4 2.5 3.8 5 4" />
+            </svg>
+          `,
+        },
+        {
+          title: 'Social Media Content',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="6" y="3" width="12" height="18" rx="2.5" />
+              <path d="M9.5 8h5" />
+              <path d="M9.5 11.5h5" />
+              <path d="M9.5 15h3" />
+            </svg>
+          `,
+        },
+        {
+          title: 'Storytelling & Viral Hook Videos',
+          icon: `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3.5 14.3 9.7 20.5 12 14.3 14.3 12 20.5 9.7 14.3 3.5 12 9.7 9.7 12 3.5Z" />
+            </svg>
+          `,
+        },
+      ];
+
+      const gridContainer = document.getElementById('video-cards-grid');
+      if (!gridContainer) return;
+
+      // Track active touch card on mobile devices so tapping previews the hover animation cleanly
+      let activeTouchCard = null;
+
+      /**
+       * Helper to apply or remove the active dark purple + lilac state programmatically
+       * (used for smooth touch feedback on mobile alongside CSS group-hover for desktop).
+       */
+      function setCardActiveState(card, isActive) {
+        const badge = card.querySelector('[data-badge]');
+        const iconWrap = card.querySelector('[data-icon]');
+        const title = card.querySelector('[data-title]');
+        const spotlight = card.querySelector('[data-spotlight]');
+
+        if (isActive) {
+          card.classList.add(
+            '!bg-[#2E1065]',
+            '!border-[#7C3AED]/70',
+            '!-translate-y-0.5',
+            '!shadow-[0_14px_30px_-8px_rgba(46,16,101,0.45),0_0_0_1px_rgba(216,180,254,0.22)]'
+          );
+          badge.classList.add('!bg-[#D8B4FE]/15', '!border-[#D8B4FE]/25');
+          iconWrap.classList.add('!text-[#D8B4FE]', '!scale-110');
+          title.classList.add('!text-[#E0C3FC]');
+          spotlight.classList.add('!opacity-100');
+        } else {
+          card.classList.remove(
+            '!bg-[#2E1065]',
+            '!border-[#7C3AED]/70',
+            '!-translate-y-0.5',
+            '!shadow-[0_14px_30px_-8px_rgba(46,16,101,0.45),0_0_0_1px_rgba(216,180,254,0.22)]'
+          );
+          badge.classList.remove('!bg-[#D8B4FE]/15', '!border-[#D8B4FE]/25');
+          iconWrap.classList.remove('!text-[#D8B4FE]', '!scale-110');
+          title.classList.remove('!text-[#E0C3FC]');
+          spotlight.classList.remove('!opacity-100');
+        }
+      }
+
+      // Render each video category card
+      const cardElements = videoCategories.map((category, index) => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.setAttribute('role', 'listitem');
+        card.setAttribute('aria-label', category.title);
+
+        // Initial hidden state for staggered entrance + smooth hover transitions to dark purple & lilac
+        card.className = [
+          'group relative overflow-hidden w-full text-left flex items-center gap-4',
+          'px-4 py-3.5 sm:px-5 sm:py-4 rounded-2xl',
+          'bg-white border border-brand-cardBorder',
+          'shadow-[0_2px_8px_-2px_rgba(43,38,56,0.03)]',
+          'transition-all duration-300 ease-out cursor-pointer',
+          'hover:bg-[#2E1065] hover:border-[#7C3AED]/70 hover:-translate-y-0.5',
+          'hover:shadow-[0_14px_30px_-8px_rgba(46,16,101,0.45),0_0_0_1px_rgba(216,180,254,0.22)]',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple focus-visible:ring-offset-2',
+          'opacity-0 translate-y-4',
+        ].join(' ');
+
+        card.innerHTML = `
+          <!-- Interactive Lilac Radial Spotlight Layer (Tracks Cursor on Hover) -->
+          <div
+            data-spotlight
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+
+          <!-- Icon Badge -->
+          <div
+            data-badge
+            class="relative z-10 flex-shrink-0 w-10 h-10 rounded-xl bg-brand-badge border border-transparent flex items-center justify-center transition-all duration-300 ease-out group-hover:bg-[#D8B4FE]/15 group-hover:border-[#D8B4FE]/25"
+          >
+            <span
+              data-icon
+              class="text-brand-purple transition-all duration-300 ease-out group-hover:text-[#D8B4FE] group-hover:scale-110 flex items-center justify-center"
+            >
+              ${category.icon}
+            </span>
+          </div>
+
+          <!-- Category Title -->
+          <span
+            data-title
+            class="relative z-10 text-sm sm:text-[15px] font-semibold text-brand-cardText tracking-[-0.01em] transition-colors duration-300 ease-out group-hover:text-[#E0C3FC]"
+          >
+            ${category.title}
+          </span>
+        `;
+
+        const spotlight = card.querySelector('[data-spotlight]');
+
+        // Update lilac radial glow position smoothly as the cursor moves across the dark purple card
+        card.addEventListener('mousemove', (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          spotlight.style.background = `radial-gradient(220px circle at ${x}px ${y}px, rgba(216, 180, 254, 0.22), transparent 72%)`;
+        });
+
+        // Reset spotlight softly when leaving the card
+        card.addEventListener('mouseleave', () => {
+          spotlight.style.background = '';
+        });
+
+        // Touch-friendly toggle so mobile users can also experience the dark purple & lilac animation
+        card.addEventListener('click', () => {
+          if (activeTouchCard && activeTouchCard !== card) {
+            setCardActiveState(activeTouchCard, false);
+          }
+          const isAlreadyActive = activeTouchCard === card;
+          if (isAlreadyActive) {
+            setCardActiveState(card, false);
+            activeTouchCard = null;
+          } else {
+            // Center spotlight nicely on tap
+            spotlight.style.background =
+              'radial-gradient(240px circle at 25% 50%, rgba(216, 180, 254, 0.2), transparent 75%)';
+            setCardActiveState(card, true);
+            activeTouchCard = card;
+          }
+        });
+
+        gridContainer.appendChild(card);
+        return { card, index };
+      });
+
+      // Staggered entrance animation on load
+      requestAnimationFrame(() => {
+        cardElements.forEach(({ card, index }) => {
+          setTimeout(() => {
+            card.classList.remove('opacity-0', 'translate-y-4');
+            card.classList.add('opacity-100', 'translate-y-0');
+          }, 55 * index);
+        });
+      });
+
+      // Clear active mobile card state when tapping outside the grid
+      document.addEventListener('click', (event) => {
+        if (activeTouchCard && !gridContainer.contains(event.target)) {
+          setCardActiveState(activeTouchCard, false);
+          activeTouchCard = null;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
