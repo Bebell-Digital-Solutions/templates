@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preguntas frecuentes</title>
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  
+  
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  
+  
+  
+  
+  <style>
+    :root {
+      --bg-page: #ffffff;
+      --green-dark: #0e5a2f;
+      --green-accent: #146135;
+      --green-tint: #e8f2eb;
+      --badge-bg: #ebf3ed;
+      --card-bg: #fafaf8;
+      --card-border: #eceee9;
+      --card-border-hover: #d8e4dc;
+      --text-primary: #1a1f1c;
+      --text-secondary: #5f6662;
+      --chevron-color: #6b726e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .faq-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+
+    /* Header */
+    .faq-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .faq-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--badge-bg);
+      color: var(--green-accent);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+
+    .faq-badge svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .faq-title {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(2rem, 4.5vw, 2.85rem);
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .faq-subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* Two independent columns so opening a card doesn't stretch its neighbor */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    @media (min-width: 768px) {
+      .faq-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+    }
+
+    .faq-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Accordion Card */
+    .faq-item {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .faq-item:hover {
+      border-color: var(--card-border-hover);
+    }
+
+    .faq-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 22px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .faq-trigger:focus-visible {
+      outline: 2px solid var(--green-accent);
+      outline-offset: -2px;
+      border-radius: 22px;
+    }
+
+    .faq-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--green-tint);
+      color: var(--green-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .faq-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 1.8;
+    }
+
+    .faq-question {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .faq-chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--chevron-color);
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+
+    .faq-item[data-open="true"] .faq-chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Smooth Expandable Panel */
+    .faq-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.28s ease;
+    }
+
+    .faq-item[data-open="true"] .faq-panel {
+      grid-template-rows: 1fr;
+    }
+
+    .faq-panel-inner {
+      overflow: hidden;
+    }
+
+    .faq-answer {
+      /* Aligns text cleanly under the question title (22px padding + 40px icon + 16px gap) */
+      padding: 0 26px 22px 78px;
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 480px) {
+      .faq-trigger {
+        padding: 18px;
+        gap: 12px;
+      }
+
+      .faq-answer {
+        padding: 0 18px 18px 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+  <section class="faq-section" aria-labelledby="faq-heading">
+  
+  
+    <!-- Header -->
+    <div class="faq-header">
+      <div class="faq-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <span>AYUDA</span>
+      </div>
+      <h2 id="faq-heading" class="faq-title">Preguntas frecuentes</h2>
+      <p class="faq-subtitle">Lo que más nos preguntan, antes de solicitar.</p>
+    </div>
+    
+    
+    
+    
+
+    <!-- 2-Column Accordion Grid -->
+    <div class="faq-grid">
+    
+    
+      <!-- Left Column -->
+      <div class="faq-column">
+        <!-- Item 1 (Open by default) -->
+        <div class="faq-item" data-open="false">
+          <button class="faq-trigger" aria-expanded="true" aria-controls="faq-answer-1">
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+            </span>
+            <span class="faq-question">¿Cuáles son los requisitos para solicitar?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </button>
+          <div class="faq-panel" id="faq-answer-1">
+            <div class="faq-panel-inner">
+              <p class="faq-answer">
+                Ser dominicano o residente, tener entre 18 y 65 años, cédula vigente, teléfono activo y ser empleado, preferiblemente de cobro quincenal.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="faq-item" data-open="false">
+          <button class="faq-trigger" aria-expanded="false" aria-controls="faq-answer-2">
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </span>
+            <span class="faq-question">¿Aceptan trabajadores independientes?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </button>
+          <div class="faq-panel" id="faq-answer-2">
+            <div class="faq-panel-inner">
+              <p class="faq-answer">
+                Sí, evaluamos solicitudes de trabajadores independientes siempre que puedan demostrar ingresos regulares mediante estados de cuenta bancarios.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="faq-item" data-open="false">
+          <button class="faq-trigger" aria-expanded="false" aria-controls="faq-answer-3">
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="22" x2="21" y2="22"></line>
+                <line x1="6" y1="18" x2="6" y2="11"></line>
+                <line x1="10" y1="18" x2="10" y2="11"></line>
+                <line x1="14" y1="18" x2="14" y2="11"></line>
+                <line x1="18" y1="18" x2="18" y2="11"></line>
+                <polygon points="12 2 20 7 4 7"></polygon>
+              </svg>
+            </span>
+            <span class="faq-question">¿Cómo y dónde recibo el dinero?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </button>
+          <div class="faq-panel" id="faq-answer-3">
+            <div class="faq-panel-inner">
+              <p class="faq-answer">
+                Una vez aprobado, transferimos el monto directamente a tu cuenta bancaria personal en cualquiera de los principales bancos del país.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="faq-item" data-open="false">
+          <button class="faq-trigger" aria-expanded="false" aria-controls="faq-answer-4">
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m17 2 4 4-4 4"></path>
+                <path d="M3 11v-1a4 4 0 0 1 4-4h14"></path>
+                <path d="m7 22-4-4 4-4"></path>
+                <path d="M21 13v1a4 4 0 0 1-4 4H3"></path>
+              </svg>
+            </span>
+            <span class="faq-question">¿Puedo tener más de un préstamo activo?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </button>
+          <div class="faq-panel" id="faq-answer-4">
+            <div class="faq-panel-inner">
+              <p class="faq-answer">
+                Solo puedes mantener un préstamo activo a la vez. Al saldarlo o alcanzar el porcentaje requerido, podrás solicitar uno nuevo de inmediato.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="faq-column">
+        <!-- Item 5 -->
+        <div class="faq-item" data-open="false">
+          <button class="faq-trigger" aria-expanded="false" aria-controls="faq-answer-5">
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                <circle cx="12" cy="12" r="2"></circle>
+                <path d="M6 12h.01M18 12h.01"></path>
+              </svg>
+            </span>
+            <span class="faq-question">¿Cuál es el monto mínimo y máximo?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </button>
+          <div class="faq-panel" id="faq-answer-5">
+            <div class="faq-panel-inner">
+              <p class="faq-answer">
+                El monto disponible depende de tu perfil y capacidad de pago, y puede aumentar progresivamente con tu buen historial de pagos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="faq-item" data-open="false">
+          <button class="faq-trigger" aria-expanded="false" aria-controls="faq-answer-6">
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                <path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"></path>
+                <path d="M12 17h.01"></path>
+              </svg>
+            </span>
+            <span class="faq-question">¿Necesito garante o codeudor?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </button>
+          <div class="faq-panel" id="faq-answer-6">
+            <div class="faq-panel-inner">
+              <p class="faq-answer">
+                No necesitas garante, codeudor ni garantías prendarias. La evaluación se realiza únicamente con tu información personal y laboral.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="faq-item" data-open="false">
+          <button class="faq-trigger" aria-expanded="false" aria-controls="faq-answer-7">
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"></path>
+                <path d="M16 2v4"></path>
+                <path d="M8 2v4"></path>
+                <path d="M3 10h5"></path>
+                <circle cx="16" cy="16" r="6"></circle>
+                <path d="M16 14v2l1 1"></path>
+              </svg>
+            </span>
+            <span class="faq-question">¿Qué pasa si me atraso en un pago?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </button>
+          <div class="faq-panel" id="faq-answer-7">
+            <div class="faq-panel-inner">
+              <p class="faq-answer">
+                Si prevés un retraso, contáctanos antes de tu fecha de vencimiento para buscar una alternativa. Los pagos vencidos generan cargos por mora según tu contrato.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="faq-item" data-open="false">
+          <button class="faq-trigger" aria-expanded="false" aria-controls="faq-answer-8">
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="10" y1="2" x2="14" y2="2"></line>
+                <line x1="12" y1="14" x2="15" y2="11"></line>
+                <circle cx="12" cy="14" r="8"></circle>
+              </svg>
+            </span>
+            <span class="faq-question">¿Cuánto tiempo tarda la aprobación?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </button>
+          <div class="faq-panel" id="faq-answer-8">
+            <div class="faq-panel-inner">
+              <p class="faq-answer">
+                Nuestro proceso de validación es ágil: en la mayoría de los casos recibirás una respuesta en cuestión de minutos o el mismo día laborable.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll(".faq-trigger").forEach((button) => {
+      button.addEventListener("click", () => {
+        const item = button.closest(".faq-item");
+        const isOpen = item.getAttribute("data-open") === "true";
+
+        item.setAttribute("data-open", String(!isOpen));
+        button.setAttribute("aria-expanded", String(!isOpen));
+      });
+    });
+  </script>
+</body>
+</html>
